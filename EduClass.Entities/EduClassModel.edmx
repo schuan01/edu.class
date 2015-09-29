@@ -1,0 +1,615 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="EduClassModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
+        <EntityContainer Name="EduClassModelTargetContainer" >
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="EduClassModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="EduClassModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Person" EntityType="EduClassModel.Person" />
+          <EntitySet Name="Boards" EntityType="EduClassModel.Board" />
+          <EntitySet Name="Posts" EntityType="EduClassModel.Post" />
+          <AssociationSet Name="PersonPost" Association="EduClassModel.PersonPost">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+          <AssociationSet Name="BoardPost" Association="EduClassModel.BoardPost">
+            <End Role="Board" EntitySet="Boards" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+          <EntitySet Name="Groups" EntityType="EduClassModel.Group" />
+          <EntitySet Name="Tests" EntityType="EduClassModel.Test" />
+          <EntitySet Name="Questions" EntityType="EduClassModel.Question" />
+          <EntitySet Name="QuestionOptions" EntityType="EduClassModel.QuestionOption" />
+          <EntitySet Name="QuestionTypes" EntityType="EduClassModel.QuestionType" />
+          <EntitySet Name="Responses" EntityType="EduClassModel.Response" />
+          <EntitySet Name="Keys" EntityType="EduClassModel.Key" />
+          <EntitySet Name="Calendars" EntityType="EduClassModel.Calendar" />
+          <EntitySet Name="Events" EntityType="EduClassModel.Event" />
+          <EntitySet Name="EventTypes" EntityType="EduClassModel.EventType" />
+          <EntitySet Name="Pages" EntityType="EduClassModel.Page" />
+          <EntitySet Name="Alerts" EntityType="EduClassModel.Alert" />
+          <EntitySet Name="Mails" EntityType="EduClassModel.Mail" />
+          <EntitySet Name="Avatars" EntityType="EduClassModel.Avatar" />
+          <EntitySet Name="PostTypes" EntityType="EduClassModel.PostType" />
+          <AssociationSet Name="PostPostType" Association="EduClassModel.PostPostType">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="PostType" EntitySet="PostTypes" />
+          </AssociationSet>
+          <EntitySet Name="Replays" EntityType="EduClassModel.Replay" />
+          <AssociationSet Name="PersonReplay" Association="EduClassModel.PersonReplay">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="Replay" EntitySet="Replays" />
+          </AssociationSet>
+          <AssociationSet Name="PostReplay" Association="EduClassModel.PostReplay">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="Replay" EntitySet="Replays" />
+          </AssociationSet>
+          <AssociationSet Name="PersonAvatar" Association="EduClassModel.PersonAvatar">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="Avatar" EntitySet="Avatars" />
+          </AssociationSet>
+          <AssociationSet Name="PersonMail" Association="EduClassModel.PersonMail">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="Mail" EntitySet="Mails" />
+          </AssociationSet>
+          <AssociationSet Name="PersonAlert" Association="EduClassModel.PersonAlert">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="Alert" EntitySet="Alerts" />
+          </AssociationSet>
+          <AssociationSet Name="GroupCalendar" Association="EduClassModel.GroupCalendar">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="Calendar" EntitySet="Calendars" />
+          </AssociationSet>
+          <AssociationSet Name="CalendarEvent" Association="EduClassModel.CalendarEvent">
+            <End Role="Calendar" EntitySet="Calendars" />
+            <End Role="Event" EntitySet="Events" />
+          </AssociationSet>
+          <AssociationSet Name="EventEventType" Association="EduClassModel.EventEventType">
+            <End Role="Event" EntitySet="Events" />
+            <End Role="EventType" EntitySet="EventTypes" />
+          </AssociationSet>
+          <AssociationSet Name="GroupStudent" Association="EduClassModel.GroupStudent">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="Student" EntitySet="Person" />
+          </AssociationSet>
+          <AssociationSet Name="GroupTeacher" Association="EduClassModel.GroupTeacher">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="Teacher" EntitySet="Person" />
+          </AssociationSet>
+          <AssociationSet Name="GroupPage" Association="EduClassModel.GroupPage">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="Page" EntitySet="Pages" />
+          </AssociationSet>
+          <AssociationSet Name="GroupBoard" Association="EduClassModel.GroupBoard">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="Board" EntitySet="Boards" />
+          </AssociationSet>
+          <AssociationSet Name="GroupKey" Association="EduClassModel.GroupKey">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="Key" EntitySet="Keys" />
+          </AssociationSet>
+          <AssociationSet Name="GroupTest" Association="EduClassModel.GroupTest">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="Test" EntitySet="Tests" />
+          </AssociationSet>
+          <AssociationSet Name="TestQuestion" Association="EduClassModel.TestQuestion">
+            <End Role="Test" EntitySet="Tests" />
+            <End Role="Question" EntitySet="Questions" />
+          </AssociationSet>
+          <AssociationSet Name="QuestionQuestionType" Association="EduClassModel.QuestionQuestionType">
+            <End Role="Question" EntitySet="Questions" />
+            <End Role="QuestionType" EntitySet="QuestionTypes" />
+          </AssociationSet>
+          <AssociationSet Name="QuestionResponse" Association="EduClassModel.QuestionResponse">
+            <End Role="Question" EntitySet="Questions" />
+            <End Role="Response" EntitySet="Responses" />
+          </AssociationSet>
+          <AssociationSet Name="QuestionQuestionOption" Association="EduClassModel.QuestionQuestionOption">
+            <End Role="Question" EntitySet="Questions" />
+            <End Role="QuestionOption" EntitySet="QuestionOptions" />
+          </AssociationSet>
+          <AssociationSet Name="QuestionOptionResponse" Association="EduClassModel.QuestionOptionResponse">
+            <End Role="QuestionOption" EntitySet="QuestionOptions" />
+            <End Role="Response" EntitySet="Responses" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" Nullable="false" />
+          <Property Name="Password" Type="String" Nullable="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" />
+          <Property Name="LastName" Type="String" Nullable="false" />
+          <Property Name="Birthday" Type="String" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" />
+          <Property Name="IdentificationCard" Type="String" Nullable="false" />
+          <Property Name="CreatedAt" Type="String" Nullable="false" />
+          <Property Name="UpdatedAt" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="Posts" Relationship="EduClassModel.PersonPost" FromRole="Person" ToRole="Post" />
+          <NavigationProperty Name="Replays" Relationship="EduClassModel.PersonReplay" FromRole="Person" ToRole="Replay" />
+          <NavigationProperty Name="Avatar" Relationship="EduClassModel.PersonAvatar" FromRole="Person" ToRole="Avatar" />
+          <NavigationProperty Name="Mails" Relationship="EduClassModel.PersonMail" FromRole="Person" ToRole="Mail" />
+          <NavigationProperty Name="Alerts" Relationship="EduClassModel.PersonAlert" FromRole="Person" ToRole="Alert" />
+        </EntityType>
+        <EntityType Name="Teacher" BaseType="EduClassModel.Person" >
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Group" Relationship="EduClassModel.GroupTeacher" FromRole="Teacher" ToRole="Group" />
+        </EntityType>
+        <EntityType Name="Student" BaseType="EduClassModel.Person" >
+          <NavigationProperty Name="Group" Relationship="EduClassModel.GroupStudent" FromRole="Student" ToRole="Group" />
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Board">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="CreatedAt" Type="String" Nullable="false" />
+          <Property Name="UpdatedAt" Nullable="false" Type="String" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="Posts" Relationship="EduClassModel.BoardPost" FromRole="Board" ToRole="Post" />
+          <NavigationProperty Name="Group" Relationship="EduClassModel.GroupBoard" FromRole="Board" ToRole="Group" />
+        </EntityType>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" />
+          <Property Name="Content" Type="String" Nullable="false" />
+          <Property Name="CreatedAt" Type="String" Nullable="false" />
+          <Property Name="UpdatedAt" Type="String" Nullable="false" />
+          <NavigationProperty Name="Person" Relationship="EduClassModel.PersonPost" FromRole="Post" ToRole="Person" />
+          <Property Name="PersonId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Board" Relationship="EduClassModel.BoardPost" FromRole="Post" ToRole="Board" />
+          <Property Name="BoardId" Type="Int32" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="PostType" Relationship="EduClassModel.PostPostType" FromRole="Post" ToRole="PostType" />
+          <NavigationProperty Name="Replays" Relationship="EduClassModel.PostReplay" FromRole="Post" ToRole="Replay" />
+        </EntityType>
+        <Association Name="PersonPost">
+          <End Type="EduClassModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="EduClassModel.Post" Role="Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BoardPost">
+          <End Type="EduClassModel.Board" Role="Board" Multiplicity="1" />
+          <End Type="EduClassModel.Post" Role="Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Board">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="BoardId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Group">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="CreatedAt" Type="String" Nullable="false" />
+          <Property Name="UpdatedAt" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="Calendar" Relationship="EduClassModel.GroupCalendar" FromRole="Group" ToRole="Calendar" />
+          <NavigationProperty Name="Students" Relationship="EduClassModel.GroupStudent" FromRole="Group" ToRole="Student" />
+          <NavigationProperty Name="Teacher" Relationship="EduClassModel.GroupTeacher" FromRole="Group" ToRole="Teacher" />
+          <NavigationProperty Name="Pages" Relationship="EduClassModel.GroupPage" FromRole="Group" ToRole="Page" />
+          <NavigationProperty Name="Board" Relationship="EduClassModel.GroupBoard" FromRole="Group" ToRole="Board" />
+          <NavigationProperty Name="Keys" Relationship="EduClassModel.GroupKey" FromRole="Group" ToRole="Key" />
+          <NavigationProperty Name="Tests" Relationship="EduClassModel.GroupTest" FromRole="Group" ToRole="Test" />
+        </EntityType>
+        <EntityType Name="Test">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="CreatedAt" Type="String" Nullable="false" />
+          <Property Name="UpdatedAt" Type="String" Nullable="false" />
+          <Property Name="StartDate" Type="String" Nullable="false" />
+          <Property Name="EndDate" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="Group" Relationship="EduClassModel.GroupTest" FromRole="Test" ToRole="Group" />
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Questions" Relationship="EduClassModel.TestQuestion" FromRole="Test" ToRole="Question" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Content" Type="String" Nullable="false" />
+          <Property Name="CreatedAt" Type="String" Nullable="false" />
+          <Property Name="UpdatedAt" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="Test" Relationship="EduClassModel.TestQuestion" FromRole="Question" ToRole="Test" />
+          <Property Name="TestId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="QuestionType" Relationship="EduClassModel.QuestionQuestionType" FromRole="Question" ToRole="QuestionType" />
+          <NavigationProperty Name="Response" Relationship="EduClassModel.QuestionResponse" FromRole="Question" ToRole="Response" />
+          <NavigationProperty Name="QuestionOptions" Relationship="EduClassModel.QuestionQuestionOption" FromRole="Question" ToRole="QuestionOption" />
+        </EntityType>
+        <EntityType Name="QuestionOption">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Content" Type="String" Nullable="false" />
+          <Property Name="CreatedAt" Type="String" Nullable="false" />
+          <Property Name="UpdatedAt" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="Question" Relationship="EduClassModel.QuestionQuestionOption" FromRole="QuestionOption" ToRole="Question" />
+          <Property Name="QuestionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Response" Relationship="EduClassModel.QuestionOptionResponse" FromRole="QuestionOption" ToRole="Response" />
+        </EntityType>
+        <EntityType Name="QuestionType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="CreatedAt" Type="String" Nullable="false" />
+          <Property Name="UpdateAt" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="Question" Relationship="EduClassModel.QuestionQuestionType" FromRole="QuestionType" ToRole="Question" />
+        </EntityType>
+        <EntityType Name="Response">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Content" Type="String" Nullable="false" />
+          <Property Name="CreatedAt" Type="String" Nullable="false" />
+          <NavigationProperty Name="Question" Relationship="EduClassModel.QuestionResponse" FromRole="Response" ToRole="Question" />
+          <NavigationProperty Name="QuestionOption" Relationship="EduClassModel.QuestionOptionResponse" FromRole="Response" ToRole="QuestionOption" />
+        </EntityType>
+        <EntityType Name="Key">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HashKey" Type="String" Nullable="false" />
+          <Property Name="CreatedAt" Type="String" Nullable="false" />
+          <Property Name="UpdatedAt" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="Group" Relationship="EduClassModel.GroupKey" FromRole="Key" ToRole="Group" />
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Calendar">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="CreatedAt" Type="String" Nullable="false" />
+          <Property Name="UpdatedAt" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="Group" Relationship="EduClassModel.GroupCalendar" FromRole="Calendar" ToRole="Group" />
+          <NavigationProperty Name="Events" Relationship="EduClassModel.CalendarEvent" FromRole="Calendar" ToRole="Event" />
+        </EntityType>
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="Date" Type="String" Nullable="false" />
+          <Property Name="CreatedAt" Type="String" Nullable="false" />
+          <Property Name="UpdateAt" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="Calendar" Relationship="EduClassModel.CalendarEvent" FromRole="Event" ToRole="Calendar" />
+          <Property Name="CalendarId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="EventType" Relationship="EduClassModel.EventEventType" FromRole="Event" ToRole="EventType" />
+        </EntityType>
+        <EntityType Name="EventType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="CreatedAt" Type="String" Nullable="false" />
+          <Property Name="UpdatedAt" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="Event" Relationship="EduClassModel.EventEventType" FromRole="EventType" ToRole="Event" />
+        </EntityType>
+        <EntityType Name="Page">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Content" Type="String" Nullable="false" />
+          <Property Name="CreatedAt" Type="String" Nullable="false" />
+          <Property Name="UpdatedAt" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="Group" Relationship="EduClassModel.GroupPage" FromRole="Page" ToRole="Group" />
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Alert">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="CreatedAt" Type="String" Nullable="false" />
+          <Property Name="ReadAt" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="Person" Relationship="EduClassModel.PersonAlert" FromRole="Alert" ToRole="Person" />
+          <Property Name="PersonId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Mail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Subject" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="CreateAt" Type="String" Nullable="false" />
+          <Property Name="ReadAt" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="Person" Relationship="EduClassModel.PersonMail" FromRole="Mail" ToRole="Person" />
+          <Property Name="PersonId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Avatar">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UrlPhoto" Type="String" Nullable="false" />
+          <Property Name="UpdatedAt" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="Person" Relationship="EduClassModel.PersonAvatar" FromRole="Avatar" ToRole="Person" />
+        </EntityType>
+        <EntityType Name="PostType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="CreatedAt" Type="String" Nullable="false" />
+          <Property Name="UpdatedAt" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="Post" Relationship="EduClassModel.PostPostType" FromRole="PostType" ToRole="Post" />
+        </EntityType>
+        <Association Name="PostPostType">
+          <End Type="EduClassModel.Post" Role="Post" Multiplicity="1" />
+          <End Type="EduClassModel.PostType" Role="PostType" Multiplicity="1" />
+        </Association>
+        <EntityType Name="Replay">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="CreatedAt" Type="String" Nullable="false" />
+          <Property Name="UpdatedAt" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" />
+          <NavigationProperty Name="Person" Relationship="EduClassModel.PersonReplay" FromRole="Replay" ToRole="Person" />
+          <Property Name="PersonId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Post" Relationship="EduClassModel.PostReplay" FromRole="Replay" ToRole="Post" />
+          <Property Name="PostId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="PersonReplay">
+          <End Type="EduClassModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="EduClassModel.Replay" Role="Replay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Replay">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PostReplay">
+          <End Type="EduClassModel.Post" Role="Post" Multiplicity="1" />
+          <End Type="EduClassModel.Replay" Role="Replay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Replay">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PersonAvatar">
+          <End Type="EduClassModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="EduClassModel.Avatar" Role="Avatar" Multiplicity="0..1" />
+        </Association>
+        <Association Name="PersonMail">
+          <End Type="EduClassModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="EduClassModel.Mail" Role="Mail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Mail">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PersonAlert">
+          <End Type="EduClassModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="EduClassModel.Alert" Role="Alert" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Alert">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GroupCalendar">
+          <End Type="EduClassModel.Group" Role="Group" Multiplicity="1" />
+          <End Type="EduClassModel.Calendar" Role="Calendar" Multiplicity="0..1" />
+        </Association>
+        <Association Name="CalendarEvent">
+          <End Type="EduClassModel.Calendar" Role="Calendar" Multiplicity="1" />
+          <End Type="EduClassModel.Event" Role="Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Calendar">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="CalendarId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EventEventType">
+          <End Type="EduClassModel.Event" Role="Event" Multiplicity="1" />
+          <End Type="EduClassModel.EventType" Role="EventType" Multiplicity="1" />
+        </Association>
+        <Association Name="GroupStudent">
+          <End Type="EduClassModel.Group" Role="Group" Multiplicity="1" />
+          <End Type="EduClassModel.Student" Role="Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GroupTeacher">
+          <End Type="EduClassModel.Group" Role="Group" Multiplicity="1" />
+          <End Type="EduClassModel.Teacher" Role="Teacher" Multiplicity="1" />
+        </Association>
+        <Association Name="GroupPage">
+          <End Type="EduClassModel.Group" Role="Group" Multiplicity="1" />
+          <End Type="EduClassModel.Page" Role="Page" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Page">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GroupBoard">
+          <End Type="EduClassModel.Group" Role="Group" Multiplicity="1" />
+          <End Type="EduClassModel.Board" Role="Board" Multiplicity="1" />
+        </Association>
+        <Association Name="GroupKey">
+          <End Type="EduClassModel.Group" Role="Group" Multiplicity="1" />
+          <End Type="EduClassModel.Key" Role="Key" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Key">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GroupTest">
+          <End Type="EduClassModel.Group" Role="Group" Multiplicity="1" />
+          <End Type="EduClassModel.Test" Role="Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TestQuestion">
+          <End Type="EduClassModel.Test" Role="Test" Multiplicity="1" />
+          <End Type="EduClassModel.Question" Role="Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Question">
+              <PropertyRef Name="TestId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="QuestionQuestionType">
+          <End Type="EduClassModel.Question" Role="Question" Multiplicity="1" />
+          <End Type="EduClassModel.QuestionType" Role="QuestionType" Multiplicity="1" />
+        </Association>
+        <Association Name="QuestionResponse">
+          <End Type="EduClassModel.Question" Role="Question" Multiplicity="1" />
+          <End Type="EduClassModel.Response" Role="Response" Multiplicity="1" />
+        </Association>
+        <Association Name="QuestionQuestionOption">
+          <End Type="EduClassModel.Question" Role="Question" Multiplicity="1" />
+          <End Type="EduClassModel.QuestionOption" Role="QuestionOption" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="QuestionOption">
+              <PropertyRef Name="QuestionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="QuestionOptionResponse">
+          <End Type="EduClassModel.QuestionOption" Role="QuestionOption" Multiplicity="1" />
+          <End Type="EduClassModel.Response" Role="Response" Multiplicity="0..1" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
+        <Alias Key="Model" Value="EduClassModel" />
+        <Alias Key="Target" Value="EduClassModel.Store" />
+        <EntityContainerMapping CdmEntityContainer="EduClassModelContainer" StorageEntityContainer="EduClassModelTargetContainer">
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -41,6 +41,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,11 +51,112 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Alert.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Avatar.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Board.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Calendar.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EduClassModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EduClassModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EduClassModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EduClassModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EduClassModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Event.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EventType.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Group.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Key.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Mail.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Page.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Person.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Post.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PostType.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Question.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QuestionOption.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QuestionType.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Replay.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Response.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Student.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Teacher.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Test.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EntityDeploy Include="EduClassModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>EduClassModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="EduClassModel.edmx.diagram">
+      <DependentUpon>EduClassModel.edmx</DependentUpon>
+    </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EduClassModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EduClassModel.Context.cs</LastGenOutput>
+      <DependentUpon>EduClassModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="EduClassModel.edmx.sql" />
+    <Content Include="EduClassModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EduClassModel.cs</LastGenOutput>
+      <DependentUpon>EduClassModel.edmx</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

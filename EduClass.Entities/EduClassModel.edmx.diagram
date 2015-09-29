@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d40e4d5d4eff4ec291ef2f22cd6b4075" Name="Diagram1" ZoomLevel="73" >
+        <EntityTypeShape EntityType="EduClassModel.Person" Width="1.5" PointX="3.125" PointY="3.75" />
+        <EntityTypeShape EntityType="EduClassModel.Teacher" Width="1.5" PointX="5.5" PointY="8.625" />
+        <InheritanceConnector EntityType="EduClassModel.Teacher" />
+        <EntityTypeShape EntityType="EduClassModel.Student" Width="1.5" PointX="1.375" PointY="8.625" />
+        <InheritanceConnector EntityType="EduClassModel.Student" />
+        <EntityTypeShape EntityType="EduClassModel.Board" Width="1.5" PointX="7.75" PointY="5.625" />
+        <EntityTypeShape EntityType="EduClassModel.Post" Width="1.5" PointX="7.875" PointY="0.875" />
+        <AssociationConnector Association="EduClassModel.PersonPost" />
+        <AssociationConnector Association="EduClassModel.BoardPost" />
+        <EntityTypeShape EntityType="EduClassModel.Group" Width="1.5" PointX="6.375" PointY="11.625" />
+        <EntityTypeShape EntityType="EduClassModel.Test" Width="1.5" PointX="3.125" PointY="15.125" />
+        <EntityTypeShape EntityType="EduClassModel.Question" Width="1.5" PointX="6.375" PointY="16.375" />
+        <EntityTypeShape EntityType="EduClassModel.QuestionOption" Width="1.5" PointX="10.125" PointY="18.75" />
+        <EntityTypeShape EntityType="EduClassModel.QuestionType" Width="1.5" PointX="0.875" PointY="18.5" />
+        <EntityTypeShape EntityType="EduClassModel.Response" Width="1.5" PointX="10.125" PointY="16" />
+        <EntityTypeShape EntityType="EduClassModel.Key" Width="1.5" PointX="8.875" PointY="12.875" />
+        <EntityTypeShape EntityType="EduClassModel.Calendar" Width="1.5" PointX="8.75" PointY="9.375" />
+        <EntityTypeShape EntityType="EduClassModel.Event" Width="1.5" PointX="10.875" PointY="9.25" />
+        <EntityTypeShape EntityType="EduClassModel.EventType" Width="1.5" PointX="10.875" PointY="12.875" />
+        <EntityTypeShape EntityType="EduClassModel.Page" Width="1.5" PointX="3.625" PointY="11.125" />
+        <EntityTypeShape EntityType="EduClassModel.Alert" Width="1.5" PointX="0.5" PointY="3.5" />
+        <EntityTypeShape EntityType="EduClassModel.Mail" Width="1.5" PointX="0.5" PointY="0.5" />
+        <EntityTypeShape EntityType="EduClassModel.Avatar" Width="1.5" PointX="3.25" PointY="0.5" />
+        <EntityTypeShape EntityType="EduClassModel.PostType" Width="1.5" PointX="10.75" PointY="2.5" />
+        <AssociationConnector Association="EduClassModel.PostPostType" />
+        <EntityTypeShape EntityType="EduClassModel.Replay" Width="1.5" PointX="5.5" PointY="0.5" />
+        <AssociationConnector Association="EduClassModel.PersonReplay" />
+        <AssociationConnector Association="EduClassModel.PostReplay" />
+        <AssociationConnector Association="EduClassModel.PersonAvatar" />
+        <AssociationConnector Association="EduClassModel.PersonMail" />
+        <AssociationConnector Association="EduClassModel.PersonAlert" />
+        <AssociationConnector Association="EduClassModel.GroupCalendar" />
+        <AssociationConnector Association="EduClassModel.CalendarEvent" />
+        <AssociationConnector Association="EduClassModel.EventEventType" />
+        <AssociationConnector Association="EduClassModel.GroupStudent" ManuallyRouted="false" >
+        </AssociationConnector>
+        <AssociationConnector Association="EduClassModel.GroupTeacher" />
+        <AssociationConnector Association="EduClassModel.GroupPage" />
+        <AssociationConnector Association="EduClassModel.GroupBoard" />
+        <AssociationConnector Association="EduClassModel.GroupKey" />
+        <AssociationConnector Association="EduClassModel.GroupTest" />
+        <AssociationConnector Association="EduClassModel.TestQuestion" />
+        <AssociationConnector Association="EduClassModel.QuestionQuestionType" />
+        <AssociationConnector Association="EduClassModel.QuestionResponse" />
+        <AssociationConnector Association="EduClassModel.QuestionQuestionOption" />
+        <AssociationConnector Association="EduClassModel.QuestionOptionResponse" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
