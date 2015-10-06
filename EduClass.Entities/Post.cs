@@ -17,7 +17,7 @@ namespace EduClass.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Post()
         {
-            this.Replays = new HashSet<Replay>();
+            this.Replays = new HashSet<Reply>();
         }
     
         public int Id { get; set; }
@@ -33,6 +33,6 @@ namespace EduClass.Entities
         public virtual Board Board { get; set; }
         public virtual PostType PostType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Replay> Replays { get; set; }
+        public virtual ICollection<Reply> Replays { get; set; }
     }
 }

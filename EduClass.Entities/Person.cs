@@ -18,7 +18,7 @@ namespace EduClass.Entities
         public Person()
         {
             this.Posts = new HashSet<Post>();
-            this.Replays = new HashSet<Replay>();
+            this.Replays = new HashSet<Reply>();
             this.Mails = new HashSet<Mail>();
             this.Alerts = new HashSet<Alert>();
         }
@@ -38,7 +38,7 @@ namespace EduClass.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Post> Posts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Replay> Replays { get; set; }
+        public virtual ICollection<Reply> Replays { get; set; }
         public virtual Avatar Avatar { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Mail> Mails { get; set; }

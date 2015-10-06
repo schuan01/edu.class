@@ -43,14 +43,14 @@
             <End Role="Post" EntitySet="Posts" />
             <End Role="PostType" EntitySet="PostTypes" />
           </AssociationSet>
-          <EntitySet Name="Replays" EntityType="EduClassModel.Replay" />
+          <EntitySet Name="Replies" EntityType="EduClassModel.Reply" />
           <AssociationSet Name="PersonReplay" Association="EduClassModel.PersonReplay">
             <End Role="Person" EntitySet="Person" />
-            <End Role="Replay" EntitySet="Replays" />
+            <End Role="Replay" EntitySet="Replies" />
           </AssociationSet>
           <AssociationSet Name="PostReplay" Association="EduClassModel.PostReplay">
             <End Role="Post" EntitySet="Posts" />
-            <End Role="Replay" EntitySet="Replays" />
+            <End Role="Replay" EntitySet="Replies" />
           </AssociationSet>
           <AssociationSet Name="PersonAvatar" Association="EduClassModel.PersonAvatar">
             <End Role="Person" EntitySet="Person" />
@@ -403,7 +403,7 @@
           <End Type="EduClassModel.Post" Role="Post" Multiplicity="1" />
           <End Type="EduClassModel.PostType" Role="PostType" Multiplicity="1" />
         </Association>
-        <EntityType Name="Replay">
+        <EntityType Name="Reply">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -420,7 +420,7 @@
         </EntityType>
         <Association Name="PersonReplay">
           <End Type="EduClassModel.Person" Role="Person" Multiplicity="1" />
-          <End Type="EduClassModel.Replay" Role="Replay" Multiplicity="*" />
+          <End Type="EduClassModel.Reply" Role="Replay" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Person">
               <PropertyRef Name="Id" />
@@ -432,7 +432,7 @@
         </Association>
         <Association Name="PostReplay">
           <End Type="EduClassModel.Post" Role="Post" Multiplicity="1" />
-          <End Type="EduClassModel.Replay" Role="Replay" Multiplicity="*" />
+          <End Type="EduClassModel.Reply" Role="Replay" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Post">
               <PropertyRef Name="Id" />
