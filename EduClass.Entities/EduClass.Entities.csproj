@@ -115,7 +115,7 @@
     <Compile Include="QuestionType.cs">
       <DependentUpon>EduClassModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Replay.cs">
+    <Compile Include="Reply.cs">
       <DependentUpon>EduClassModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Response.cs">
