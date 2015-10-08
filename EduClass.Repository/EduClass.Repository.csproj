@@ -49,6 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\BaseRepository.cs" />
+    <Compile Include="Base\IBaseRepository.cs" />
+    <Compile Include="Base\IUnitOfWork.cs" />
+    <Compile Include="Base\UnitOfWork.cs" />
+    <Compile Include="IPersonRepository.cs" />
+    <Compile Include="PersonRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

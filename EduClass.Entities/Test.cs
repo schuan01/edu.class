@@ -23,12 +23,12 @@ namespace EduClass.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string CreatedAt { get; set; }
-        public string UpdatedAt { get; set; }
-        public string StartDate { get; set; }
-        public string EndDate { get; set; }
-        public string Enabled { get; set; }
+        public System.DateTime CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public System.DateTime EndDate { get; set; }
         public int GroupId { get; set; }
+        public string Enabled { get; set; }
     
         public virtual Group Group { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -22,10 +22,10 @@ namespace EduClass.Entities
     
         public int Id { get; set; }
         public string Content { get; set; }
-        public string CreatedAt { get; set; }
-        public string UpdatedAt { get; set; }
-        public string Enabled { get; set; }
+        public System.DateTime CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
         public int TestId { get; set; }
+        public string Enabled { get; set; }
     
         public virtual Test Test { get; set; }
         public virtual QuestionType QuestionType { get; set; }

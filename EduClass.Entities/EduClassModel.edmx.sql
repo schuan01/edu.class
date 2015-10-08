@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 09/27/2015 13:06:16
+-- Date Created: 10/07/2015 22:14:30
 -- Generated from EDMX file: D:\code\Edu.Class\EduClass.Entities\EduClassModel.edmx
 -- --------------------------------------------------
 
@@ -17,11 +17,146 @@ GO
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[FK_PersonPost]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Posts] DROP CONSTRAINT [FK_PersonPost];
+GO
+IF OBJECT_ID(N'[dbo].[FK_BoardPost]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Posts] DROP CONSTRAINT [FK_BoardPost];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PostPostType]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Posts] DROP CONSTRAINT [FK_PostPostType];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PersonReplay]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Replies] DROP CONSTRAINT [FK_PersonReplay];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PostReplay]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Replies] DROP CONSTRAINT [FK_PostReplay];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PersonAvatar]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Avatars] DROP CONSTRAINT [FK_PersonAvatar];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PersonMail]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Mails] DROP CONSTRAINT [FK_PersonMail];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PersonAlert]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Alerts] DROP CONSTRAINT [FK_PersonAlert];
+GO
+IF OBJECT_ID(N'[dbo].[FK_GroupCalendar]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Calendars] DROP CONSTRAINT [FK_GroupCalendar];
+GO
+IF OBJECT_ID(N'[dbo].[FK_CalendarEvent]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Events] DROP CONSTRAINT [FK_CalendarEvent];
+GO
+IF OBJECT_ID(N'[dbo].[FK_EventEventType]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Events] DROP CONSTRAINT [FK_EventEventType];
+GO
+IF OBJECT_ID(N'[dbo].[FK_GroupStudent]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Person_Student] DROP CONSTRAINT [FK_GroupStudent];
+GO
+IF OBJECT_ID(N'[dbo].[FK_GroupTeacher]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Groups] DROP CONSTRAINT [FK_GroupTeacher];
+GO
+IF OBJECT_ID(N'[dbo].[FK_GroupPage]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Pages] DROP CONSTRAINT [FK_GroupPage];
+GO
+IF OBJECT_ID(N'[dbo].[FK_GroupBoard]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Groups] DROP CONSTRAINT [FK_GroupBoard];
+GO
+IF OBJECT_ID(N'[dbo].[FK_GroupKey]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Keys] DROP CONSTRAINT [FK_GroupKey];
+GO
+IF OBJECT_ID(N'[dbo].[FK_GroupTest]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Tests] DROP CONSTRAINT [FK_GroupTest];
+GO
+IF OBJECT_ID(N'[dbo].[FK_TestQuestion]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Questions] DROP CONSTRAINT [FK_TestQuestion];
+GO
+IF OBJECT_ID(N'[dbo].[FK_QuestionQuestionType]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Questions] DROP CONSTRAINT [FK_QuestionQuestionType];
+GO
+IF OBJECT_ID(N'[dbo].[FK_QuestionResponse]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Questions] DROP CONSTRAINT [FK_QuestionResponse];
+GO
+IF OBJECT_ID(N'[dbo].[FK_QuestionQuestionOption]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[QuestionOptions] DROP CONSTRAINT [FK_QuestionQuestionOption];
+GO
+IF OBJECT_ID(N'[dbo].[FK_QuestionOptionResponse]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Responses] DROP CONSTRAINT [FK_QuestionOptionResponse];
+GO
+IF OBJECT_ID(N'[dbo].[FK_Student_inherits_Person]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Person_Student] DROP CONSTRAINT [FK_Student_inherits_Person];
+GO
+IF OBJECT_ID(N'[dbo].[FK_Teacher_inherits_Person]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Person_Teacher] DROP CONSTRAINT [FK_Teacher_inherits_Person];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[Person]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Person];
+GO
+IF OBJECT_ID(N'[dbo].[Boards]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Boards];
+GO
+IF OBJECT_ID(N'[dbo].[Posts]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Posts];
+GO
+IF OBJECT_ID(N'[dbo].[Groups]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Groups];
+GO
+IF OBJECT_ID(N'[dbo].[Tests]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Tests];
+GO
+IF OBJECT_ID(N'[dbo].[Questions]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Questions];
+GO
+IF OBJECT_ID(N'[dbo].[QuestionOptions]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[QuestionOptions];
+GO
+IF OBJECT_ID(N'[dbo].[QuestionTypes]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[QuestionTypes];
+GO
+IF OBJECT_ID(N'[dbo].[Responses]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Responses];
+GO
+IF OBJECT_ID(N'[dbo].[Keys]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Keys];
+GO
+IF OBJECT_ID(N'[dbo].[Calendars]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Calendars];
+GO
+IF OBJECT_ID(N'[dbo].[Events]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Events];
+GO
+IF OBJECT_ID(N'[dbo].[EventTypes]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[EventTypes];
+GO
+IF OBJECT_ID(N'[dbo].[Pages]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Pages];
+GO
+IF OBJECT_ID(N'[dbo].[Alerts]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Alerts];
+GO
+IF OBJECT_ID(N'[dbo].[Mails]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Mails];
+GO
+IF OBJECT_ID(N'[dbo].[Avatars]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Avatars];
+GO
+IF OBJECT_ID(N'[dbo].[PostTypes]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[PostTypes];
+GO
+IF OBJECT_ID(N'[dbo].[Replies]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Replies];
+GO
+IF OBJECT_ID(N'[dbo].[Person_Student]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Person_Student];
+GO
+IF OBJECT_ID(N'[dbo].[Person_Teacher]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Person_Teacher];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
@@ -30,40 +165,40 @@ GO
 -- Creating table 'Person'
 CREATE TABLE [dbo].[Person] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [UserName] nvarchar(max)  NOT NULL,
+    [UserName] nvarchar(50)  NOT NULL,
     [Password] nvarchar(max)  NOT NULL,
-    [FirstName] nvarchar(max)  NOT NULL,
-    [LastName] nvarchar(max)  NOT NULL,
-    [Birthday] nvarchar(max)  NOT NULL,
-    [Email] nvarchar(max)  NOT NULL,
+    [FirstName] nvarchar(75)  NOT NULL,
+    [LastName] nvarchar(75)  NOT NULL,
+    [Birthday] datetime  NULL,
+    [Email] nvarchar(250)  NOT NULL,
     [IdentificationCard] nvarchar(max)  NOT NULL,
-    [CreatedAt] nvarchar(max)  NOT NULL,
-    [UpdatedAt] nvarchar(max)  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL
+    [CreatedAt] datetime  NOT NULL,
+    [UpdatedAt] datetime  NULL,
+    [Enabled] bit  NOT NULL
 );
 GO
 
 -- Creating table 'Boards'
 CREATE TABLE [dbo].[Boards] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
+    [Name] nvarchar(250)  NOT NULL,
     [Description] nvarchar(max)  NOT NULL,
-    [CreatedAt] nvarchar(max)  NOT NULL,
-    [UpdatedAt] nvarchar(max)  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL
+    [CreatedAt] datetime  NOT NULL,
+    [UpdatedAt] datetime  NULL,
+    [Enabled] bit  NOT NULL
 );
 GO
 
 -- Creating table 'Posts'
 CREATE TABLE [dbo].[Posts] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Title] nvarchar(max)  NOT NULL,
+    [Title] nvarchar(250)  NOT NULL,
     [Content] nvarchar(max)  NOT NULL,
-    [CreatedAt] nvarchar(max)  NOT NULL,
-    [UpdatedAt] nvarchar(max)  NOT NULL,
+    [CreatedAt] datetime  NOT NULL,
+    [UpdatedAt] datetime  NULL,
     [PersonId] int  NOT NULL,
     [BoardId] int  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL,
+    [Enabled] bit  NOT NULL,
     [PostType_Id] int  NOT NULL
 );
 GO
@@ -71,11 +206,11 @@ GO
 -- Creating table 'Groups'
 CREATE TABLE [dbo].[Groups] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
+    [Name] nvarchar(250)  NOT NULL,
     [Description] nvarchar(max)  NOT NULL,
-    [CreatedAt] nvarchar(max)  NOT NULL,
-    [UpdatedAt] nvarchar(max)  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL,
+    [CreatedAt] datetime  NOT NULL,
+    [UpdatedAt] datetime  NULL,
+    [Enabled] bit  NOT NULL,
     [Teacher_Id] int  NOT NULL,
     [Board_Id] int  NOT NULL
 );
@@ -84,14 +219,14 @@ GO
 -- Creating table 'Tests'
 CREATE TABLE [dbo].[Tests] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
+    [Name] nvarchar(250)  NOT NULL,
     [Description] nvarchar(max)  NOT NULL,
-    [CreatedAt] nvarchar(max)  NOT NULL,
-    [UpdatedAt] nvarchar(max)  NOT NULL,
-    [StartDate] nvarchar(max)  NOT NULL,
-    [EndDate] nvarchar(max)  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL,
-    [GroupId] int  NOT NULL
+    [CreatedAt] datetime  NOT NULL,
+    [UpdatedAt] datetime  NULL,
+    [StartDate] datetime  NOT NULL,
+    [EndDate] datetime  NOT NULL,
+    [GroupId] int  NOT NULL,
+    [Enabled] nvarchar(max)  NOT NULL
 );
 GO
 
@@ -99,10 +234,10 @@ GO
 CREATE TABLE [dbo].[Questions] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Content] nvarchar(max)  NOT NULL,
-    [CreatedAt] nvarchar(max)  NOT NULL,
-    [UpdatedAt] nvarchar(max)  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL,
+    [CreatedAt] datetime  NOT NULL,
+    [UpdatedAt] datetime  NULL,
     [TestId] int  NOT NULL,
+    [Enabled] nvarchar(max)  NOT NULL,
     [QuestionType_Id] int  NOT NULL,
     [Response_Id] int  NOT NULL
 );
@@ -112,21 +247,21 @@ GO
 CREATE TABLE [dbo].[QuestionOptions] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Content] nvarchar(max)  NOT NULL,
-    [CreatedAt] nvarchar(max)  NOT NULL,
-    [UpdatedAt] nvarchar(max)  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL,
-    [QuestionId] int  NOT NULL
+    [CreatedAt] datetime  NOT NULL,
+    [UpdatedAt] datetime  NULL,
+    [QuestionId] int  NOT NULL,
+    [Enabled] nvarchar(max)  NOT NULL
 );
 GO
 
 -- Creating table 'QuestionTypes'
 CREATE TABLE [dbo].[QuestionTypes] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
+    [Name] nvarchar(250)  NOT NULL,
     [Description] nvarchar(max)  NOT NULL,
-    [CreatedAt] nvarchar(max)  NOT NULL,
-    [UpdateAt] nvarchar(max)  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL
+    [CreatedAt] datetime  NOT NULL,
+    [UpdateAt] datetime  NULL,
+    [Enabled] bit  NOT NULL
 );
 GO
 
@@ -134,7 +269,7 @@ GO
 CREATE TABLE [dbo].[Responses] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Content] nvarchar(max)  NOT NULL,
-    [CreatedAt] nvarchar(max)  NOT NULL,
+    [CreatedAt] datetime  NOT NULL,
     [QuestionOption_Id] int  NOT NULL
 );
 GO
@@ -143,20 +278,20 @@ GO
 CREATE TABLE [dbo].[Keys] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [HashKey] nvarchar(max)  NOT NULL,
-    [CreatedAt] nvarchar(max)  NOT NULL,
-    [UpdatedAt] nvarchar(max)  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL,
-    [GroupId] int  NOT NULL
+    [CreatedAt] datetime  NOT NULL,
+    [UpdatedAt] datetime  NULL,
+    [GroupId] int  NOT NULL,
+    [Enabled] nvarchar(max)  NOT NULL
 );
 GO
 
 -- Creating table 'Calendars'
 CREATE TABLE [dbo].[Calendars] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Description] nvarchar(max)  NOT NULL,
-    [CreatedAt] nvarchar(max)  NOT NULL,
-    [UpdatedAt] nvarchar(max)  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL,
+    [Description] nvarchar(500)  NOT NULL,
+    [CreatedAt] datetime  NOT NULL,
+    [UpdatedAt] datetime  NULL,
+    [Enabled] bit  NOT NULL,
     [Group_Id] int  NOT NULL
 );
 GO
@@ -164,13 +299,13 @@ GO
 -- Creating table 'Events'
 CREATE TABLE [dbo].[Events] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
+    [Name] nvarchar(250)  NOT NULL,
     [Description] nvarchar(max)  NOT NULL,
-    [Date] nvarchar(max)  NOT NULL,
-    [CreatedAt] nvarchar(max)  NOT NULL,
-    [UpdateAt] nvarchar(max)  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL,
+    [Date] datetime  NOT NULL,
+    [CreatedAt] datetime  NOT NULL,
+    [UpdateAt] datetime  NULL,
     [CalendarId] int  NOT NULL,
+    [Enabled] nvarchar(max)  NOT NULL,
     [EventType_Id] int  NOT NULL
 );
 GO
@@ -178,11 +313,11 @@ GO
 -- Creating table 'EventTypes'
 CREATE TABLE [dbo].[EventTypes] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
+    [Name] nvarchar(250)  NOT NULL,
     [Description] nvarchar(max)  NOT NULL,
-    [CreatedAt] nvarchar(max)  NOT NULL,
-    [UpdatedAt] nvarchar(max)  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL
+    [CreatedAt] datetime  NOT NULL,
+    [UpdatedAt] datetime  NULL,
+    [Enabled] bit  NOT NULL
 );
 GO
 
@@ -190,34 +325,34 @@ GO
 CREATE TABLE [dbo].[Pages] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Content] nvarchar(max)  NOT NULL,
-    [CreatedAt] nvarchar(max)  NOT NULL,
-    [UpdatedAt] nvarchar(max)  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL,
-    [GroupId] int  NOT NULL
+    [CreatedAt] datetime  NOT NULL,
+    [UpdatedAt] datetime  NULL,
+    [GroupId] int  NOT NULL,
+    [Enabled] nvarchar(max)  NOT NULL
 );
 GO
 
 -- Creating table 'Alerts'
 CREATE TABLE [dbo].[Alerts] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Title] nvarchar(max)  NOT NULL,
+    [Title] nvarchar(250)  NOT NULL,
     [Description] nvarchar(max)  NOT NULL,
-    [CreatedAt] nvarchar(max)  NOT NULL,
-    [ReadAt] nvarchar(max)  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL,
-    [PersonId] int  NOT NULL
+    [CreatedAt] datetime  NOT NULL,
+    [ReadAt] datetime  NULL,
+    [PersonId] int  NOT NULL,
+    [Enabled] nvarchar(max)  NOT NULL
 );
 GO
 
 -- Creating table 'Mails'
 CREATE TABLE [dbo].[Mails] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Subject] nvarchar(max)  NOT NULL,
+    [Subject] nvarchar(250)  NOT NULL,
     [Description] nvarchar(max)  NOT NULL,
-    [CreateAt] nvarchar(max)  NOT NULL,
-    [ReadAt] nvarchar(max)  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL,
-    [PersonId] int  NOT NULL
+    [CreateAt] datetime  NOT NULL,
+    [ReadAt] datetime  NULL,
+    [PersonId] int  NOT NULL,
+    [Enabled] bit  NOT NULL
 );
 GO
 
@@ -225,8 +360,8 @@ GO
 CREATE TABLE [dbo].[Avatars] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [UrlPhoto] nvarchar(max)  NOT NULL,
-    [UpdatedAt] nvarchar(max)  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL,
+    [UpdatedAt] datetime  NULL,
+    [Enabled] bit  NOT NULL,
     [Person_Id] int  NOT NULL
 );
 GO
@@ -234,24 +369,23 @@ GO
 -- Creating table 'PostTypes'
 CREATE TABLE [dbo].[PostTypes] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
+    [Name] nvarchar(250)  NOT NULL,
     [Description] nvarchar(max)  NOT NULL,
-    [CreatedAt] nvarchar(max)  NOT NULL,
-    [UpdatedAt] nvarchar(max)  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL
+    [CreatedAt] datetime  NOT NULL,
+    [UpdatedAt] datetime  NULL,
+    [Enabled] bit  NOT NULL
 );
 GO
 
--- Creating table 'Replays'
-CREATE TABLE [dbo].[Replays] (
+-- Creating table 'Replies'
+CREATE TABLE [dbo].[Replies] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
-    [Description] nvarchar(max)  NOT NULL,
-    [CreatedAt] nvarchar(max)  NOT NULL,
-    [UpdatedAt] nvarchar(max)  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL,
+    [Content] nvarchar(250)  NOT NULL,
+    [CreatedAt] datetime  NOT NULL,
+    [UpdatedAt] datetime  NULL,
     [PersonId] int  NOT NULL,
-    [PostId] int  NOT NULL
+    [PostId] int  NOT NULL,
+    [Enabled] nvarchar(max)  NOT NULL
 );
 GO
 
@@ -381,9 +515,9 @@ ADD CONSTRAINT [PK_PostTypes]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'Replays'
-ALTER TABLE [dbo].[Replays]
-ADD CONSTRAINT [PK_Replays]
+-- Creating primary key on [Id] in table 'Replies'
+ALTER TABLE [dbo].[Replies]
+ADD CONSTRAINT [PK_Replies]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -448,8 +582,8 @@ ON [dbo].[Posts]
     ([PostType_Id]);
 GO
 
--- Creating foreign key on [PersonId] in table 'Replays'
-ALTER TABLE [dbo].[Replays]
+-- Creating foreign key on [PersonId] in table 'Replies'
+ALTER TABLE [dbo].[Replies]
 ADD CONSTRAINT [FK_PersonReplay]
     FOREIGN KEY ([PersonId])
     REFERENCES [dbo].[Person]
@@ -459,12 +593,12 @@ GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_PersonReplay'
 CREATE INDEX [IX_FK_PersonReplay]
-ON [dbo].[Replays]
+ON [dbo].[Replies]
     ([PersonId]);
 GO
 
--- Creating foreign key on [PostId] in table 'Replays'
-ALTER TABLE [dbo].[Replays]
+-- Creating foreign key on [PostId] in table 'Replies'
+ALTER TABLE [dbo].[Replies]
 ADD CONSTRAINT [FK_PostReplay]
     FOREIGN KEY ([PostId])
     REFERENCES [dbo].[Posts]
@@ -474,7 +608,7 @@ GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_PostReplay'
 CREATE INDEX [IX_FK_PostReplay]
-ON [dbo].[Replays]
+ON [dbo].[Replies]
     ([PostId]);
 GO
 

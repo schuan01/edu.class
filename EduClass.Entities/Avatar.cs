@@ -16,8 +16,8 @@ namespace EduClass.Entities
     {
         public int Id { get; set; }
         public string UrlPhoto { get; set; }
-        public string UpdatedAt { get; set; }
-        public string Enabled { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
+        public bool Enabled { get; set; }
     
         public virtual Person Person { get; set; }
     }

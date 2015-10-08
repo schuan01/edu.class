@@ -17,10 +17,10 @@ namespace EduClass.Entities
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string CreatedAt { get; set; }
-        public string ReadAt { get; set; }
-        public string Enabled { get; set; }
+        public System.DateTime CreatedAt { get; set; }
+        public Nullable<System.DateTime> ReadAt { get; set; }
         public int PersonId { get; set; }
+        public string Enabled { get; set; }
     
         public virtual Person Person { get; set; }
     }

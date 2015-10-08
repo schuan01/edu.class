@@ -16,10 +16,10 @@ namespace EduClass.Entities
     {
         public int Id { get; set; }
         public string HashKey { get; set; }
-        public string CreatedAt { get; set; }
-        public string UpdatedAt { get; set; }
-        public string Enabled { get; set; }
+        public System.DateTime CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
         public int GroupId { get; set; }
+        public string Enabled { get; set; }
     
         public virtual Group Group { get; set; }
     }
