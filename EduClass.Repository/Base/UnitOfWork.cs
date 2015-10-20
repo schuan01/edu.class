@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 
 namespace EduClass.Repository
 {
@@ -29,8 +30,20 @@ namespace EduClass.Repository
         /// <returns>The number of objects in an Added, Modified, or Deleted state</returns>
         public int Commit()
         {
-            // Save changes with the default options
-            return _dbContext.SaveChanges();
+            //TODO: Eliminar este TODO
+            try
+            {
+                // Save changes with the default options
+                return _dbContext.SaveChanges();
+            }
+            catch (DbEntityValidationException esx)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         /// <summary>

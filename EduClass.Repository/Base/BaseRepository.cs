@@ -7,51 +7,79 @@ using System.Linq.Expressions;
 
 namespace EduClass.Repository
 {
-    public abstract class BaseRepository<T> : IBaseRepository<T>, IDisposable where T : class
+    public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        private readonly DbContext _context;
-        protected IDbSet<T> _dbset;
+        protected DbContext context { get; set; }
+        protected DbSet<T> dbSet { get; set; }
 
-        public BaseRepository(DbContext context)
+        public BaseRepository(DbContext dbContext)
         {
-            _context = context;
-            _dbset = context.Set<T>();
-        }
-        
-        public virtual IEnumerable<T> GetAll()
-        {
-            return _dbset.AsEnumerable();
-        }
+            if (dbContext == null)
+                throw new ArgumentNullException("Null DbContext");
 
-        public virtual IEnumerable<T> FindBy(Expression<Func<T, bool>> predicate)
-        {
-            IEnumerable<T> query = _dbset.Where(predicate).AsEnumerable();
-            return query;
+            dbContext.Configuration.LazyLoadingEnabled = true;
+
+            context = dbContext;
+            dbSet = context.Set<T>();
         }
 
-        public virtual T Add(T entity)
+        public virtual IQueryable<T> GetAll()
         {
-            return _dbset.Add(entity);
+            return dbSet;
         }
 
-        public virtual T Delete(T entity)
+        public virtual T GetById(int id)
         {
-            return _dbset.Remove(entity);
+            return dbSet.Find(id);
         }
 
-        public virtual void Edit(T entity)
+        public virtual void Add(T entity)
         {
-            _context.Entry(entity).State = System.Data.Entity.EntityState.Modified;
+            DbEntityEntry dbEntityEntry = context.Entry(entity);
+            if (dbEntityEntry.State != EntityState.Detached)
+            {
+                dbEntityEntry.State = EntityState.Added;
+            }
+            else
+            {
+                dbSet.Add(entity);
+            }
         }
 
-        public void Save()
+        public virtual void Update(T entity)
         {
-            _context.SaveChanges();
+            DbEntityEntry dbEntityEntry = context.Entry(entity);
+            if (dbEntityEntry.State == EntityState.Detached)
+            {
+                dbSet.Attach(entity);
+            }
+            dbEntityEntry.State = EntityState.Modified;
+        }
+
+        public virtual void Delete(T entity)
+        {
+            DbEntityEntry dbEntityEntry = context.Entry(entity);
+            if (dbEntityEntry.State != EntityState.Deleted)
+            {
+                dbEntityEntry.State = EntityState.Deleted;
+            }
+            else
+            {
+                dbSet.Attach(entity);
+                dbSet.Remove(entity);
+            }
+        }
+
+        public virtual void Delete(int id)
+        {
+            var entity = GetById(id);
+            if (entity == null) return;
+            Delete(entity);
         }
 
         public void Dispose()
         {
-            if (_context != null) { _context.Dispose(); }
+            throw new NotImplementedException();
         }
     }
 }

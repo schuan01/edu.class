@@ -1,0 +1,65 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!--<link rel="shortcut icon" href="../images/favicon.png" type="image/png">-->
+
+    <title>Quirk Responsive Admin Templates</title>
+
+    <link rel="stylesheet" href="css/lib_fontawesome_css_font-awesome.css">
+    <link href="@Url.Content("~/Content/template/css_quirk.css")" rel="stylesheet" />
+
+    <script src="@Url.Content("Scripts/template/lib_modernizr_modernizr.js")"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="js/lib_html5shiv_html5shiv.js"></script>
+    <script src="js/lib_respond_respond.src.js"></script>
+    <![endif]-->
+</head>
+
+<body class="signwrapper">
+
+    <div class="sign-overlay"></div>
+    <div class="signpanel"></div>
+
+    <div class="panel signin">
+        <div class="panel-heading">
+            <h1>Edu.Class</h1>
+            <h4 class="panel-title">Welcome! Please signin.</h4>
+        </div>
+        <div class="panel-body">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" name="returnUrl" value="@((String.IsNullOrEmpty(ViewBag.ReturnUrl.ToString()))? "" : ViewBag.ReturnUrl.ToString())" />
+                <div class="form-group mb10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input type="text" class="form-control" name="userName" placeholder="Enter Username"  value="@((String.IsNullOrEmpty(ViewBag.UserName.ToString()))? "" : ViewBag.UserName.ToString())">
+                    </div>
+                </div>
+                <div class="form-group nomargin">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                        <input type="text" class="form-control" name="password" placeholder="Enter Password">
+                    </div>
+                </div>
+                <div><a href="" class="forgot">Forgot password?</a></div>
+                <div class="form-group">
+                    <button class="btn btn-success btn-quirk btn-block">Sign In</button>
+                </div>
+            }
+            <hr class="invisible">
+            <div class="form-group">
+                <a href="signup.html" class="btn btn-default btn-quirk btn-stroke btn-stroke-thin btn-block btn-sign">Not a member? Sign up now!</a>
+            </div>
+        </div>
+    </div><!-- panel -->
+
+</body>
+</html>

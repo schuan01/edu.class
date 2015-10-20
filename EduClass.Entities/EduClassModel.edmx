@@ -661,7 +661,7 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="EduClassModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
-        <EntityContainer Name="EduClassModelContainer" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="EduClassContext" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Person" EntityType="EduClassModel.Person" />
           <EntitySet Name="Boards" EntityType="EduClassModel.Board" />
           <EntitySet Name="Posts" EntityType="EduClassModel.Post" />
@@ -1235,7 +1235,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
     <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="EduClassModelStoreContainer" CdmEntityContainer="EduClassModelContainer">
+  <EntityContainerMapping StorageEntityContainer="EduClassModelStoreContainer" CdmEntityContainer="EduClassContext">
     <EntitySetMapping Name="Person">
       <EntityTypeMapping TypeName="IsTypeOf(EduClassModel.Person)">
         <MappingFragment StoreEntitySet="Person">

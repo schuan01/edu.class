@@ -18,29 +18,26 @@ namespace EduClass.Logic
             _personRepository = personRepository;
         }
 
-            public void Create(Person entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Person entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Person> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
         public Person SignIn(string userName, string password)
         {
             return _personRepository.SignIn(userName, password);
         }
 
-        public void Update(Person entity)
+        public Person GetByUserName(string userName)
         {
-            throw new NotImplementedException();
+            return _personRepository.GetByUserName(userName);
+        }
+
+        public void ChangePassword(int id, string newpassword)
+        {
+            var user = _personRepository.GetById(id);
+
+            if (user == null) { throw new ArgumentNullException("User"); }
+
+            user.Password = newpassword;
+
+            _personRepository.Update(user);
+            _unitOfWork.Commit();
         }
     }
 }

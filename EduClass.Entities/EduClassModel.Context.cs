@@ -13,10 +13,10 @@ namespace EduClass.Entities
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class EduClassModelContainer : DbContext
+    public partial class EduClassContext : DbContext
     {
-        public EduClassModelContainer()
-            : base("name=EduClassModelContainer")
+        public EduClassContext()
+            : base("name=EduClassContext")
         {
         }
     

@@ -17,25 +17,24 @@ namespace EduClass.Logic
 
         public virtual void Create(T entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException("entity");
-            }
+            if (entity == null) { throw new ArgumentNullException("entity"); }
+
             _repository.Add(entity);
             _unitOfWork.Commit();
         }
 
-
         public virtual void Update(T entity)
         {
-            if (entity == null) throw new ArgumentNullException("entity");
-            _repository.Edit(entity);
+            if (entity == null) { throw new ArgumentNullException("entity"); }
+
+            _repository.Update(entity);
             _unitOfWork.Commit();
         }
 
         public virtual void Delete(T entity)
         {
-            if (entity == null) throw new ArgumentNullException("entity");
+            if (entity == null) { throw new ArgumentNullException("entity"); }
+
             _repository.Delete(entity);
             _unitOfWork.Commit();
         }
@@ -43,6 +42,12 @@ namespace EduClass.Logic
         public virtual IEnumerable<T> GetAll()
         {
             return _repository.GetAll();
+        }
+
+
+        public T GetById(int id)
+        {
+            return _repository.GetById(id);
         }
     }
 }
