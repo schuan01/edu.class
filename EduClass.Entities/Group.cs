@@ -17,10 +17,10 @@ namespace EduClass.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Group()
         {
-            this.Students = new HashSet<Student>();
             this.Pages = new HashSet<Page>();
             this.Keys = new HashSet<Key>();
             this.Tests = new HashSet<Test>();
+            this.Students = new HashSet<Student>();
         }
     
         public int Id { get; set; }
@@ -31,8 +31,6 @@ namespace EduClass.Entities
         public bool Enabled { get; set; }
     
         public virtual Calendar Calendar { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Student> Students { get; set; }
         public virtual Teacher Teacher { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Page> Pages { get; set; }
@@ -41,5 +39,7 @@ namespace EduClass.Entities
         public virtual ICollection<Key> Keys { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Test> Tests { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Student> Students { get; set; }
     }
 }

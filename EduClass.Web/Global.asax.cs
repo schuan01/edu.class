@@ -6,6 +6,7 @@ using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
 using System.Reflection;
+using EduClass.Web.Infrastructure.Mappers;
 
 namespace EduClass.Web
 {
@@ -32,6 +33,9 @@ namespace EduClass.Web
             var container = builder.Build();
 
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+
+            //AutoMapper
+            AutoMapperConfig.RegisterMappings();
         }
     }
 }

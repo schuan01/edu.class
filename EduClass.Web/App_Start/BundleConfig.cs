@@ -27,8 +27,10 @@ namespace EduClass.Web
                       "~/Scripts/template/lib_raphael_raphael.js",
                       "~/Scripts/template/lib_flot_jquery.flot.js",
                       "~/Scripts/template/lib_flot_jquery.flot.resize.js",
+                      "~/Scripts/template/lib_jquery.steps_jquery.steps.js",
                       "~/Scripts/template/lib_flot-spline_jquery.flot.spline.js",
                       "~/Scripts/template/lib_jquery-knob_jquery.knob.js",
+                      "~/Scripts/template/lib_jquery.gritter_jquery.gritter.js",
                       "~/Scripts/template/js_quirk.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
@@ -41,8 +43,10 @@ namespace EduClass.Web
                           "~/Content/template/lib_weather-icons_css_weather-icons.css",
                           "~/Content/template/lib_ionicons_css_ionicons.css",
                           "~/Content/template/lib_jquery-toggles_toggles-full.css",
+                          "~/Content/template/lib_jquery.steps_jquery.steps.css",
                           "~/Content/template/lib_morrisjs_morris.css",
-                          "~/Content/template/css_quirk.css").Include("~/Content/font/css"));
+                          "~/Content/template/lib_jquery.gritter_jquery.gritter.css",
+                          "~/Content/template/css_quirk.css").IncludeDirectory("~/Content/font", "*.css", false));
         }
     }
 }

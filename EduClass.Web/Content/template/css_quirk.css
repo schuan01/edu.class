@@ -8588,7 +8588,7 @@ a.text-danger:focus {
   margin-bottom: 20px;
 }
 .wizard > .content {
-  min-height: 180px;
+  min-height: 305px;
   background-color: #fff;
   border-radius: 0;
   margin: 0;
@@ -13993,7 +13993,7 @@ fieldset[disabled] .btn-fb.active {
   margin-top: 20px;
   text-transform: none;
   font-weight: 200;
-  font-size: 20px;
+  font-size: 19px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   letter-spacing: .7px;
 }

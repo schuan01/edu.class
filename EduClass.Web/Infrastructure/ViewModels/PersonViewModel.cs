@@ -44,9 +44,13 @@ namespace EduClass.Web.Infrastructure.ViewModels
         public string IdentificationCard { get; set; }
 
         [Required]
+        public string PersonType { get; set; }
+
         public System.DateTime CreatedAt { get; set; }
 
         public Nullable<System.DateTime> UpdatedAt { get; set; }
         public bool Enabled { get; set; }
+
+        
     }
 }

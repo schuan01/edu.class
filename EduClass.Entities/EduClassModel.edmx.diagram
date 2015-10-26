@@ -39,8 +39,6 @@
         <AssociationConnector Association="EduClassModel.GroupCalendar" />
         <AssociationConnector Association="EduClassModel.CalendarEvent" />
         <AssociationConnector Association="EduClassModel.EventEventType" />
-        <AssociationConnector Association="EduClassModel.GroupStudent" ManuallyRouted="false" >
-        </AssociationConnector>
         <AssociationConnector Association="EduClassModel.GroupTeacher" />
         <AssociationConnector Association="EduClassModel.GroupPage" />
         <AssociationConnector Association="EduClassModel.GroupBoard" />
@@ -51,6 +49,7 @@
         <AssociationConnector Association="EduClassModel.QuestionResponse" />
         <AssociationConnector Association="EduClassModel.QuestionQuestionOption" />
         <AssociationConnector Association="EduClassModel.QuestionOptionResponse" />
+        <AssociationConnector Association="EduClassModel.GroupStudent" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

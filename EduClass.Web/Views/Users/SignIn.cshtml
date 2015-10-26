@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <!--<link rel="shortcut icon" href="../images/favicon.png" type="image/png">-->
 
-    <title>Quirk Responsive Admin Templates</title>
+    <title>Inicio de sesión | Edu.Clas</title>
 
     <link rel="stylesheet" href="css/lib_fontawesome_css_font-awesome.css">
     <link href="@Url.Content("~/Content/template/css_quirk.css")" rel="stylesheet" />
@@ -29,7 +29,7 @@
     <div class="panel signin">
         <div class="panel-heading">
             <h1>Edu.Class</h1>
-            <h4 class="panel-title">Welcome! Please signin.</h4>
+            <h5 class="panel-title">Bienvenido, por favor inicia sesión</h5>
         </div>
         <div class="panel-body">
             @using (Html.BeginForm())
@@ -40,23 +40,23 @@
                 <div class="form-group mb10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <input type="text" class="form-control" name="userName" placeholder="Enter Username"  value="@((String.IsNullOrEmpty(ViewBag.UserName.ToString()))? "" : ViewBag.UserName.ToString())">
+                        <input type="text" class="form-control" name="userName" placeholder="Ingresa tu nombre de usuario"  value="@((String.IsNullOrEmpty(ViewBag.UserName.ToString()))? "" : ViewBag.UserName.ToString())">
                     </div>
                 </div>
                 <div class="form-group nomargin">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                        <input type="text" class="form-control" name="password" placeholder="Enter Password">
+                        <input type="password" class="form-control" name="password" placeholder="Ingresa tu contraseña">
                     </div>
                 </div>
-                <div><a href="" class="forgot">Forgot password?</a></div>
+                <div><a href="" class="forgot">¿Olvidé mi contraseña?</a></div>
                 <div class="form-group">
-                    <button class="btn btn-success btn-quirk btn-block">Sign In</button>
+                    <button class="btn btn-success btn-quirk btn-block">Inícia sesión</button>
                 </div>
             }
             <hr class="invisible">
             <div class="form-group">
-                <a href="signup.html" class="btn btn-default btn-quirk btn-stroke btn-stroke-thin btn-block btn-sign">Not a member? Sign up now!</a>
+                <a href="@Url.Action("Register")" class="btn btn-default btn-quirk btn-stroke btn-stroke-thin btn-block btn-sign">Regístrate ahora</a>
             </div>
         </div>
     </div><!-- panel -->

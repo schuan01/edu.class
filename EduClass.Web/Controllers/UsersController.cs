@@ -22,13 +22,6 @@ namespace EduClass.Web.Controllers
             _service = service;
         }
 
-        public ActionResult Index()
-        {
-            var list = _service.GetAll().OrderBy(a => a.UserName);
-
-            return View(list);
-        }
-
         // GET: User
         [HttpGet]
         [AllowAnonymous]
@@ -128,18 +121,18 @@ namespace EduClass.Web.Controllers
                     {
                         _service.ChangePassword(userId, Security.EncodePassword(value.NewPassword));
 
-                        //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Cambio de contraseña", "Su contraseña fue modificada con éxito."));
+                        MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Cambio de contraseña", "Su contraseña fue modificada con éxito."));
 
                         return RedirectToAction("Index", "User");
                     }
                     else
                     {
-                        //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error al ingresar la contraseña", "La contraseña actual no es valida."));
+                        MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error al ingresar la contraseña", "La contraseña actual no es valida."));
                     }
                 }
                 catch (Exception ex)
                 {
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, ex.Message, "Error al cambiar la contraseña"));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, ex.Message, "Error al cambiar la contraseña"));
 
                     return View(value);
                 }
@@ -153,46 +146,55 @@ namespace EduClass.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Create()
+        [AllowAnonymous]
+        public ActionResult Register()
         {
             return View(new PersonViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "UserName, Email, Password, ConfirmPassword, FirstName, LastName, Birthday, IdentificationCard")]PersonViewModel userVm)
+        [AllowAnonymous]
+        public ActionResult Register([Bind(Include = "UserName, Email, Password, ConfirmPassword, FirstName, LastName, Birthday, IdentificationCard, PersonType")]PersonViewModel personVm)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (_service.GetByUserName(userVm.UserName) == null)
+                    //TODO: El chequeo debe ser con username y Email
+                    if (_service.GetByUserName(personVm.UserName) == null)
                     {
-                        //Execute the mapping 
-                        var user = AutoMapper.Mapper.Map<PersonViewModel, Person>(userVm);
+                        Person person;
 
-                        user.Password = Security.EncodePassword(user.Password);
-                        user.CreatedAt = DateTime.Now;
-                        user.Enabled = true;
+                        if (personVm.PersonType.ToLower() == "teacher") {
+                            person = AutoMapper.Mapper.Map<PersonViewModel, Teacher>(personVm); //person = new Teacher(); 
+                        }
+                        else {
+                            person = AutoMapper.Mapper.Map<PersonViewModel, Student>(personVm); //person = new Student(); 
+                        }
+                        
+                        person.CreatedAt = DateTime.Now;
+                        person.Enabled = true;
 
-                        _service.Create(user);
+                        _service.Create(person);
 
-                        //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario creado", string.Format("El usuario {0} fue creado con éxito", userVm.UserName)));
+                        MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario creado", string.Format("El usuario {0} fue creado con éxito", personVm.UserName)));
 
-                        return RedirectToAction("Index");
+                        //TODO: HACER EL ENVIO DE MAIL
+                        return View("_ActivationAccount");
                     }
                     else
                     {
-                        //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error al crear usuario", string.Format("El usuario {0} ya existe", userVm.UserName)));
+                        MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error al crear usuario", string.Format("El usuario {0} ya existe", personVm.UserName)));
                     }
                 }
                 catch (Exception ex)
                 {
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al crear usuario", typeof(UserController), ex));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al crear usuario, por favor contacte con el Administrador."));
                 }
             }
 
-            return View(userVm);
+            return View(personVm);
         }
 
         [HttpGet]
@@ -220,13 +222,13 @@ namespace EduClass.Web.Controllers
 
                     _service.Create(user);
 
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", userVm.UserName)));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", userVm.UserName)));
 
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al modificar usuario", typeof(UserController), ex));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al modificar usuario"));
                 }
             }
 
@@ -247,9 +249,8 @@ namespace EduClass.Web.Controllers
             user.UpdatedAt = DateTime.Now;
 
             _service.Update(user);
-
-            //TODO: AGREGAR LA CLASE MESSAGE SESSION
-            //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", user.Name)));
+            
+            MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", user.UserName)));
 
             return RedirectToAction("Index");
         }

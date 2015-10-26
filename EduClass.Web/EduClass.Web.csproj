@@ -139,18 +139,20 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\BoardController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\Helpers\EmailHelper.cs" />
     <Compile Include="Infrastructure\Mappers\AutoMapperConfig.cs" />
     <Compile Include="Infrastructure\Mappers\PersonMapperProfiles.cs" />
     <Compile Include="Infrastructure\Modules\EntitiesModule.cs" />
     <Compile Include="Infrastructure\Modules\RepositoryModule.cs" />
     <Compile Include="Infrastructure\Modules\SecurityModule.cs" />
     <Compile Include="Infrastructure\Modules\ServiceModule.cs" />
-    <Compile Include="Infrastructure\Security.cs" />
+    <Compile Include="Infrastructure\Helpers\Security.cs" />
+    <Compile Include="Infrastructure\Sessions\MessageSession.cs" />
     <Compile Include="Infrastructure\Sessions\UserSession.cs" />
     <Compile Include="Infrastructure\ViewModels\ChangePasswordViewModel.cs" />
     <Compile Include="Infrastructure\ViewModels\PersonViewModel.cs" />
@@ -259,6 +261,7 @@
     <Content Include="Content\template\lib_weather-icons_css_weather-icons.css" />
     <Content Include="Content\template\style.blue.css" />
     <Content Include="Content\template\style.default.css" />
+    <Content Include="Scripts\app\helpersSite.js" />
     <Content Include="Scripts\template\bootstrap.min.js" />
     <Content Include="Scripts\template\custom.js" />
     <Content Include="Scripts\template\jquery-1.10.2.min.js" />
@@ -311,13 +314,8 @@
     <Content Include="Scripts\template\modernizr.min.js" />
     <Content Include="Scripts\template\_lib_modernizr_modernizr.js" />
     <Content Include="Views\favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\font\css" />
@@ -366,9 +364,12 @@
     <Content Include="Views\Menu\_menuTop.cshtml" />
     <Content Include="Views\Menu\_menuVertical.cshtml" />
     <Content Include="Views\Users\SignIn.cshtml" />
+    <Content Include="Views\Users\Register.cshtml" />
+    <Content Include="Views\Users\_ActivationAccount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Board\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

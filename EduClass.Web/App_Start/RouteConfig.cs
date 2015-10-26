@@ -16,7 +16,7 @@ namespace EduClass.Web
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Users", action = "SignIn", id = UrlParameter.Optional }
             );
         }
     }

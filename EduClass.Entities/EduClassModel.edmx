@@ -25,8 +25,9 @@
     <EntitySet Name="Avatars" EntityType="EduClassModel.Store.Avatars" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="PostTypes" EntityType="EduClassModel.Store.PostTypes" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Replies" EntityType="EduClassModel.Store.Replies" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Person_Student" EntityType="EduClassModel.Store.Person_Student" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Person_Teacher" EntityType="EduClassModel.Store.Person_Teacher" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Person_Student" EntityType="EduClassModel.Store.Person_Student" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="GroupStudent" EntityType="EduClassModel.Store.GroupStudent" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="PersonPost" Association="EduClassModel.Store.PersonPost">
       <End Role="Person" EntitySet="Person" />
       <End Role="Post" EntitySet="Posts" />
@@ -71,10 +72,6 @@
       <End Role="Event" EntitySet="Events" />
       <End Role="EventType" EntitySet="EventTypes" />
     </AssociationSet>
-    <AssociationSet Name="GroupStudent" Association="EduClassModel.Store.GroupStudent">
-      <End Role="Group" EntitySet="Groups" />
-      <End Role="Student" EntitySet="Person_Student" />
-    </AssociationSet>
     <AssociationSet Name="GroupTeacher" Association="EduClassModel.Store.GroupTeacher">
       <End Role="Group" EntitySet="Groups" />
       <End Role="Teacher" EntitySet="Person_Teacher" />
@@ -115,13 +112,21 @@
       <End Role="QuestionOption" EntitySet="QuestionOptions" />
       <End Role="Response" EntitySet="Responses" />
     </AssociationSet>
-    <AssociationSet Name="FK_Student_inherits_Person" Association="EduClassModel.Store.FK_Student_inherits_Person">
-      <End Role="Person" EntitySet="Person" />
+    <AssociationSet Name="FK_GroupStudent_Group" Association="EduClassModel.Store.FK_GroupStudent_Group">
+      <End Role="Group" EntitySet="Groups" />
+      <End Role="GroupStudent" EntitySet="GroupStudent" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GroupStudent_Student" Association="EduClassModel.Store.FK_GroupStudent_Student">
       <End Role="Student" EntitySet="Person_Student" />
+      <End Role="GroupStudent" EntitySet="GroupStudent" />
     </AssociationSet>
     <AssociationSet Name="FK_Teacher_inherits_Person" Association="EduClassModel.Store.FK_Teacher_inherits_Person">
       <End Role="Person" EntitySet="Person" />
       <End Role="Teacher" EntitySet="Person_Teacher" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Student_inherits_Person" Association="EduClassModel.Store.FK_Student_inherits_Person">
+      <End Role="Person" EntitySet="Person" />
+      <End Role="Student" EntitySet="Person_Student" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Person">
@@ -351,6 +356,13 @@
     <Property Name="PostId" Type="int" Nullable="false" />
     <Property Name="Enabled" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
+  <EntityType Name="Person_Teacher">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="GroupId" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="Person_Student">
     <Key>
       <PropertyRef Name="Id" />
@@ -358,12 +370,13 @@
     <Property Name="GroupId" Type="int" Nullable="false" />
     <Property Name="Id" Type="int" Nullable="false" />
   </EntityType>
-  <EntityType Name="Person_Teacher">
+  <EntityType Name="GroupStudent">
     <Key>
-      <PropertyRef Name="Id" />
+      <PropertyRef Name="Groups_Id" />
+      <PropertyRef Name="Students_Id" />
     </Key>
-    <Property Name="GroupId" Type="int" Nullable="false" />
-    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Groups_Id" Type="int" Nullable="false" />
+    <Property Name="Students_Id" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="PersonPost">
     <End Role="Person" Type="EduClassModel.Store.Person" Multiplicity="1" />
@@ -497,18 +510,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="GroupStudent">
-    <End Role="Group" Type="EduClassModel.Store.Groups" Multiplicity="1" />
-    <End Role="Student" Type="EduClassModel.Store.Person_Student" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Group">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Student">
-        <PropertyRef Name="GroupId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="GroupTeacher">
     <End Role="Group" Type="EduClassModel.Store.Groups" Multiplicity="*" />
     <End Role="Teacher" Type="EduClassModel.Store.Person_Teacher" Multiplicity="1" />
@@ -629,17 +630,27 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Student_inherits_Person">
-    <End Role="Person" Type="EduClassModel.Store.Person" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="Student" Type="EduClassModel.Store.Person_Student" Multiplicity="0..1" />
+  <Association Name="FK_GroupStudent_Group">
+    <End Role="Group" Type="EduClassModel.Store.Groups" Multiplicity="1" />
+    <End Role="GroupStudent" Type="EduClassModel.Store.GroupStudent" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Person">
+      <Principal Role="Group">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="Student">
+      <Dependent Role="GroupStudent">
+        <PropertyRef Name="Groups_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GroupStudent_Student">
+    <End Role="GroupStudent" Type="EduClassModel.Store.GroupStudent" Multiplicity="*" />
+    <End Role="Student" Type="EduClassModel.Store.Person_Student" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Student">
         <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="GroupStudent">
+        <PropertyRef Name="Students_Id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -653,6 +664,20 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="Teacher">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Student_inherits_Person">
+    <End Role="Person" Type="EduClassModel.Store.Person" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Student" Type="EduClassModel.Store.Person_Student" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Person">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Student">
         <PropertyRef Name="Id" />
       </Dependent>
     </ReferentialConstraint>
@@ -725,10 +750,6 @@
             <End Role="Event" EntitySet="Events" />
             <End Role="EventType" EntitySet="EventTypes" />
           </AssociationSet>
-          <AssociationSet Name="GroupStudent" Association="EduClassModel.GroupStudent">
-            <End Role="Group" EntitySet="Groups" />
-            <End Role="Student" EntitySet="Person" />
-          </AssociationSet>
           <AssociationSet Name="GroupTeacher" Association="EduClassModel.GroupTeacher">
             <End Role="Group" EntitySet="Groups" />
             <End Role="Teacher" EntitySet="Person" />
@@ -769,21 +790,25 @@
             <End Role="QuestionOption" EntitySet="QuestionOptions" />
             <End Role="Response" EntitySet="Responses" />
           </AssociationSet>
+          <AssociationSet Name="GroupStudent" Association="EduClassModel.GroupStudent">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="Student" EntitySet="Person" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Person">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" Unicode="true" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" />
-          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="75" Unicode="true" />
-          <Property Name="LastName" Type="String" Nullable="false" MaxLength="75" Unicode="true" />
-          <Property Name="Birthday" Type="DateTime" Nullable="true" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="250" Unicode="true" />
-          <Property Name="IdentificationCard" Type="String" Nullable="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="75" Unicode="true" FixedLength="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="75" Unicode="true" FixedLength="false" />
+          <Property Name="Birthday" Type="DateTime" Nullable="true" Precision="3" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="IdentificationCard" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Posts" Relationship="EduClassModel.PersonPost" FromRole="Person" ToRole="Post" />
           <NavigationProperty Name="Replays" Relationship="EduClassModel.PersonReplay" FromRole="Person" ToRole="Replay" />
@@ -796,18 +821,18 @@
           <NavigationProperty Name="Group" Relationship="EduClassModel.GroupTeacher" FromRole="Teacher" ToRole="Group" />
         </EntityType>
         <EntityType Name="Student" BaseType="EduClassModel.Person" >
-          <NavigationProperty Name="Group" Relationship="EduClassModel.GroupStudent" FromRole="Student" ToRole="Group" />
           <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Groups" Relationship="EduClassModel.GroupStudent" FromRole="Student" ToRole="Group" />
         </EntityType>
         <EntityType Name="Board">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Posts" Relationship="EduClassModel.BoardPost" FromRole="Board" ToRole="Post" />
           <NavigationProperty Name="Group" Relationship="EduClassModel.GroupBoard" FromRole="Board" ToRole="Group" />
@@ -817,10 +842,10 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Title" Type="String" Nullable="false" MaxLength="250" Unicode="true" />
-          <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" Unicode="true" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Person" Relationship="EduClassModel.PersonPost" FromRole="Post" ToRole="Person" />
           <Property Name="PersonId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Board" Relationship="EduClassModel.BoardPost" FromRole="Post" ToRole="Board" />
@@ -858,33 +883,33 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Calendar" Relationship="EduClassModel.GroupCalendar" FromRole="Group" ToRole="Calendar" />
-          <NavigationProperty Name="Students" Relationship="EduClassModel.GroupStudent" FromRole="Group" ToRole="Student" />
           <NavigationProperty Name="Teacher" Relationship="EduClassModel.GroupTeacher" FromRole="Group" ToRole="Teacher" />
           <NavigationProperty Name="Pages" Relationship="EduClassModel.GroupPage" FromRole="Group" ToRole="Page" />
           <NavigationProperty Name="Board" Relationship="EduClassModel.GroupBoard" FromRole="Group" ToRole="Board" />
           <NavigationProperty Name="Keys" Relationship="EduClassModel.GroupKey" FromRole="Group" ToRole="Key" />
           <NavigationProperty Name="Tests" Relationship="EduClassModel.GroupTest" FromRole="Group" ToRole="Test" />
+          <NavigationProperty Name="Students" Relationship="EduClassModel.GroupStudent" FromRole="Group" ToRole="Student" />
         </EntityType>
         <EntityType Name="Test">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" />
-          <Property Name="StartDate" Type="DateTime" Nullable="false" />
-          <Property Name="EndDate" Type="DateTime" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Group" Relationship="EduClassModel.GroupTest" FromRole="Test" ToRole="Group" />
           <Property Name="GroupId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Questions" Relationship="EduClassModel.TestQuestion" FromRole="Test" ToRole="Question" />
         </EntityType>
         <EntityType Name="Question">
@@ -892,12 +917,12 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" Unicode="true" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" />
+          <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Test" Relationship="EduClassModel.TestQuestion" FromRole="Question" ToRole="Test" />
           <Property Name="TestId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="QuestionType" Relationship="EduClassModel.QuestionQuestionType" FromRole="Question" ToRole="QuestionType" />
           <NavigationProperty Name="Response" Relationship="EduClassModel.QuestionResponse" FromRole="Question" ToRole="Response" />
           <NavigationProperty Name="QuestionOptions" Relationship="EduClassModel.QuestionQuestionOption" FromRole="Question" ToRole="QuestionOption" />
@@ -907,12 +932,12 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" Unicode="true" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" />
+          <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Question" Relationship="EduClassModel.QuestionQuestionOption" FromRole="QuestionOption" ToRole="Question" />
           <Property Name="QuestionId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Response" Relationship="EduClassModel.QuestionOptionResponse" FromRole="QuestionOption" ToRole="Response" />
         </EntityType>
         <EntityType Name="QuestionType">
@@ -920,10 +945,10 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
-          <Property Name="UpdateAt" Type="DateTime" Nullable="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateAt" Type="DateTime" Nullable="true" Precision="3" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Question" Relationship="EduClassModel.QuestionQuestionType" FromRole="QuestionType" ToRole="Question" />
         </EntityType>
@@ -932,8 +957,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
+          <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Question" Relationship="EduClassModel.QuestionResponse" FromRole="Response" ToRole="Question" />
           <NavigationProperty Name="QuestionOption" Relationship="EduClassModel.QuestionOptionResponse" FromRole="Response" ToRole="QuestionOption" />
         </EntityType>
@@ -942,21 +967,21 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="HashKey" Type="String" Nullable="false" MaxLength="Max" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" />
+          <Property Name="HashKey" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Group" Relationship="EduClassModel.GroupKey" FromRole="Key" ToRole="Group" />
           <Property Name="GroupId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
         </EntityType>
         <EntityType Name="Calendar">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="500" Unicode="true" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
-          <Property Name="UpdatedAt" Type="DateTime" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="500" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Group" Relationship="EduClassModel.GroupCalendar" FromRole="Calendar" ToRole="Group" />
           <NavigationProperty Name="Events" Relationship="EduClassModel.CalendarEvent" FromRole="Calendar" ToRole="Event" />
@@ -966,14 +991,14 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" />
-          <Property Name="Date" Type="DateTime" Nullable="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
-          <Property Name="UpdateAt" Type="DateTime" Nullable="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Calendar" Relationship="EduClassModel.CalendarEvent" FromRole="Event" ToRole="Calendar" />
           <Property Name="CalendarId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="EventType" Relationship="EduClassModel.EventEventType" FromRole="Event" ToRole="EventType" />
         </EntityType>
         <EntityType Name="EventType">
@@ -981,10 +1006,10 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Event" Relationship="EduClassModel.EventEventType" FromRole="EventType" ToRole="Event" />
         </EntityType>
@@ -993,35 +1018,35 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" Unicode="true" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" />
+          <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Group" Relationship="EduClassModel.GroupPage" FromRole="Page" ToRole="Group" />
           <Property Name="GroupId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
         </EntityType>
         <EntityType Name="Alert">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Title" Type="String" Nullable="false" MaxLength="250" Unicode="true" />
-          <Property Name="Description" Type="String" Nullable="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
-          <Property Name="ReadAt" Type="DateTime" Nullable="true" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ReadAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Person" Relationship="EduClassModel.PersonAlert" FromRole="Alert" ToRole="Person" />
           <Property Name="PersonId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
         </EntityType>
         <EntityType Name="Mail">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Subject" Type="String" Nullable="false" MaxLength="250" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" />
-          <Property Name="CreateAt" Type="DateTime" Nullable="false" />
-          <Property Name="ReadAt" Type="DateTime" Nullable="true" />
+          <Property Name="Subject" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ReadAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Person" Relationship="EduClassModel.PersonMail" FromRole="Mail" ToRole="Person" />
           <Property Name="PersonId" Type="Int32" Nullable="false" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
@@ -1031,8 +1056,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UrlPhoto" Type="String" Nullable="false" MaxLength="Max" Unicode="true" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" />
+          <Property Name="UrlPhoto" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Person" Relationship="EduClassModel.PersonAvatar" FromRole="Avatar" ToRole="Person" />
         </EntityType>
@@ -1041,10 +1066,10 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Post" Relationship="EduClassModel.PostPostType" FromRole="PostType" ToRole="Post" />
         </EntityType>
@@ -1057,14 +1082,14 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Content" Type="String" Nullable="false" MaxLength="250" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" />
+          <Property Name="Content" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Person" Relationship="EduClassModel.PersonReplay" FromRole="Replay" ToRole="Person" />
           <Property Name="PersonId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Post" Relationship="EduClassModel.PostReplay" FromRole="Replay" ToRole="Post" />
           <Property Name="PostId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="String" Nullable="false" />
+          <Property Name="Enabled" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
         </EntityType>
         <Association Name="PersonReplay">
           <End Type="EduClassModel.Person" Role="Person" Multiplicity="1" />
@@ -1138,20 +1163,8 @@
           <End Type="EduClassModel.Event" Role="Event" Multiplicity="1" />
           <End Type="EduClassModel.EventType" Role="EventType" Multiplicity="1" />
         </Association>
-        <Association Name="GroupStudent">
-          <End Type="EduClassModel.Group" Role="Group" Multiplicity="1" />
-          <End Type="EduClassModel.Student" Role="Student" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Group">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Student">
-              <PropertyRef Name="GroupId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="GroupTeacher">
-          <End Type="EduClassModel.Group" Role="Group" Multiplicity="1" />
+          <End Type="EduClassModel.Group" Role="Group" Multiplicity="*" />
           <End Type="EduClassModel.Teacher" Role="Teacher" Multiplicity="1" />
         </Association>
         <Association Name="GroupPage">
@@ -1230,6 +1243,10 @@
           <End Type="EduClassModel.QuestionOption" Role="QuestionOption" Multiplicity="1" />
           <End Type="EduClassModel.Response" Role="Response" Multiplicity="0..1" />
         </Association>
+        <Association Name="GroupStudent">
+          <End Type="EduClassModel.Group" Role="Group" Multiplicity="*" />
+          <End Type="EduClassModel.Student" Role="Student" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1252,14 +1269,14 @@
           <ScalarProperty Name="Enabled" ColumnName="Enabled" />
         </MappingFragment>
       </EntityTypeMapping>
-      <EntityTypeMapping TypeName="IsTypeOf(EduClassModel.Student)">
-        <MappingFragment StoreEntitySet="Person_Student">
+      <EntityTypeMapping TypeName="IsTypeOf(EduClassModel.Teacher)">
+        <MappingFragment StoreEntitySet="Person_Teacher">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="GroupId" ColumnName="GroupId" />
         </MappingFragment>
       </EntityTypeMapping>
-      <EntityTypeMapping TypeName="IsTypeOf(EduClassModel.Teacher)">
-        <MappingFragment StoreEntitySet="Person_Teacher">
+      <EntityTypeMapping TypeName="IsTypeOf(EduClassModel.Student)">
+        <MappingFragment StoreEntitySet="Person_Student">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="GroupId" ColumnName="GroupId" />
         </MappingFragment>
@@ -1557,6 +1574,14 @@
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
+    <AssociationSetMapping Name="GroupStudent" TypeName="EduClassModel.GroupStudent" StoreEntitySet="GroupStudent">
+      <EndProperty Name="Group">
+        <ScalarProperty Name="Id" ColumnName="Groups_Id" />
+      </EndProperty>
+      <EndProperty Name="Student">
+        <ScalarProperty Name="Id" ColumnName="Students_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>
@@ -1573,6 +1598,7 @@
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
         <DesignerProperty Name="UseLegacyProvider" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
       </DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
