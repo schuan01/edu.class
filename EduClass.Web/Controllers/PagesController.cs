@@ -50,7 +50,7 @@ namespace EduClass.Web.Controllers
                         var page = AutoMapper.Mapper.Map<PageViewModel, Page>(pageVm);
 
                         page.CreatedAt = DateTime.Now;
-                        page.Enabled = "";
+                        page.Enabled = true;
 
                         _service.Create(page);
 
@@ -114,8 +114,8 @@ namespace EduClass.Web.Controllers
 
             if (page == null) { return HttpNotFound(); }
 
-            if (page.Enabled == "") page.Enabled = "";
-            else page.Enabled = "";
+            if (page.Enabled) page.Enabled = true;
+            else page.Enabled = true;
 
             page.UpdatedAt = DateTime.Now;
 

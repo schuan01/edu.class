@@ -27,11 +27,11 @@ namespace EduClass.Entities
         public Nullable<System.DateTime> UpdatedAt { get; set; }
         public int PersonId { get; set; }
         public int BoardId { get; set; }
+        public PostType PostType { get; set; }
         public bool Enabled { get; set; }
     
         public virtual Person Person { get; set; }
         public virtual Board Board { get; set; }
-        public virtual PostType PostType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Reply> Replays { get; set; }
     }

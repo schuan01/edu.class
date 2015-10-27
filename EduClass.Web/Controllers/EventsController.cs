@@ -50,7 +50,7 @@ namespace EduClass.Web.Controllers
 
                         
                         Event.CreatedAt = DateTime.Now;
-                        Event.Enabled = "";
+                        Event.Enabled = true;
 
                         _service.Create(Event);
 
@@ -112,8 +112,8 @@ namespace EduClass.Web.Controllers
 
             if (Event == null) { return HttpNotFound(); }
 
-            if (Event.Enabled == "") Event.Enabled = "";
-            else Event.Enabled = "";
+            if (Event.Enabled) Event.Enabled = true;
+            else Event.Enabled = false;
 
             
 

@@ -18,11 +18,14 @@ namespace EduClass.Entities
         public Student()
         {
             this.Groups = new HashSet<Group>();
+            this.Responses = new HashSet<Response>();
         }
     
         public int GroupId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Group> Groups { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Response> Responses { get; set; }
     }
 }

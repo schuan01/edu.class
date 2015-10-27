@@ -10,17 +10,9 @@
 namespace EduClass.Entities
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class QuestionType
+    public enum QuestionType : int
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-        public Nullable<System.DateTime> UpdateAt { get; set; }
-        public bool Enabled { get; set; }
-    
-        public virtual Question Question { get; set; }
+        ZarazaQuestion = 1
     }
 }

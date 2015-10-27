@@ -20,7 +20,7 @@ namespace EduClass.Entities
         public System.DateTime CreatedAt { get; set; }
         public Nullable<System.DateTime> ReadAt { get; set; }
         public int PersonId { get; set; }
-        public string Enabled { get; set; }
+        public bool Enabled { get; set; }
     
         public virtual Person Person { get; set; }
     }

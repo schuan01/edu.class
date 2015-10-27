@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 10/25/2015 21:18:38
+-- Date Created: 10/27/2015 19:40:40
 -- Generated from EDMX file: D:\code\Edu.Class\EduClass.Entities\EduClassModel.edmx
 -- --------------------------------------------------
 
@@ -17,91 +17,112 @@ GO
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
 
-IF OBJECT_ID(N'[dbo].[FK_BoardPost]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Posts] DROP CONSTRAINT [FK_BoardPost];
-GO
-IF OBJECT_ID(N'[dbo].[FK_CalendarEvent]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Events] DROP CONSTRAINT [FK_CalendarEvent];
-GO
-IF OBJECT_ID(N'[dbo].[FK_EventEventType]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Events] DROP CONSTRAINT [FK_EventEventType];
-GO
-IF OBJECT_ID(N'[dbo].[FK_GroupBoard]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Groups] DROP CONSTRAINT [FK_GroupBoard];
-GO
-IF OBJECT_ID(N'[dbo].[FK_GroupCalendar]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Calendars] DROP CONSTRAINT [FK_GroupCalendar];
-GO
-IF OBJECT_ID(N'[dbo].[FK_GroupKey]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Keys] DROP CONSTRAINT [FK_GroupKey];
-GO
-IF OBJECT_ID(N'[dbo].[FK_GroupPage]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Pages] DROP CONSTRAINT [FK_GroupPage];
-GO
-IF OBJECT_ID(N'[dbo].[FK_GroupStudent]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Person_Student] DROP CONSTRAINT [FK_GroupStudent];
-GO
-IF OBJECT_ID(N'[dbo].[FK_GroupTeacher]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Groups] DROP CONSTRAINT [FK_GroupTeacher];
-GO
-IF OBJECT_ID(N'[dbo].[FK_GroupTest]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Tests] DROP CONSTRAINT [FK_GroupTest];
-GO
-IF OBJECT_ID(N'[dbo].[FK_PersonAlert]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Alerts] DROP CONSTRAINT [FK_PersonAlert];
-GO
-IF OBJECT_ID(N'[dbo].[FK_PersonAvatar]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Avatars] DROP CONSTRAINT [FK_PersonAvatar];
-GO
-IF OBJECT_ID(N'[dbo].[FK_PersonMail]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Mails] DROP CONSTRAINT [FK_PersonMail];
-GO
 IF OBJECT_ID(N'[dbo].[FK_PersonPost]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Posts] DROP CONSTRAINT [FK_PersonPost];
+GO
+IF OBJECT_ID(N'[dbo].[FK_BoardPost]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Posts] DROP CONSTRAINT [FK_BoardPost];
 GO
 IF OBJECT_ID(N'[dbo].[FK_PersonReplay]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Replies] DROP CONSTRAINT [FK_PersonReplay];
 GO
-IF OBJECT_ID(N'[dbo].[FK_PostPostType]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Posts] DROP CONSTRAINT [FK_PostPostType];
-GO
 IF OBJECT_ID(N'[dbo].[FK_PostReplay]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Replies] DROP CONSTRAINT [FK_PostReplay];
 GO
-IF OBJECT_ID(N'[dbo].[FK_QuestionOptionResponse]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Responses] DROP CONSTRAINT [FK_QuestionOptionResponse];
+IF OBJECT_ID(N'[dbo].[FK_PersonAvatar]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Avatars] DROP CONSTRAINT [FK_PersonAvatar];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PersonAlert]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Alerts] DROP CONSTRAINT [FK_PersonAlert];
+GO
+IF OBJECT_ID(N'[dbo].[FK_GroupCalendar]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Calendars] DROP CONSTRAINT [FK_GroupCalendar];
+GO
+IF OBJECT_ID(N'[dbo].[FK_CalendarEvent]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Events] DROP CONSTRAINT [FK_CalendarEvent];
+GO
+IF OBJECT_ID(N'[dbo].[FK_GroupTeacher]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Groups] DROP CONSTRAINT [FK_GroupTeacher];
+GO
+IF OBJECT_ID(N'[dbo].[FK_GroupPage]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Pages] DROP CONSTRAINT [FK_GroupPage];
+GO
+IF OBJECT_ID(N'[dbo].[FK_GroupBoard]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Groups] DROP CONSTRAINT [FK_GroupBoard];
+GO
+IF OBJECT_ID(N'[dbo].[FK_GroupKey]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Keys] DROP CONSTRAINT [FK_GroupKey];
+GO
+IF OBJECT_ID(N'[dbo].[FK_GroupTest]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Tests] DROP CONSTRAINT [FK_GroupTest];
+GO
+IF OBJECT_ID(N'[dbo].[FK_TestQuestion]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Questions] DROP CONSTRAINT [FK_TestQuestion];
+GO
+IF OBJECT_ID(N'[dbo].[FK_QuestionResponse]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Responses] DROP CONSTRAINT [FK_QuestionResponse];
 GO
 IF OBJECT_ID(N'[dbo].[FK_QuestionQuestionOption]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[QuestionOptions] DROP CONSTRAINT [FK_QuestionQuestionOption];
 GO
-IF OBJECT_ID(N'[dbo].[FK_QuestionQuestionType]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Questions] DROP CONSTRAINT [FK_QuestionQuestionType];
+IF OBJECT_ID(N'[dbo].[FK_QuestionOptionResponse]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Responses] DROP CONSTRAINT [FK_QuestionOptionResponse];
 GO
-IF OBJECT_ID(N'[dbo].[FK_QuestionResponse]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Questions] DROP CONSTRAINT [FK_QuestionResponse];
+IF OBJECT_ID(N'[dbo].[FK_GroupStudent_Group]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[GroupStudent] DROP CONSTRAINT [FK_GroupStudent_Group];
 GO
-IF OBJECT_ID(N'[dbo].[FK_Student_inherits_Person]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Person_Student] DROP CONSTRAINT [FK_Student_inherits_Person];
+IF OBJECT_ID(N'[dbo].[FK_GroupStudent_Student]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[GroupStudent] DROP CONSTRAINT [FK_GroupStudent_Student];
+GO
+IF OBJECT_ID(N'[dbo].[FK_StudentResponse]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Responses] DROP CONSTRAINT [FK_StudentResponse];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PersonMail]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Mails] DROP CONSTRAINT [FK_PersonMail];
+GO
+IF OBJECT_ID(N'[dbo].[FK_MailPerson_Mail]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[MailPerson] DROP CONSTRAINT [FK_MailPerson_Mail];
+GO
+IF OBJECT_ID(N'[dbo].[FK_MailPerson_Person]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[MailPerson] DROP CONSTRAINT [FK_MailPerson_Person];
 GO
 IF OBJECT_ID(N'[dbo].[FK_Teacher_inherits_Person]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Person_Teacher] DROP CONSTRAINT [FK_Teacher_inherits_Person];
 GO
-IF OBJECT_ID(N'[dbo].[FK_TestQuestion]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Questions] DROP CONSTRAINT [FK_TestQuestion];
+IF OBJECT_ID(N'[dbo].[FK_Student_inherits_Person]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Person_Student] DROP CONSTRAINT [FK_Student_inherits_Person];
 GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
 
-IF OBJECT_ID(N'[dbo].[Alerts]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Alerts];
-GO
-IF OBJECT_ID(N'[dbo].[Avatars]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Avatars];
+IF OBJECT_ID(N'[dbo].[Person]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Person];
 GO
 IF OBJECT_ID(N'[dbo].[Boards]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Boards];
+GO
+IF OBJECT_ID(N'[dbo].[Posts]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Posts];
+GO
+IF OBJECT_ID(N'[dbo].[Groups]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Groups];
+GO
+IF OBJECT_ID(N'[dbo].[Tests]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Tests];
+GO
+IF OBJECT_ID(N'[dbo].[Questions]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Questions];
+GO
+IF OBJECT_ID(N'[dbo].[QuestionOptions]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[QuestionOptions];
+GO
+IF OBJECT_ID(N'[dbo].[Responses]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Responses];
+GO
+IF OBJECT_ID(N'[dbo].[Keys]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Keys];
 GO
 IF OBJECT_ID(N'[dbo].[Calendars]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Calendars];
@@ -109,53 +130,32 @@ GO
 IF OBJECT_ID(N'[dbo].[Events]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Events];
 GO
-IF OBJECT_ID(N'[dbo].[EventTypes]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[EventTypes];
+IF OBJECT_ID(N'[dbo].[Pages]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Pages];
 GO
-IF OBJECT_ID(N'[dbo].[Groups]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Groups];
-GO
-IF OBJECT_ID(N'[dbo].[Keys]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Keys];
+IF OBJECT_ID(N'[dbo].[Alerts]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Alerts];
 GO
 IF OBJECT_ID(N'[dbo].[Mails]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Mails];
 GO
-IF OBJECT_ID(N'[dbo].[Pages]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Pages];
-GO
-IF OBJECT_ID(N'[dbo].[Person]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Person];
-GO
-IF OBJECT_ID(N'[dbo].[Person_Student]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Person_Student];
-GO
-IF OBJECT_ID(N'[dbo].[Person_Teacher]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Person_Teacher];
-GO
-IF OBJECT_ID(N'[dbo].[Posts]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Posts];
-GO
-IF OBJECT_ID(N'[dbo].[PostTypes]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[PostTypes];
-GO
-IF OBJECT_ID(N'[dbo].[QuestionOptions]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[QuestionOptions];
-GO
-IF OBJECT_ID(N'[dbo].[Questions]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Questions];
-GO
-IF OBJECT_ID(N'[dbo].[QuestionTypes]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[QuestionTypes];
+IF OBJECT_ID(N'[dbo].[Avatars]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Avatars];
 GO
 IF OBJECT_ID(N'[dbo].[Replies]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Replies];
 GO
-IF OBJECT_ID(N'[dbo].[Responses]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Responses];
+IF OBJECT_ID(N'[dbo].[Person_Teacher]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Person_Teacher];
 GO
-IF OBJECT_ID(N'[dbo].[Tests]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Tests];
+IF OBJECT_ID(N'[dbo].[Person_Student]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Person_Student];
+GO
+IF OBJECT_ID(N'[dbo].[GroupStudent]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[GroupStudent];
+GO
+IF OBJECT_ID(N'[dbo].[MailPerson]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[MailPerson];
 GO
 
 -- --------------------------------------------------
@@ -198,8 +198,8 @@ CREATE TABLE [dbo].[Posts] (
     [UpdatedAt] datetime  NULL,
     [PersonId] int  NOT NULL,
     [BoardId] int  NOT NULL,
-    [Enabled] bit  NOT NULL,
-    [PostType_Id] int  NOT NULL
+    [PostType] int  NOT NULL,
+    [Enabled] bit  NOT NULL
 );
 GO
 
@@ -226,7 +226,7 @@ CREATE TABLE [dbo].[Tests] (
     [StartDate] datetime  NOT NULL,
     [EndDate] datetime  NOT NULL,
     [GroupId] int  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL
+    [Enabled] bit  NOT NULL
 );
 GO
 
@@ -237,9 +237,8 @@ CREATE TABLE [dbo].[Questions] (
     [CreatedAt] datetime  NOT NULL,
     [UpdatedAt] datetime  NULL,
     [TestId] int  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL,
-    [QuestionType_Id] int  NOT NULL,
-    [Response_Id] int  NOT NULL
+    [QuestionType] int  NOT NULL,
+    [Enabled] bit  NOT NULL
 );
 GO
 
@@ -250,17 +249,6 @@ CREATE TABLE [dbo].[QuestionOptions] (
     [CreatedAt] datetime  NOT NULL,
     [UpdatedAt] datetime  NULL,
     [QuestionId] int  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL
-);
-GO
-
--- Creating table 'QuestionTypes'
-CREATE TABLE [dbo].[QuestionTypes] (
-    [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(250)  NOT NULL,
-    [Description] nvarchar(max)  NOT NULL,
-    [CreatedAt] datetime  NOT NULL,
-    [UpdateAt] datetime  NULL,
     [Enabled] bit  NOT NULL
 );
 GO
@@ -270,6 +258,8 @@ CREATE TABLE [dbo].[Responses] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Content] nvarchar(max)  NOT NULL,
     [CreatedAt] datetime  NOT NULL,
+    [StudentId] int  NOT NULL,
+    [Question_Id] int  NOT NULL,
     [QuestionOption_Id] int  NOT NULL
 );
 GO
@@ -279,9 +269,8 @@ CREATE TABLE [dbo].[Keys] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [HashKey] nvarchar(max)  NOT NULL,
     [CreatedAt] datetime  NOT NULL,
-    [UpdatedAt] datetime  NULL,
     [GroupId] int  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL
+    [Enabled] bit  NOT NULL
 );
 GO
 
@@ -301,22 +290,11 @@ CREATE TABLE [dbo].[Events] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Name] nvarchar(250)  NOT NULL,
     [Description] nvarchar(max)  NOT NULL,
+    [EventType] int  NOT NULL,
     [Date] datetime  NOT NULL,
     [CreatedAt] datetime  NOT NULL,
     [UpdateAt] datetime  NULL,
     [CalendarId] int  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL,
-    [EventType_Id] int  NOT NULL
-);
-GO
-
--- Creating table 'EventTypes'
-CREATE TABLE [dbo].[EventTypes] (
-    [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(250)  NOT NULL,
-    [Description] nvarchar(max)  NOT NULL,
-    [CreatedAt] datetime  NOT NULL,
-    [UpdatedAt] datetime  NULL,
     [Enabled] bit  NOT NULL
 );
 GO
@@ -328,7 +306,7 @@ CREATE TABLE [dbo].[Pages] (
     [CreatedAt] datetime  NOT NULL,
     [UpdatedAt] datetime  NULL,
     [GroupId] int  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL
+    [Enabled] bit  NOT NULL
 );
 GO
 
@@ -340,7 +318,7 @@ CREATE TABLE [dbo].[Alerts] (
     [CreatedAt] datetime  NOT NULL,
     [ReadAt] datetime  NULL,
     [PersonId] int  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL
+    [Enabled] bit  NOT NULL
 );
 GO
 
@@ -352,6 +330,7 @@ CREATE TABLE [dbo].[Mails] (
     [CreateAt] datetime  NOT NULL,
     [ReadAt] datetime  NULL,
     [PersonId] int  NOT NULL,
+    [PersonFromId] int  NOT NULL,
     [Enabled] bit  NOT NULL
 );
 GO
@@ -366,17 +345,6 @@ CREATE TABLE [dbo].[Avatars] (
 );
 GO
 
--- Creating table 'PostTypes'
-CREATE TABLE [dbo].[PostTypes] (
-    [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(250)  NOT NULL,
-    [Description] nvarchar(max)  NOT NULL,
-    [CreatedAt] datetime  NOT NULL,
-    [UpdatedAt] datetime  NULL,
-    [Enabled] bit  NOT NULL
-);
-GO
-
 -- Creating table 'Replies'
 CREATE TABLE [dbo].[Replies] (
     [Id] int IDENTITY(1,1) NOT NULL,
@@ -385,7 +353,7 @@ CREATE TABLE [dbo].[Replies] (
     [UpdatedAt] datetime  NULL,
     [PersonId] int  NOT NULL,
     [PostId] int  NOT NULL,
-    [Enabled] nvarchar(max)  NOT NULL
+    [Enabled] bit  NOT NULL
 );
 GO
 
@@ -407,6 +375,13 @@ GO
 CREATE TABLE [dbo].[GroupStudent] (
     [Groups_Id] int  NOT NULL,
     [Students_Id] int  NOT NULL
+);
+GO
+
+-- Creating table 'MailPerson'
+CREATE TABLE [dbo].[MailPerson] (
+    [MailsRecieved_Id] int  NOT NULL,
+    [PersonsTo_Id] int  NOT NULL
 );
 GO
 
@@ -456,12 +431,6 @@ ADD CONSTRAINT [PK_QuestionOptions]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'QuestionTypes'
-ALTER TABLE [dbo].[QuestionTypes]
-ADD CONSTRAINT [PK_QuestionTypes]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
 -- Creating primary key on [Id] in table 'Responses'
 ALTER TABLE [dbo].[Responses]
 ADD CONSTRAINT [PK_Responses]
@@ -483,12 +452,6 @@ GO
 -- Creating primary key on [Id] in table 'Events'
 ALTER TABLE [dbo].[Events]
 ADD CONSTRAINT [PK_Events]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Id] in table 'EventTypes'
-ALTER TABLE [dbo].[EventTypes]
-ADD CONSTRAINT [PK_EventTypes]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -516,12 +479,6 @@ ADD CONSTRAINT [PK_Avatars]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'PostTypes'
-ALTER TABLE [dbo].[PostTypes]
-ADD CONSTRAINT [PK_PostTypes]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
 -- Creating primary key on [Id] in table 'Replies'
 ALTER TABLE [dbo].[Replies]
 ADD CONSTRAINT [PK_Replies]
@@ -544,6 +501,12 @@ GO
 ALTER TABLE [dbo].[GroupStudent]
 ADD CONSTRAINT [PK_GroupStudent]
     PRIMARY KEY CLUSTERED ([Groups_Id], [Students_Id] ASC);
+GO
+
+-- Creating primary key on [MailsRecieved_Id], [PersonsTo_Id] in table 'MailPerson'
+ALTER TABLE [dbo].[MailPerson]
+ADD CONSTRAINT [PK_MailPerson]
+    PRIMARY KEY CLUSTERED ([MailsRecieved_Id], [PersonsTo_Id] ASC);
 GO
 
 -- --------------------------------------------------
@@ -578,21 +541,6 @@ GO
 CREATE INDEX [IX_FK_BoardPost]
 ON [dbo].[Posts]
     ([BoardId]);
-GO
-
--- Creating foreign key on [PostType_Id] in table 'Posts'
-ALTER TABLE [dbo].[Posts]
-ADD CONSTRAINT [FK_PostPostType]
-    FOREIGN KEY ([PostType_Id])
-    REFERENCES [dbo].[PostTypes]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_PostPostType'
-CREATE INDEX [IX_FK_PostPostType]
-ON [dbo].[Posts]
-    ([PostType_Id]);
 GO
 
 -- Creating foreign key on [PersonId] in table 'Replies'
@@ -640,21 +588,6 @@ ON [dbo].[Avatars]
     ([Person_Id]);
 GO
 
--- Creating foreign key on [PersonId] in table 'Mails'
-ALTER TABLE [dbo].[Mails]
-ADD CONSTRAINT [FK_PersonMail]
-    FOREIGN KEY ([PersonId])
-    REFERENCES [dbo].[Person]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_PersonMail'
-CREATE INDEX [IX_FK_PersonMail]
-ON [dbo].[Mails]
-    ([PersonId]);
-GO
-
 -- Creating foreign key on [PersonId] in table 'Alerts'
 ALTER TABLE [dbo].[Alerts]
 ADD CONSTRAINT [FK_PersonAlert]
@@ -698,21 +631,6 @@ GO
 CREATE INDEX [IX_FK_CalendarEvent]
 ON [dbo].[Events]
     ([CalendarId]);
-GO
-
--- Creating foreign key on [EventType_Id] in table 'Events'
-ALTER TABLE [dbo].[Events]
-ADD CONSTRAINT [FK_EventEventType]
-    FOREIGN KEY ([EventType_Id])
-    REFERENCES [dbo].[EventTypes]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_EventEventType'
-CREATE INDEX [IX_FK_EventEventType]
-ON [dbo].[Events]
-    ([EventType_Id]);
 GO
 
 -- Creating foreign key on [Teacher_Id] in table 'Groups'
@@ -805,34 +723,19 @@ ON [dbo].[Questions]
     ([TestId]);
 GO
 
--- Creating foreign key on [QuestionType_Id] in table 'Questions'
-ALTER TABLE [dbo].[Questions]
-ADD CONSTRAINT [FK_QuestionQuestionType]
-    FOREIGN KEY ([QuestionType_Id])
-    REFERENCES [dbo].[QuestionTypes]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_QuestionQuestionType'
-CREATE INDEX [IX_FK_QuestionQuestionType]
-ON [dbo].[Questions]
-    ([QuestionType_Id]);
-GO
-
--- Creating foreign key on [Response_Id] in table 'Questions'
-ALTER TABLE [dbo].[Questions]
+-- Creating foreign key on [Question_Id] in table 'Responses'
+ALTER TABLE [dbo].[Responses]
 ADD CONSTRAINT [FK_QuestionResponse]
-    FOREIGN KEY ([Response_Id])
-    REFERENCES [dbo].[Responses]
+    FOREIGN KEY ([Question_Id])
+    REFERENCES [dbo].[Questions]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_QuestionResponse'
 CREATE INDEX [IX_FK_QuestionResponse]
-ON [dbo].[Questions]
-    ([Response_Id]);
+ON [dbo].[Responses]
+    ([Question_Id]);
 GO
 
 -- Creating foreign key on [QuestionId] in table 'QuestionOptions'
@@ -887,6 +790,60 @@ GO
 CREATE INDEX [IX_FK_GroupStudent_Student]
 ON [dbo].[GroupStudent]
     ([Students_Id]);
+GO
+
+-- Creating foreign key on [StudentId] in table 'Responses'
+ALTER TABLE [dbo].[Responses]
+ADD CONSTRAINT [FK_StudentResponse]
+    FOREIGN KEY ([StudentId])
+    REFERENCES [dbo].[Person_Student]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_StudentResponse'
+CREATE INDEX [IX_FK_StudentResponse]
+ON [dbo].[Responses]
+    ([StudentId]);
+GO
+
+-- Creating foreign key on [PersonFromId] in table 'Mails'
+ALTER TABLE [dbo].[Mails]
+ADD CONSTRAINT [FK_PersonMail]
+    FOREIGN KEY ([PersonFromId])
+    REFERENCES [dbo].[Person]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_PersonMail'
+CREATE INDEX [IX_FK_PersonMail]
+ON [dbo].[Mails]
+    ([PersonFromId]);
+GO
+
+-- Creating foreign key on [MailsRecieved_Id] in table 'MailPerson'
+ALTER TABLE [dbo].[MailPerson]
+ADD CONSTRAINT [FK_MailPerson_Mail]
+    FOREIGN KEY ([MailsRecieved_Id])
+    REFERENCES [dbo].[Mails]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [PersonsTo_Id] in table 'MailPerson'
+ALTER TABLE [dbo].[MailPerson]
+ADD CONSTRAINT [FK_MailPerson_Person]
+    FOREIGN KEY ([PersonsTo_Id])
+    REFERENCES [dbo].[Person]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_MailPerson_Person'
+CREATE INDEX [IX_FK_MailPerson_Person]
+ON [dbo].[MailPerson]
+    ([PersonsTo_Id]);
 GO
 
 -- Creating foreign key on [Id] in table 'Person_Teacher'

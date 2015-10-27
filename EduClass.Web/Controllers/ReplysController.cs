@@ -50,7 +50,7 @@ namespace EduClass.Web.Controllers
                         var reply = AutoMapper.Mapper.Map<ReplyViewModel, Reply>(replyVm);
 
                         reply.CreatedAt = DateTime.Now;
-                        reply.Enabled = "";
+                        reply.Enabled = true;
 
                         _service.Create(reply);
 
@@ -114,8 +114,8 @@ namespace EduClass.Web.Controllers
 
             if (reply == null) { return HttpNotFound(); }
 
-            if (reply.Enabled == "") reply.Enabled = "";
-            else reply.Enabled = "";
+            if (reply.Enabled == true) reply.Enabled = true;
+            else reply.Enabled = true;
 
             reply.UpdatedAt = DateTime.Now;
 

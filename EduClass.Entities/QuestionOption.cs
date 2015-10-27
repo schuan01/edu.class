@@ -19,7 +19,7 @@ namespace EduClass.Entities
         public System.DateTime CreatedAt { get; set; }
         public Nullable<System.DateTime> UpdatedAt { get; set; }
         public int QuestionId { get; set; }
-        public string Enabled { get; set; }
+        public bool Enabled { get; set; }
     
         public virtual Question Question { get; set; }
         public virtual Response Response { get; set; }

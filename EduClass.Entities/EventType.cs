@@ -10,17 +10,9 @@
 namespace EduClass.Entities
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class EventType
+    public enum EventType : int
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-        public Nullable<System.DateTime> UpdatedAt { get; set; }
-        public bool Enabled { get; set; }
-    
-        public virtual Event Event { get; set; }
+        Zaraza = 1
     }
 }

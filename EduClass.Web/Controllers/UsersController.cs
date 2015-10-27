@@ -9,6 +9,7 @@ using System.Linq;
 using EduClass.Web.Infrastructure;
 using EduClass.Web.Infrastructure.ViewModels;
 using EduClass.Entities;
+using System.Data.Entity.Validation;
 
 namespace EduClass.Web.Controllers
 {
@@ -187,6 +188,10 @@ namespace EduClass.Web.Controllers
                     {
                         MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error al crear usuario", string.Format("El usuario {0} ya existe", personVm.UserName)));
                     }
+                }
+                catch (DbEntityValidationException dex)
+                {
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al crear usuario, por favor contacte con el Administrador."));
                 }
                 catch (Exception ex)
                 {

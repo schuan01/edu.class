@@ -32,17 +32,14 @@ namespace EduClass.Entities
         public virtual DbSet<Test> Tests { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<QuestionOption> QuestionOptions { get; set; }
-        public virtual DbSet<QuestionType> QuestionTypes { get; set; }
         public virtual DbSet<Response> Responses { get; set; }
         public virtual DbSet<Key> Keys { get; set; }
         public virtual DbSet<Calendar> Calendars { get; set; }
         public virtual DbSet<Event> Events { get; set; }
-        public virtual DbSet<EventType> EventTypes { get; set; }
         public virtual DbSet<Page> Pages { get; set; }
         public virtual DbSet<Alert> Alerts { get; set; }
         public virtual DbSet<Mail> Mails { get; set; }
         public virtual DbSet<Avatar> Avatars { get; set; }
-        public virtual DbSet<PostType> PostTypes { get; set; }
         public virtual DbSet<Reply> Replies { get; set; }
     }
 }

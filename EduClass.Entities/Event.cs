@@ -17,13 +17,13 @@ namespace EduClass.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public EventType EventType { get; set; }
         public System.DateTime Date { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public int CalendarId { get; set; }
-        public string Enabled { get; set; }
+        public bool Enabled { get; set; }
     
         public virtual Calendar Calendar { get; set; }
-        public virtual EventType EventType { get; set; }
     }
 }

@@ -17,6 +17,7 @@ namespace EduClass.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Question()
         {
+            this.Response = new HashSet<Response>();
             this.QuestionOptions = new HashSet<QuestionOption>();
         }
     
@@ -25,11 +26,12 @@ namespace EduClass.Entities
         public System.DateTime CreatedAt { get; set; }
         public Nullable<System.DateTime> UpdatedAt { get; set; }
         public int TestId { get; set; }
-        public string Enabled { get; set; }
+        public QuestionType QuestionType { get; set; }
+        public bool Enabled { get; set; }
     
         public virtual Test Test { get; set; }
-        public virtual QuestionType QuestionType { get; set; }
-        public virtual Response Response { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Response> Response { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<QuestionOption> QuestionOptions { get; set; }
     }

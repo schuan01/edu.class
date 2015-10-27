@@ -50,7 +50,7 @@ namespace EduClass.Web.Controllers
 
                         
                         test.CreatedAt = DateTime.Now;
-                        test.Enabled = "";
+                        test.Enabled = true;
 
                         _service.Create(test);
 
@@ -112,8 +112,8 @@ namespace EduClass.Web.Controllers
 
             if (test == null) { return HttpNotFound(); }
 
-            if (test.Enabled == "") test.Enabled = "";
-            else test.Enabled = "";
+            if (test.Enabled) test.Enabled = true;
+            else test.Enabled = true;
 
             test.UpdatedAt = DateTime.Now;
 

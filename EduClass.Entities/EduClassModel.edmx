@@ -13,21 +13,19 @@
     <EntitySet Name="Tests" EntityType="EduClassModel.Store.Tests" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Questions" EntityType="EduClassModel.Store.Questions" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="QuestionOptions" EntityType="EduClassModel.Store.QuestionOptions" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="QuestionTypes" EntityType="EduClassModel.Store.QuestionTypes" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Responses" EntityType="EduClassModel.Store.Responses" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Keys" EntityType="EduClassModel.Store.Keys" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Calendars" EntityType="EduClassModel.Store.Calendars" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Events" EntityType="EduClassModel.Store.Events" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="EventTypes" EntityType="EduClassModel.Store.EventTypes" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Pages" EntityType="EduClassModel.Store.Pages" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Alerts" EntityType="EduClassModel.Store.Alerts" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Mails" EntityType="EduClassModel.Store.Mails" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Avatars" EntityType="EduClassModel.Store.Avatars" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="PostTypes" EntityType="EduClassModel.Store.PostTypes" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Replies" EntityType="EduClassModel.Store.Replies" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Person_Teacher" EntityType="EduClassModel.Store.Person_Teacher" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Person_Student" EntityType="EduClassModel.Store.Person_Student" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="GroupStudent" EntityType="EduClassModel.Store.GroupStudent" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MailPerson" EntityType="EduClassModel.Store.MailPerson" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="PersonPost" Association="EduClassModel.Store.PersonPost">
       <End Role="Person" EntitySet="Person" />
       <End Role="Post" EntitySet="Posts" />
@@ -35,10 +33,6 @@
     <AssociationSet Name="BoardPost" Association="EduClassModel.Store.BoardPost">
       <End Role="Board" EntitySet="Boards" />
       <End Role="Post" EntitySet="Posts" />
-    </AssociationSet>
-    <AssociationSet Name="PostPostType" Association="EduClassModel.Store.PostPostType">
-      <End Role="Post" EntitySet="Posts" />
-      <End Role="PostType" EntitySet="PostTypes" />
     </AssociationSet>
     <AssociationSet Name="PersonReplay" Association="EduClassModel.Store.PersonReplay">
       <End Role="Person" EntitySet="Person" />
@@ -52,10 +46,6 @@
       <End Role="Person" EntitySet="Person" />
       <End Role="Avatar" EntitySet="Avatars" />
     </AssociationSet>
-    <AssociationSet Name="PersonMail" Association="EduClassModel.Store.PersonMail">
-      <End Role="Person" EntitySet="Person" />
-      <End Role="Mail" EntitySet="Mails" />
-    </AssociationSet>
     <AssociationSet Name="PersonAlert" Association="EduClassModel.Store.PersonAlert">
       <End Role="Person" EntitySet="Person" />
       <End Role="Alert" EntitySet="Alerts" />
@@ -67,10 +57,6 @@
     <AssociationSet Name="CalendarEvent" Association="EduClassModel.Store.CalendarEvent">
       <End Role="Calendar" EntitySet="Calendars" />
       <End Role="Event" EntitySet="Events" />
-    </AssociationSet>
-    <AssociationSet Name="EventEventType" Association="EduClassModel.Store.EventEventType">
-      <End Role="Event" EntitySet="Events" />
-      <End Role="EventType" EntitySet="EventTypes" />
     </AssociationSet>
     <AssociationSet Name="GroupTeacher" Association="EduClassModel.Store.GroupTeacher">
       <End Role="Group" EntitySet="Groups" />
@@ -96,10 +82,6 @@
       <End Role="Test" EntitySet="Tests" />
       <End Role="Question" EntitySet="Questions" />
     </AssociationSet>
-    <AssociationSet Name="QuestionQuestionType" Association="EduClassModel.Store.QuestionQuestionType">
-      <End Role="Question" EntitySet="Questions" />
-      <End Role="QuestionType" EntitySet="QuestionTypes" />
-    </AssociationSet>
     <AssociationSet Name="QuestionResponse" Association="EduClassModel.Store.QuestionResponse">
       <End Role="Question" EntitySet="Questions" />
       <End Role="Response" EntitySet="Responses" />
@@ -119,6 +101,22 @@
     <AssociationSet Name="FK_GroupStudent_Student" Association="EduClassModel.Store.FK_GroupStudent_Student">
       <End Role="Student" EntitySet="Person_Student" />
       <End Role="GroupStudent" EntitySet="GroupStudent" />
+    </AssociationSet>
+    <AssociationSet Name="StudentResponse" Association="EduClassModel.Store.StudentResponse">
+      <End Role="Student" EntitySet="Person_Student" />
+      <End Role="Response" EntitySet="Responses" />
+    </AssociationSet>
+    <AssociationSet Name="PersonMail" Association="EduClassModel.Store.PersonMail">
+      <End Role="Person" EntitySet="Person" />
+      <End Role="Mail" EntitySet="Mails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MailPerson_Mail" Association="EduClassModel.Store.FK_MailPerson_Mail">
+      <End Role="Mail" EntitySet="Mails" />
+      <End Role="MailPerson" EntitySet="MailPerson" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MailPerson_Person" Association="EduClassModel.Store.FK_MailPerson_Person">
+      <End Role="Person" EntitySet="Person" />
+      <End Role="MailPerson" EntitySet="MailPerson" />
     </AssociationSet>
     <AssociationSet Name="FK_Teacher_inherits_Person" Association="EduClassModel.Store.FK_Teacher_inherits_Person">
       <End Role="Person" EntitySet="Person" />
@@ -167,8 +165,8 @@
     <Property Name="UpdatedAt" Type="datetime" Nullable="true" />
     <Property Name="PersonId" Type="int" Nullable="false" />
     <Property Name="BoardId" Type="int" Nullable="false" />
+    <Property Name="PostType" Type="int" Nullable="false" />
     <Property Name="Enabled" Type="bit" Nullable="false" />
-    <Property Name="PostType_Id" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Groups">
     <Key>
@@ -195,7 +193,7 @@
     <Property Name="StartDate" Type="datetime" Nullable="false" />
     <Property Name="EndDate" Type="datetime" Nullable="false" />
     <Property Name="GroupId" Type="int" Nullable="false" />
-    <Property Name="Enabled" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Enabled" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Questions">
     <Key>
@@ -206,9 +204,8 @@
     <Property Name="CreatedAt" Type="datetime" Nullable="false" />
     <Property Name="UpdatedAt" Type="datetime" Nullable="true" />
     <Property Name="TestId" Type="int" Nullable="false" />
-    <Property Name="Enabled" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="QuestionType_Id" Type="int" Nullable="false" />
-    <Property Name="Response_Id" Type="int" Nullable="false" />
+    <Property Name="QuestionType" Type="int" Nullable="false" />
+    <Property Name="Enabled" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="QuestionOptions">
     <Key>
@@ -219,17 +216,6 @@
     <Property Name="CreatedAt" Type="datetime" Nullable="false" />
     <Property Name="UpdatedAt" Type="datetime" Nullable="true" />
     <Property Name="QuestionId" Type="int" Nullable="false" />
-    <Property Name="Enabled" Type="nvarchar(max)" Nullable="false" />
-  </EntityType>
-  <EntityType Name="QuestionTypes">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="250" />
-    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="CreatedAt" Type="datetime" Nullable="false" />
-    <Property Name="UpdateAt" Type="datetime" Nullable="true" />
     <Property Name="Enabled" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Responses">
@@ -239,6 +225,8 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
     <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+    <Property Name="StudentId" Type="int" Nullable="false" />
+    <Property Name="Question_Id" Type="int" Nullable="false" />
     <Property Name="QuestionOption_Id" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Keys">
@@ -248,9 +236,8 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="HashKey" Type="nvarchar(max)" Nullable="false" />
     <Property Name="CreatedAt" Type="datetime" Nullable="false" />
-    <Property Name="UpdatedAt" Type="datetime" Nullable="true" />
     <Property Name="GroupId" Type="int" Nullable="false" />
-    <Property Name="Enabled" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Enabled" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Calendars">
     <Key>
@@ -270,22 +257,11 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="250" />
     <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="EventType" Type="int" Nullable="false" />
     <Property Name="Date" Type="datetime" Nullable="false" />
     <Property Name="CreatedAt" Type="datetime" Nullable="false" />
     <Property Name="UpdateAt" Type="datetime" Nullable="true" />
     <Property Name="CalendarId" Type="int" Nullable="false" />
-    <Property Name="Enabled" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="EventType_Id" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="EventTypes">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="250" />
-    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="CreatedAt" Type="datetime" Nullable="false" />
-    <Property Name="UpdatedAt" Type="datetime" Nullable="true" />
     <Property Name="Enabled" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Pages">
@@ -297,7 +273,7 @@
     <Property Name="CreatedAt" Type="datetime" Nullable="false" />
     <Property Name="UpdatedAt" Type="datetime" Nullable="true" />
     <Property Name="GroupId" Type="int" Nullable="false" />
-    <Property Name="Enabled" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Enabled" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Alerts">
     <Key>
@@ -309,7 +285,7 @@
     <Property Name="CreatedAt" Type="datetime" Nullable="false" />
     <Property Name="ReadAt" Type="datetime" Nullable="true" />
     <Property Name="PersonId" Type="int" Nullable="false" />
-    <Property Name="Enabled" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Enabled" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Mails">
     <Key>
@@ -321,6 +297,7 @@
     <Property Name="CreateAt" Type="datetime" Nullable="false" />
     <Property Name="ReadAt" Type="datetime" Nullable="true" />
     <Property Name="PersonId" Type="int" Nullable="false" />
+    <Property Name="PersonFromId" Type="int" Nullable="false" />
     <Property Name="Enabled" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Avatars">
@@ -333,17 +310,6 @@
     <Property Name="Enabled" Type="bit" Nullable="false" />
     <Property Name="Person_Id" Type="int" Nullable="false" />
   </EntityType>
-  <EntityType Name="PostTypes">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="250" />
-    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="CreatedAt" Type="datetime" Nullable="false" />
-    <Property Name="UpdatedAt" Type="datetime" Nullable="true" />
-    <Property Name="Enabled" Type="bit" Nullable="false" />
-  </EntityType>
   <EntityType Name="Replies">
     <Key>
       <PropertyRef Name="Id" />
@@ -354,7 +320,7 @@
     <Property Name="UpdatedAt" Type="datetime" Nullable="true" />
     <Property Name="PersonId" Type="int" Nullable="false" />
     <Property Name="PostId" Type="int" Nullable="false" />
-    <Property Name="Enabled" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Enabled" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Person_Teacher">
     <Key>
@@ -378,6 +344,14 @@
     <Property Name="Groups_Id" Type="int" Nullable="false" />
     <Property Name="Students_Id" Type="int" Nullable="false" />
   </EntityType>
+  <EntityType Name="MailPerson">
+    <Key>
+      <PropertyRef Name="MailsRecieved_Id" />
+      <PropertyRef Name="PersonsTo_Id" />
+    </Key>
+    <Property Name="MailsRecieved_Id" Type="int" Nullable="false" />
+    <Property Name="PersonsTo_Id" Type="int" Nullable="false" />
+  </EntityType>
   <Association Name="PersonPost">
     <End Role="Person" Type="EduClassModel.Store.Person" Multiplicity="1" />
     <End Role="Post" Type="EduClassModel.Store.Posts" Multiplicity="*" />
@@ -399,18 +373,6 @@
       </Principal>
       <Dependent Role="Post">
         <PropertyRef Name="BoardId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="PostPostType">
-    <End Role="Post" Type="EduClassModel.Store.Posts" Multiplicity="*" />
-    <End Role="PostType" Type="EduClassModel.Store.PostTypes" Multiplicity="1" />
-    <ReferentialConstraint>
-      <Principal Role="PostType">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Post">
-        <PropertyRef Name="PostType_Id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -450,18 +412,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="PersonMail">
-    <End Role="Person" Type="EduClassModel.Store.Person" Multiplicity="1" />
-    <End Role="Mail" Type="EduClassModel.Store.Mails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Person">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Mail">
-        <PropertyRef Name="PersonId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="PersonAlert">
     <End Role="Person" Type="EduClassModel.Store.Person" Multiplicity="1" />
     <End Role="Alert" Type="EduClassModel.Store.Alerts" Multiplicity="*" />
@@ -495,18 +445,6 @@
       </Principal>
       <Dependent Role="Event">
         <PropertyRef Name="CalendarId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="EventEventType">
-    <End Role="Event" Type="EduClassModel.Store.Events" Multiplicity="*" />
-    <End Role="EventType" Type="EduClassModel.Store.EventTypes" Multiplicity="1" />
-    <ReferentialConstraint>
-      <Principal Role="EventType">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Event">
-        <PropertyRef Name="EventType_Id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -582,27 +520,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="QuestionQuestionType">
-    <End Role="Question" Type="EduClassModel.Store.Questions" Multiplicity="*" />
-    <End Role="QuestionType" Type="EduClassModel.Store.QuestionTypes" Multiplicity="1" />
-    <ReferentialConstraint>
-      <Principal Role="QuestionType">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Question">
-        <PropertyRef Name="QuestionType_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="QuestionResponse">
-    <End Role="Question" Type="EduClassModel.Store.Questions" Multiplicity="*" />
-    <End Role="Response" Type="EduClassModel.Store.Responses" Multiplicity="1" />
+    <End Role="Question" Type="EduClassModel.Store.Questions" Multiplicity="1" />
+    <End Role="Response" Type="EduClassModel.Store.Responses" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Response">
+      <Principal Role="Question">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="Question">
-        <PropertyRef Name="Response_Id" />
+      <Dependent Role="Response">
+        <PropertyRef Name="Question_Id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -630,6 +556,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="StudentResponse">
+    <End Role="Student" Type="EduClassModel.Store.Person_Student" Multiplicity="1" />
+    <End Role="Response" Type="EduClassModel.Store.Responses" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Student">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Response">
+        <PropertyRef Name="StudentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PersonMail">
+    <End Role="Person" Type="EduClassModel.Store.Person" Multiplicity="1" />
+    <End Role="Mail" Type="EduClassModel.Store.Mails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Person">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Mail">
+        <PropertyRef Name="PersonFromId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_GroupStudent_Group">
     <End Role="Group" Type="EduClassModel.Store.Groups" Multiplicity="1" />
     <End Role="GroupStudent" Type="EduClassModel.Store.GroupStudent" Multiplicity="*" />
@@ -651,6 +601,30 @@
       </Principal>
       <Dependent Role="GroupStudent">
         <PropertyRef Name="Students_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MailPerson_Mail">
+    <End Role="Mail" Type="EduClassModel.Store.Mails" Multiplicity="1" />
+    <End Role="MailPerson" Type="EduClassModel.Store.MailPerson" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Mail">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MailPerson">
+        <PropertyRef Name="MailsRecieved_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MailPerson_Person">
+    <End Role="MailPerson" Type="EduClassModel.Store.MailPerson" Multiplicity="*" />
+    <End Role="Person" Type="EduClassModel.Store.Person" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Person">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MailPerson">
+        <PropertyRef Name="PersonsTo_Id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -702,21 +676,14 @@
           <EntitySet Name="Tests" EntityType="EduClassModel.Test" />
           <EntitySet Name="Questions" EntityType="EduClassModel.Question" />
           <EntitySet Name="QuestionOptions" EntityType="EduClassModel.QuestionOption" />
-          <EntitySet Name="QuestionTypes" EntityType="EduClassModel.QuestionType" />
           <EntitySet Name="Responses" EntityType="EduClassModel.Response" />
           <EntitySet Name="Keys" EntityType="EduClassModel.Key" />
           <EntitySet Name="Calendars" EntityType="EduClassModel.Calendar" />
           <EntitySet Name="Events" EntityType="EduClassModel.Event" />
-          <EntitySet Name="EventTypes" EntityType="EduClassModel.EventType" />
           <EntitySet Name="Pages" EntityType="EduClassModel.Page" />
           <EntitySet Name="Alerts" EntityType="EduClassModel.Alert" />
           <EntitySet Name="Mails" EntityType="EduClassModel.Mail" />
           <EntitySet Name="Avatars" EntityType="EduClassModel.Avatar" />
-          <EntitySet Name="PostTypes" EntityType="EduClassModel.PostType" />
-          <AssociationSet Name="PostPostType" Association="EduClassModel.PostPostType">
-            <End Role="Post" EntitySet="Posts" />
-            <End Role="PostType" EntitySet="PostTypes" />
-          </AssociationSet>
           <EntitySet Name="Replies" EntityType="EduClassModel.Reply" />
           <AssociationSet Name="PersonReplay" Association="EduClassModel.PersonReplay">
             <End Role="Person" EntitySet="Person" />
@@ -730,10 +697,6 @@
             <End Role="Person" EntitySet="Person" />
             <End Role="Avatar" EntitySet="Avatars" />
           </AssociationSet>
-          <AssociationSet Name="PersonMail" Association="EduClassModel.PersonMail">
-            <End Role="Person" EntitySet="Person" />
-            <End Role="Mail" EntitySet="Mails" />
-          </AssociationSet>
           <AssociationSet Name="PersonAlert" Association="EduClassModel.PersonAlert">
             <End Role="Person" EntitySet="Person" />
             <End Role="Alert" EntitySet="Alerts" />
@@ -745,10 +708,6 @@
           <AssociationSet Name="CalendarEvent" Association="EduClassModel.CalendarEvent">
             <End Role="Calendar" EntitySet="Calendars" />
             <End Role="Event" EntitySet="Events" />
-          </AssociationSet>
-          <AssociationSet Name="EventEventType" Association="EduClassModel.EventEventType">
-            <End Role="Event" EntitySet="Events" />
-            <End Role="EventType" EntitySet="EventTypes" />
           </AssociationSet>
           <AssociationSet Name="GroupTeacher" Association="EduClassModel.GroupTeacher">
             <End Role="Group" EntitySet="Groups" />
@@ -774,10 +733,6 @@
             <End Role="Test" EntitySet="Tests" />
             <End Role="Question" EntitySet="Questions" />
           </AssociationSet>
-          <AssociationSet Name="QuestionQuestionType" Association="EduClassModel.QuestionQuestionType">
-            <End Role="Question" EntitySet="Questions" />
-            <End Role="QuestionType" EntitySet="QuestionTypes" />
-          </AssociationSet>
           <AssociationSet Name="QuestionResponse" Association="EduClassModel.QuestionResponse">
             <End Role="Question" EntitySet="Questions" />
             <End Role="Response" EntitySet="Responses" />
@@ -793,6 +748,18 @@
           <AssociationSet Name="GroupStudent" Association="EduClassModel.GroupStudent">
             <End Role="Group" EntitySet="Groups" />
             <End Role="Student" EntitySet="Person" />
+          </AssociationSet>
+          <AssociationSet Name="StudentResponse" Association="EduClassModel.StudentResponse">
+            <End Role="Student" EntitySet="Person" />
+            <End Role="Response" EntitySet="Responses" />
+          </AssociationSet>
+          <AssociationSet Name="PersonMail" Association="EduClassModel.PersonMail">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="Mail" EntitySet="Mails" />
+          </AssociationSet>
+          <AssociationSet Name="MailPerson" Association="EduClassModel.MailPerson">
+            <End Role="Mail" EntitySet="Mails" />
+            <End Role="Person" EntitySet="Person" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Person">
@@ -813,8 +780,9 @@
           <NavigationProperty Name="Posts" Relationship="EduClassModel.PersonPost" FromRole="Person" ToRole="Post" />
           <NavigationProperty Name="Replays" Relationship="EduClassModel.PersonReplay" FromRole="Person" ToRole="Replay" />
           <NavigationProperty Name="Avatar" Relationship="EduClassModel.PersonAvatar" FromRole="Person" ToRole="Avatar" />
-          <NavigationProperty Name="Mails" Relationship="EduClassModel.PersonMail" FromRole="Person" ToRole="Mail" />
           <NavigationProperty Name="Alerts" Relationship="EduClassModel.PersonAlert" FromRole="Person" ToRole="Alert" />
+          <NavigationProperty Name="MailsSends" Relationship="EduClassModel.PersonMail" FromRole="Person" ToRole="Mail" />
+          <NavigationProperty Name="MailsRecieved" Relationship="EduClassModel.MailPerson" FromRole="Person" ToRole="Mail" />
         </EntityType>
         <EntityType Name="Teacher" BaseType="EduClassModel.Person" >
           <Property Name="GroupId" Type="Int32" Nullable="false" />
@@ -823,6 +791,7 @@
         <EntityType Name="Student" BaseType="EduClassModel.Person" >
           <Property Name="GroupId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Groups" Relationship="EduClassModel.GroupStudent" FromRole="Student" ToRole="Group" />
+          <NavigationProperty Name="Responses" Relationship="EduClassModel.StudentResponse" FromRole="Student" ToRole="Response" />
         </EntityType>
         <EntityType Name="Board">
           <Key>
@@ -850,9 +819,9 @@
           <Property Name="PersonId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Board" Relationship="EduClassModel.BoardPost" FromRole="Post" ToRole="Board" />
           <Property Name="BoardId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="PostType" Relationship="EduClassModel.PostPostType" FromRole="Post" ToRole="PostType" />
           <NavigationProperty Name="Replays" Relationship="EduClassModel.PostReplay" FromRole="Post" ToRole="Replay" />
+          <Property Name="PostType" Type="EduClassModel.PostType" Nullable="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="PersonPost">
           <End Type="EduClassModel.Person" Role="Person" Multiplicity="1" />
@@ -909,7 +878,7 @@
           <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Group" Relationship="EduClassModel.GroupTest" FromRole="Test" ToRole="Group" />
           <Property Name="GroupId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Questions" Relationship="EduClassModel.TestQuestion" FromRole="Test" ToRole="Question" />
         </EntityType>
         <EntityType Name="Question">
@@ -922,8 +891,8 @@
           <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Test" Relationship="EduClassModel.TestQuestion" FromRole="Question" ToRole="Test" />
           <Property Name="TestId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="QuestionType" Relationship="EduClassModel.QuestionQuestionType" FromRole="Question" ToRole="QuestionType" />
+          <Property Name="QuestionType" Type="EduClassModel.QuestionType" Nullable="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Response" Relationship="EduClassModel.QuestionResponse" FromRole="Question" ToRole="Response" />
           <NavigationProperty Name="QuestionOptions" Relationship="EduClassModel.QuestionQuestionOption" FromRole="Question" ToRole="QuestionOption" />
         </EntityType>
@@ -937,20 +906,8 @@
           <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Question" Relationship="EduClassModel.QuestionQuestionOption" FromRole="QuestionOption" ToRole="Question" />
           <Property Name="QuestionId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Response" Relationship="EduClassModel.QuestionOptionResponse" FromRole="QuestionOption" ToRole="Response" />
-        </EntityType>
-        <EntityType Name="QuestionType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateAt" Type="DateTime" Nullable="true" Precision="3" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Question" Relationship="EduClassModel.QuestionQuestionType" FromRole="QuestionType" ToRole="Question" />
+          <NavigationProperty Name="Response" Relationship="EduClassModel.QuestionOptionResponse" FromRole="QuestionOption" ToRole="Response" />
         </EntityType>
         <EntityType Name="Response">
           <Key>
@@ -961,6 +918,8 @@
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Question" Relationship="EduClassModel.QuestionResponse" FromRole="Response" ToRole="Question" />
           <NavigationProperty Name="QuestionOption" Relationship="EduClassModel.QuestionOptionResponse" FromRole="Response" ToRole="QuestionOption" />
+          <NavigationProperty Name="Student" Relationship="EduClassModel.StudentResponse" FromRole="Response" ToRole="Student" />
+          <Property Name="StudentId" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Key">
           <Key>
@@ -969,10 +928,9 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="HashKey" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Group" Relationship="EduClassModel.GroupKey" FromRole="Key" ToRole="Group" />
           <Property Name="GroupId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Calendar">
           <Key>
@@ -993,25 +951,13 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="EventType" Type="EduClassModel.EventType" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Calendar" Relationship="EduClassModel.CalendarEvent" FromRole="Event" ToRole="Calendar" />
           <Property Name="CalendarId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="EventType" Relationship="EduClassModel.EventEventType" FromRole="Event" ToRole="EventType" />
-        </EntityType>
-        <EntityType Name="EventType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Event" Relationship="EduClassModel.EventEventType" FromRole="EventType" ToRole="Event" />
         </EntityType>
         <EntityType Name="Page">
           <Key>
@@ -1023,7 +969,7 @@
           <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Group" Relationship="EduClassModel.GroupPage" FromRole="Page" ToRole="Group" />
           <Property Name="GroupId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Alert">
           <Key>
@@ -1036,7 +982,7 @@
           <Property Name="ReadAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Person" Relationship="EduClassModel.PersonAlert" FromRole="Alert" ToRole="Person" />
           <Property Name="PersonId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Mail">
           <Key>
@@ -1047,9 +993,11 @@
           <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ReadAt" Type="DateTime" Nullable="true" Precision="3" />
-          <NavigationProperty Name="Person" Relationship="EduClassModel.PersonMail" FromRole="Mail" ToRole="Person" />
           <Property Name="PersonId" Type="Int32" Nullable="false" />
+          <Property Name="PersonFromId" Type="Int32" Nullable="false" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="PersonFrom" Relationship="EduClassModel.PersonMail" FromRole="Mail" ToRole="Person" />
+          <NavigationProperty Name="PersonsTo" Relationship="EduClassModel.MailPerson" FromRole="Mail" ToRole="Person" />
         </EntityType>
         <EntityType Name="Avatar">
           <Key>
@@ -1061,22 +1009,6 @@
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Person" Relationship="EduClassModel.PersonAvatar" FromRole="Avatar" ToRole="Person" />
         </EntityType>
-        <EntityType Name="PostType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
-          <Property Name="Enabled" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Post" Relationship="EduClassModel.PostPostType" FromRole="PostType" ToRole="Post" />
-        </EntityType>
-        <Association Name="PostPostType">
-          <End Type="EduClassModel.Post" Role="Post" Multiplicity="1" />
-          <End Type="EduClassModel.PostType" Role="PostType" Multiplicity="1" />
-        </Association>
         <EntityType Name="Reply">
           <Key>
             <PropertyRef Name="Id" />
@@ -1089,7 +1021,7 @@
           <Property Name="PersonId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Post" Relationship="EduClassModel.PostReplay" FromRole="Replay" ToRole="Post" />
           <Property Name="PostId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="PersonReplay">
           <End Type="EduClassModel.Person" Role="Person" Multiplicity="1" />
@@ -1119,18 +1051,6 @@
           <End Type="EduClassModel.Person" Role="Person" Multiplicity="1" />
           <End Type="EduClassModel.Avatar" Role="Avatar" Multiplicity="0..1" />
         </Association>
-        <Association Name="PersonMail">
-          <End Type="EduClassModel.Person" Role="Person" Multiplicity="1" />
-          <End Type="EduClassModel.Mail" Role="Mail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Person">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Mail">
-              <PropertyRef Name="PersonId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="PersonAlert">
           <End Type="EduClassModel.Person" Role="Person" Multiplicity="1" />
           <End Type="EduClassModel.Alert" Role="Alert" Multiplicity="*" />
@@ -1158,10 +1078,6 @@
               <PropertyRef Name="CalendarId" />
             </Dependent>
           </ReferentialConstraint>
-        </Association>
-        <Association Name="EventEventType">
-          <End Type="EduClassModel.Event" Role="Event" Multiplicity="1" />
-          <End Type="EduClassModel.EventType" Role="EventType" Multiplicity="1" />
         </Association>
         <Association Name="GroupTeacher">
           <End Type="EduClassModel.Group" Role="Group" Multiplicity="*" />
@@ -1219,13 +1135,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="QuestionQuestionType">
-          <End Type="EduClassModel.Question" Role="Question" Multiplicity="1" />
-          <End Type="EduClassModel.QuestionType" Role="QuestionType" Multiplicity="1" />
-        </Association>
         <Association Name="QuestionResponse">
           <End Type="EduClassModel.Question" Role="Question" Multiplicity="1" />
-          <End Type="EduClassModel.Response" Role="Response" Multiplicity="1" />
+          <End Type="EduClassModel.Response" Role="Response" Multiplicity="*" />
         </Association>
         <Association Name="QuestionQuestionOption">
           <End Type="EduClassModel.Question" Role="Question" Multiplicity="1" />
@@ -1246,6 +1158,43 @@
         <Association Name="GroupStudent">
           <End Type="EduClassModel.Group" Role="Group" Multiplicity="*" />
           <End Type="EduClassModel.Student" Role="Student" Multiplicity="*" />
+        </Association>
+        <EnumType Name="EventType">
+          <Member Name="Zaraza" Value="1" />
+        </EnumType>
+        <EnumType Name="PostType">
+          <Member Name="ZarazaPost" Value="1" />
+        </EnumType>
+        <EnumType Name="QuestionType">
+          <Member Name="ZarazaQuestion" Value="1" />
+        </EnumType>
+        <Association Name="StudentResponse">
+          <End Type="EduClassModel.Student" Role="Student" Multiplicity="1" />
+          <End Type="EduClassModel.Response" Role="Response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Response">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PersonMail">
+          <End Type="EduClassModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="EduClassModel.Mail" Role="Mail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Mail">
+              <PropertyRef Name="PersonFromId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="MailPerson">
+          <End Type="EduClassModel.Mail" Role="Mail" Multiplicity="*" />
+          <End Type="EduClassModel.Person" Role="Person" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -1304,6 +1253,7 @@
           <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
           <ScalarProperty Name="PersonId" ColumnName="PersonId" />
           <ScalarProperty Name="BoardId" ColumnName="BoardId" />
+          <ScalarProperty Name="PostType" ColumnName="PostType" />
           <ScalarProperty Name="Enabled" ColumnName="Enabled" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -1343,6 +1293,7 @@
           <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
           <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
           <ScalarProperty Name="TestId" ColumnName="TestId" />
+          <ScalarProperty Name="QuestionType" ColumnName="QuestionType" />
           <ScalarProperty Name="Enabled" ColumnName="Enabled" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -1359,24 +1310,13 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="QuestionTypes">
-      <EntityTypeMapping TypeName="IsTypeOf(EduClassModel.QuestionType)">
-        <MappingFragment StoreEntitySet="QuestionTypes">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-          <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
-          <ScalarProperty Name="Enabled" ColumnName="Enabled" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Responses">
       <EntityTypeMapping TypeName="IsTypeOf(EduClassModel.Response)">
         <MappingFragment StoreEntitySet="Responses">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Content" ColumnName="Content" />
           <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+          <ScalarProperty Name="StudentId" ColumnName="StudentId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1386,7 +1326,6 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="HashKey" ColumnName="HashKey" />
           <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-          <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
           <ScalarProperty Name="GroupId" ColumnName="GroupId" />
           <ScalarProperty Name="Enabled" ColumnName="Enabled" />
         </MappingFragment>
@@ -1409,22 +1348,11 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="EventType" ColumnName="EventType" />
           <ScalarProperty Name="Date" ColumnName="Date" />
           <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
           <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
           <ScalarProperty Name="CalendarId" ColumnName="CalendarId" />
-          <ScalarProperty Name="Enabled" ColumnName="Enabled" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="EventTypes">
-      <EntityTypeMapping TypeName="IsTypeOf(EduClassModel.EventType)">
-        <MappingFragment StoreEntitySet="EventTypes">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-          <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
           <ScalarProperty Name="Enabled" ColumnName="Enabled" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -1463,6 +1391,7 @@
           <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
           <ScalarProperty Name="ReadAt" ColumnName="ReadAt" />
           <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+          <ScalarProperty Name="PersonFromId" ColumnName="PersonFromId" />
           <ScalarProperty Name="Enabled" ColumnName="Enabled" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -1472,18 +1401,6 @@
         <MappingFragment StoreEntitySet="Avatars">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="UrlPhoto" ColumnName="UrlPhoto" />
-          <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-          <ScalarProperty Name="Enabled" ColumnName="Enabled" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="PostTypes">
-      <EntityTypeMapping TypeName="IsTypeOf(EduClassModel.PostType)">
-        <MappingFragment StoreEntitySet="PostTypes">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
           <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
           <ScalarProperty Name="Enabled" ColumnName="Enabled" />
         </MappingFragment>
@@ -1502,14 +1419,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="PostPostType" TypeName="EduClassModel.PostPostType" StoreEntitySet="Posts">
-      <EndProperty Name="PostType">
-        <ScalarProperty Name="Id" ColumnName="PostType_Id" />
-      </EndProperty>
-      <EndProperty Name="Post">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
     <AssociationSetMapping Name="PersonAvatar" TypeName="EduClassModel.PersonAvatar" StoreEntitySet="Avatars">
       <EndProperty Name="Person">
         <ScalarProperty Name="Id" ColumnName="Person_Id" />
@@ -1523,14 +1432,6 @@
         <ScalarProperty Name="Id" ColumnName="Group_Id" />
       </EndProperty>
       <EndProperty Name="Calendar">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="EventEventType" TypeName="EduClassModel.EventEventType" StoreEntitySet="Events">
-      <EndProperty Name="EventType">
-        <ScalarProperty Name="Id" ColumnName="EventType_Id" />
-      </EndProperty>
-      <EndProperty Name="Event">
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
@@ -1550,19 +1451,11 @@
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="QuestionQuestionType" TypeName="EduClassModel.QuestionQuestionType" StoreEntitySet="Questions">
-      <EndProperty Name="QuestionType">
-        <ScalarProperty Name="Id" ColumnName="QuestionType_Id" />
-      </EndProperty>
+    <AssociationSetMapping Name="QuestionResponse" TypeName="EduClassModel.QuestionResponse" StoreEntitySet="Responses">
       <EndProperty Name="Question">
-        <ScalarProperty Name="Id" ColumnName="Id" />
+        <ScalarProperty Name="Id" ColumnName="Question_Id" />
       </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="QuestionResponse" TypeName="EduClassModel.QuestionResponse" StoreEntitySet="Questions">
       <EndProperty Name="Response">
-        <ScalarProperty Name="Id" ColumnName="Response_Id" />
-      </EndProperty>
-      <EndProperty Name="Question">
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
@@ -1580,6 +1473,14 @@
       </EndProperty>
       <EndProperty Name="Student">
         <ScalarProperty Name="Id" ColumnName="Students_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="MailPerson" TypeName="EduClassModel.MailPerson" StoreEntitySet="MailPerson">
+      <EndProperty Name="Mail">
+        <ScalarProperty Name="Id" ColumnName="MailsRecieved_Id" />
+      </EndProperty>
+      <EndProperty Name="Person">
+        <ScalarProperty Name="Id" ColumnName="PersonsTo_Id" />
       </EndProperty>
     </AssociationSetMapping>
   </EntityContainerMapping>

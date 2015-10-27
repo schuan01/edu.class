@@ -140,13 +140,27 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BoardController.cs" />
+    <Compile Include="Controllers\CalendarController.cs" />
+    <Compile Include="Controllers\EventsController.cs" />
+    <Compile Include="Controllers\GroupsController.cs" />
+    <Compile Include="Controllers\PagesController.cs" />
+    <Compile Include="Controllers\PostsController.cs" />
+    <Compile Include="Controllers\ReplysController.cs" />
+    <Compile Include="Controllers\TestsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\Helpers\EmailHelper.cs" />
     <Compile Include="Infrastructure\Mappers\AutoMapperConfig.cs" />
+    <Compile Include="Infrastructure\Mappers\CalendarMapperProfiles.cs" />
+    <Compile Include="Infrastructure\Mappers\EventMapperProfiles.cs" />
+    <Compile Include="Infrastructure\Mappers\GroupMapperProfiles.cs" />
+    <Compile Include="Infrastructure\Mappers\PageMapperProfiles.cs" />
     <Compile Include="Infrastructure\Mappers\PersonMapperProfiles.cs" />
+    <Compile Include="Infrastructure\Mappers\PostMapperProfiles.cs" />
+    <Compile Include="Infrastructure\Mappers\ReplyMapperProfiles.cs" />
+    <Compile Include="Infrastructure\Mappers\TestMapperProfiles.cs" />
     <Compile Include="Infrastructure\Modules\EntitiesModule.cs" />
     <Compile Include="Infrastructure\Modules\RepositoryModule.cs" />
     <Compile Include="Infrastructure\Modules\SecurityModule.cs" />
@@ -154,8 +168,15 @@
     <Compile Include="Infrastructure\Helpers\Security.cs" />
     <Compile Include="Infrastructure\Sessions\MessageSession.cs" />
     <Compile Include="Infrastructure\Sessions\UserSession.cs" />
+    <Compile Include="Infrastructure\ViewModels\CalendarViewModel.cs" />
     <Compile Include="Infrastructure\ViewModels\ChangePasswordViewModel.cs" />
+    <Compile Include="Infrastructure\ViewModels\EventViewModel.cs" />
+    <Compile Include="Infrastructure\ViewModels\GroupViewModel.cs" />
+    <Compile Include="Infrastructure\ViewModels\PageViewModel.cs" />
     <Compile Include="Infrastructure\ViewModels\PersonViewModel.cs" />
+    <Compile Include="Infrastructure\ViewModels\PostViewModel.cs" />
+    <Compile Include="Infrastructure\ViewModels\ReplyViewModel.cs" />
+    <Compile Include="Infrastructure\ViewModels\TestViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

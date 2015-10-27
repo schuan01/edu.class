@@ -19,7 +19,7 @@ namespace EduClass.Entities
         public System.DateTime CreatedAt { get; set; }
         public Nullable<System.DateTime> UpdatedAt { get; set; }
         public int GroupId { get; set; }
-        public string Enabled { get; set; }
+        public bool Enabled { get; set; }
     
         public virtual Group Group { get; set; }
     }

@@ -28,7 +28,7 @@ namespace EduClass.Entities
         public System.DateTime StartDate { get; set; }
         public System.DateTime EndDate { get; set; }
         public int GroupId { get; set; }
-        public string Enabled { get; set; }
+        public bool Enabled { get; set; }
     
         public virtual Group Group { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
