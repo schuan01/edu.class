@@ -18,9 +18,6 @@ namespace EduClass.Logic
             _groupRepository = groupRepository;
         }
 
-        public bool Join(Person _person)
-        {
-            return _groupRepository.Join(_person);   
-        }  
+       
     }
 }

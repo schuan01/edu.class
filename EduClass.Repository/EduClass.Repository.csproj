@@ -59,11 +59,13 @@
     <Compile Include="ICalendarRepository.cs" />
     <Compile Include="IEventRepository.cs" />
     <Compile Include="IGroupRepository.cs" />
+    <Compile Include="IMailRepository.cs" />
     <Compile Include="IPageRepository.cs" />
     <Compile Include="IPersonRepository.cs" />
     <Compile Include="IPostRepository.cs" />
     <Compile Include="IReplyRepository.cs" />
     <Compile Include="ITestRepository.cs" />
+    <Compile Include="MailRepository.cs" />
     <Compile Include="PageRepository.cs" />
     <Compile Include="PersonRepository.cs" />
     <Compile Include="PostRepository.cs" />

@@ -58,11 +58,13 @@
     <Compile Include="ICalendarServices.cs" />
     <Compile Include="IEventServices.cs" />
     <Compile Include="IGroupServices.cs" />
+    <Compile Include="IMailServices.cs" />
     <Compile Include="IPageServices.cs" />
     <Compile Include="IPersonServices.cs" />
     <Compile Include="IPostServices.cs" />
     <Compile Include="IReplyServices.cs" />
     <Compile Include="ITestServices.cs" />
+    <Compile Include="MailServices.cs" />
     <Compile Include="PageServices.cs" />
     <Compile Include="PersonServices.cs" />
     <Compile Include="PostServices.cs" />

@@ -12,10 +12,7 @@ namespace EduClass.Repository
 
         }
 
-        public bool Join(Person _person)
-        {
-               return true;//TODO
-        }
+        
         
     }
 }

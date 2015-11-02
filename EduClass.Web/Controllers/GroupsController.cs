@@ -16,16 +16,16 @@ namespace EduClass.Web.Controllers
     [Authorize]
     public class GroupsController : Controller
     {
-        private static IGroupServices _service;
+        private static IGroupServices _serviceGroup;
 
-        public GroupsController(IGroupServices service)
+        public GroupsController(IGroupServices serviceGroup)
         {
-            _service = service;
+            _serviceGroup = serviceGroup;
         }
 
         public ActionResult Index()
         {
-            var list = _service.GetAll().OrderBy(a => a.Id);
+            var list = _serviceGroup.GetAll().OrderBy(a => a.Id);
 
             return View(list);
         }
@@ -33,10 +33,38 @@ namespace EduClass.Web.Controllers
         // GET: Group
         [HttpGet]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult Join(Person _person)
+        public ActionResult JoinStudent(Person _person)
         {
-            return null;//TODO
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult JoinStudent(int idGroup, int idPerson = 0)
+        {
+            Person student = null; 
+            if (idPerson == 0)
+            {
+                student = UserSession.GetCurrentUser();//Obtengo el usuario Actual
+            }
+
+            var group = _serviceGroup.GetById(idGroup);//Obtengo el Grupo del Id pasado por parametro
+            
+            if (group == null || student == null) { return HttpNotFound(); }
+
+            if (group.Students.First(st => st.Id == student.Id) != null)//Si ya existe en la collecion
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "El usuario actual ya existe en el grupo seleccionado"));
+            }
+            
+            if (student is Student )//Solo aplica si es tipo Student
+                group.Students.Add((Student)student);
+            else
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "El usuario actual no es un Estudiante"));
+
+
+
+            return View();
         }
 
 
@@ -62,7 +90,7 @@ namespace EduClass.Web.Controllers
                     group.CreatedAt = DateTime.Now;
                     group.Enabled = true;
 
-                    _service.Create(group);
+                    _serviceGroup.Create(group);
 
                     //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario creado", string.Format("El usuario {0} fue creado con éxito", groupVm.groupName)));
 
@@ -82,7 +110,7 @@ namespace EduClass.Web.Controllers
         public ActionResult Edit(int id = 0)
         {
             if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
-            var group = AutoMapper.Mapper.Map<Group, GroupViewModel>(_service.GetById(id));
+            var group = AutoMapper.Mapper.Map<Group, GroupViewModel>(_serviceGroup.GetById(id));
 
             return View(group);
         }
@@ -100,7 +128,7 @@ namespace EduClass.Web.Controllers
 
                     group.UpdatedAt = DateTime.Now;
 
-                    _service.Create(group);
+                    _serviceGroup.Create(group);
 
                     //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", groupVm.groupName)));
 
@@ -119,7 +147,7 @@ namespace EduClass.Web.Controllers
         {
             if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
-            var group = _service.GetById(id);
+            var group = _serviceGroup.GetById(id);
 
             if (group == null) { return HttpNotFound(); }
 
@@ -128,7 +156,7 @@ namespace EduClass.Web.Controllers
 
             group.UpdatedAt = DateTime.Now;
 
-            _service.Update(group);
+            _serviceGroup.Update(group);
 
             //TODO: AGREGAR LA CLASE MESSAGE SESSION
             //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", group.Name)));

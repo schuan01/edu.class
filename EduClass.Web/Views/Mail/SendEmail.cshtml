@@ -1,0 +1,88 @@
+﻿@model EduClass.Web.Infrastructure.ViewModels.MailViewModel
+
+@{
+    ViewBag.Title = "SendEmail";
+}
+
+<h2>Enviar un Email</h2>
+<style>
+    .caca {
+    }
+</style>
+<div class="panel panel-site-traffic col-md-8 col-md-offset-2">
+    <div class="panel-heading">
+        <ul class="panel-options">
+            <li><a><i class="fa fa-refresh"></i></a></li>
+        </ul>
+        <h4 class="panel-title text-success">Envia un mensaje a cualquier miembro del grupo</h4>
+        <p class="nomargin">Past 30 Days — Last Updated July 14, 2015</p>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            
+
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PersonEmailFrom, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.PersonEmailFrom, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PersonEmailFrom, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PersonIdTo, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.ListBoxFor(model => model.PersonIdTo, (SelectList)ViewBag.PersonsTo, htmlAttributes: new { @class = "form-control", @Id = "ddlPersons", @multiple = "multiple", @data_plugin = "select2" })
+                        @Html.ValidationMessageFor(model => model.PersonIdTo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Subject, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @data_autosize_on = "true" } })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Create" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+        }
+    </div>
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>
+
+
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval") 
+    <script type="text/javascript">
+        $("#ddlPersons").select2({
+            placeholder: "Destinatarios",
+            maximumSelectionSize: 25
+        });
+
+    </script>
+}
