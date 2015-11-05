@@ -9,6 +9,7 @@ namespace EduClass.Web.Infrastructure.Mappers
             Mapper.Initialize(x => {
                 x.AddProfile<PersonMapperProfiles>();
                 x.AddProfile<MailMapperProfiles>();
+                x.AddProfile<GroupMapperProfiles>();
             });
 
         

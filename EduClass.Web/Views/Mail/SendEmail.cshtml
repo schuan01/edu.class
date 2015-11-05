@@ -5,10 +5,6 @@
 }
 
 <h2>Enviar un Email</h2>
-<style>
-    .caca {
-    }
-</style>
 <div class="panel panel-site-traffic col-md-8 col-md-offset-2">
     <div class="panel-heading">
         <ul class="panel-options">
@@ -30,7 +26,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.PersonEmailFrom, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.PersonEmailFrom, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.PersonEmailFrom, new { htmlAttributes = new { @class = "form-control", @Value=ViewBag.FromEmail, @readonly=""} })
                         @Html.ValidationMessageFor(model => model.PersonEmailFrom, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -38,7 +34,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.PersonIdTo, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.ListBoxFor(model => model.PersonIdTo, (SelectList)ViewBag.PersonsTo, htmlAttributes: new { @class = "form-control", @Id = "ddlPersons", @multiple = "multiple", @data_plugin = "select2" })
+                        @Html.ListBoxFor(model => model.PersonIdTo, (SelectList)ViewBag.PersonsTo, htmlAttributes: new { @class = "form-control", @Id = "ddlPersons",  @multiple = "multiple", @data_plugin = "select2" })
                         @Html.ValidationMessageFor(model => model.PersonIdTo, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -50,21 +46,16 @@
                             @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
-
                     <div class="form-group">
-                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @data_autosize_on = "true" } })
-                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        @Html.TextAreaFor(model => model.Description, htmlAttributes : new { @class = "form-control", @Id = "wysiwyg",  @placeholder = "Inserte contenido del mensaje", @rows="10" })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-5 col-lg-8">
+                            <input type="submit" value="Create" class="btn btn-success" />
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Create" class="btn btn-default" />
-                        </div>
-                    </div>
                 </div>
         }
     </div>
@@ -82,6 +73,13 @@
         $("#ddlPersons").select2({
             placeholder: "Destinatarios",
             maximumSelectionSize: 25
+        });
+
+        // HTML5 WYSIWYG Editor
+        $('#wysiwyg').wysihtml5({
+            toolbar: {
+                fa: true
+            }
         });
 
     </script>

@@ -2,8 +2,8 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 10/27/2015 19:40:40
--- Generated from EDMX file: D:\code\Edu.Class\EduClass.Entities\EduClassModel.edmx
+-- Date Created: 11/04/2015 21:47:35
+-- Generated from EDMX file: C:\Users\Schuan\Documents\edu.class\EduClass.Entities\EduClassModel.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
@@ -19,9 +19,6 @@ GO
 
 IF OBJECT_ID(N'[dbo].[FK_PersonPost]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Posts] DROP CONSTRAINT [FK_PersonPost];
-GO
-IF OBJECT_ID(N'[dbo].[FK_BoardPost]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Posts] DROP CONSTRAINT [FK_BoardPost];
 GO
 IF OBJECT_ID(N'[dbo].[FK_PersonReplay]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Replies] DROP CONSTRAINT [FK_PersonReplay];
@@ -46,12 +43,6 @@ IF OBJECT_ID(N'[dbo].[FK_GroupTeacher]', 'F') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[FK_GroupPage]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Pages] DROP CONSTRAINT [FK_GroupPage];
-GO
-IF OBJECT_ID(N'[dbo].[FK_GroupBoard]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Groups] DROP CONSTRAINT [FK_GroupBoard];
-GO
-IF OBJECT_ID(N'[dbo].[FK_GroupKey]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Keys] DROP CONSTRAINT [FK_GroupKey];
 GO
 IF OBJECT_ID(N'[dbo].[FK_GroupTest]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Tests] DROP CONSTRAINT [FK_GroupTest];
@@ -100,9 +91,6 @@ GO
 IF OBJECT_ID(N'[dbo].[Person]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Person];
 GO
-IF OBJECT_ID(N'[dbo].[Boards]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Boards];
-GO
 IF OBJECT_ID(N'[dbo].[Posts]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Posts];
 GO
@@ -120,9 +108,6 @@ IF OBJECT_ID(N'[dbo].[QuestionOptions]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[Responses]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Responses];
-GO
-IF OBJECT_ID(N'[dbo].[Keys]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Keys];
 GO
 IF OBJECT_ID(N'[dbo].[Calendars]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Calendars];
@@ -178,17 +163,6 @@ CREATE TABLE [dbo].[Person] (
 );
 GO
 
--- Creating table 'Boards'
-CREATE TABLE [dbo].[Boards] (
-    [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(250)  NOT NULL,
-    [Description] nvarchar(max)  NOT NULL,
-    [CreatedAt] datetime  NOT NULL,
-    [UpdatedAt] datetime  NULL,
-    [Enabled] bit  NOT NULL
-);
-GO
-
 -- Creating table 'Posts'
 CREATE TABLE [dbo].[Posts] (
     [Id] int IDENTITY(1,1) NOT NULL,
@@ -199,7 +173,8 @@ CREATE TABLE [dbo].[Posts] (
     [PersonId] int  NOT NULL,
     [BoardId] int  NOT NULL,
     [PostType] int  NOT NULL,
-    [Enabled] bit  NOT NULL
+    [Enabled] bit  NOT NULL,
+    [GroupId] int  NOT NULL
 );
 GO
 
@@ -211,8 +186,8 @@ CREATE TABLE [dbo].[Groups] (
     [CreatedAt] datetime  NOT NULL,
     [UpdatedAt] datetime  NULL,
     [Enabled] bit  NOT NULL,
-    [Teacher_Id] int  NOT NULL,
-    [Board_Id] int  NOT NULL
+    [Key] nvarchar(max)  NOT NULL,
+    [Teacher_Id] int  NOT NULL
 );
 GO
 
@@ -261,16 +236,6 @@ CREATE TABLE [dbo].[Responses] (
     [StudentId] int  NOT NULL,
     [Question_Id] int  NOT NULL,
     [QuestionOption_Id] int  NOT NULL
-);
-GO
-
--- Creating table 'Keys'
-CREATE TABLE [dbo].[Keys] (
-    [Id] int IDENTITY(1,1) NOT NULL,
-    [HashKey] nvarchar(max)  NOT NULL,
-    [CreatedAt] datetime  NOT NULL,
-    [GroupId] int  NOT NULL,
-    [Enabled] bit  NOT NULL
 );
 GO
 
@@ -395,12 +360,6 @@ ADD CONSTRAINT [PK_Person]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'Boards'
-ALTER TABLE [dbo].[Boards]
-ADD CONSTRAINT [PK_Boards]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
 -- Creating primary key on [Id] in table 'Posts'
 ALTER TABLE [dbo].[Posts]
 ADD CONSTRAINT [PK_Posts]
@@ -434,12 +393,6 @@ GO
 -- Creating primary key on [Id] in table 'Responses'
 ALTER TABLE [dbo].[Responses]
 ADD CONSTRAINT [PK_Responses]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Id] in table 'Keys'
-ALTER TABLE [dbo].[Keys]
-ADD CONSTRAINT [PK_Keys]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -526,21 +479,6 @@ GO
 CREATE INDEX [IX_FK_PersonPost]
 ON [dbo].[Posts]
     ([PersonId]);
-GO
-
--- Creating foreign key on [BoardId] in table 'Posts'
-ALTER TABLE [dbo].[Posts]
-ADD CONSTRAINT [FK_BoardPost]
-    FOREIGN KEY ([BoardId])
-    REFERENCES [dbo].[Boards]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_BoardPost'
-CREATE INDEX [IX_FK_BoardPost]
-ON [dbo].[Posts]
-    ([BoardId]);
 GO
 
 -- Creating foreign key on [PersonId] in table 'Replies'
@@ -660,36 +598,6 @@ GO
 -- Creating non-clustered index for FOREIGN KEY 'FK_GroupPage'
 CREATE INDEX [IX_FK_GroupPage]
 ON [dbo].[Pages]
-    ([GroupId]);
-GO
-
--- Creating foreign key on [Board_Id] in table 'Groups'
-ALTER TABLE [dbo].[Groups]
-ADD CONSTRAINT [FK_GroupBoard]
-    FOREIGN KEY ([Board_Id])
-    REFERENCES [dbo].[Boards]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_GroupBoard'
-CREATE INDEX [IX_FK_GroupBoard]
-ON [dbo].[Groups]
-    ([Board_Id]);
-GO
-
--- Creating foreign key on [GroupId] in table 'Keys'
-ALTER TABLE [dbo].[Keys]
-ADD CONSTRAINT [FK_GroupKey]
-    FOREIGN KEY ([GroupId])
-    REFERENCES [dbo].[Groups]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_GroupKey'
-CREATE INDEX [IX_FK_GroupKey]
-ON [dbo].[Keys]
     ([GroupId]);
 GO
 
@@ -844,6 +752,21 @@ GO
 CREATE INDEX [IX_FK_MailPerson_Person]
 ON [dbo].[MailPerson]
     ([PersonsTo_Id]);
+GO
+
+-- Creating foreign key on [GroupId] in table 'Posts'
+ALTER TABLE [dbo].[Posts]
+ADD CONSTRAINT [FK_GroupPost]
+    FOREIGN KEY ([GroupId])
+    REFERENCES [dbo].[Groups]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_GroupPost'
+CREATE INDEX [IX_FK_GroupPost]
+ON [dbo].[Posts]
+    ([GroupId]);
 GO
 
 -- Creating foreign key on [Id] in table 'Person_Teacher'

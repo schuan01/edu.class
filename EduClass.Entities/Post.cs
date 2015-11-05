@@ -29,10 +29,11 @@ namespace EduClass.Entities
         public int BoardId { get; set; }
         public PostType PostType { get; set; }
         public bool Enabled { get; set; }
+        public int GroupId { get; set; }
     
         public virtual Person Person { get; set; }
-        public virtual Board Board { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Reply> Replays { get; set; }
+        public virtual Group Group { get; set; }
     }
 }

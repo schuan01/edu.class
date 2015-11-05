@@ -10,16 +10,13 @@
         <InheritanceConnector EntityType="EduClassModel.Teacher" />
         <EntityTypeShape EntityType="EduClassModel.Student" Width="1.5" PointX="1.375" PointY="8.625" />
         <InheritanceConnector EntityType="EduClassModel.Student" />
-        <EntityTypeShape EntityType="EduClassModel.Board" Width="1.5" PointX="7.75" PointY="5.625" />
         <EntityTypeShape EntityType="EduClassModel.Post" Width="1.5" PointX="7.875" PointY="0.875" />
         <AssociationConnector Association="EduClassModel.PersonPost" />
-        <AssociationConnector Association="EduClassModel.BoardPost" />
         <EntityTypeShape EntityType="EduClassModel.Group" Width="1.5" PointX="6.375" PointY="11.625" />
         <EntityTypeShape EntityType="EduClassModel.Test" Width="1.5" PointX="8.75" PointY="16.375" />
         <EntityTypeShape EntityType="EduClassModel.Question" Width="1.5" PointX="4.875" PointY="16.75" />
         <EntityTypeShape EntityType="EduClassModel.QuestionOption" Width="1.5" PointX="1" PointY="18.75" />
         <EntityTypeShape EntityType="EduClassModel.Response" Width="1.5" PointX="0.875" PointY="15.375" />
-        <EntityTypeShape EntityType="EduClassModel.Key" Width="1.5" PointX="8.875" PointY="12.875" />
         <EntityTypeShape EntityType="EduClassModel.Calendar" Width="1.5" PointX="8.75" PointY="9.375" />
         <EntityTypeShape EntityType="EduClassModel.Event" Width="1.5" PointX="10.875" PointY="9.25" />
         <EntityTypeShape EntityType="EduClassModel.Page" Width="1.5" PointX="3.625" PointY="11.125" />
@@ -35,8 +32,6 @@
         <AssociationConnector Association="EduClassModel.CalendarEvent" />
         <AssociationConnector Association="EduClassModel.GroupTeacher" />
         <AssociationConnector Association="EduClassModel.GroupPage" />
-        <AssociationConnector Association="EduClassModel.GroupBoard" />
-        <AssociationConnector Association="EduClassModel.GroupKey" />
         <AssociationConnector Association="EduClassModel.GroupTest" />
         <AssociationConnector Association="EduClassModel.TestQuestion" />
         <AssociationConnector Association="EduClassModel.QuestionResponse" />
@@ -46,6 +41,7 @@
         <AssociationConnector Association="EduClassModel.StudentResponse" />
         <AssociationConnector Association="EduClassModel.PersonMail" />
         <AssociationConnector Association="EduClassModel.MailPerson" />
+        <AssociationConnector Association="EduClassModel.GroupPost" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

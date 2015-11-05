@@ -16,14 +16,5 @@ namespace EduClass.Web.Infrastructure.ViewModels
 
         [Required]
         public string Description { get; set; }
-
-        [Required]
-        public int KeyId { get; set; }
-
-        [Required]
-        public System.DateTime CreatedAt { get; set; }
-
-        public Nullable<System.DateTime> UpdatedAt { get; set; }
-        public bool Enabled { get; set; }
     }
 }

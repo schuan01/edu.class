@@ -391,6 +391,7 @@
     <Content Include="Views\Users\Register.cshtml" />
     <Content Include="Views\Users\_ActivationAccount.cshtml" />
     <Content Include="Views\Mail\SendEmail.cshtml" />
+    <Content Include="Views\Groups\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -7,14 +7,12 @@
     <Schema Namespace="EduClassModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityContainer Name="EduClassModelStoreContainer">
     <EntitySet Name="Person" EntityType="EduClassModel.Store.Person" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Boards" EntityType="EduClassModel.Store.Boards" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Posts" EntityType="EduClassModel.Store.Posts" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Groups" EntityType="EduClassModel.Store.Groups" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Tests" EntityType="EduClassModel.Store.Tests" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Questions" EntityType="EduClassModel.Store.Questions" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="QuestionOptions" EntityType="EduClassModel.Store.QuestionOptions" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Responses" EntityType="EduClassModel.Store.Responses" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Keys" EntityType="EduClassModel.Store.Keys" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Calendars" EntityType="EduClassModel.Store.Calendars" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Events" EntityType="EduClassModel.Store.Events" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Pages" EntityType="EduClassModel.Store.Pages" store:Type="Tables" Schema="dbo" />
@@ -28,10 +26,6 @@
     <EntitySet Name="MailPerson" EntityType="EduClassModel.Store.MailPerson" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="PersonPost" Association="EduClassModel.Store.PersonPost">
       <End Role="Person" EntitySet="Person" />
-      <End Role="Post" EntitySet="Posts" />
-    </AssociationSet>
-    <AssociationSet Name="BoardPost" Association="EduClassModel.Store.BoardPost">
-      <End Role="Board" EntitySet="Boards" />
       <End Role="Post" EntitySet="Posts" />
     </AssociationSet>
     <AssociationSet Name="PersonReplay" Association="EduClassModel.Store.PersonReplay">
@@ -65,14 +59,6 @@
     <AssociationSet Name="GroupPage" Association="EduClassModel.Store.GroupPage">
       <End Role="Group" EntitySet="Groups" />
       <End Role="Page" EntitySet="Pages" />
-    </AssociationSet>
-    <AssociationSet Name="GroupBoard" Association="EduClassModel.Store.GroupBoard">
-      <End Role="Group" EntitySet="Groups" />
-      <End Role="Board" EntitySet="Boards" />
-    </AssociationSet>
-    <AssociationSet Name="GroupKey" Association="EduClassModel.Store.GroupKey">
-      <End Role="Group" EntitySet="Groups" />
-      <End Role="Key" EntitySet="Keys" />
     </AssociationSet>
     <AssociationSet Name="GroupTest" Association="EduClassModel.Store.GroupTest">
       <End Role="Group" EntitySet="Groups" />
@@ -118,6 +104,10 @@
       <End Role="Person" EntitySet="Person" />
       <End Role="MailPerson" EntitySet="MailPerson" />
     </AssociationSet>
+    <AssociationSet Name="GroupPost" Association="EduClassModel.Store.GroupPost">
+      <End Role="Group" EntitySet="Groups" />
+      <End Role="Post" EntitySet="Posts" />
+    </AssociationSet>
     <AssociationSet Name="FK_Teacher_inherits_Person" Association="EduClassModel.Store.FK_Teacher_inherits_Person">
       <End Role="Person" EntitySet="Person" />
       <End Role="Teacher" EntitySet="Person_Teacher" />
@@ -143,17 +133,6 @@
     <Property Name="UpdatedAt" Type="datetime" Nullable="true" />
     <Property Name="Enabled" Type="bit" Nullable="false" />
   </EntityType>
-  <EntityType Name="Boards">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="250" />
-    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="CreatedAt" Type="datetime" Nullable="false" />
-    <Property Name="UpdatedAt" Type="datetime" Nullable="true" />
-    <Property Name="Enabled" Type="bit" Nullable="false" />
-  </EntityType>
   <EntityType Name="Posts">
     <Key>
       <PropertyRef Name="Id" />
@@ -167,6 +146,7 @@
     <Property Name="BoardId" Type="int" Nullable="false" />
     <Property Name="PostType" Type="int" Nullable="false" />
     <Property Name="Enabled" Type="bit" Nullable="false" />
+    <Property Name="GroupId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Groups">
     <Key>
@@ -178,8 +158,8 @@
     <Property Name="CreatedAt" Type="datetime" Nullable="false" />
     <Property Name="UpdatedAt" Type="datetime" Nullable="true" />
     <Property Name="Enabled" Type="bit" Nullable="false" />
+    <Property Name="Key" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Teacher_Id" Type="int" Nullable="false" />
-    <Property Name="Board_Id" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Tests">
     <Key>
@@ -228,16 +208,6 @@
     <Property Name="StudentId" Type="int" Nullable="false" />
     <Property Name="Question_Id" Type="int" Nullable="false" />
     <Property Name="QuestionOption_Id" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="Keys">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="HashKey" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="CreatedAt" Type="datetime" Nullable="false" />
-    <Property Name="GroupId" Type="int" Nullable="false" />
-    <Property Name="Enabled" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Calendars">
     <Key>
@@ -364,18 +334,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="BoardPost">
-    <End Role="Board" Type="EduClassModel.Store.Boards" Multiplicity="1" />
-    <End Role="Post" Type="EduClassModel.Store.Posts" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Board">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Post">
-        <PropertyRef Name="BoardId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="PersonReplay">
     <End Role="Person" Type="EduClassModel.Store.Person" Multiplicity="1" />
     <End Role="Replay" Type="EduClassModel.Store.Replies" Multiplicity="*" />
@@ -472,30 +430,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="GroupBoard">
-    <End Role="Group" Type="EduClassModel.Store.Groups" Multiplicity="*" />
-    <End Role="Board" Type="EduClassModel.Store.Boards" Multiplicity="1" />
-    <ReferentialConstraint>
-      <Principal Role="Board">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Group">
-        <PropertyRef Name="Board_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="GroupKey">
-    <End Role="Group" Type="EduClassModel.Store.Groups" Multiplicity="1" />
-    <End Role="Key" Type="EduClassModel.Store.Keys" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Group">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Key">
-        <PropertyRef Name="GroupId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="GroupTest">
     <End Role="Group" Type="EduClassModel.Store.Groups" Multiplicity="1" />
     <End Role="Test" Type="EduClassModel.Store.Tests" Multiplicity="*" />
@@ -580,6 +514,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="GroupPost">
+    <End Role="Group" Type="EduClassModel.Store.Groups" Multiplicity="1" />
+    <End Role="Post" Type="EduClassModel.Store.Posts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Group">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Post">
+        <PropertyRef Name="GroupId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_GroupStudent_Group">
     <End Role="Group" Type="EduClassModel.Store.Groups" Multiplicity="1" />
     <End Role="GroupStudent" Type="EduClassModel.Store.GroupStudent" Multiplicity="*" />
@@ -660,16 +606,11 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="EduClassModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
-        <EntityContainer Name="EduClassContext" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="EduClassContext" annotation:LazyLoadingEnabled="false">
           <EntitySet Name="Person" EntityType="EduClassModel.Person" />
-          <EntitySet Name="Boards" EntityType="EduClassModel.Board" />
           <EntitySet Name="Posts" EntityType="EduClassModel.Post" />
           <AssociationSet Name="PersonPost" Association="EduClassModel.PersonPost">
             <End Role="Person" EntitySet="Person" />
-            <End Role="Post" EntitySet="Posts" />
-          </AssociationSet>
-          <AssociationSet Name="BoardPost" Association="EduClassModel.BoardPost">
-            <End Role="Board" EntitySet="Boards" />
             <End Role="Post" EntitySet="Posts" />
           </AssociationSet>
           <EntitySet Name="Groups" EntityType="EduClassModel.Group" />
@@ -677,7 +618,6 @@
           <EntitySet Name="Questions" EntityType="EduClassModel.Question" />
           <EntitySet Name="QuestionOptions" EntityType="EduClassModel.QuestionOption" />
           <EntitySet Name="Responses" EntityType="EduClassModel.Response" />
-          <EntitySet Name="Keys" EntityType="EduClassModel.Key" />
           <EntitySet Name="Calendars" EntityType="EduClassModel.Calendar" />
           <EntitySet Name="Events" EntityType="EduClassModel.Event" />
           <EntitySet Name="Pages" EntityType="EduClassModel.Page" />
@@ -717,14 +657,6 @@
             <End Role="Group" EntitySet="Groups" />
             <End Role="Page" EntitySet="Pages" />
           </AssociationSet>
-          <AssociationSet Name="GroupBoard" Association="EduClassModel.GroupBoard">
-            <End Role="Group" EntitySet="Groups" />
-            <End Role="Board" EntitySet="Boards" />
-          </AssociationSet>
-          <AssociationSet Name="GroupKey" Association="EduClassModel.GroupKey">
-            <End Role="Group" EntitySet="Groups" />
-            <End Role="Key" EntitySet="Keys" />
-          </AssociationSet>
           <AssociationSet Name="GroupTest" Association="EduClassModel.GroupTest">
             <End Role="Group" EntitySet="Groups" />
             <End Role="Test" EntitySet="Tests" />
@@ -761,6 +693,10 @@
             <End Role="Mail" EntitySet="Mails" />
             <End Role="Person" EntitySet="Person" />
           </AssociationSet>
+          <AssociationSet Name="GroupPost" Association="EduClassModel.GroupPost">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Person">
           <Key>
@@ -793,19 +729,6 @@
           <NavigationProperty Name="Groups" Relationship="EduClassModel.GroupStudent" FromRole="Student" ToRole="Group" />
           <NavigationProperty Name="Responses" Relationship="EduClassModel.StudentResponse" FromRole="Student" ToRole="Response" />
         </EntityType>
-        <EntityType Name="Board">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
-          <Property Name="Enabled" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Posts" Relationship="EduClassModel.BoardPost" FromRole="Board" ToRole="Post" />
-          <NavigationProperty Name="Group" Relationship="EduClassModel.GroupBoard" FromRole="Board" ToRole="Group" />
-        </EntityType>
         <EntityType Name="Post">
           <Key>
             <PropertyRef Name="Id" />
@@ -817,11 +740,12 @@
           <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Person" Relationship="EduClassModel.PersonPost" FromRole="Post" ToRole="Person" />
           <Property Name="PersonId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Board" Relationship="EduClassModel.BoardPost" FromRole="Post" ToRole="Board" />
           <Property Name="BoardId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Replays" Relationship="EduClassModel.PostReplay" FromRole="Post" ToRole="Replay" />
           <Property Name="PostType" Type="EduClassModel.PostType" Nullable="false" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Group" Relationship="EduClassModel.GroupPost" FromRole="Post" ToRole="Group" />
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="PersonPost">
           <End Type="EduClassModel.Person" Role="Person" Multiplicity="1" />
@@ -832,18 +756,6 @@
             </Principal>
             <Dependent Role="Post">
               <PropertyRef Name="PersonId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="BoardPost">
-          <End Type="EduClassModel.Board" Role="Board" Multiplicity="1" />
-          <End Type="EduClassModel.Post" Role="Post" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Board">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Post">
-              <PropertyRef Name="BoardId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -860,10 +772,10 @@
           <NavigationProperty Name="Calendar" Relationship="EduClassModel.GroupCalendar" FromRole="Group" ToRole="Calendar" />
           <NavigationProperty Name="Teacher" Relationship="EduClassModel.GroupTeacher" FromRole="Group" ToRole="Teacher" />
           <NavigationProperty Name="Pages" Relationship="EduClassModel.GroupPage" FromRole="Group" ToRole="Page" />
-          <NavigationProperty Name="Board" Relationship="EduClassModel.GroupBoard" FromRole="Group" ToRole="Board" />
-          <NavigationProperty Name="Keys" Relationship="EduClassModel.GroupKey" FromRole="Group" ToRole="Key" />
           <NavigationProperty Name="Tests" Relationship="EduClassModel.GroupTest" FromRole="Group" ToRole="Test" />
           <NavigationProperty Name="Students" Relationship="EduClassModel.GroupStudent" FromRole="Group" ToRole="Student" />
+          <Property Name="Key" Type="String" Nullable="false" />
+          <NavigationProperty Name="Posts" Relationship="EduClassModel.GroupPost" FromRole="Group" ToRole="Post" />
         </EntityType>
         <EntityType Name="Test">
           <Key>
@@ -920,17 +832,6 @@
           <NavigationProperty Name="QuestionOption" Relationship="EduClassModel.QuestionOptionResponse" FromRole="Response" ToRole="QuestionOption" />
           <NavigationProperty Name="Student" Relationship="EduClassModel.StudentResponse" FromRole="Response" ToRole="Student" />
           <Property Name="StudentId" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Key">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="HashKey" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Group" Relationship="EduClassModel.GroupKey" FromRole="Key" ToRole="Group" />
-          <Property Name="GroupId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Calendar">
           <Key>
@@ -1095,22 +996,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="GroupBoard">
-          <End Type="EduClassModel.Group" Role="Group" Multiplicity="1" />
-          <End Type="EduClassModel.Board" Role="Board" Multiplicity="1" />
-        </Association>
-        <Association Name="GroupKey">
-          <End Type="EduClassModel.Group" Role="Group" Multiplicity="1" />
-          <End Type="EduClassModel.Key" Role="Key" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Group">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Key">
-              <PropertyRef Name="GroupId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="GroupTest">
           <End Type="EduClassModel.Group" Role="Group" Multiplicity="1" />
           <End Type="EduClassModel.Test" Role="Test" Multiplicity="*" />
@@ -1196,6 +1081,18 @@
           <End Type="EduClassModel.Mail" Role="Mail" Multiplicity="*" />
           <End Type="EduClassModel.Person" Role="Person" Multiplicity="*" />
         </Association>
+        <Association Name="GroupPost">
+          <End Type="EduClassModel.Group" Role="Group" Multiplicity="1" />
+          <End Type="EduClassModel.Post" Role="Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1231,18 +1128,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Boards">
-      <EntityTypeMapping TypeName="IsTypeOf(EduClassModel.Board)">
-        <MappingFragment StoreEntitySet="Boards">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-          <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-          <ScalarProperty Name="Enabled" ColumnName="Enabled" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Posts">
       <EntityTypeMapping TypeName="IsTypeOf(EduClassModel.Post)">
         <MappingFragment StoreEntitySet="Posts">
@@ -1255,6 +1140,7 @@
           <ScalarProperty Name="BoardId" ColumnName="BoardId" />
           <ScalarProperty Name="PostType" ColumnName="PostType" />
           <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1267,6 +1153,7 @@
           <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
           <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
           <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+          <ScalarProperty Name="Key" ColumnName="Key" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1317,17 +1204,6 @@
           <ScalarProperty Name="Content" ColumnName="Content" />
           <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
           <ScalarProperty Name="StudentId" ColumnName="StudentId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Keys">
-      <EntityTypeMapping TypeName="IsTypeOf(EduClassModel.Key)">
-        <MappingFragment StoreEntitySet="Keys">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="HashKey" ColumnName="HashKey" />
-          <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
-          <ScalarProperty Name="Enabled" ColumnName="Enabled" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1438,14 +1314,6 @@
     <AssociationSetMapping Name="GroupTeacher" TypeName="EduClassModel.GroupTeacher" StoreEntitySet="Groups">
       <EndProperty Name="Teacher">
         <ScalarProperty Name="Id" ColumnName="Teacher_Id" />
-      </EndProperty>
-      <EndProperty Name="Group">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="GroupBoard" TypeName="EduClassModel.GroupBoard" StoreEntitySet="Groups">
-      <EndProperty Name="Board">
-        <ScalarProperty Name="Id" ColumnName="Board_Id" />
       </EndProperty>
       <EndProperty Name="Group">
         <ScalarProperty Name="Id" ColumnName="Id" />

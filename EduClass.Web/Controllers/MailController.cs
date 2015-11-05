@@ -52,29 +52,28 @@ namespace EduClass.Web.Controllers
             {
                 try
                 {
-
                     //Execute the mapping 
                     var mail = AutoMapper.Mapper.Map<MailViewModel, Mail>(mailVm);
 
                     mail.PersonFromId = UserSession.GetCurrentUser().Id;
-                    mail.PersonFrom = UserSession.GetCurrentUser();
-                    foreach (int i in mailVm.PersonIdTo)
-                    {
-                        Person personTo = _personService.GetById(i);
-                        if(personTo.Enabled)
-                            mail.PersonsTo.Add(personTo);
-                    }
-                    
-
                     mail.CreateAt = DateTime.Now;
                     mail.ReadAt = null;
                     mail.Enabled = true;
 
+                    foreach (int i in mailVm.PersonIdTo)
+                    {
+                        Person personTo = _personService.GetById(i);
+                        if (personTo.Enabled && personTo != null)
+                        {
+                            mail.PersonsTo.Add(personTo);
+
+                        }
+                    }
+
                     _service.Create(mail);
-
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Envio Exitoso", "El Email fue enviado correctamente"));
-
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("SendEmail", "Mail");
+                    
 
                 }
                 catch (Exception ex)

@@ -15,24 +15,12 @@ namespace EduClass.Web.Infrastructure
             return SHA256Encode(password);
         }
 
-        public static string EncodePasswordBase64(string password)
-        {
-            return Base64Encode(password);
-        }
-
         private static string SHA256Encode(string plainText)
         {
             var x = new SHA256CryptoServiceProvider();
             var data = System.Text.Encoding.ASCII.GetBytes(plainText + SECRET_KEY);
             data = x.ComputeHash(data);
             return System.Text.Encoding.ASCII.GetString(data);
-        }
-
-        private static string Base64Encode(string plainText)
-        {
-           
-            var data = System.Text.Encoding.ASCII.GetBytes(plainText + SECRET_KEY);
-            return System.Convert.ToBase64String(data);
         }
     }
 }

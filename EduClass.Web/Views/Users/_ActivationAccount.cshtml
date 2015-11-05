@@ -35,6 +35,15 @@
             
         </div>
     </div><!-- panel -->
+    @{var sessionMessage = EduClass.Web.Infrastructure.Sessions.MessageSession.GetMessage(); }
 
+    <script src="~/Scripts/app/helpersSite.js"></script>
+    var message = "@Html.Raw(sessionMessage.ToString())";
+    if (message != "") {
+
+
+
+    showMessageJS(message);
+    }
 </body>
 </html>

@@ -33,22 +33,20 @@ namespace EduClass.Web.Controllers
         // GET: Group
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult JoinStudent(Person _person)
+        public ActionResult JoinStudent()
         {
-            return View();
+            return View(new GroupViewModel());
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult JoinStudent(int idGroup, int idPerson = 0)
+        public ActionResult JoinStudent([Bind(Include = "Name, Descripction, KeyId")] GroupViewModel groupVm)
         {
             Person student = null; 
-            if (idPerson == 0)
-            {
-                student = UserSession.GetCurrentUser();//Obtengo el usuario Actual
-            }
+            student = UserSession.GetCurrentUser();//Obtengo el usuario Actual
+            
 
-            var group = _serviceGroup.GetById(idGroup);//Obtengo el Grupo del Id pasado por parametro
+            var group = _serviceGroup.GetById(1);//Obtengo el Grupo del Id pasado por parametro
             
             if (group == null || student == null) { return HttpNotFound(); }
 
@@ -78,33 +76,43 @@ namespace EduClass.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name, Descripction, KeyId")]GroupViewModel groupVm)
+        public ActionResult Create([Bind(Include = "Name, Description")]GroupViewModel groupVm)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-
                     //Execute the mapping 
                     var group = AutoMapper.Mapper.Map<GroupViewModel, Group>(groupVm);
                     group.CreatedAt = DateTime.Now;
                     group.Enabled = true;
 
+                    Person teacher = UserSession.GetCurrentUser();
+
+                    if (teacher is Teacher)
+                        group.Teacher = (Teacher)teacher;
+                    else
+                        throw new Exception("El usuario actual no es un Profesor");
+                    
+                    group.Key = Security.EncodePasswordBase64(group.Name + group.Id.ToString()).Substring(0, 8);
+                    
                     _serviceGroup.Create(group);
 
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario creado", string.Format("El usuario {0} fue creado con éxito", groupVm.groupName)));
 
-                    return RedirectToAction("Index");
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Grupo", "El grupo fue creado correctamente"));
+                    return RedirectToAction("Create", "Groups");
 
                 }
                 catch (Exception ex)
                 {
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al crear usuario", typeof(groupController), ex));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
                 }
             }
 
             return View(groupVm);
         }
+
+       
 
         [HttpGet]
         public ActionResult Edit(int id = 0)
@@ -117,7 +125,7 @@ namespace EduClass.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Name, Descripction, KeyId")]GroupViewModel groupVm)
+        public ActionResult Edit([Bind(Include = "Name, Descripction")]GroupViewModel groupVm)
         {
             if (ModelState.IsValid)
             {
