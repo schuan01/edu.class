@@ -1,0 +1,12 @@
+﻿
+@helper LimitDescriptionMail(string contenido)
+{
+    var texto = System.Text.RegularExpressions.Regex.Replace(contenido, @"<(.|\n)*?>", string.Empty);
+    <p>@texto.Substring(0,100)</p>
+
+
+}
+
+
+
+

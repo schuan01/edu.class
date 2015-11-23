@@ -10,6 +10,8 @@ namespace EduClass.Web.Infrastructure.Mappers
                 x.AddProfile<PersonMapperProfiles>();
                 x.AddProfile<MailMapperProfiles>();
                 x.AddProfile<GroupMapperProfiles>();
+                x.AddProfile<PostMapperProfiles>();
+		x.AddProfile<PageMapperProfiles>();
             });
 
         

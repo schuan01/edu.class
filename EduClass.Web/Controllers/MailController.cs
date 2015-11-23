@@ -9,6 +9,7 @@ using System.Linq;
 using EduClass.Web.Infrastructure;
 using EduClass.Web.Infrastructure.ViewModels;
 using EduClass.Entities;
+using System.Web;
 
 namespace EduClass.Web.Controllers
 {
@@ -27,8 +28,11 @@ namespace EduClass.Web.Controllers
 
         public ActionResult Index()
         {
-            var list = _service.GetAll().OrderBy(a => a.CreateAt);
-
+            var list = _service.GetMailsReceived(UserSession.GetCurrentUser()).OrderBy(a => a.CreateAt);
+            foreach(var v in list)
+            {               
+                v.Description = HttpUtility.HtmlDecode(v.Description);
+            }
             return View(list);
         }
 
@@ -70,6 +74,7 @@ namespace EduClass.Web.Controllers
                         }
                     }
 
+                    mail.Description = HttpUtility.HtmlEncode(mail.Description);
                     _service.Create(mail);
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Envio Exitoso", "El Email fue enviado correctamente"));
                     return RedirectToAction("SendEmail", "Mail");
@@ -81,6 +86,10 @@ namespace EduClass.Web.Controllers
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al enviar el correo."));
                 }
             }
+
+
+            //Vuelvo a cargar la lista par aque no de exception(si aplica)
+            ViewBag.PersonsTo = new SelectList(_personService.GetAll().Where(g => g.Enabled == true && g.Id != UserSession.GetCurrentUser().Id).ToList(), "Id", "FirstName");
 
             return View(mailVm);
         }

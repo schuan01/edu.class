@@ -25,7 +25,6 @@ namespace EduClass.Entities
         public string Description { get; set; }
         public System.DateTime CreateAt { get; set; }
         public Nullable<System.DateTime> ReadAt { get; set; }
-        public int PersonId { get; set; }
         public int PersonFromId { get; set; }
         public bool Enabled { get; set; }
     

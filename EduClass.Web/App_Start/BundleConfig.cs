@@ -8,7 +8,7 @@ namespace EduClass.Web
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
+           bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
@@ -19,7 +19,7 @@ namespace EduClass.Web
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/template").Include(
+           bundles.Add(new ScriptBundle("~/bundles/template").Include(
                       "~/Scripts/template/lib_jquery-ui_jquery-ui.js",
                       "~/Scripts/template/lib_jquery-toggles_toggles.js",
                       "~/Scripts/template/lib_bootstrap_js_bootstrap.js",

@@ -21,7 +21,6 @@ namespace EduClass.Entities
             this.Responses = new HashSet<Response>();
         }
     
-        public int GroupId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Group> Groups { get; set; }

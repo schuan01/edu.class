@@ -1,0 +1,133 @@
+﻿@model IPagedList<Student>
+@using EduClass.Entities;
+@using MvcPaging;
+@{
+    ViewBag.Title = "Contactos";
+}
+
+<h2>Contactos</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+
+    <div class="contentpanel">
+
+        <div class="row">
+            <div class="col-sm-8 col-md-9 col-lg-10 people-list">
+
+                <div class="people-options clearfix">
+
+                    <div class="pager">
+                        @Html.Raw(Html.Pager(
+                            new Options
+                            {
+                                PageSize = Model.PageSize,
+                                TotalItemCount = Model.TotalItemCount,
+                                CurrentPage = Model.PageNumber,
+                                ItemIcon = new ItemIcon() { Previous = "fa fa-chevron-left", Next = "fa fa-chevron-right" },
+                                TooltipTitles = new TooltipTitles() { First = "Primera", Last = "Ultima", Next = "Próxima Página {0}", Previous = "Página Anterior {0}", Page = "Ir a {0}" },
+                                Size = Size.normal,
+                                Alignment = Alignment.centered,
+                                IsShowControls = true,
+                                IsShowFirstLast = false,
+                                IsShowPages = true
+                            }, new { student_name = ViewData["student_name"] }))
+                    </div>
+
+
+
+                    <div class="btn-group pull-right people-pager">
+                        <button class="btn btn-default-active"><i class="fa fa-th"></i></button>
+                        <a href="people-directory.html" class="btn btn-default"><i class="fa fa-th-list"></i></a>
+                    </div>
+
+                    <div class="btn-group pull-right people-pager">
+                        <button type="button" class="btn btn-default"><i class="fa fa-chevron-left"></i></button>
+                        <button type="button" class="btn btn-default"><i class="fa fa-chevron-right"></i></button>
+                    </div>
+                    <span class="people-count pull-right">Página <strong>@Model.PageNumber</strong> de <strong>@Model.TotalItemCount</strong> Estudiantes</span>
+                </div><!-- people-options -->
+
+
+
+                <div class="row">
+                    @foreach (Student p in Model)
+                    {
+                        <div class="col-md-6 col-lg-3">
+                            <div class="panel panel-profile grid-view">
+                                <div class="panel-heading">
+                                    <div class="text-center">
+
+
+
+                                        <a href="#" class="panel-profile-photo">
+                                            <img class="img-circle" src="img/images_photos_user1.png" alt="">
+                                        </a>
+                                        <h4 class="panel-profile-name">@p.FirstName</h4>
+                                        <p class="media-usermeta"><i class="glyphicon glyphicon-briefcase"></i> Estudiante</p>
+                                    </div>
+                                    <ul class="panel-options">
+                                        <li><a class="tooltips" href="" data-toggle="tooltip" title="View Options"><i class="glyphicon glyphicon-option-vertical"></i></a></li>
+                                    </ul>
+                                </div><!-- panel-heading -->
+                                <div class="panel-body people-info">
+
+                                    <div class="info-group">
+                                        <label>Nombre Completo</label>
+                                        @p.FirstName @p.LastName
+                                    </div>
+                                    <div class="info-group">
+                                        <label>Email</label>
+                                        @p.Email
+                                    </div>
+                                    <div class="info-group last">
+                                        <label>Cédula</label>
+                                        @p.IdentificationCard
+                                    </div> 
+                                </div><!-- panel-body -->
+                            </div><!-- panel -->
+                        </div><!-- col-md-6 -->
+                    }
+                </div><!-- row -->
+
+            </div><!-- col-sm-8 -->
+
+            <div class="col-sm-4 col-md-3 col-lg-2">
+
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">Filtrar Usuarios</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="control-label center-block">Nombre:</label>
+                            <input type="text" class="form-control" placeholder="Ingrese un nombre" name="student_name" value="@ViewData["student_name"]">
+                        </div>
+                        <button class="btn btn-success btn-block" type="submit">Filtrar Lista</button>
+                    </div>
+                </div><!-- panel -->       
+            </div>
+        </div><!-- row -->
+
+    </div><!-- contentpanel -->
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/template")
+@{var sessionMessage = EduClass.Web.Infrastructure.Sessions.MessageSession.GetMessage(); }
+<script src="~/Scripts/app/helpersSite.js"></script>
+<script>
+    $(document).ready(function () {
+        var message = "@Html.Raw(sessionMessage.ToString())";
+        if (message != "") {
+            showMessageJS(message);
+        }
+    });
+</script>

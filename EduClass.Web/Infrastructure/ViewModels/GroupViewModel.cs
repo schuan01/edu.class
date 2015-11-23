@@ -16,5 +16,10 @@ namespace EduClass.Web.Infrastructure.ViewModels
 
         [Required]
         public string Description { get; set; }
+
+        //TODO Requiered
+        [MinLength(8)]
+        [Display(Name = "Clave")]
+        public string Key { get; set; }
     }
 }

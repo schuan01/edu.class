@@ -18,6 +18,11 @@ namespace EduClass.Logic
             _groupRepository = groupRepository;
         }
 
-       
+        public Group GetByKey(string key)
+        {
+            return _groupRepository.GetByKey(key);
+        }
+
+
     }
 }

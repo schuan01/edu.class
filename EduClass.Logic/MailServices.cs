@@ -17,5 +17,15 @@ namespace EduClass.Logic
             _mailRepository = mailRepository;
         }
 
+        public IEnumerable<Mail> GetMailsReceived(Person person)
+        {
+            return _mailRepository.GetMailsReceived(person);
+        }
+
+        public IEnumerable<Mail> GetMailsSent(Person person)
+        {
+            return _mailRepository.GetMailsSent(person);
+        }
+
     }
 }

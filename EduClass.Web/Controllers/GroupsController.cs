@@ -1,4 +1,4 @@
-using EduClass.Logic;
+﻿using EduClass.Logic;
 using EduClass.Web.Infrastructure.Modules;
 using EduClass.Web.Infrastructure.Sessions;
 using System;
@@ -10,6 +10,8 @@ using EduClass.Web.Infrastructure;
 using EduClass.Web.Infrastructure.ViewModels;
 using EduClass.Entities;
 using EduClass.Web.Infrastructure.Mappers;
+using System.Collections.Generic;
+using MvcPaging;
 
 namespace EduClass.Web.Controllers
 {
@@ -17,10 +19,13 @@ namespace EduClass.Web.Controllers
     public class GroupsController : Controller
     {
         private static IGroupServices _serviceGroup;
+        private static IPersonServices _servicePerson;
+        private const int defaultPageSize = 1;
 
-        public GroupsController(IGroupServices serviceGroup)
+        public GroupsController(IGroupServices serviceGroup, IPersonServices servicePerson)
         {
             _serviceGroup = serviceGroup;
+            _servicePerson = servicePerson;
         }
 
         public ActionResult Index()
@@ -28,6 +33,43 @@ namespace EduClass.Web.Controllers
             var list = _serviceGroup.GetAll().OrderBy(a => a.Id);
 
             return View(list);
+        }
+
+        [HttpGet]
+        public ActionResult GetContacts(string student_name, int? page)
+        {
+            IList<Student> estudiantes = null;
+            try
+            {
+                ViewData["student_name"] = student_name;
+                var group = _serviceGroup.GetById(1);
+                ViewBag.StudentsGroup = group.Students;
+                ViewBag.TeacherGroup = group.Teacher;
+
+                //return View();
+
+                int currentPageIndex = page.HasValue ? page.Value : 1;
+                estudiantes = group.Students.ToList();
+
+                if (string.IsNullOrWhiteSpace(student_name))
+                {
+                    estudiantes = estudiantes.ToPagedList(currentPageIndex, defaultPageSize);
+                }
+                else
+                {
+                    estudiantes = estudiantes.Where(p => p.FirstName.ToLower().Contains(student_name.ToLower())).ToPagedList(currentPageIndex, defaultPageSize);
+                }
+
+                //estudiantes = estudiantes.ToPagedList(currentPageIndex, defaultPageSize);
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+            }
+
+            return View(estudiantes);
         }
 
         // GET: Group
@@ -40,29 +82,44 @@ namespace EduClass.Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult JoinStudent([Bind(Include = "Name, Descripction, KeyId")] GroupViewModel groupVm)
+        public ActionResult JoinStudent([Bind(Include = "Key")] GroupViewModel groupVm)
         {
-            Person student = null; 
-            student = UserSession.GetCurrentUser();//Obtengo el usuario Actual
-            
 
-            var group = _serviceGroup.GetById(1);//Obtengo el Grupo del Id pasado por parametro
-            
-            if (group == null || student == null) { return HttpNotFound(); }
-
-            if (group.Students.First(st => st.Id == student.Id) != null)//Si ya existe en la collecion
+            try
             {
-                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "El usuario actual ya existe en el grupo seleccionado"));
+                Person student = null;
+                int idStudent = UserSession.GetCurrentUser().Id;//Obtengo el usuario Actual
+
+                var group = _serviceGroup.GetByKey(groupVm.Key);//Obtengo el Grupo del Id pasado por parametro
+                student = _servicePerson.GetById(idStudent);
+
+                if (group == null || student == null) { return HttpNotFound(); }
+
+                if (group.Students.FirstOrDefault(st => st.Id == student.Id) != null)//Si ya existe en la collecion
+                {
+
+                    throw new Exception("El usuario actual ya existe en el grupo seleccionado");
+
+                }
+
+                if (student is Student)//Solo aplica si es tipo Student
+                {
+                    group.Students.Add((Student)student);
+                    _serviceGroup.Update(group);
+
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Unirse", "El usuario actual se agrego correctamente"));
+                }
+                else
+                    throw new Exception("El usuario actual no es un estudiante");
+
             }
-            
-            if (student is Student )//Solo aplica si es tipo Student
-                group.Students.Add((Student)student);
-            else
-                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "El usuario actual no es un Estudiante"));
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+            }
 
 
-
-            return View();
+            return RedirectToAction("JoinStudent", "Groups");
         }
 
 
@@ -93,9 +150,9 @@ namespace EduClass.Web.Controllers
                         group.Teacher = (Teacher)teacher;
                     else
                         throw new Exception("El usuario actual no es un Profesor");
-                    
+
                     group.Key = Security.EncodePasswordBase64(group.Name + group.Id.ToString()).Substring(0, 8);
-                    
+
                     _serviceGroup.Create(group);
 
 
@@ -112,7 +169,7 @@ namespace EduClass.Web.Controllers
             return View(groupVm);
         }
 
-       
+
 
         [HttpGet]
         public ActionResult Edit(int id = 0)

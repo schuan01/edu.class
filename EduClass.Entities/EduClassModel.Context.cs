@@ -18,6 +18,7 @@ namespace EduClass.Entities
         public EduClassContext()
             : base("name=EduClassContext")
         {
+            this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -26,14 +27,12 @@ namespace EduClass.Entities
         }
     
         public virtual DbSet<Person> Person { get; set; }
-        public virtual DbSet<Board> Boards { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<Test> Tests { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<QuestionOption> QuestionOptions { get; set; }
         public virtual DbSet<Response> Responses { get; set; }
-        public virtual DbSet<Key> Keys { get; set; }
         public virtual DbSet<Calendar> Calendars { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<Page> Pages { get; set; }

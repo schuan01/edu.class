@@ -1,0 +1,226 @@
+﻿
+@model IOrderedEnumerable<EduClass.Entities.Mail>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Emails";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+<div class="mainpanel">
+    <div class="emailcontent">
+        <div class="email-options">
+            <div class="settings">
+                <div class="btn-group mr5">
+                    <button type="button" class="btn btn-success dropdown-toggle btn-sm" data-toggle="dropdown" aria-expanded="false">
+                        Recibidos <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul role="menu" class="dropdown-menu dm-icon pull-right">
+                        <li><a href="#"><i class="fa fa-reply-all"></i> Recibidos</a></li>
+                        <li><a href="#"><i class="fa fa-arrow-right"></i> Enviados</a></li>
+                        <li><a href="#"><i class="fa fa-print"></i> Borrados</a></li>
+                    </ul>
+                </div>
+                
+                    <a href="Index" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="Recargar"><i class="fa fa-refresh"></i></a>
+                    <a href="" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="Mover a la papelera"><i class="fa fa-trash"></i></a>
+                
+
+            </div>
+
+            <label class="ckbox">
+                <input type="checkbox"><span></span>
+            </label>
+        </div><!-- email-options -->
+        <div class="list-group">
+        
+        @foreach (var elemento in Model)
+        {
+                    <div class="list-group-item unread" data-id= "@Html.Raw(elemento.Id)">
+                        <div class="list-left">
+                            <label class="ckbox">
+                                <input type="checkbox"><span></span>
+                            </label>
+                            <span class="markstar"><i class="glyphicon glyphicon-star"></i></span>
+                        </div>
+               
+                        <div class="media" >
+                            <div class="media-left">
+                                <img class="media-object img-circle" src="img/images_photos_user1.png" alt="">
+                            </div>
+                            <div class="media-body">
+                                <span class="pull-right">@elemento.CreateAt</span>
+                                <h5 class="media-heading">@elemento.PersonFrom.FirstName</h5>
+                                <h5>@elemento.Subject</h5>
+                            </div>
+                            @HelperView.LimitDescriptionMail(elemento.Description)
+                        </div>
+                    </div>
+
+
+        }
+            
+        </div>      
+                <div class="contentpanel emailpanel">
+                    <h3 class="nomail">Ningun email seleccionado</h3>
+                @foreach (var elemento in Model)
+                {
+                    <div class="mailcontent hide" data-id= "@elemento.Id">
+                   
+                        <div class="email-header">
+                            <div class="pull-right">
+                                1 hour ago &nbsp;
+                                <div class="btn-group mr5">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-reply"></i></button>
+                                    <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button" aria-expanded="false">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Desplegar Dropdown</span>
+                                    </button>
+                                    <ul role="menu" class="dropdown-menu dm-icon pull-right">
+                                        <li><a href="#"><i class="fa fa-reply-all"></i> Responder a todos</a></li>
+                                        <li><a href="#"><i class="fa fa-arrow-right"></i> Reenviar</a></li>
+                                        <li><a href="#"><i class="fa fa-print"></i> Imprimir</a></li>
+                                        <li><a href="#"><i class="fa fa-trash"></i> Delete Message</a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="btn-group">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i></button>
+                                    <button class="btn btn-default" type="button"><i class="fa fa-angle-right"></i></button>
+                                </div>
+                            </div>
+                            <div class="media">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object img-circle" src="img/images_photos_user1.png" alt="">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">@elemento.PersonFrom.FirstName</h4>
+                                    para: mi, 
+                                    @foreach (var persona in elemento.PersonsTo)
+                                    {
+                                       @persona.FirstName
+                                       
+                                    } 
+                                </div>
+                            </div><!-- media -->
+                        </div><!-- email-header -->
+
+                        <hr>
+
+                        <h3 class="email-subject">@elemento.Subject <span class="markstar"><i class="glyphicon glyphicon-star"></i></span></h3>
+                        <div class="email-body">
+                            <p>@Html.Raw(elemento.Description)</p>
+                        </div>
+
+                        <br>
+                        <hr>
+
+                        <h4 class="panel-title">Attachments:</h4>
+                        <ul class="list-unstyled list-attachments">
+                            <li><i class="fa fa-file-pdf-o"></i> <a href="">Template_Documentation.pdf</a></li>
+                            <li><i class="fa fa-file-pdf-o"></i> <a href="">Template_Documentation.pdf</a></li>
+                        </ul>
+
+                        <hr>
+
+                        <div class="form-group email-editor">
+                            <div>Responder</div>
+                            @Html.TextArea(elemento.Description, htmlAttributes: new { @class = "form-control", @Id = "wysiwyg", @placeholder = "Inserte contenido del mensaje", @rows = "10" })
+                        
+                        </div>
+
+
+                        <button class="btn btn-success">Enviar mensaje</button>
+                       
+
+                        <br><br>
+
+
+                    </div><!-- mailcontent -->
+                }
+                </div><!-- contentpanel -->
+        
+        
+    </div><!-- emailcontent -->
+    
+</div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/template")
+
+    <script>
+$(document).ready(function()
+{
+  $('.emailcontent input[type=checkbox]').click(function() {
+    if($(this).is(':checked')) {
+      $(this).closest('.list-group-item').addClass('selected');
+    } else {
+        $(this).closest('.list-group-item').removeClass('selected');
+    }
+
+    $('.dropdown-toggle').dropdown()
+  });
+
+  // Mark a star
+  $('.markstar').click(function() {
+    if($(this).hasClass('starred')) {
+      $(this).removeClass('starred');
+    } else {
+      $(this).addClass('starred');
+    }
+  });
+
+  // Clicking a message
+  $('.list-group-item > .media').click(function () {
+
+      //Recorre todos los elementos de la izquierda y les elimina la clase active
+      $('.list-group-item').each(function (index, item) {
+          $(item).removeClass('active');
+      })
+
+      //Recorre todos los elementos de la derecha y les elimina la clase active
+      $('.mailcontent').each(function (index, item) {
+          $(item).removeClass('active');
+      })
+
+      //Le agrega la clase active al elemento que hizo click
+      $(this).addClass('active');
+
+      //Le saco unread al parent
+      $(this).parent().addClass('active').removeClass('unread');
+
+      //Agrego la clase hide a nomail
+      $('.nomail').addClass('hide');
+
+
+      var idMail = $(this).parent().data("id"); //Obtengo el valor del atributo Data-Id del Parent
+
+
+      $('.list-group-item').find('[data-id="' + idMail + '"]').addClass('active');//ESTO ASI NO ANDA
+
+      $('.mailcontent').addClass('hide');//Agrego el hide a todos los mensajes
+
+      $('.mailcontent[data-id="' + idMail + '"]').removeClass('hide');//Saco el hide solo al seleccionado, Asi si anda el "find"
+
+      //$('.mailcontent').find("[data-id='" + idMail + "']").removeClass('hide');
+  });
+
+
+  // HTML5 WYSIWYG Editor
+  $('#wysiwyg').wysihtml5({
+      toolbar: {
+          fa: true
+      }
+  });
+
+
+    
+
+});
+    </script>
+}
+

@@ -1,7 +1,7 @@
 ﻿@model EduClass.Web.Infrastructure.ViewModels.MailViewModel
 
 @{
-    ViewBag.Title = "SendEmail";
+    ViewBag.Title = "Enviar Mail";
 }
 
 <h2>Enviar un Email</h2>
@@ -63,8 +63,55 @@
         @Html.ActionLink("Back to List", "Index")
     </div>
 </div>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/template")
+@{var sessionMessage = EduClass.Web.Infrastructure.Sessions.MessageSession.GetMessage(); }
+
+<script src="~/Scripts/app/helpersSite.js"></script>
+<script>
+        $(document).ready(function () {
+            //$("#birthday").mask("99/99/9999");
+
+            var form = $("#registerForm");
+
+            form.steps({
+                headerTag: "h3",
+                bodyTag: "section",
+                transitionEffect: "slideLeft",
+                autoFocus: true,
+                onStepChanging: function (event, currentIndex, newIndex) {
+                    form.validate().settings.ignore = ":disabled,:hidden";
+                    return form.valid();
+                },
+                onFinishing: function (event, currentIndex) {
+                    form.validate().settings.ignore = ":disabled";
+                    return form.valid();
+                },
+                onFinished: function (event, currentIndex) {
+                    this.submit();
+                }
+            });
+
+            form.validate({
+                errorPlacement: function errorPlacement(error, element) { element.before(error); },
+                rules: {
+
+                    confirm: {
+                        equalTo: "#password"
+                    }
+                }
+            });
+
+            var message = "@Html.Raw(sessionMessage.ToString())";
+            if (message != "") {
 
 
+
+                showMessageJS(message);
+            }
+        });
+</script>
 
 @section scripts
 {

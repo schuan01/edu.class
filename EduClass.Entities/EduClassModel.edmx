@@ -143,7 +143,6 @@
     <Property Name="CreatedAt" Type="datetime" Nullable="false" />
     <Property Name="UpdatedAt" Type="datetime" Nullable="true" />
     <Property Name="PersonId" Type="int" Nullable="false" />
-    <Property Name="BoardId" Type="int" Nullable="false" />
     <Property Name="PostType" Type="int" Nullable="false" />
     <Property Name="Enabled" Type="bit" Nullable="false" />
     <Property Name="GroupId" Type="int" Nullable="false" />
@@ -266,7 +265,6 @@
     <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
     <Property Name="CreateAt" Type="datetime" Nullable="false" />
     <Property Name="ReadAt" Type="datetime" Nullable="true" />
-    <Property Name="PersonId" Type="int" Nullable="false" />
     <Property Name="PersonFromId" Type="int" Nullable="false" />
     <Property Name="Enabled" Type="bit" Nullable="false" />
   </EntityType>
@@ -303,7 +301,6 @@
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="GroupId" Type="int" Nullable="false" />
     <Property Name="Id" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="GroupStudent">
@@ -725,7 +722,6 @@
           <NavigationProperty Name="Group" Relationship="EduClassModel.GroupTeacher" FromRole="Teacher" ToRole="Group" />
         </EntityType>
         <EntityType Name="Student" BaseType="EduClassModel.Person" >
-          <Property Name="GroupId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Groups" Relationship="EduClassModel.GroupStudent" FromRole="Student" ToRole="Group" />
           <NavigationProperty Name="Responses" Relationship="EduClassModel.StudentResponse" FromRole="Student" ToRole="Response" />
         </EntityType>
@@ -740,7 +736,6 @@
           <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Person" Relationship="EduClassModel.PersonPost" FromRole="Post" ToRole="Person" />
           <Property Name="PersonId" Type="Int32" Nullable="false" />
-          <Property Name="BoardId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Replays" Relationship="EduClassModel.PostReplay" FromRole="Post" ToRole="Replay" />
           <Property Name="PostType" Type="EduClassModel.PostType" Nullable="false" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
@@ -894,7 +889,6 @@
           <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ReadAt" Type="DateTime" Nullable="true" Precision="3" />
-          <Property Name="PersonId" Type="Int32" Nullable="false" />
           <Property Name="PersonFromId" Type="Int32" Nullable="false" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="PersonFrom" Relationship="EduClassModel.PersonMail" FromRole="Mail" ToRole="Person" />
@@ -1124,7 +1118,6 @@
       <EntityTypeMapping TypeName="IsTypeOf(EduClassModel.Student)">
         <MappingFragment StoreEntitySet="Person_Student">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1137,7 +1130,6 @@
           <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
           <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
           <ScalarProperty Name="PersonId" ColumnName="PersonId" />
-          <ScalarProperty Name="BoardId" ColumnName="BoardId" />
           <ScalarProperty Name="PostType" ColumnName="PostType" />
           <ScalarProperty Name="Enabled" ColumnName="Enabled" />
           <ScalarProperty Name="GroupId" ColumnName="GroupId" />
@@ -1266,7 +1258,6 @@
           <ScalarProperty Name="Description" ColumnName="Description" />
           <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
           <ScalarProperty Name="ReadAt" ColumnName="ReadAt" />
-          <ScalarProperty Name="PersonId" ColumnName="PersonId" />
           <ScalarProperty Name="PersonFromId" ColumnName="PersonFromId" />
           <ScalarProperty Name="Enabled" ColumnName="Enabled" />
         </MappingFragment>

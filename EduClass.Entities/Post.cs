@@ -26,7 +26,6 @@ namespace EduClass.Entities
         public System.DateTime CreatedAt { get; set; }
         public Nullable<System.DateTime> UpdatedAt { get; set; }
         public int PersonId { get; set; }
-        public int BoardId { get; set; }
         public PostType PostType { get; set; }
         public bool Enabled { get; set; }
         public int GroupId { get; set; }

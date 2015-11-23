@@ -11,8 +11,12 @@ namespace EduClass.Repository
         {
 
         }
+        public Group GetByKey(string key)
+        {
+            return dbSet.Where(x => x.Key == key).FirstOrDefault();
+        }
 
-        
-        
+
+
     }
 }

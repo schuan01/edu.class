@@ -17,6 +17,13 @@ namespace EduClass.Web.Controllers
     public class PostsController : Controller
     {
         private static IPostServices _service;
+        enum PostType
+        {
+            TEXT,
+            LINK,
+            PHOTO,
+            FILE
+        }
 
         public PostsController(IPostServices service)
         {
@@ -26,7 +33,6 @@ namespace EduClass.Web.Controllers
         public ActionResult Index()
         {
             var list = _service.GetAll().OrderBy(a => a.Title);
-
             return View(list);
         }
 
@@ -34,34 +40,35 @@ namespace EduClass.Web.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            
             return View(new PostViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Title, Content, PersonId, BoardId")]PostViewModel postVm)
+        public ActionResult Create([Bind(Include = "Title, Content")]PostViewModel postVm)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    
-                        //Execute the mapping 
-                        var post = AutoMapper.Mapper.Map<PostViewModel, Post>(postVm);
 
-                        post.CreatedAt = DateTime.Now;
-                        post.Enabled = true;
+                    //Execute the mapping 
+                    var post = AutoMapper.Mapper.Map<PostViewModel, Post>(postVm);
 
-                        _service.Create(post);
+                    post.CreatedAt = DateTime.Now;
+                    post.Enabled = true;
 
-                        //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario creado", string.Format("El usuario {0} fue creado con éxito", postVm.postName)));
+                    _service.Create(post);
 
-                        return RedirectToAction("Index");
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Post", "El Post se ha creado correctamente"));
+
+                    return RedirectToAction("Index");
                   
                 }
                 catch (Exception ex)
                 {
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al crear usuario", typeof(postController), ex));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Ocurrio un error al crear el Post"));
                 }
             }
 
@@ -79,7 +86,7 @@ namespace EduClass.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Title, Content, PersonId, BoardId")]PostViewModel postVm)
+        public ActionResult Edit([Bind(Include = "Title, Content, PersonId, GroupId")]PostViewModel postVm)
         {
             if (ModelState.IsValid)
             {

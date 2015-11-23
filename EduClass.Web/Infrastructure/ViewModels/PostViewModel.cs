@@ -19,7 +19,8 @@ namespace EduClass.Web.Infrastructure.ViewModels
         public string Content { get; set; }
 
         [Required]
-        public int PersonId { get; set; }
+        public string PostType { get; set; }
+
 
         [Required]
         public System.DateTime CreatedAt { get; set; }

@@ -1,4 +1,4 @@
-using EduClass.Logic;
+﻿using EduClass.Logic;
 using EduClass.Web.Infrastructure.Modules;
 using EduClass.Web.Infrastructure.Sessions;
 using System;
@@ -10,6 +10,7 @@ using EduClass.Web.Infrastructure;
 using EduClass.Web.Infrastructure.ViewModels;
 using EduClass.Entities;
 using EduClass.Web.Infrastructure.Mappers;
+using System.Web;
 
 namespace EduClass.Web.Controllers
 {
@@ -45,23 +46,25 @@ namespace EduClass.Web.Controllers
             {
                 try
                 {
-                    
-                        //Execute the mapping 
-                        var page = AutoMapper.Mapper.Map<PageViewModel, Page>(pageVm);
 
-                        page.CreatedAt = DateTime.Now;
-                        page.Enabled = true;
+                    //Execute the mapping 
+                    var page = AutoMapper.Mapper.Map<PageViewModel, Page>(pageVm);
 
-                        _service.Create(page);
+                    page.CreatedAt = DateTime.Now;
+                    page.Enabled = true;
+                    page.GroupId = 1;//TODO GET CURRENT Group
+                    page.Content = HttpUtility.HtmlEncode(page.Content);
 
-                        //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario creado", string.Format("El usuario {0} fue creado con éxito", pageVm.pageName)));
+                    _service.Create(page);
 
-                        return RedirectToAction("Index");
-                  
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Creacion Exitosa", "La Página se creo correctamente"));
+
+                    return RedirectToAction("Create");
+
                 }
                 catch (Exception ex)
                 {
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al crear usuario", typeof(pageController), ex));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se pudo crear la Página"));
                 }
             }
 

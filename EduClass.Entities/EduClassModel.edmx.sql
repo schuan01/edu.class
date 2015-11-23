@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 11/04/2015 21:47:35
+-- Date Created: 11/22/2015 20:23:04
 -- Generated from EDMX file: C:\Users\Schuan\Documents\edu.class\EduClass.Entities\EduClassModel.edmx
 -- --------------------------------------------------
 
@@ -76,6 +76,9 @@ IF OBJECT_ID(N'[dbo].[FK_MailPerson_Mail]', 'F') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[FK_MailPerson_Person]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[MailPerson] DROP CONSTRAINT [FK_MailPerson_Person];
+GO
+IF OBJECT_ID(N'[dbo].[FK_GroupPost]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Posts] DROP CONSTRAINT [FK_GroupPost];
 GO
 IF OBJECT_ID(N'[dbo].[FK_Teacher_inherits_Person]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Person_Teacher] DROP CONSTRAINT [FK_Teacher_inherits_Person];
@@ -171,7 +174,6 @@ CREATE TABLE [dbo].[Posts] (
     [CreatedAt] datetime  NOT NULL,
     [UpdatedAt] datetime  NULL,
     [PersonId] int  NOT NULL,
-    [BoardId] int  NOT NULL,
     [PostType] int  NOT NULL,
     [Enabled] bit  NOT NULL,
     [GroupId] int  NOT NULL
@@ -294,7 +296,6 @@ CREATE TABLE [dbo].[Mails] (
     [Description] nvarchar(max)  NOT NULL,
     [CreateAt] datetime  NOT NULL,
     [ReadAt] datetime  NULL,
-    [PersonId] int  NOT NULL,
     [PersonFromId] int  NOT NULL,
     [Enabled] bit  NOT NULL
 );
@@ -331,7 +332,6 @@ GO
 
 -- Creating table 'Person_Student'
 CREATE TABLE [dbo].[Person_Student] (
-    [GroupId] int  NOT NULL,
     [Id] int  NOT NULL
 );
 GO
