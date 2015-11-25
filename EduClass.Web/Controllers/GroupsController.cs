@@ -21,6 +21,7 @@ namespace EduClass.Web.Controllers
         private static IGroupServices _serviceGroup;
         private static IPersonServices _servicePerson;
         private const int defaultPageSize = 1;
+        
 
         public GroupsController(IGroupServices serviceGroup, IPersonServices servicePerson)
         {
@@ -45,8 +46,6 @@ namespace EduClass.Web.Controllers
                 var group = _serviceGroup.GetById(1);
                 ViewBag.StudentsGroup = group.Students;
                 ViewBag.TeacherGroup = group.Teacher;
-
-                //return View();
 
                 int currentPageIndex = page.HasValue ? page.Value : 1;
                 estudiantes = group.Students.ToList();
@@ -128,6 +127,7 @@ namespace EduClass.Web.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            
             return View(new GroupViewModel());
         }
 
@@ -144,20 +144,22 @@ namespace EduClass.Web.Controllers
                     group.CreatedAt = DateTime.Now;
                     group.Enabled = true;
 
-                    Person teacher = UserSession.GetCurrentUser();
+                    Person teacher = _servicePerson.GetById(UserSession.GetCurrentUser().Id);
 
-                    if (teacher is Teacher)
+                    if (teacher is Teacher && teacher != null)
                         group.Teacher = (Teacher)teacher;
                     else
-                        throw new Exception("El usuario actual no es un Profesor");
+                        throw new Exception("El usuario actual no es un Profesor o no existe");
 
-                    group.Key = Security.EncodePasswordBase64(group.Name + group.Id.ToString()).Substring(0, 8);
+                   
+                    group.Key = Security.EncodePasswordBase64().Substring(0,8);
 
                     _serviceGroup.Create(group);
 
 
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Grupo", "El grupo fue creado correctamente"));
                     return RedirectToAction("Create", "Groups");
+                    
 
                 }
                 catch (Exception ex)

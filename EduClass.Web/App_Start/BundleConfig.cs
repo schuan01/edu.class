@@ -52,6 +52,7 @@ namespace EduClass.Web
                           "~/Content/template/lib_jquery.gritter_jquery.gritter.css",
                           "~/Content/template/lib_select2_select2.css",
                           "~/Content/template/lib_bootstrap3-wysihtml5-bower_bootstrap3-wysihtml5.css",
+                          "~/Content/template/thumbnail-gallery.css",
                           "~/Content/template/css_quirk.css").IncludeDirectory("~/Content/font", "*.css", false));
         }
     }

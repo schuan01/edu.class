@@ -12,7 +12,12 @@
     <div class="emailcontent">
         <div class="email-options">
             <div class="settings">
+                <a href="SendEmail">
+                    <input type="button" class="btn btn-danger btn-sm pull-left" value="Nuevo Mensaje" />
+                </a>
+               
                 <div class="btn-group mr5">
+                    
                     <button type="button" class="btn btn-success dropdown-toggle btn-sm" data-toggle="dropdown" aria-expanded="false">
                         Recibidos <span class="caret"></span>
                         <span class="sr-only">Toggle Dropdown</span>
@@ -148,10 +153,7 @@
     </div><!-- emailcontent -->
     
 </div>
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/template")
-
+@Scripts.Render("~/bundles/jquery")
     <script>
 $(document).ready(function()
 {

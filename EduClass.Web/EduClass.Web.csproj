@@ -400,6 +400,8 @@
     <Content Include="Views\Groups\JoinStudent.cshtml" />
     <Content Include="Views\Mail\Index.cshtml" />
     <Content Include="Views\Groups\GetContacts.cshtml" />
+    <Content Include="Views\Pages\Create.cshtml" />
+    <Content Include="Views\Pages\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -442,7 +444,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>61267</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:61267/</IISUrl>
+          <IISUrl>http://localhost:55555/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

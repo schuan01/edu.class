@@ -2,7 +2,32 @@
 @helper LimitDescriptionMail(string contenido)
 {
     var texto = System.Text.RegularExpressions.Regex.Replace(contenido, @"<(.|\n)*?>", string.Empty);
-    <p>@texto.Substring(0,100)</p>
+    
+    if (contenido.Length > 100)
+    {
+            <p>@texto.Substring(0, 100)</p>
+    }
+    else
+    {
+
+            <p>@texto</p>
+    }
+
+
+}
+
+@helper LimitContentPage(string contenido, int lenght)
+{
+    var texto = System.Text.RegularExpressions.Regex.Replace(contenido, @"<(.|\n)*?>", string.Empty);
+    if (contenido.Length > lenght)
+    {
+            <p>@texto.Substring(0, lenght)</p>
+    }
+    else
+    {
+
+           <p>@texto</p>
+    }
 
 
 }

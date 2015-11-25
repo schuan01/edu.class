@@ -27,9 +27,14 @@ namespace EduClass.Web.Controllers
         public ActionResult Index()
         {
             var list = _service.GetAll().OrderBy(a => a.Id);
-
+            foreach (var v in list)
+            {
+                v.Content = HttpUtility.HtmlDecode(v.Content);
+            }
             return View(list);
         }
+
+
 
         // GET: Page
         [HttpGet]
@@ -40,7 +45,7 @@ namespace EduClass.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Title, Content, BoardId")]PageViewModel pageVm)
+        public ActionResult Create([Bind(Include = "Title, Content")]PageViewModel pageVm)
         {
             if (ModelState.IsValid)
             {
@@ -52,7 +57,7 @@ namespace EduClass.Web.Controllers
 
                     page.CreatedAt = DateTime.Now;
                     page.Enabled = true;
-                    page.GroupId = 1;//TODO GET CURRENT Group
+                    page.GroupId = 14;//TODO GET CURRENT Group
                     page.Content = HttpUtility.HtmlEncode(page.Content);
 
                     _service.Create(page);
@@ -82,7 +87,7 @@ namespace EduClass.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Title, Content, BoardId")]PageViewModel pageVm)
+        public ActionResult Edit([Bind(Include = "Title, Content")]PageViewModel pageVm)
         {
             if (ModelState.IsValid)
             {
@@ -91,8 +96,9 @@ namespace EduClass.Web.Controllers
                     //Execute the mapping 
                     var page = AutoMapper.Mapper.Map<PageViewModel, Page>(pageVm);
 
-                    
                     page.UpdatedAt = DateTime.Now;
+
+
 
                     _service.Create(page);
 

@@ -11,10 +11,12 @@ namespace EduClass.Web.Infrastructure.ViewModels
         public int Id { get; set; }
 
         [Required]
+        [Display(Name = "Nombre")]
         [MaxLength(75)]
         public string Name { get; set; }
 
         [Required]
+        [Display(Name = "Descripción")]
         public string Description { get; set; }
 
         //TODO Requiered

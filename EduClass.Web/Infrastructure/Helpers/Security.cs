@@ -8,16 +8,16 @@ namespace EduClass.Web.Infrastructure
 {
     public class Security
     {
-        private const string SECRET_KEY = "VAMO LOS PIBES"; 
+        private const string SECRET_KEY = "VAMO LOS PIBES";
 
         public static string EncodePassword(string password)
         {
             return SHA256Encode(password);
         }
 
-        public static string EncodePasswordBase64(string password)
+        public static string EncodePasswordBase64()
         {
-            return Base64Encode(password);
+            return Base64Encode();
         }
 
         private static string SHA256Encode(string plainText)
@@ -28,11 +28,16 @@ namespace EduClass.Web.Infrastructure
             return System.Text.Encoding.ASCII.GetString(data);
         }
 
-        private static string Base64Encode(string plainText)
+        private static string Base64Encode()
         {
-           
-            var data = System.Text.Encoding.ASCII.GetBytes(plainText + SECRET_KEY);
-            return System.Convert.ToBase64String(data);
+            Guid g = Guid.NewGuid();
+            /*string GuidString = Convert.ToBase64String(g.ToByteArray());
+            GuidString = GuidString.Replace("=", "");
+            GuidString = GuidString.Replace("+", "");
+            var data = System.Text.Encoding.ASCII.GetBytes(g+plainText);
+            string resultado = System.Convert.ToBase64String(data);*/
+            return g.ToString();
+            //return resultado;
         }
     }
 }
