@@ -57,7 +57,7 @@ namespace EduClass.Web.Controllers
 
                     page.CreatedAt = DateTime.Now;
                     page.Enabled = true;
-                    page.GroupId = 14;//TODO GET CURRENT Group
+                    page.GroupId = 1;//TODO GET CURRENT Group
                     page.Content = HttpUtility.HtmlEncode(page.Content);
 
                     _service.Create(page);

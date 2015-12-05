@@ -1,0 +1,186 @@
+﻿@model IEnumerable<EduClass.Entities.Post>
+@{
+    
+    ViewBag.Title = "Linea de tiempo";
+    DateTime earlierDate = DateTime.Now;
+}
+
+<div class="panel panel-site-traffic col-md-8 col-md-offset-2">
+    <div class="panel-body">
+        @foreach (var item in Model)
+        {
+            <div class="row">
+                <div class="timeline-wrapper">
+                    @if ((earlierDate - item.CreatedAt).TotalDays > 0)
+                    {                        
+                        <div class="timeline-date">@item.CreatedAt.ToLongDateString()</div>
+                        
+                        @{ earlierDate = item.CreatedAt;}
+                    }
+                    <div class="panel panel-post-item status">
+                        <div class="panel-heading">
+                            <div class="media">
+                                <div class="media-body">
+                                    <h4 class="media-heading">@item.Person.FirstName @item.Person.LastName</h4>
+                                    <p class="media-usermeta">
+                                        <span class="media-time">10:30 am</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div><!-- panel-heading -->
+                        <div class="panel-body">
+                            Prototyping is one of the best things that can happen within a project, yet it is extremely underutilized. <a href="">#prototype</a>
+                        </div>
+                        <div class="panel-footer">
+                            <ul class="list-inline">
+                                <li><a href=""><i class="glyphicon glyphicon-heart"></i> Like</a></li>
+                                <li><a data-target="#comment-1" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comments (2)</a></li>
+                                <li class="pull-right">24 liked this</li>
+                            </ul>
+                        </div>
+                        <div class="collapse" id="comment-1">
+                            <ul class="media-list">
+                                <li class="media">
+                                    <div class="media-body">
+                                        <h4 class="media-heading">Floyd M. Romero <small>8 minutes ago</small></h4>
+                                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+                                    </div>
+                                </li>
+                                <li class="media">
+                                    <div class="media-left">
+                                        <a href="#">
+                                            <img class="media-object img-circle" src="img/images_photos_user3.png" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">Jennie S. Gray <small>5 minutes ago</small></h4>
+                                        Nor again is there anyone who loves or pursues or desires to obtain pain of itself,
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Write some comments">
+                        </div>
+                    </div><!-- panel panel-post -->
+                    <!--
+                        <div class="timeline-date"><a href="">Load more...</a></div>
+                        -->
+                </div><!-- timeline-wrapper -->
+            </div>
+        }
+        <div class="row">
+            <div class="timeline-wrapper">
+                <div class="timeline-date">Sunday, July 05, 2015</div>
+                <div class="panel panel-post-item status">
+                    <div class="panel-heading">
+                        <div class="media">
+                            <div class="media-body">
+                                <h4 class="media-heading">Christina R. Hill</h4>
+                                <p class="media-usermeta">
+                                    <span class="media-time">10:30 am</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div><!-- panel-heading -->
+                    <div class="panel-body">
+                        Prototyping is one of the best things that can happen within a project, yet it is extremely underutilized. <a href="">#prototype</a>
+                    </div>
+                    <div class="panel-footer">
+                        <ul class="list-inline">
+                            <li><a href=""><i class="glyphicon glyphicon-heart"></i> Like</a></li>
+                            <li><a data-target="#comment-1" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comments (2)</a></li>
+                            <li class="pull-right">24 liked this</li>
+                        </ul>
+                    </div>
+                    <div class="collapse" id="comment-1">
+                        <ul class="media-list">
+                            <li class="media">
+                                <div class="media-body">
+                                    <h4 class="media-heading">Floyd M. Romero <small>8 minutes ago</small></h4>
+                                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+                                </div>
+                            </li>
+                            <li class="media">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object img-circle" src="img/images_photos_user3.png" alt="">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">Jennie S. Gray <small>5 minutes ago</small></h4>
+                                    Nor again is there anyone who loves or pursues or desires to obtain pain of itself,
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Write some comments">
+                    </div>
+                </div><!-- panel panel-post -->
+
+             
+            <!--
+                <div class="timeline-date"><a href="">Load more...</a></div>
+                -->
+            </div><!-- timeline-wrapper -->
+        </div>
+
+        <div class="row">
+            <div class="timeline-wrapper">
+                <div class="timeline-date">Sunday, July 05, 2015</div>
+                <div class="panel panel-post-item status">
+                    <div class="panel-heading">
+                        <div class="media">
+                            <div class="media-body">
+                                <h4 class="media-heading">Christina R. Hill</h4>
+                                <p class="media-usermeta">
+                                    <span class="media-time">10:30 am</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div><!-- panel-heading -->
+                    <div class="panel-body">
+                        Prototyping is one of the best things that can happen within a project, yet it is extremely underutilized. <a href="">#prototype</a>
+                    </div>
+                    <div class="panel-footer">
+                        <ul class="list-inline">
+                            <li><a href=""><i class="glyphicon glyphicon-heart"></i> Like</a></li>
+                            <li><a data-target="#comment-1" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comments (2)</a></li>
+                            <li class="pull-right">24 liked this</li>
+                        </ul>
+                    </div>
+                    <div class="collapse" id="comment-1">
+                        <ul class="media-list">
+                            <li class="media">
+                                <div class="media-body">
+                                    <h4 class="media-heading">Floyd M. Romero <small>8 minutes ago</small></h4>
+                                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+                                </div>
+                            </li>
+                            <li class="media">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object img-circle" src="img/images_photos_user3.png" alt="">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">Jennie S. Gray <small>5 minutes ago</small></h4>
+                                    Nor again is there anyone who loves or pursues or desires to obtain pain of itself,
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Write some comments">
+                    </div>
+                </div><!-- panel panel-post -->
+                <!--
+                <div class="timeline-date"><a href="">Load more...</a></div>
+                -->
+            </div><!-- timeline-wrapper -->
+        </div>
+    </div><!-- panel-body -->
+</div>
+
+

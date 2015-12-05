@@ -6,5 +6,6 @@ namespace EduClass.Repository
     {
         Person SignIn(string userName, string password);
         Person GetByUserName(string userName);
+        void SaveKeyResetPassword(string email, string key);
     }
 }

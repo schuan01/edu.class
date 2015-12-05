@@ -10,6 +10,7 @@ using EduClass.Web.Infrastructure;
 using EduClass.Web.Infrastructure.ViewModels;
 using EduClass.Entities;
 using System.Data.Entity.Validation;
+using EduClass.Web.Mailers;
 
 namespace EduClass.Web.Controllers
 {
@@ -258,6 +259,40 @@ namespace EduClass.Web.Controllers
             MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", user.UserName)));
 
             return RedirectToAction("Index");
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult ResetPasswordEmail()
+        {
+            ViewBag.Sended = false;
+
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ResetPasswordEmail(string email)
+        {
+
+            var uMailer = new UserMailer();
+
+            var key = Guid.NewGuid().ToString();
+            var urlReset = Url.Action("EmailUrlResetPassword", "Users", new { key = key }, Request.Url.Scheme);
+            uMailer.PasswordReset(email, urlReset);
+
+            //_service.SaveKeyResetPassword(email, key);
+
+            ViewBag.Sended = true;
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult EmailUrlResetPassword(string key)
+        {
+            return View();
         }
     }
 }

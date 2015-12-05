@@ -73,6 +73,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Mvc.Mailer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvcMailer.4.5\lib\45\Mvc.Mailer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MvcPaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MVC4.Paging.3.1.1\lib\net40\MvcPaging.dll</HintPath>
       <Private>True</Private>
@@ -184,6 +188,8 @@
     <Compile Include="Infrastructure\ViewModels\PostViewModel.cs" />
     <Compile Include="Infrastructure\ViewModels\ReplyViewModel.cs" />
     <Compile Include="Infrastructure\ViewModels\TestViewModel.cs" />
+    <Compile Include="Mailers\IUserMailer.cs" />
+    <Compile Include="Mailers\UserMailer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -402,10 +408,16 @@
     <Content Include="Views\Groups\GetContacts.cshtml" />
     <Content Include="Views\Pages\Create.cshtml" />
     <Content Include="Views\Pages\Index.cshtml" />
+    <Content Include="Views\UserMailer\PasswordReset.cshtml" />
+    <Content Include="Views\UserMailer\Welcome.cshtml" />
+    <Content Include="Views\UserMailer\_Layout.cshtml" />
+    <Content Include="Views\Users\ResetPasswordEmail.cshtml" />
+    <Content Include="Views\Board\Index.cshtml" />
+    <Content Include="Views\Users\EmailUrlResetPassword.cshtml" />
+    <Content Include="Views\Shared\_SimpleLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Board\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

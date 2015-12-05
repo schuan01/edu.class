@@ -19,5 +19,10 @@ namespace EduClass.Repository
         {
             return dbSet.Where(x => x.UserName == userName).FirstOrDefault();
         }
+
+        public void SaveKeyResetPassword(string email, string key)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

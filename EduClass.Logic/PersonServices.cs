@@ -39,5 +39,10 @@ namespace EduClass.Logic
             _personRepository.Update(user);
             _unitOfWork.Commit();
         }
+
+        public void SaveKeyResetPassword(string email, string key)
+        {
+            _personRepository.SaveKeyResetPassword(email, key);
+        }
     }
 }

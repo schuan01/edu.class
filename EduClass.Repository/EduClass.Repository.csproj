@@ -53,9 +53,11 @@
     <Compile Include="Base\IBaseRepository.cs" />
     <Compile Include="Base\IUnitOfWork.cs" />
     <Compile Include="Base\UnitOfWork.cs" />
+    <Compile Include="BoardRepository.cs" />
     <Compile Include="CalendarRepository.cs" />
     <Compile Include="EventRepository.cs" />
     <Compile Include="GroupRepository.cs" />
+    <Compile Include="IBoardRepository.cs" />
     <Compile Include="ICalendarRepository.cs" />
     <Compile Include="IEventRepository.cs" />
     <Compile Include="IGroupRepository.cs" />

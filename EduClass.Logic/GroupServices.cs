@@ -23,6 +23,23 @@ namespace EduClass.Logic
             return _groupRepository.GetByKey(key);
         }
 
+        public IList<Group> GetActiveGroups(Person person)
+        {
+            if (person is Teacher)
+            {
+                return _groupRepository.GetActiveGroupsByTeacher(person.Id);
+            }
+            else if (person is Student)
+            {
+                return _groupRepository.GetActiveGroupsByStudent(person.Id);
+            }
 
+            throw new InvalidCastException();
+        }
+
+        public Group GetGroupByIdWithPosts(int id)
+        {
+            return _groupRepository.GetGroupByIdWithPosts(id);
+        }
     }
 }

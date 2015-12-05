@@ -52,9 +52,11 @@
     <Compile Include="Base\EntityService.cs" />
     <Compile Include="Base\IEntityService.cs" />
     <Compile Include="Base\IService.cs" />
+    <Compile Include="BoardServices.cs" />
     <Compile Include="CalendarServices.cs" />
     <Compile Include="EventServices.cs" />
     <Compile Include="GroupServices.cs" />
+    <Compile Include="IBoardServices.cs" />
     <Compile Include="ICalendarServices.cs" />
     <Compile Include="IEventServices.cs" />
     <Compile Include="IGroupServices.cs" />
