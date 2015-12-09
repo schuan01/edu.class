@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AvatarRepository.cs" />
     <Compile Include="Base\BaseRepository.cs" />
     <Compile Include="Base\IBaseRepository.cs" />
     <Compile Include="Base\IUnitOfWork.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="CalendarRepository.cs" />
     <Compile Include="EventRepository.cs" />
     <Compile Include="GroupRepository.cs" />
+    <Compile Include="IAvatarRepository.cs" />
     <Compile Include="IBoardRepository.cs" />
     <Compile Include="ICalendarRepository.cs" />
     <Compile Include="IEventRepository.cs" />

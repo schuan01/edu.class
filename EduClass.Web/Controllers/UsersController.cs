@@ -11,6 +11,9 @@ using EduClass.Web.Infrastructure.ViewModels;
 using EduClass.Entities;
 using System.Data.Entity.Validation;
 using EduClass.Web.Mailers;
+using System.IO;
+using System.Web;
+using System.Collections.Generic;
 
 namespace EduClass.Web.Controllers
 {
@@ -18,10 +21,14 @@ namespace EduClass.Web.Controllers
     public class UsersController : Controller
     {
         private static IPersonServices _service;
+        private static IAvatarServices _avatarService;
+        private string carpetaRaiz = "~/UsersFolders/";//Carpeta raiz, no incluye los Avatars
 
-        public UsersController(IPersonServices service)
+        public UsersController(IPersonServices service, IAvatarServices avatarService)
         {
             _service = service;
+            _avatarService = avatarService;
+
         }
 
         // GET: User
@@ -62,13 +69,15 @@ namespace EduClass.Web.Controllers
                     if (!String.IsNullOrEmpty(returnurl) && Url.IsLocalUrl(returnurl))
                         return Redirect(returnurl);
 
+                    
+
                     return RedirectToAction("Index", "User");
                 }
                 else
                 {
                     ViewBag.UserName = userName;
                     ViewBag.ReturnUrl = returnurl;
-                    ViewBag.Message = "El usuario y la contraseña no cohinciden.";
+                    ViewBag.Message = "El usuario y la contraseña no coinciden.";
                 }
             }
             else
@@ -182,6 +191,8 @@ namespace EduClass.Web.Controllers
 
                         MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario creado", string.Format("El usuario {0} fue creado con éxito", personVm.UserName)));
 
+                        CreateUserFolder(person);
+
                         //TODO: HACER EL ENVIO DE MAIL
                         return View("_ActivationAccount");
                     }
@@ -203,11 +214,33 @@ namespace EduClass.Web.Controllers
             return View(personVm);
         }
 
-        [HttpGet]
-        public ActionResult Edit(int id = 0)
+        private void CreateUserFolder(Person person)
         {
-            if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
-            var user = AutoMapper.Mapper.Map<Person, PersonViewModel>(_service.GetById(id));
+            string carpetaUsuario = carpetaRaiz + person.UserName;
+            if (!Directory.Exists(Server.MapPath(carpetaUsuario)))
+            {
+                Directory.CreateDirectory(Server.MapPath(carpetaUsuario));
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Edit()
+        {
+            PersonViewModel user = null;
+            try
+            {
+                Person usuario = UserSession.GetCurrentUser();
+                if(usuario == null)
+                    throw new Exception("El usuario no existe");
+
+                user = AutoMapper.Mapper.Map<Person, PersonViewModel>(_service.GetById(usuario.Id));
+
+                
+            }
+            catch(Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+            }
 
             return View(user);
         }
@@ -294,6 +327,112 @@ namespace EduClass.Web.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public ActionResult SaveUploadedFile()
+        {
+            return View();
+        }
+
+        //TODO
+        [HttpPost]
+        public ActionResult SaveUploadedFile(int id= 0)
+        {
+            HttpPostedFileBase file = null;
+            bool isSavedSuccessfully = true;
+            string fName = "";
+            string path = "";
+            try
+            {
+               
+               
+                foreach (string fileName in Request.Files)
+                {
+                    file = Request.Files[fileName];
+                    //Save file content goes here
+                    fName = file.FileName;
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        //La carpeta es el userName del usuario
+                        var originalDirectory = new DirectoryInfo(string.Format("{0}Content\\", Server.MapPath(@"\")));
+
+                        string pathString = System.IO.Path.Combine(originalDirectory.ToString(), "avatars");
+                        pathString = System.IO.Path.Combine(pathString, UserSession.GetCurrentUser().UserName);
+
+                        var fileName1 = Path.GetFileName(file.FileName);
+                        
+
+                        bool isExists = System.IO.Directory.Exists(pathString);
+
+                        if (!isExists)
+                            System.IO.Directory.CreateDirectory(pathString);
+
+                        path = string.Format("{0}\\{1}", pathString, file.FileName);
+                        
+                        file.SaveAs(path);
+
+
+                        //Despues de guardar la imagen
+                        Person p = UserSession.GetCurrentUser();//Traigo el usuario actual
+                        p = _service.GetById(p.Id);
+
+                        //Y creo un nuevo Avatar
+                        Avatar a = new Avatar();
+                        a.Enabled = true;
+                        a.UrlPhoto = "~\\Content\\avatars\\" + UserSession.GetCurrentUser().UserName+"\\"+file.FileName;
+                        a.UpdatedAt = DateTime.Now;
+                        a.Person = p;
+
+                        //Termino creando el Avatar
+                        if (p.Avatar == null)
+                        {
+                            _avatarService.Create(a);
+                            UserSession.SetCurrentUser(p);//Actualizo la Session
+                        }
+                        else
+                        {
+                            //Si ya existe, elimino la anterior. Relacion 1 - 1. Tambien elimino fisicamente
+                            //TODO
+                            //FileInfo fi1 = new FileInfo(p.Avatar.UrlPhoto);
+                            //fi1.Delete();
+                            _avatarService.Delete(p.Avatar);
+                            
+
+                            _avatarService.Create(a);//Nuevo Avatar para la Person
+                            UserSession.SetCurrentUser(p);//Actualizo la Session
+                        }
+                        
+
+                    }
+
+                }
+
+                
+            }
+            catch(Exception ex)
+            {
+                //Borro el archivo fisico si se llega a crear
+                if (file != null)
+                {
+                    FileInfo fi1 = new FileInfo(path);
+                    fi1.Delete();
+                }
+
+                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al actualizar el Avatar."));
+
+            }
+
+            if (isSavedSuccessfully)
+            {
+                return Json(new { Message = fName });
+            }
+            else
+            {
+                return Json(new { Message = "Error al guardar el archivo" });
+            }
+        }
+
+       
     }
 }
 

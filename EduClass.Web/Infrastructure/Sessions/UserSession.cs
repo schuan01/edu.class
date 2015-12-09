@@ -9,6 +9,7 @@ namespace EduClass.Web.Infrastructure.Sessions
     public class UserSession
     {
         private static string sessionName = "educlass_session";
+        private static string sessionNameGroup = "educlass_session_group";
 
         public static Person GetCurrentUser()
         {
@@ -40,6 +41,25 @@ namespace EduClass.Web.Infrastructure.Sessions
         {
             HttpContext.Current.Session.Clear();
             HttpContext.Current.Session.Abandon();
+        }
+
+        public static void SetCurrentGroup(Group group)
+        {
+            HttpContext.Current.Session[sessionNameGroup] = group;
+        }
+
+        public static Group GetCurrentGroup()
+        {
+            if (HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                if (HttpContext.Current.Session[sessionNameGroup] != null)
+                {
+                    return (Group)HttpContext.Current.Session[sessionNameGroup];
+                }
+
+            }
+
+            throw new Exception("Error to get group");
         }
     }
 }

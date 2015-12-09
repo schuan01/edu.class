@@ -251,6 +251,7 @@
     <Content Include="Content\font\img_bootstrap-colorpicker_saturation.png" />
     <Content Include="Content\font\isotope.css" />
     <Content Include="Content\font\roboto.css" />
+    <Content Include="Content\images\default.png" />
     <Content Include="Content\images\images_doc.png" />
     <Content Include="Content\images\images_docx.png" />
     <Content Include="Content\images\images_image.png" />
@@ -275,6 +276,7 @@
     <Content Include="Content\images\images_png.png" />
     <Content Include="Content\images\tp-logo.png" />
     <Content Include="Content\images\_images_image.png" />
+    <Content Include="Content\template\basic.css" />
     <Content Include="Content\template\css_quirk.css" />
     <Content Include="Content\template\lib_animate.css_animate.css" />
     <Content Include="Content\template\lib_bootstrap3-wysihtml5-bower_bootstrap3-wysihtml5.css" />
@@ -295,6 +297,7 @@
     <Content Include="Content\template\lib_weather-icons_css_weather-icons.css" />
     <Content Include="Content\template\style.blue.css" />
     <Content Include="Content\template\style.default.css" />
+    <Content Include="Content\template\thumbnail-gallery.css" />
     <Content Include="Scripts\app\helpersSite.js" />
     <Content Include="Scripts\template\bootstrap.min.js" />
     <Content Include="Scripts\template\custom.js" />
@@ -415,9 +418,15 @@
     <Content Include="Views\Board\Index.cshtml" />
     <Content Include="Views\Users\EmailUrlResetPassword.cshtml" />
     <Content Include="Views\Shared\_SimpleLayout.cshtml" />
+    <Content Include="Views\Tests\Create.cshtml" />
+    <Content Include="Views\Groups\Index.cshtml" />
+    <Content Include="Views\Groups\Edit.cshtml" />
+    <Content Include="Views\Users\Edit.cshtml" />
+    <Content Include="Views\Users\SaveUploadedFile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\avatars\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

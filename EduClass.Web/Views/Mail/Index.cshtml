@@ -23,9 +23,9 @@
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <ul role="menu" class="dropdown-menu dm-icon pull-right">
-                        <li><a href="#"><i class="fa fa-reply-all"></i> Recibidos</a></li>
-                        <li><a href="#"><i class="fa fa-arrow-right"></i> Enviados</a></li>
-                        <li><a href="#"><i class="fa fa-print"></i> Borrados</a></li>
+                        <li><a href="@Url.Action("Index", "Mail", new { type = "Recibidos" })"><i class="fa fa-reply-all"></i> Recibidos</a></li>
+                        <li><a href="@Url.Action("Index", "Mail", new { type = "Enviados" })"><i class="fa fa-arrow-right"></i> Enviados</a></li>
+                        <li><a href="@Url.Action("Index", "Mail", new { type = "Borrados" })"><i class="fa fa-trash"></i> Borrados</a></li>
                     </ul>
                 </div>
                 

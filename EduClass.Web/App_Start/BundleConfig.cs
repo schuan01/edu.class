@@ -35,6 +35,7 @@ namespace EduClass.Web
                       "~/Scripts/template/lib_wysihtml5x_wysihtml5x-toolbar.js",
                       "~/Scripts/template/lib_bootstrap3-wysihtml5-bower_bootstrap3-wysihtml5.all.js",
                       "~/Scripts/template/lib_wysihtml5x_wysihtml5x.js",
+                      "~/Scripts/template/lib_dropzone_dropzone.js",
                       "~/Scripts/template/js_quirk.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
@@ -53,6 +54,8 @@ namespace EduClass.Web
                           "~/Content/template/lib_select2_select2.css",
                           "~/Content/template/lib_bootstrap3-wysihtml5-bower_bootstrap3-wysihtml5.css",
                           "~/Content/template/thumbnail-gallery.css",
+                          "~/Content/template/lib_dropzone_dropzone.css",
+                          "~/Content/template/basic.css",
                           "~/Content/template/css_quirk.css").IncludeDirectory("~/Content/font", "*.css", false));
         }
     }

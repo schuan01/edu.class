@@ -17,7 +17,8 @@ namespace EduClass.Web.Infrastructure
 
         public static string EncodePasswordBase64()
         {
-            return Base64Encode();
+            Guid g = Guid.NewGuid();
+            return g.ToString();
         }
 
         private static string SHA256Encode(string plainText)
@@ -28,16 +29,5 @@ namespace EduClass.Web.Infrastructure
             return System.Text.Encoding.ASCII.GetString(data);
         }
 
-        private static string Base64Encode()
-        {
-            Guid g = Guid.NewGuid();
-            /*string GuidString = Convert.ToBase64String(g.ToByteArray());
-            GuidString = GuidString.Replace("=", "");
-            GuidString = GuidString.Replace("+", "");
-            var data = System.Text.Encoding.ASCII.GetBytes(g+plainText);
-            string resultado = System.Convert.ToBase64String(data);*/
-            return g.ToString();
-            //return resultado;
-        }
     }
 }

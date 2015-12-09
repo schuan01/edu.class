@@ -11,10 +11,6 @@ namespace EduClass.Web.Infrastructure.ViewModels
     {
         public int Id { get; set; }
 
-        [Required]
-        [MaxLength(100)]
-        public string Title { get; set; }
-
         [AllowHtml]
         [Required]
         public string Content { get; set; }

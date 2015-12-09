@@ -27,5 +27,10 @@ namespace EduClass.Logic
             return _mailRepository.GetMailsSent(person);
         }
 
+        public IEnumerable<Mail> GetMailsDeleted(Person person)
+        {
+            return _mailRepository.GetMailsDeleted(person);
+        }
+
     }
 }

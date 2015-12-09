@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AvatarServices.cs" />
     <Compile Include="Base\EntityService.cs" />
     <Compile Include="Base\IEntityService.cs" />
     <Compile Include="Base\IService.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="CalendarServices.cs" />
     <Compile Include="EventServices.cs" />
     <Compile Include="GroupServices.cs" />
+    <Compile Include="IAvatarServices.cs" />
     <Compile Include="IBoardServices.cs" />
     <Compile Include="ICalendarServices.cs" />
     <Compile Include="IEventServices.cs" />

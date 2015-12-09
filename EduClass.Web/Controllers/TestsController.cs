@@ -39,29 +39,36 @@ namespace EduClass.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name, Description, StartDate, EndDate, GroupId")]TestViewModel testVm) {
+        public ActionResult Create([Bind(Include = "Name, Description, StartDate, EndDate")]TestViewModel testVm)
+        {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    
-                        //Execute the mapping 
-                        var test = AutoMapper.Mapper.Map<TestViewModel, Test>(testVm);
+                    //Se creara primero el test sin preguntas.
+                    //Luego se editara el mismo.
 
-                        
-                        test.CreatedAt = DateTime.Now;
-                        test.Enabled = true;
 
+                    //Execute the mapping 
+                    var test = AutoMapper.Mapper.Map<TestViewModel, Test>(testVm);
+
+                    test.GroupId = 1;//TODO GET CURRENT GROUP
+                    test.CreatedAt = DateTime.Now;
+                    test.Enabled = true;
+
+                    if (UserSession.GetCurrentUser() is Teacher)
                         _service.Create(test);
+                    else
+                        throw new Exception("El usuario actual no es un Profesor");
 
-                        //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario creado", string.Format("El usuario {0} fue creado con éxito", testVm.testName)));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Creacion Exitosa", "El Test se creo correctamente"));
 
-                        return RedirectToAction("Index");
-                   
+                    return RedirectToAction("Create");
+
                 }
                 catch (Exception ex)
                 {
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al crear usuario", typeof(testController), ex));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se pudo crear el Test"));
                 }
             }
 

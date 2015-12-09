@@ -18,13 +18,10 @@ namespace EduClass.Web.Infrastructure.ViewModels
         public string Description { get; set; }
 
         [Required]
-        public System.DateTime StarDate { get; set; }
+        public System.DateTime StartDate { get; set; }
 
         [Required]
-        public Nullable<System.DateTime> EndDate { get; set; }
-
-        [Required]
-        public int GroupId { get; set; }
+        public System.DateTime EndDate { get; set; }
         
         [Required]
         public System.DateTime CreatedAt { get; set; }

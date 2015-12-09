@@ -1,0 +1,64 @@
+﻿@model List<EduClass.Entities.Group>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Grupos";
+}
+<h2>Grupos</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="contentpanel">
+
+        <div class="row">
+            <div class="col-sm-8 col-md-9 col-lg-10 people-list">
+
+                <div class="people-options clearfix">
+                    <div class="btn-group pull-right people-pager">
+                        <button class="btn btn-default-active"><i class="fa fa-th"></i></button>
+                        <a href="people-directory.html" class="btn btn-default"><i class="fa fa-th-list"></i></a>
+                    </div>
+
+                    <div class="btn-group pull-right people-pager">
+                        <button type="button" class="btn btn-default"><i class="fa fa-chevron-left"></i></button>
+                        <button type="button" class="btn btn-default"><i class="fa fa-chevron-right"></i></button>
+                    </div>
+                </div><!-- people-options -->
+
+
+                <div class="row">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item active">
+                            Grupos
+                        </a>
+                        @foreach (var elemento in Model)
+                        {
+                            <a href="@Url.Action("Edit", "Groups", new {id = elemento.Id})" class="list-group-item">@elemento.Name</a>
+                        }
+                    </div>
+                </div><!-- row -->
+
+            </div><!-- col-sm-8 -->
+
+            <div class="col-sm-4 col-md-3 col-lg-2">
+
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">Filtrar Grupos</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="control-label center-block">Nombre:</label>
+                            <input type="text" class="form-control" placeholder="Ingrese un nombre" name="student_name" value="@ViewData["student_name"]">
+                        </div>
+                        <button class="btn btn-success btn-block" type="submit">Filtrar Lista</button>
+                    </div>
+                </div><!-- panel -->
+            </div>
+        </div><!-- row -->
+
+    </div><!-- contentpanel -->
+
+}
+

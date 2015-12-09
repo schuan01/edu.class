@@ -36,6 +36,7 @@ namespace EduClass.Web.Infrastructure.ViewModels
         public string PersonEmailFrom { get; set; }
 
         [Required]
+        [Display(Name = "Destinatarios")]
         public int[] PersonIdTo { get; set; }
     }
 }

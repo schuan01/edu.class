@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using EduClass.Web.Infrastructure.Sessions
+@using EduClass.Entities
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -27,12 +30,34 @@
                 <div class="media leftpanel-profile">
                     <div class="media-left">
                         <a href="#">
-                            <img src="@Url.Content("~/Content/images/images_photos_loggeduser.png")" alt="" class="media-object img-circle">
+                       @try
+                       {
+                           if (UserSession.GetCurrentUser().Avatar == null || UserSession.GetCurrentUser().Avatar.UrlPhoto == "")
+                           {
+                            <img src="@Url.Content("~/Content/images/default.png")" alt="" class="media-object img-circle">
+                           }
+                           else
+                           {
+                            <img src="@Url.Content(UserSession.GetCurrentUser().Avatar.UrlPhoto)" alt="" class="media-object img-circle">
+                           }
+                       }
+                       catch (Exception ex)
+                       {
+                            <img src="@Url.Content("~/Content/images/default.png")" alt="" class="media-object img-circle">
+                       }
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading">Elen Adarna </h4>
-                        <span>Student</span>
+                        <h4 class="media-heading">@UserSession.GetCurrentUser().FirstName @UserSession.GetCurrentUser().LastName  </h4>
+                        @if (@UserSession.GetCurrentUser() is Student)
+                        {
+                            <span>Estudiante</span>
+                        }
+                        else if (@UserSession.GetCurrentUser() is Teacher)
+                        {
+                            <span>Profesor</span>
+                        }
+
                     </div>
                 </div><!-- leftpanel-profile -->
 

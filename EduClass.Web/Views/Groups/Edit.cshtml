@@ -1,0 +1,124 @@
+﻿@model EduClass.Web.Infrastructure.ViewModels.GroupViewModel
+@using EduClass.Entities
+@{
+    ViewBag.Title = "Editar";
+}
+
+<div class="panel panel-site-traffic col-md-8 col-md-offset-2">
+    <div class="panel-heading">
+        <ul class="panel-options">
+            <li><button type="button" class="btn btn-sm btn-quirk" data-toggle="modal" data-target="#myModal">Invitar Alumno</button></li>
+            
+        </ul>
+        <h4 class="panel-title text-success">Editar Grupo</h4>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Key, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Key, new { htmlAttributes = new { @class = "form-control", @readonly = "" } })
+                        @Html.ValidationMessageFor(model => model.Key, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                @if(ViewBag.PersonType is Teacher)
+                {
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Gurdar" class="btn btn-success" />
+                    </div>
+                </div>
+                }
+            </div>
+
+
+            <div class="modal bounceIn animated" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">Invitar Alumnos al Grupo</h4>
+                        </div>
+                        
+                        
+                        <p class="mb20">Escriba el mail de los alumnos que desee invitar</p>
+                        <select id="select6" class="form-control" style="width: 100%" data-plugin = "select2" data-placeholder="Ingrese los mails" multiple>
+                        </select>
+                                
+                            
+                        
+
+                        <div class="modal-body">
+                            <h4>CLAVE: @Model.Key</h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div><!-- modal-content -->
+                </div><!-- modal-dialog -->
+            </div><!-- modal -->
+        }
+    </div>
+
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+    </div>
+@Scripts.Render("~/bundles/jquery")
+@{var sessionMessage = EduClass.Web.Infrastructure.Sessions.MessageSession.GetMessage(); }
+<script>
+        $(document).ready(function () {
+           
+            var message = "@Html.Raw(sessionMessage.ToString())";
+            if (message != "") {
+
+
+
+                showMessageJS(message);
+            }
+        });
+</script>
+<script src="~/Scripts/app/helpersSite.js"></script>
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $("#select6").select2({ tags: true });
+
+        // HTML5 WYSIWYG Editor
+        $('#wysiwyg').wysihtml5({
+            toolbar: {
+                fa: true
+            }
+        });
+
+    </script>
+}

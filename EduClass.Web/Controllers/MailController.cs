@@ -26,13 +26,28 @@ namespace EduClass.Web.Controllers
         }
 
 
-        public ActionResult Index()
+        public ActionResult Index(string type)
         {
-            var list = _service.GetMailsReceived(UserSession.GetCurrentUser()).OrderBy(a => a.CreateAt);
-            foreach(var v in list)
-            {               
+            
+            var list = _service.GetMailsReceived(UserSession.GetCurrentUser()).OrderByDescending(a => a.CreateAt);
+
+            if(type == "Enviados")
+            {
+                list = _service.GetMailsSent(UserSession.GetCurrentUser()).OrderByDescending(a => a.CreateAt);//Obtengo enviados
+                
+            }
+            else if(type == "Borrados")
+            {
+                list = _service.GetMailsDeleted(UserSession.GetCurrentUser()).OrderByDescending(a => a.CreateAt);//Obtengo los borrados
+                
+            }
+
+            foreach (var v in list)
+            {
                 v.Description = HttpUtility.HtmlDecode(v.Description);
             }
+
+            
             return View(list);
         }
 
@@ -51,7 +66,7 @@ namespace EduClass.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SendEmail([Bind(Include = "Subject, Description, PersonIdTo, PersonEmailFrom")]MailViewModel mailVm)
         {
-            //EN DESARROLLO
+            
             if (ModelState.IsValid)
             {
                 try
@@ -77,7 +92,7 @@ namespace EduClass.Web.Controllers
                     mail.Description = HttpUtility.HtmlEncode(mail.Description);
                     _service.Create(mail);
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Envio Exitoso", "El Email fue enviado correctamente"));
-                    return RedirectToAction("SendEmail", "Mail");
+                    return RedirectToAction("Index", "Mail");
                     
 
                 }
@@ -88,7 +103,7 @@ namespace EduClass.Web.Controllers
             }
 
 
-            //Vuelvo a cargar la lista par aque no de exception(si aplica)
+            //Vuelvo a cargar la lista para que no de exception(si aplica)
             ViewBag.PersonsTo = new SelectList(_personService.GetAll().Where(g => g.Enabled == true && g.Id != UserSession.GetCurrentUser().Id).ToList(), "Id", "FirstName");
 
             return View(mailVm);

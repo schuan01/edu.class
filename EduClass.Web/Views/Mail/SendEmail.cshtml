@@ -7,11 +7,7 @@
 <h2>Enviar un Email</h2>
 <div class="panel panel-site-traffic col-md-8 col-md-offset-2">
     <div class="panel-heading">
-        <ul class="panel-options">
-            <li><a><i class="fa fa-refresh"></i></a></li>
-        </ul>
         <h4 class="panel-title text-success">Envia un mensaje a cualquier miembro del grupo</h4>
-        <p class="nomargin">Past 30 Days — Last Updated July 14, 2015</p>
     </div>
     <div class="panel-body">
         @using (Html.BeginForm())
@@ -52,7 +48,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-offset-5 col-lg-8">
-                            <input type="submit" value="Create" class="btn btn-success" />
+                            <input type="submit" value="Enviar" class="btn btn-success" />
                         </div>
                     </div>
 
@@ -69,38 +65,7 @@
 <script src="~/Scripts/app/helpersSite.js"></script>
 <script>
         $(document).ready(function () {
-            //$("#birthday").mask("99/99/9999");
-
-            var form = $("#registerForm");
-
-            form.steps({
-                headerTag: "h3",
-                bodyTag: "section",
-                transitionEffect: "slideLeft",
-                autoFocus: true,
-                onStepChanging: function (event, currentIndex, newIndex) {
-                    form.validate().settings.ignore = ":disabled,:hidden";
-                    return form.valid();
-                },
-                onFinishing: function (event, currentIndex) {
-                    form.validate().settings.ignore = ":disabled";
-                    return form.valid();
-                },
-                onFinished: function (event, currentIndex) {
-                    this.submit();
-                }
-            });
-
-            form.validate({
-                errorPlacement: function errorPlacement(error, element) { element.before(error); },
-                rules: {
-
-                    confirm: {
-                        equalTo: "#password"
-                    }
-                }
-            });
-
+         
             var message = "@Html.Raw(sessionMessage.ToString())";
             if (message != "") {
 

@@ -7,5 +7,6 @@ namespace EduClass.Repository
     {
         IQueryable<Mail> GetMailsReceived(Person person);
         IQueryable<Mail> GetMailsSent(Person person);
+        IQueryable<Mail> GetMailsDeleted(Person person);
     }
 }

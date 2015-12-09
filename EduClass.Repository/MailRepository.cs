@@ -14,25 +14,20 @@ namespace EduClass.Repository
 
         public IQueryable<Mail> GetMailsReceived(Person person)
         {
-            //GetAll().Where(u => u.PersonsTo.Any(s => s.Id == person.Id)).ToList();
-            var algo = GetAll().Where(x => x.PersonsTo.Any(s => s.Id == person.Id));
-            return algo;
+            
+            return GetAll().Where(x => x.PersonsTo.Any(s => s.Id == person.Id));
+            
         }
 
         public IQueryable<Mail> GetMailsSent(Person person)
         {
-            
             return GetAll().Where(x => x.PersonFromId == person.Id);
         }
 
-        /*public Person SignIn(string userName, string password)
+        public IQueryable<Mail> GetMailsDeleted(Person person)
         {
-            return dbSet.Where(x => x.UserName == userName && x.Password == password && x.Enabled).FirstOrDefault();
+            //Obtengo todos los Disabled, sean enviados, recibidos,etc. Siempre que el Id pasado se encuentre entre los mail
+            return GetAll().Where(x => x.Enabled == false && ((x.PersonFromId == person.Id) || (x.PersonsTo.Any(s => s.Id == person.Id))));
         }
-
-        public Person GetByUserName(string userName)
-        {
-            return dbSet.Where(x => x.UserName == userName).FirstOrDefault();
-        }*/
     }
 }

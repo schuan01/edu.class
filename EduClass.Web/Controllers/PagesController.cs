@@ -45,7 +45,7 @@ namespace EduClass.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Title, Content")]PageViewModel pageVm)
+        public ActionResult Create([Bind(Include = "Content")]PageViewModel pageVm)
         {
             if (ModelState.IsValid)
             {

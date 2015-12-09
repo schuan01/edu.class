@@ -1,4 +1,6 @@
-﻿<div class="logopanel">
+﻿@using EduClass.Web.Infrastructure.Sessions
+@using EduClass.Entities
+<div class="logopanel">
     <h2><a href="index.html">Edu.Class</a></h2>
 </div><!-- logopanel -->
 
@@ -10,9 +12,50 @@
                     Mis Grupos <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Group A</a></li>
-                    <li><a href="#">Group B</a></li>
-                    <li><a href="#">Group C</a></li>
+                    @if (UserSession.GetCurrentUser() is Student)
+                    {
+                        try
+                        {
+                            Student usu = (Student)UserSession.GetCurrentUser();
+                            foreach (Group item in usu.Groups)
+                            {
+                                <li><a href="#" id="@item.Id">@item.Name</a></li>
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            <li><a href="#">Group A</a></li>
+                            <li><a href="#">Group B</a></li>
+                            <li><a href="#">Group C</a></li>
+                        }
+                    }
+                    else if (UserSession.GetCurrentUser() is Teacher)
+                    {
+
+                        Teacher usu = (Teacher)UserSession.GetCurrentUser();
+                        try
+                        {
+                            foreach (Group item in usu.Group)
+                            {
+                            <li><a href="#" id="@item.Id">@item.Name</a></li>
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            <li><a href="#">Group A</a></li>
+                            <li><a href="#">Group B</a></li>
+                            <li><a href="#">Group C</a></li>
+                        }
+
+                    }
+                    else
+                    {
+
+                     <li><a href="#">Group A</a></li>
+                     <li><a href="#">Group B</a></li>
+                     <li><a href="#">Group C</a></li>
+                    }
+
                 </ul>
         </div><!-- input-group -->
     </div>
@@ -167,14 +210,31 @@
             <li>
                 <div class="btn-group">
                     <button type="button" class="btn btn-logged" data-toggle="dropdown">
-                        <img src="@Url.Content("~/Content/images/images_photos_loggeduser.png")" alt="" />
-                        Elen Adarna
+                    @try
+                    {
+                        if (UserSession.GetCurrentUser().Avatar == null || UserSession.GetCurrentUser().Avatar.UrlPhoto == "")
+                        {
+                            <img src="@Url.Content("~/Content/images/default.png")" alt="" />
+                        }
+                        else
+                        {
+                            <img src="@Url.Content(UserSession.GetCurrentUser().Avatar.UrlPhoto)" alt="" />
+                        }
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        <img src="@Url.Content("~/Content/images/default.png")" alt="" />
+                    }
+
+                    @UserSession.GetCurrentUser().FirstName
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu pull-right">
-                        <li><a href="profile.html"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
-                        <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Account Settings</a></li>
-                        <li><a href="#"><i class="glyphicon glyphicon-question-sign"></i> Help</a></li>
+                        <li><a href="profile.html"><i class="glyphicon glyphicon-user"></i> Mi Perfil</a></li>
+                        <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Preferencias de Cuenta</a></li>
+                        <li><a href="#"><i class="glyphicon glyphicon-question-sign"></i> Ayuda</a></li>
                         <li><a href="@Url.Action("SignOut", "Users")"><i class="glyphicon glyphicon-log-out"></i> Log Out</a></li>
                     </ul>
                 </div>

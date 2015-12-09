@@ -20,7 +20,7 @@ namespace EduClass.Web.Controllers
     {
         private static IGroupServices _serviceGroup;
         private static IPersonServices _servicePerson;
-        private const int defaultPageSize = 1;
+        private const int defaultPageSize = 10;
         
 
         public GroupsController(IGroupServices serviceGroup, IPersonServices servicePerson)
@@ -31,9 +31,17 @@ namespace EduClass.Web.Controllers
 
         public ActionResult Index()
         {
-            var list = _serviceGroup.GetAll().OrderBy(a => a.Id);
-
-            return View(list);
+            
+            List<Group> grupos = new List<Group>();
+            if (UserSession.GetCurrentUser() is Teacher)//Si el que ingresa es un teacher
+            {
+                //Obtengo los grupos en los que esta el Teacher.
+                //grupos = _serviceGroup.GetAll().Where(a => a.Teacher.Id == UserSession.GetCurrentUser().Id).OrderBy(a => a.Id).ToList();
+                Teacher t = (Teacher)_servicePerson.GetById(UserSession.GetCurrentUser().Id);
+                grupos = t.Group.ToList();
+            }
+            
+            return View(grupos);
         }
 
         [HttpGet]
@@ -59,28 +67,26 @@ namespace EduClass.Web.Controllers
                     estudiantes = estudiantes.Where(p => p.FirstName.ToLower().Contains(student_name.ToLower())).ToPagedList(currentPageIndex, defaultPageSize);
                 }
 
-                //estudiantes = estudiantes.ToPagedList(currentPageIndex, defaultPageSize);
-
 
             }
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
             }
-
-            return View(estudiantes);
+            if(estudiantes != null)
+                return View(estudiantes);
+            else
+                return View();
         }
 
         // GET: Group
         [HttpGet]
-        [AllowAnonymous]
         public ActionResult JoinStudent()
         {
             return View(new GroupViewModel());
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public ActionResult JoinStudent([Bind(Include = "Key")] GroupViewModel groupVm)
         {
 
@@ -96,9 +102,7 @@ namespace EduClass.Web.Controllers
 
                 if (group.Students.FirstOrDefault(st => st.Id == student.Id) != null)//Si ya existe en la collecion
                 {
-
                     throw new Exception("El usuario actual ya existe en el grupo seleccionado");
-
                 }
 
                 if (student is Student)//Solo aplica si es tipo Student
@@ -174,36 +178,48 @@ namespace EduClass.Web.Controllers
 
 
         [HttpGet]
-        public ActionResult Edit(int id = 0)
+        public ActionResult Edit(int id)
         {
-            if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
-            var group = AutoMapper.Mapper.Map<Group, GroupViewModel>(_serviceGroup.GetById(id));
+            GroupViewModel group = null;
+            try
+            {
+                ViewBag.PersonType = UserSession.GetCurrentUser();
+                if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+                group = AutoMapper.Mapper.Map<Group, GroupViewModel>(_serviceGroup.GetById(id));
+
+                
+            }
+            catch(Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+            }
 
             return View(group);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Name, Descripction")]GroupViewModel groupVm)
+        public ActionResult Edit([Bind(Include = "Name, Description, Id")]GroupViewModel groupVm)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    //Execute the mapping 
-                    var group = AutoMapper.Mapper.Map<GroupViewModel, Group>(groupVm);
 
+                    var group = _serviceGroup.GetById(groupVm.Id);
+
+                    group.Name = groupVm.Name;
+                    group.Description = groupVm.Description;
                     group.UpdatedAt = DateTime.Now;
 
-                    _serviceGroup.Create(group);
+                    _serviceGroup.Update(group);
 
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", groupVm.groupName)));
-
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Grupo", "El grupo fue editado correctamente"));
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al modificar usuario", typeof(groupController), ex));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
                 }
             }
 

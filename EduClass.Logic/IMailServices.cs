@@ -7,5 +7,6 @@ namespace EduClass.Logic
     {
         IEnumerable<Mail> GetMailsReceived(Person person);
         IEnumerable<Mail> GetMailsSent(Person person);
+        IEnumerable<Mail> GetMailsDeleted(Person person);
     }
 }
