@@ -1,6 +1,7 @@
 ﻿using EduClass.Entities;
 using EduClass.Logic;
 using System;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 
@@ -43,6 +44,15 @@ namespace EduClass.Web.Infrastructure.Sessions
             HttpContext.Current.Session.Abandon();
         }
 
+        public static IList<Group> GetUserGroups()
+        {
+            IList<Group> grupos = new List<Group>();
+            
+            var _service = DependencyResolver.Current.GetService<IGroupServices>();
+            grupos = _service.GetActiveGroups(GetCurrentUser());
+            return grupos;
+        }
+
         public static void SetCurrentGroup(Group group)
         {
             HttpContext.Current.Session[sessionNameGroup] = group;
@@ -56,10 +66,23 @@ namespace EduClass.Web.Infrastructure.Sessions
                 {
                     return (Group)HttpContext.Current.Session[sessionNameGroup];
                 }
+                else
+                {
+                    IList<Group> grupos = new List<Group>();
+
+                    var _service = DependencyResolver.Current.GetService<IGroupServices>();
+                    grupos = _service.GetActiveGroups(GetCurrentUser());
+                    if (grupos.Count <= 0)
+                        return null;//Que devuelva NULL si la persona no pertence a ningun grupo
+
+                    SetCurrentGroup(grupos[0]);//Obtengo el primer grupo que venga y lo coloco en la Session
+                    return grupos[0];
+
+                }
 
             }
 
-            throw new Exception("Error to get group");
+            throw new Exception("Error al obtener Grupo");
         }
     }
 }

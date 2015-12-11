@@ -1,5 +1,6 @@
 ﻿
 @model IOrderedEnumerable<EduClass.Entities.Mail>
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Emails";
@@ -43,7 +44,7 @@
         
         @foreach (var elemento in Model)
         {
-                    <div class="list-group-item unread" data-id= "@Html.Raw(elemento.Id)">
+                    <div class="list-group-item unread" style="position: static; z-index: 1;" data-id= "@Html.Raw(elemento.Id)">
                         <div class="list-left">
                             <label class="ckbox">
                                 <input type="checkbox"><span></span>
@@ -72,7 +73,7 @@
                     <h3 class="nomail">Ningun email seleccionado</h3>
                 @foreach (var elemento in Model)
                 {
-                    <div class="mailcontent hide" data-id= "@elemento.Id">
+                    <div class="mailcontent hide" data-id= "@elemento.Id" id="mailId" value="@elemento.Id">
                    
                         <div class="email-header">
                             <div class="pull-right">
@@ -84,10 +85,10 @@
                                         <span class="sr-only">Desplegar Dropdown</span>
                                     </button>
                                     <ul role="menu" class="dropdown-menu dm-icon pull-right">
-                                        <li><a href="#"><i class="fa fa-reply-all"></i> Responder a todos</a></li>
-                                        <li><a href="#"><i class="fa fa-arrow-right"></i> Reenviar</a></li>
+                                        <li><a href="SendEmail"><i class="fa fa-reply-all"></i> Responder a todos</a></li>
+                                        <li><a href="SendEmail"><i class="fa fa-arrow-right"></i> Reenviar</a></li>
                                         <li><a href="#"><i class="fa fa-print"></i> Imprimir</a></li>
-                                        <li><a href="#"><i class="fa fa-trash"></i> Delete Message</a></li>
+                                        <li><a id="btnDelete"><i class="fa fa-trash"></i> Delete Message</a></li>
                                     </ul>
                                 </div>
 
@@ -124,13 +125,9 @@
                         <br>
                         <hr>
 
-                        <h4 class="panel-title">Attachments:</h4>
-                        <ul class="list-unstyled list-attachments">
-                            <li><i class="fa fa-file-pdf-o"></i> <a href="">Template_Documentation.pdf</a></li>
-                            <li><i class="fa fa-file-pdf-o"></i> <a href="">Template_Documentation.pdf</a></li>
-                        </ul>
+                        
 
-                        <hr>
+                        
 
                         <div class="form-group email-editor">
                             <div>Responder</div>
@@ -153,6 +150,7 @@
     </div><!-- emailcontent -->
     
 </div>
+
 @Scripts.Render("~/bundles/jquery")
     <script>
 $(document).ready(function()
@@ -175,6 +173,7 @@ $(document).ready(function()
       $(this).addClass('starred');
     }
   });
+
 
   // Clicking a message
   $('.list-group-item > .media').click(function () {
@@ -209,6 +208,26 @@ $(document).ready(function()
       $('.mailcontent[data-id="' + idMail + '"]').removeClass('hide');//Saco el hide solo al seleccionado, Asi si anda el "find"
 
       //$('.mailcontent').find("[data-id='" + idMail + "']").removeClass('hide');
+
+
+
+
+
+      $('#btnDelete').click(function(e) {
+          e.preventDefault();
+
+          // TODO: Validate input
+
+          var data = $('#mailId').attr('id');
+
+          $.ajax({
+              url: '@Url.Action("DeleteMail", "Mail")',
+              type: 'POST',
+              contentType: 'application/json;',
+              data: JSON.stringify({ id: data })
+          });
+      });
+
   });
 
 

@@ -14,7 +14,7 @@ namespace EduClass.Repository
 
         public Group GetByKey(string key)
         {
-            return dbSet.FirstOrDefault(x => x.Key == key);
+            return dbSet.FirstOrDefault(x => x.Key == key && x.Enabled == true);
         }
 
         public IList<Group> GetActiveGroupsByTeacher(int id)

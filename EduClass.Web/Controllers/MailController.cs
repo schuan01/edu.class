@@ -53,7 +53,7 @@ namespace EduClass.Web.Controllers
 
         // GET: Mail
         [HttpGet]
-        
+        [ValidateAntiForgeryToken]
         public ActionResult SendEmail()
         {
             ViewBag.FromEmail = UserSession.GetCurrentUser().Email;
@@ -107,6 +107,13 @@ namespace EduClass.Web.Controllers
             ViewBag.PersonsTo = new SelectList(_personService.GetAll().Where(g => g.Enabled == true && g.Id != UserSession.GetCurrentUser().Id).ToList(), "Id", "FirstName");
 
             return View(mailVm);
+        }
+
+        //TODO
+        [HttpPost]
+        public ActionResult DeleteMail(int id)
+        {
+            return View();
         }
     }
 }

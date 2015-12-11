@@ -8,53 +8,32 @@
 
     <div class="searchpanel">
         <div class="input-group">
-                <button type="button" class="btn btn-success dropdown-toggle btn-lg" data-toggle="dropdown" aria-expanded="false">
-                    Mis Grupos <span class="caret"></span>
+                @if (UserSession.GetCurrentGroup() != null)
+                {
+                <button id="botonMenu" type="button" class="btn btn-success dropdown-toggle btn-lg" data-toggle="dropdown" aria-expanded="false">
+                    @UserSession.GetCurrentGroup().Name <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu" role="menu">
-                    @if (UserSession.GetCurrentUser() is Student)
-                    {
-                        try
+                }
+                else
+                {
+                    <button id="botonMenu" type="button" class="btn btn-success dropdown-toggle btn-lg" data-toggle="dropdown" aria-expanded="false">
+                        Mis Grupos<span class="caret"></span>
+                    </button>
+                }
+                <ul class="dropdown-menu" id="gruposDDL" role="menu">
+                        @try
                         {
-                            Student usu = (Student)UserSession.GetCurrentUser();
-                            foreach (Group item in usu.Groups)
+                            
+                            foreach (Group item in UserSession.GetUserGroups())
                             {
                                 <li><a href="#" id="@item.Id">@item.Name</a></li>
                             }
                         }
                         catch (Exception ex)
                         {
-                            <li><a href="#">Group A</a></li>
-                            <li><a href="#">Group B</a></li>
-                            <li><a href="#">Group C</a></li>
+                            <li><a href="#">No estas en ningun grupo</a></li>
                         }
-                    }
-                    else if (UserSession.GetCurrentUser() is Teacher)
-                    {
-
-                        Teacher usu = (Teacher)UserSession.GetCurrentUser();
-                        try
-                        {
-                            foreach (Group item in usu.Group)
-                            {
-                            <li><a href="#" id="@item.Id">@item.Name</a></li>
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            <li><a href="#">Group A</a></li>
-                            <li><a href="#">Group B</a></li>
-                            <li><a href="#">Group C</a></li>
-                        }
-
-                    }
-                    else
-                    {
-
-                     <li><a href="#">Group A</a></li>
-                     <li><a href="#">Group B</a></li>
-                     <li><a href="#">Group C</a></li>
-                    }
+                    
 
                 </ul>
         </div><!-- input-group -->
@@ -232,7 +211,7 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu pull-right">
-                        <li><a href="profile.html"><i class="glyphicon glyphicon-user"></i> Mi Perfil</a></li>
+                        <li><a href="@Url.Action("Me", "Users")"><i class="glyphicon glyphicon-user"></i> Mi Perfil</a></li>
                         <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Preferencias de Cuenta</a></li>
                         <li><a href="#"><i class="glyphicon glyphicon-question-sign"></i> Ayuda</a></li>
                         <li><a href="@Url.Action("SignOut", "Users")"><i class="glyphicon glyphicon-log-out"></i> Log Out</a></li>
@@ -249,4 +228,28 @@
 
     </div><!-- header-right -->
 </div><!-- headerbar -->
+@Scripts.Render("~/bundles/jquery")
+<script src="~/Scripts/app/helpersSite.js"></script>
+<script>
+        $(document).ready(function () {
+         
+            
+            $("#gruposDDL li a").click(function () {
+                
+                var selectedId = $(this).attr('id');
 
+                $.ajax({
+                    url: '@Url.Action("ChangeGroup", "Groups")',
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    data: JSON.stringify({ id: selectedId })
+                });
+
+                $("#botonMenu:first-child").text($(this).text());
+                $("#botonMenu:first-child").val($(this).text());
+                
+            });
+
+            
+        });
+</script>

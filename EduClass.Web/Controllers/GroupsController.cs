@@ -43,7 +43,40 @@ namespace EduClass.Web.Controllers
             
             return View(grupos);
         }
+        [HttpPost]
+        public ActionResult ChangeGroup(int id)
+        {
+            Group g = _serviceGroup.GetById(id);
+            if (g != null)
+            {
+                Person p = _servicePerson.GetById(UserSession.GetCurrentUser().Id);
+                if (p is Teacher)
+                {
+                    //Buscamos si el grupo seleccionado forma parte del Usuario
+                    if (((Teacher)p).Group.FirstOrDefault(gr => gr.Id == g.Id) == null)
+                    {
+                        throw new Exception("El usuario seleccionado no forma parte de este grupo ");
+                    }
+                }
+                else if (p is Student)
+                {
+                    //Buscamos si el grupo seleccionado forma parte del Usuario
+                    if (((Student)p).Groups.FirstOrDefault(gr => gr.Id == g.Id) == null)
+                    {
+                        throw new Exception("El usuario seleccionado no forma parte de este grupo ");
+                    }
+                }
 
+                //Si sale todo OK, seteo el Current Group
+                UserSession.SetCurrentGroup(g);
+            }
+            else
+            {
+                throw new Exception("El grupo actual no existe");
+            }
+
+            return RedirectToAction("Index", "Groups");//Esto es al pedo porque la llamda es por AJAX
+        }
         [HttpGet]
         public ActionResult GetContacts(string student_name, int? page)
         {
@@ -51,7 +84,7 @@ namespace EduClass.Web.Controllers
             try
             {
                 ViewData["student_name"] = student_name;
-                var group = _serviceGroup.GetById(1);
+                var group = _serviceGroup.GetById(UserSession.GetCurrentGroup().Id);
                 ViewBag.StudentsGroup = group.Students;
                 ViewBag.TeacherGroup = group.Teacher;
 
@@ -211,6 +244,12 @@ namespace EduClass.Web.Controllers
                     group.Name = groupVm.Name;
                     group.Description = groupVm.Description;
                     group.UpdatedAt = DateTime.Now;
+
+                    //Verifico si el Teacher que esta Logeado pertenece al Grupo
+                    if (group.Teacher.Id != UserSession.GetCurrentUser().Id)
+                    {
+                        throw new Exception("El Profesor actual no pertenece a este grupo");
+                    }
 
                     _serviceGroup.Update(group);
 

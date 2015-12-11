@@ -1,6 +1,7 @@
 ﻿@model IPagedList<Student>
 @using EduClass.Entities;
 @using MvcPaging;
+@using EduClass.Web.Infrastructure.Sessions
 @{
     ViewBag.Title = "Contactos";
 }
@@ -64,7 +65,25 @@
 
 
                                         <a href="#" class="panel-profile-photo">
-                                            <img class="img-circle" src="img/images_photos_user1.png" alt="">
+                                        @try
+                                        {
+                                            if (UserSession.GetCurrentUser().Avatar == null || UserSession.GetCurrentUser().Avatar.UrlPhoto == "")
+                                            {
+                                                    <img class="img-circle" src="@Url.Content("~/Content/images/default.png")" alt="" />
+                                            }
+                                            else
+                                            {
+                                                <img class="img-circle" src="@Url.Content(UserSession.GetCurrentUser().Avatar.UrlPhoto)" alt="">
+                                                
+                                            }
+
+
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            <img class="img-circle" src="@Url.Content("~/Content/images/default.png")" alt="">
+                                        }
+                                            
                                         </a>
                                         <h4 class="panel-profile-name">@p.FirstName</h4>
                                         <p class="media-usermeta"><i class="glyphicon glyphicon-briefcase"></i> Estudiante</p>
@@ -86,7 +105,7 @@
                                     <div class="info-group last">
                                         <label>Cédula</label>
                                         @p.IdentificationCard
-                                    </div> 
+                                    </div>
                                 </div><!-- panel-body -->
                             </div><!-- panel -->
                         </div><!-- col-md-6 -->
@@ -108,7 +127,7 @@
                         </div>
                         <button class="btn btn-success btn-block" type="submit">Filtrar Lista</button>
                     </div>
-                </div><!-- panel -->       
+                </div><!-- panel -->
             </div>
         </div><!-- row -->
 

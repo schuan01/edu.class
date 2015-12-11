@@ -329,6 +329,12 @@ namespace EduClass.Web.Controllers
         }
 
         [HttpGet]
+        public ActionResult Me()//Accede al Perfil actual
+        {
+            return View();
+        }
+
+        [HttpGet]
         public ActionResult SaveUploadedFile()
         {
             return View();
