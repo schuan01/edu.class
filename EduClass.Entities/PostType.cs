@@ -13,6 +13,9 @@ namespace EduClass.Entities
     
     public enum PostType : int
     {
-        ZarazaPost = 1
+        Texto = 1,
+        Tarea = 2,
+        Image = 3,
+        Material = 4
     }
 }

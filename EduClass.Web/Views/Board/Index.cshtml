@@ -1,186 +1,139 @@
 ﻿@model IEnumerable<EduClass.Entities.Post>
+
 @{
     
     ViewBag.Title = "Linea de tiempo";
-    DateTime earlierDate = DateTime.Now;
+    var earlierDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
+    var postTypeFlag = 1;
+    var avatar = String.Empty;
+    var first = true;
+    var currentUser = EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser();
 }
 
-<div class="panel panel-site-traffic col-md-8 col-md-offset-2">
-    <div class="panel-body">
-        @foreach (var item in Model)
+<div>   
+<div class="col-sm-8 col-md-9 col-lg-10">
+   @foreach (var item in Model)
         {
-            <div class="row">
-                <div class="timeline-wrapper">
-                    @if ((earlierDate - item.CreatedAt).TotalDays > 0)
-                    {                        
-                        <div class="timeline-date">@item.CreatedAt.ToLongDateString()</div>
-                        
-                        @{ earlierDate = item.CreatedAt;}
-                    }
-                    <div class="panel panel-post-item status">
-                        <div class="panel-heading">
-                            <div class="media">
-                                <div class="media-body">
-                                    <h4 class="media-heading">@item.Person.FirstName @item.Person.LastName</h4>
-                                    <p class="media-usermeta">
-                                        <span class="media-time">10:30 am</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div><!-- panel-heading -->
-                        <div class="panel-body">
-                            Prototyping is one of the best things that can happen within a project, yet it is extremely underutilized. <a href="">#prototype</a>
-                        </div>
-                        <div class="panel-footer">
-                            <ul class="list-inline">
-                                <li><a href=""><i class="glyphicon glyphicon-heart"></i> Like</a></li>
-                                <li><a data-target="#comment-1" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comments (2)</a></li>
-                                <li class="pull-right">24 liked this</li>
-                            </ul>
-                        </div>
-                        <div class="collapse" id="comment-1">
-                            <ul class="media-list">
-                                <li class="media">
-                                    <div class="media-body">
-                                        <h4 class="media-heading">Floyd M. Romero <small>8 minutes ago</small></h4>
-                                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
-                                    </div>
-                                </li>
-                                <li class="media">
-                                    <div class="media-left">
-                                        <a href="#">
-                                            <img class="media-object img-circle" src="img/images_photos_user3.png" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="media-body">
-                                        <h4 class="media-heading">Jennie S. Gray <small>5 minutes ago</small></h4>
-                                        Nor again is there anyone who loves or pursues or desires to obtain pain of itself,
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Write some comments">
-                        </div>
-                    </div><!-- panel panel-post -->
-                    <!--
-                        <div class="timeline-date"><a href="">Load more...</a></div>
-                        -->
-                </div><!-- timeline-wrapper -->
-            </div>
+     <div class="timeline-wrapper">
+        @if (!earlierDate.Equals(item.CreatedAt.ToString("dd/MM/yyyy")))
+        {
+            <div class="timeline-date">@item.CreatedAt.ToLongDateString()</div>
+
+            { earlierDate = item.CreatedAt.ToString("dd/MM/yyyy"); }
         }
-        <div class="row">
-            <div class="timeline-wrapper">
-                <div class="timeline-date">Sunday, July 05, 2015</div>
-                <div class="panel panel-post-item status">
-                    <div class="panel-heading">
-                        <div class="media">
-                            <div class="media-body">
-                                <h4 class="media-heading">Christina R. Hill</h4>
-                                <p class="media-usermeta">
-                                    <span class="media-time">10:30 am</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div><!-- panel-heading -->
-                    <div class="panel-body">
-                        Prototyping is one of the best things that can happen within a project, yet it is extremely underutilized. <a href="">#prototype</a>
-                    </div>
-                    <div class="panel-footer">
-                        <ul class="list-inline">
-                            <li><a href=""><i class="glyphicon glyphicon-heart"></i> Like</a></li>
-                            <li><a data-target="#comment-1" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comments (2)</a></li>
-                            <li class="pull-right">24 liked this</li>
-                        </ul>
-                    </div>
-                    <div class="collapse" id="comment-1">
-                        <ul class="media-list">
-                            <li class="media">
-                                <div class="media-body">
-                                    <h4 class="media-heading">Floyd M. Romero <small>8 minutes ago</small></h4>
-                                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
-                                </div>
-                            </li>
-                            <li class="media">
-                                <div class="media-left">
-                                    <a href="#">
-                                        <img class="media-object img-circle" src="img/images_photos_user3.png" alt="">
-                                    </a>
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading">Jennie S. Gray <small>5 minutes ago</small></h4>
-                                    Nor again is there anyone who loves or pursues or desires to obtain pain of itself,
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Write some comments">
-                    </div>
-                </div><!-- panel panel-post -->
+        
 
-             
-            <!--
-                <div class="timeline-date"><a href="">Load more...</a></div>
-                -->
-            </div><!-- timeline-wrapper -->
-        </div>
+        @if (first)
+        {
+            var meAvatar = String.Empty;
 
-        <div class="row">
-            <div class="timeline-wrapper">
-                <div class="timeline-date">Sunday, July 05, 2015</div>
-                <div class="panel panel-post-item status">
-                    <div class="panel-heading">
-                        <div class="media">
-                            <div class="media-body">
-                                <h4 class="media-heading">Christina R. Hill</h4>
-                                <p class="media-usermeta">
-                                    <span class="media-time">10:30 am</span>
-                                </p>
+            if (currentUser.Avatar == null) { meAvatar = "~/Content/images/default.png"; }
+            else { meAvatar = currentUser.Avatar.UrlPhoto; }
+
+            <div class="panel" style="height:200px">
+                <div class="panel-body">
+                    <div class="form-horizontal">
+                        @using (Html.BeginForm("Post", "Board"))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="row">
+                                <h4>Escribe un post</h4>
                             </div>
-                        </div>
-                    </div><!-- panel-heading -->
-                    <div class="panel-body">
-                        Prototyping is one of the best things that can happen within a project, yet it is extremely underutilized. <a href="">#prototype</a>
+                            <div class="row">
+                                <input type="text" name="Title" class="form-control" placeholder="Título">
+                            </div>
+                            
+                            <div class="row" style="margin-top: 10px">
+                                <textarea type="text" name="Content" class="form-control" placeholder="Contenido"></textarea>
+                                <select name="PostType" class="hidden">
+                                    @foreach (var pType in (Array)ViewBag.PostTypeList)
+                                    {
+
+                                        <option value="@postTypeFlag">@pType</option>
+                                        { postTypeFlag++; }
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="row" style="margin-top: 10px">
+                                    <button class="btn btn-primary btn-xs pull-right" style="padding-left: 20px; padding-right: 20px">Post</button>
+                            </div>
+
+                        }
+                        
                     </div>
-                    <div class="panel-footer">
-                        <ul class="list-inline">
-                            <li><a href=""><i class="glyphicon glyphicon-heart"></i> Like</a></li>
-                            <li><a data-target="#comment-1" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comments (2)</a></li>
-                            <li class="pull-right">24 liked this</li>
-                        </ul>
+                </div>
+            </div><!-- panel panel-post -->
+            
+            {first = false;}
+        }
+        
+        @if (item.Person.Avatar == null) { avatar = "~/Content/images/default.png"; }
+        else { avatar = item.Person.Avatar.UrlPhoto; }
+
+        <div class="panel panel-post-item status">
+            <div class="panel-heading">
+                <div class="media">
+                    <div class="media-left">
+                        <a href="#">
+                            <img alt="" src="@Url.Content(avatar)" class="media-object img-circle">
+                        </a>
                     </div>
-                    <div class="collapse" id="comment-1">
-                        <ul class="media-list">
-                            <li class="media">
-                                <div class="media-body">
-                                    <h4 class="media-heading">Floyd M. Romero <small>8 minutes ago</small></h4>
-                                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
-                                </div>
-                            </li>
-                            <li class="media">
-                                <div class="media-left">
-                                    <a href="#">
-                                        <img class="media-object img-circle" src="img/images_photos_user3.png" alt="">
-                                    </a>
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading">Jennie S. Gray <small>5 minutes ago</small></h4>
-                                    Nor again is there anyone who loves or pursues or desires to obtain pain of itself,
-                                </div>
-                            </li>
-                        </ul>
+                    <div class="media-body">
+                        <h4 class="media-heading">@item.Person.FirstName @item.Person.LastName</h4>
+                        <p class="media-usermeta">
+                            <span class="media-time">@item.CreatedAt.ToString("hh:mm tt")</span>
+                            <i class="glyphicon glyphicon-map-marker"></i>
+                        </p>
                     </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Write some comments">
-                    </div>
-                </div><!-- panel panel-post -->
-                <!--
-                <div class="timeline-date"><a href="">Load more...</a></div>
-                -->
-            </div><!-- timeline-wrapper -->
-        </div>
-    </div><!-- panel-body -->
+                </div><!-- media -->
+            </div><!-- panel-heading -->
+            <div class="panel-body">
+                <strong>@item.Title</strong>
+                <p>@item.Content</p>
+            </div>
+            <div class="panel-footer">
+                <ul class="list-inline">
+                    <li><a data-target="#comment-@item.Id" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comments (@item.Replays.Count())</a></li>
+                </ul>
+            </div>
+            <div class="collapse" id="comment-@item.Id">
+                <ul class="media-list">
+                    @foreach (var reply in item.Replays)
+                    {
+                        var avatarComment = "~/Content/images/default.png";
+
+                        if (reply.Person.Avatar != null) { avatarComment = reply.Person.Avatar.UrlPhoto; }
+
+                        <li class="media">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object img-circle" src="@Url.Content(avatarComment)" alt="">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">@reply.Person.FirstName @reply.Person.LastName<small>@(reply.CreatedAt - item.CreatedAt)</small></h4>
+                                @reply.Content
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="form-group">
+                
+                @using (Html.BeginForm("Reply", "Board", FormMethod.Post, htmlAttributes: new { @Id = "form-replay-"+item.Id }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="postId" value="@item.Id" />
+                    <input type="text" name="content" class="form-control btnSubmit" data-Id="@item.Id" placeholder="Write some comments">
+                }
+            </div>
+        </div><!-- panel panel-post -->
+         </div> 
+   }
+
+        <div class="timeline-date"><a href="">Load more...</a></div>
+
+    </div><!-- timeline-wrapper -->
 </div>
-
 

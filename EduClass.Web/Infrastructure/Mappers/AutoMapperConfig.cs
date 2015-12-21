@@ -11,7 +11,7 @@ namespace EduClass.Web.Infrastructure.Mappers
                 x.AddProfile<MailMapperProfiles>();
                 x.AddProfile<GroupMapperProfiles>();
                 x.AddProfile<PostMapperProfiles>();
-		x.AddProfile<PageMapperProfiles>();
+		        x.AddProfile<PageMapperProfiles>();
             });
 
         

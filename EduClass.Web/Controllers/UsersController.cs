@@ -164,8 +164,8 @@ namespace EduClass.Web.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public ActionResult Register([Bind(Include = "UserName, Email, Password, ConfirmPassword, FirstName, LastName, Birthday, IdentificationCard, PersonType")]PersonViewModel personVm)
         {
             if (ModelState.IsValid)
@@ -214,33 +214,11 @@ namespace EduClass.Web.Controllers
             return View(personVm);
         }
 
-        private void CreateUserFolder(Person person)
-        {
-            string carpetaUsuario = carpetaRaiz + person.UserName;
-            if (!Directory.Exists(Server.MapPath(carpetaUsuario)))
-            {
-                Directory.CreateDirectory(Server.MapPath(carpetaUsuario));
-            }
-        }
-
         [HttpGet]
-        public ActionResult Edit()
+        public ActionResult Edit(int id = 0)
         {
-            PersonViewModel user = null;
-            try
-            {
-                Person usuario = UserSession.GetCurrentUser();
-                if(usuario == null)
-                    throw new Exception("El usuario no existe");
-
-                user = AutoMapper.Mapper.Map<Person, PersonViewModel>(_service.GetById(usuario.Id));
-
-                
-            }
-            catch(Exception ex)
-            {
-                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
-            }
+            if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+            var user = AutoMapper.Mapper.Map<Person, PersonViewModel>(_service.GetById(id));
 
             return View(user);
         }
@@ -294,8 +272,8 @@ namespace EduClass.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        [AllowAnonymous]
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult ResetPasswordEmail()
         {
             ViewBag.Sended = false;
@@ -303,8 +281,8 @@ namespace EduClass.Web.Controllers
             return View();
         }
 
-        [AllowAnonymous]
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult ResetPasswordEmail(string email)
         {
@@ -325,12 +303,7 @@ namespace EduClass.Web.Controllers
         [AllowAnonymous]
         public ActionResult EmailUrlResetPassword(string key)
         {
-            return View();
-        }
-
-        [HttpGet]
-        public ActionResult Me()//Accede al Perfil actual
-        {
+            //TODO: HACER LOS METODOS PARA EMAILURLRESSET
             return View();
         }
 
@@ -435,6 +408,15 @@ namespace EduClass.Web.Controllers
             else
             {
                 return Json(new { Message = "Error al guardar el archivo" });
+            }
+        }
+
+        private void CreateUserFolder(Person person)
+        {
+            string carpetaUsuario = carpetaRaiz + person.UserName;
+            if (!Directory.Exists(Server.MapPath(carpetaUsuario)))
+            {
+                Directory.CreateDirectory(Server.MapPath(carpetaUsuario));
             }
         }
 

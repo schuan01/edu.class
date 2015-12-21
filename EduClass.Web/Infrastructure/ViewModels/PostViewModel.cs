@@ -15,14 +15,12 @@ namespace EduClass.Web.Infrastructure.ViewModels
         public string Title { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [MaxLength(2500)]
         public string Content { get; set; }
 
         [Required]
-        public string PostType { get; set; }
+        public int PostType { get; set; }
 
-
-        [Required]
         public System.DateTime CreatedAt { get; set; }
 
         public Nullable<System.DateTime> UpdatedAt { get; set; }

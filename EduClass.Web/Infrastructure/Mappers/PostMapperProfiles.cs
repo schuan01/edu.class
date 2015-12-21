@@ -18,8 +18,14 @@ namespace EduClass.Web.Infrastructure.Mappers
         protected override void Configure()
         {
            
-            Mapper.CreateMap<PostViewModel, Post>(); 
-            Mapper.CreateMap<Post, PostViewModel>();
+            Mapper.CreateMap<PostViewModel, Post>()
+                .ForMember(i => i.Title, x => x.MapFrom(src => HttpUtility.HtmlEncode(src.Title)))
+                .ForMember(i => i.Content, x => x.MapFrom(src => HttpUtility.HtmlEncode(src.Content)));
+
+
+            Mapper.CreateMap<Post, PostViewModel>()
+                .ForMember(i => i.Title, x => x.MapFrom(src => HttpUtility.HtmlDecode(src.Title)))
+                .ForMember(i => i.Content, x => x.MapFrom(src => HttpUtility.HtmlDecode(src.Content)));
         }
     }
 }

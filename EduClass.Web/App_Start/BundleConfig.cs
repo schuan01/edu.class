@@ -56,6 +56,7 @@ namespace EduClass.Web
                           "~/Content/template/thumbnail-gallery.css",
                           "~/Content/template/lib_dropzone_dropzone.css",
                           "~/Content/template/basic.css",
+                          "~/Content/site.css",
                           "~/Content/template/css_quirk.css").IncludeDirectory("~/Content/font", "*.css", false));
         }
     }
