@@ -12,63 +12,56 @@
 
 <div>   
 <div class="col-sm-8 col-md-9 col-lg-10">
-   @foreach (var item in Model)
-        {
-     <div class="timeline-wrapper">
-        @if (!earlierDate.Equals(item.CreatedAt.ToString("dd/MM/yyyy")))
+    <div class="timeline-wrapper">
+
+        @{var meAvatar = String.Empty;}
+
+        @if (currentUser.Avatar == null) { meAvatar = "~/Content/images/default.png"; }
+        else { meAvatar = currentUser.Avatar.UrlPhoto; }
+
+        <div class="panel" style="height:200px">
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    @using (Html.BeginForm("Post", "Board"))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="row">
+                            <h4>Escribe un post</h4>
+                        </div>
+                        <div class="row">
+                            <input type="text" name="Title" class="form-control" placeholder="Título">
+                        </div>
+
+                        <div class="row" style="margin-top: 10px">
+                            <textarea type="text" name="Content" class="form-control" placeholder="Contenido"></textarea>
+                            <select name="PostType" class="hidden">
+                                @foreach (var pType in (Array)ViewBag.PostTypeList)
+                                {
+                                    <option value="@postTypeFlag">@pType</option>
+                                    { postTypeFlag++; }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="row" style="margin-top: 10px">
+                            <button class="btn btn-primary btn-xs pull-right" style="padding-left: 20px; padding-right: 20px">Post</button>
+                        </div>
+
+                    }
+
+                </div>
+            </div>
+        </div><!-- panel panel-post -->
+    @foreach (var item in Model)
+    {
+        if (!earlierDate.Equals(item.CreatedAt.ToString("dd/MM/yyyy")))
         {
             <div class="timeline-date">@item.CreatedAt.ToLongDateString()</div>
 
             { earlierDate = item.CreatedAt.ToString("dd/MM/yyyy"); }
         }
         
-
-        @if (first)
-        {
-            var meAvatar = String.Empty;
-
-            if (currentUser.Avatar == null) { meAvatar = "~/Content/images/default.png"; }
-            else { meAvatar = currentUser.Avatar.UrlPhoto; }
-
-            <div class="panel" style="height:200px">
-                <div class="panel-body">
-                    <div class="form-horizontal">
-                        @using (Html.BeginForm("Post", "Board"))
-                        {
-                            @Html.AntiForgeryToken()
-                            <div class="row">
-                                <h4>Escribe un post</h4>
-                            </div>
-                            <div class="row">
-                                <input type="text" name="Title" class="form-control" placeholder="Título">
-                            </div>
-                            
-                            <div class="row" style="margin-top: 10px">
-                                <textarea type="text" name="Content" class="form-control" placeholder="Contenido"></textarea>
-                                <select name="PostType" class="hidden">
-                                    @foreach (var pType in (Array)ViewBag.PostTypeList)
-                                    {
-
-                                        <option value="@postTypeFlag">@pType</option>
-                                        { postTypeFlag++; }
-                                    }
-                                </select>
-                            </div>
-
-                            <div class="row" style="margin-top: 10px">
-                                    <button class="btn btn-primary btn-xs pull-right" style="padding-left: 20px; padding-right: 20px">Post</button>
-                            </div>
-
-                        }
-                        
-                    </div>
-                </div>
-            </div><!-- panel panel-post -->
-            
-            {first = false;}
-        }
-        
-        @if (item.Person.Avatar == null) { avatar = "~/Content/images/default.png"; }
+        if (item.Person.Avatar == null) { avatar = "~/Content/images/default.png"; }
         else { avatar = item.Person.Avatar.UrlPhoto; }
 
         <div class="panel panel-post-item status">
@@ -86,7 +79,18 @@
                             <i class="glyphicon glyphicon-map-marker"></i>
                         </p>
                     </div>
-                </div><!-- media -->
+                </div>
+                <!-- media -->
+                @if (item.PersonId == EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser().Id)
+                {
+                    <ul class="panel-options">
+                        <li>
+                            <a class="tooltips" href="@Url.Action("RemovePost", "Board", new { Id = item.Id })" data-toggle="tooltip" title="" data-original-title="Remove">
+                                <i class="glyphicon glyphicon-remove"></i>
+                            </a>
+                        </li>
+                    </ul>
+                }
             </div><!-- panel-heading -->
             <div class="panel-body">
                 <strong>@item.Title</strong>
@@ -115,6 +119,15 @@
                                 <h4 class="media-heading">@reply.Person.FirstName @reply.Person.LastName<small>@(reply.CreatedAt - item.CreatedAt)</small></h4>
                                 @reply.Content
                             </div>
+                            <div class="media-right">
+                                @if (item.PersonId == EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser().Id)
+                                {
+                                    
+                                    <a class="tooltips" href="@Url.Action("RemoveReply", "Board", new { id = reply.Id })" data-toggle="tooltip" title="" data-original-title="Remove">
+                                        <i class="glyphicon glyphicon-remove"></i>
+                                    </a>
+                                }
+                            </div>
                         </li>
                     }
                 </ul>
@@ -129,8 +142,8 @@
                 }
             </div>
         </div><!-- panel panel-post -->
-         </div> 
-   }
+    }
+    </div> 
 
         <div class="timeline-date"><a href="">Load more...</a></div>
 

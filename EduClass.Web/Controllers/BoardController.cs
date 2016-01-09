@@ -134,5 +134,67 @@ namespace EduClass.Web.Controllers
             return RedirectToAction("Index", new { id = UserSession.GetCurrentGroup().Id });
         }
 
+        public ActionResult RemovePost(int id = 0)
+        {
+            if (id == 0)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error al eliminar el post", "Post id no existe"));
+                return RedirectToAction("Index", new { id = UserSession.GetCurrentGroup().Id });
+            }
+
+            try
+            {
+                var post = _post.GetById(id);
+
+                if (post.PersonId == UserSession.GetCurrentUser().Id)
+                {
+
+                    var replycant = post.Replays.Count();
+                    var replys = post.Replays.ToArray();
+                    
+                    for (int i = 0; i < replycant; i++)
+                    {
+                        var reply = replys[i];
+                        _reply.Delete(reply.Id);
+                    }
+
+                    _post.Delete(post.Id);
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Completado", "El post fue borrado con éxito"));
+                }
+            }
+            catch (System.Data.Entity.Infrastructure.DbUpdateException du)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al eliminar post, por favor contacte con el Administrador."));
+            }
+
+            return RedirectToAction("Index", new { id = UserSession.GetCurrentGroup().Id });
+        }
+
+        public ActionResult RemoveReply(int id = 0)
+        {
+            if (id == 0)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error al eliminar el reply", "Reply id no existe"));
+                return RedirectToAction("Index", new { id = UserSession.GetCurrentGroup().Id });
+            }
+
+            try
+            {
+
+                _reply.Delete(_reply.GetById(id));
+
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Completado", "El reply fue borrado con éxito"));
+
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al eliminar reply, por favor contacte con el Administrador."));
+            }
+            return RedirectToAction("Index", new { id = UserSession.GetCurrentGroup().Id });
+        }
     }
 }

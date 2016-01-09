@@ -39,6 +39,14 @@ namespace EduClass.Logic
             _unitOfWork.Commit();
         }
 
+        public virtual void Delete(int id)
+        {
+            if (id == null) { throw new ArgumentNullException("entity"); }
+
+            _repository.Delete(id);
+            _unitOfWork.Commit();
+        }
+
         public virtual IEnumerable<T> GetAll()
         {
             return _repository.GetAll();
