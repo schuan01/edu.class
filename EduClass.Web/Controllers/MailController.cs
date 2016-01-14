@@ -1,12 +1,8 @@
 ﻿using EduClass.Logic;
-using EduClass.Web.Infrastructure.Modules;
 using EduClass.Web.Infrastructure.Sessions;
 using System;
-using System.Net;
 using System.Web.Mvc;
-using System.Web.Security;
 using System.Linq;
-using EduClass.Web.Infrastructure;
 using EduClass.Web.Infrastructure.ViewModels;
 using EduClass.Entities;
 using System.Web;
@@ -53,18 +49,23 @@ namespace EduClass.Web.Controllers
 
         // GET: Mail
         [HttpGet]
-        [ValidateAntiForgeryToken]
         public ActionResult SendEmail()
         {
-            ViewBag.FromEmail = UserSession.GetCurrentUser().Email;
-            ViewBag.PersonsTo = new SelectList(_personService.GetAll().Where(g => g.Enabled == true && g.Id != UserSession.GetCurrentUser().Id).ToList(), "Id", "FirstName");
+            ViewBag.FromUser = UserSession.GetCurrentUser().FirstName + UserSession.GetCurrentUser().LastName;
+            ViewBag.PersonsTo = new SelectList(_personService.GetAll().Where(g => g.Enabled == true && g.Id != UserSession.GetCurrentUser().Id).ToList()
+                .Select(s => new
+                {
+                    Id = s.Id,
+                    NombreCompleto = s.FirstName +" "+ s.LastName
+                })
+            , "Id", "NombreCompleto");
 
             return View(new MailViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SendEmail([Bind(Include = "Subject, Description, PersonIdTo, PersonEmailFrom")]MailViewModel mailVm)
+        public ActionResult SendEmail([Bind(Include = "Subject, Description, PersonIdTo")]MailViewModel mailVm)
         {
             
             if (ModelState.IsValid)
@@ -104,13 +105,20 @@ namespace EduClass.Web.Controllers
 
 
             //Vuelvo a cargar la lista para que no de exception(si aplica)
-            ViewBag.PersonsTo = new SelectList(_personService.GetAll().Where(g => g.Enabled == true && g.Id != UserSession.GetCurrentUser().Id).ToList(), "Id", "FirstName");
+            ViewBag.PersonsTo = new SelectList(_personService.GetAll().Where(g => g.Enabled == true && g.Id != UserSession.GetCurrentUser().Id).ToList()
+                .Select(s => new
+                {
+                    Id = s.Id,
+                    NombreCompleto = s.FirstName + " " + s.LastName
+                })
+            , "Id", "NombreCompleto");
 
             return View(mailVm);
         }
 
         //TODO
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult DeleteMail(int id)
         {
             return View();

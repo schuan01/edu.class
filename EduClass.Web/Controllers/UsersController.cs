@@ -1,11 +1,9 @@
 ﻿using EduClass.Logic;
-using EduClass.Web.Infrastructure.Modules;
 using EduClass.Web.Infrastructure.Sessions;
 using System;
 using System.Net;
 using System.Web.Mvc;
 using System.Web.Security;
-using System.Linq;
 using EduClass.Web.Infrastructure;
 using EduClass.Web.Infrastructure.ViewModels;
 using EduClass.Entities;
@@ -13,7 +11,6 @@ using System.Data.Entity.Validation;
 using EduClass.Web.Mailers;
 using System.IO;
 using System.Web;
-using System.Collections.Generic;
 
 namespace EduClass.Web.Controllers
 {
@@ -40,7 +37,7 @@ namespace EduClass.Web.Controllers
             {
                 if (!String.IsNullOrEmpty(returnUrl)) { return Redirect(returnUrl); }
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Board");
             }
 
             ViewBag.UserName = userName;
@@ -71,7 +68,7 @@ namespace EduClass.Web.Controllers
 
                     
 
-                    return RedirectToAction("Index", "User");
+                    return RedirectToAction("Index", "Board");
                 }
                 else
                 {
@@ -86,7 +83,7 @@ namespace EduClass.Web.Controllers
                 if (!String.IsNullOrEmpty(returnurl) && Url.IsLocalUrl(returnurl))
                     return Redirect(returnurl);
 
-                return RedirectToAction("Index", "User");
+                return RedirectToAction("SignIn", "Users");
             }
 
             return View();
@@ -192,6 +189,7 @@ namespace EduClass.Web.Controllers
                         MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario creado", string.Format("El usuario {0} fue creado con éxito", personVm.UserName)));
 
                         CreateUserFolder(person);
+                        SetDefaultAvatar(person);
 
                         //TODO: HACER EL ENVIO DE MAIL
                         return View("_ActivationAccount");
@@ -214,18 +212,32 @@ namespace EduClass.Web.Controllers
             return View(personVm);
         }
 
+
         [HttpGet]
-        public ActionResult Edit(int id = 0)
+        public ActionResult Edit()
         {
-            if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
-            var user = AutoMapper.Mapper.Map<Person, PersonViewModel>(_service.GetById(id));
+            PersonViewModel user = null;
+            try
+            {
+                Person usuario = UserSession.GetCurrentUser();
+                if(usuario == null)
+                    throw new Exception("El usuario no existe");
+
+                user = AutoMapper.Mapper.Map<Person, PersonViewModel>(_service.GetById(usuario.Id));
+
+                
+            }
+            catch(Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+            }
 
             return View(user);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id, UserName, FirstName, LastName, Birthday, Email, IdentificationCard")]PersonViewModel userVm)
+        public ActionResult Edit([Bind(Include = "UserName, FirstName, LastName, Birthday, Email, IdentificationCard")]PersonViewModel userVm)
         {
             if (ModelState.IsValid)
             {
@@ -234,10 +246,9 @@ namespace EduClass.Web.Controllers
                     //Execute the mapping 
                     var user = AutoMapper.Mapper.Map<PersonViewModel, Person>(userVm);
 
-                    user.Password = Security.EncodePassword(user.Password);
                     user.UpdatedAt = DateTime.Now;
 
-                    _service.Create(user);
+                    _service.Update(user);
 
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", userVm.UserName)));
 
@@ -251,7 +262,6 @@ namespace EduClass.Web.Controllers
 
             return View(userVm);
         }
-
         public ActionResult Disable(int id = 0)
         {
             if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
@@ -307,15 +317,21 @@ namespace EduClass.Web.Controllers
             return View();
         }
 
+		[HttpGet]
+        public ActionResult Me()//Accede al Perfil actual
+        {
+            return View();
+        }
+
         [HttpGet]
-        public ActionResult SaveUploadedFile()
+        public ActionResult ChangeAvatar()
         {
             return View();
         }
 
         //TODO
         [HttpPost]
-        public ActionResult SaveUploadedFile(int id= 0)
+        public ActionResult ChangeAvatar(int id= 0)
         {
             HttpPostedFileBase file = null;
             bool isSavedSuccessfully = true;
@@ -420,7 +436,23 @@ namespace EduClass.Web.Controllers
             }
         }
 
-       
+        private void SetDefaultAvatar(Person p)
+        {
+            Avatar a = new Avatar();
+            a.Enabled = true;
+            a.UrlPhoto = "~\\Content\\images\\default.png";
+            a.UpdatedAt = DateTime.Now;
+            a.Person = p;
+            //Termino creando el Avatar
+            if (p.Avatar == null)
+            {
+                _avatarService.Create(a);
+
+            }
+
+        }
+
+
     }
 }
 

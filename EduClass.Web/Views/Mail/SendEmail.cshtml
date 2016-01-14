@@ -20,10 +20,9 @@
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.PersonEmailFrom, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.Label("Remitente", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.PersonEmailFrom, new { htmlAttributes = new { @class = "form-control", @Value=ViewBag.FromEmail, @readonly=""} })
-                        @Html.ValidationMessageFor(model => model.PersonEmailFrom, "", new { @class = "text-danger" })
+                        @Html.Editor((string)ViewBag.FromUser, new { htmlAttributes = new { @class = "form-control", @Value= (string)ViewBag.FromUser, @readonly =""} })
                     </div>
                 </div>
 

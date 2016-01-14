@@ -12,35 +12,42 @@ namespace EduClass.Web.Infrastructure.ViewModels
 
         [Required]
         [MaxLength(75)]
+        [Display(Name = "Nombre Usuario")]
         public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
+        [Display(Name = "Contraseña")]
         [StringLength(255, MinimumLength = 6)]
         public string Password { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
+        [Display(Name = "Confirmar contraseña")]
         [Compare("Password")]
         public string ConfirmPassword { get; set; }
 
         [Required]
         [MaxLength(75)]
+        [Display(Name = "Nombre")]
         public string FirstName { get; set; }
 
         [Required]
         [MaxLength(75)]
+        [Display(Name = "Apellido")]
         public string LastName { get; set; }
 
         [DataType(DataType.Date)]
-        public Nullable<System.DateTime> Birthday { get; set; }
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Fecha Nacimiento")]
+        public System.DateTime Birthday { get; set; }
 
         [Required]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Required]
+        [Display(Name = "Cédula")]
         public string IdentificationCard { get; set; }
 
         [Required]

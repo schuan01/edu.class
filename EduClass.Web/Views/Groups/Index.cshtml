@@ -1,4 +1,7 @@
 ﻿@model List<EduClass.Entities.Group>
+@using EduClass.Web.Infrastructure.Sessions
+@using EduClass.Entities
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Grupos";
@@ -11,38 +14,56 @@
 
     <div class="contentpanel">
 
+    @if (UserSession.GetCurrentUser() is Teacher)
+    {
         <div class="row">
             <div class="col-sm-8 col-md-9 col-lg-10 people-list">
 
                 <div class="people-options clearfix">
                     <div class="btn-group pull-right people-pager">
-                        <button class="btn btn-default-active"><i class="fa fa-th"></i></button>
-                        <a href="people-directory.html" class="btn btn-default"><i class="fa fa-th-list"></i></a>
-                    </div>
-
-                    <div class="btn-group pull-right people-pager">
-                        <button type="button" class="btn btn-default"><i class="fa fa-chevron-left"></i></button>
-                        <button type="button" class="btn btn-default"><i class="fa fa-chevron-right"></i></button>
+                        <a href="@Url.Action("Index", "Groups")" class="btn btn-default"><i class="fa fa-refresh"></i></a>
                     </div>
                     <div class="btn-group pull-left people-pager">
-                        <a href="@Url.Action("Create","Groups")">
-                            <button type="button" class="btn btn-danger">Crear nuevo Grupo</button>
+                        <a href="@Url.Action("Create", "Groups")" class="btn btn-danger">
+                            Crear nuevo Grupo
                         </a>
                     </div>
                 </div><!-- people-options -->
 
+                <div class="table-responsive">
+                    <table class="table table-striped nomargin table-primary">
+                        <thead>
+                            <tr>
 
-                <div class="row">
-                    <div class="list-group">
-                        <a href="#" class="list-group-item active">
-                            Grupos
-                        </a>
-                        @foreach (var elemento in Model)
-                        {
-                            <a href="@Url.Action("Edit", "Groups", new {id = elemento.Id})" class="list-group-item">@elemento.Name</a>
-                        }
-                    </div>
-                </div><!-- row -->
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Clave</th>
+                                <th class="text-center">Alumnos</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var elemento in Model)
+                            {
+                                <tr>
+
+                                    <td>@elemento.Id</td>
+                                    <td>@elemento.Name</td>
+                                    <td>@elemento.Description</td>
+                                    <td>@elemento.Key</td>
+                                    <td class="text-center">@elemento.Students.Count</td>
+                                    <td>
+                                        <ul class="table-options">
+                                            <li><a href="@Url.Action("Edit", "Groups", new { id = elemento.Id })"><i class="fa fa-pencil"></i></a></li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div><!-- table-responsive -->
 
             </div><!-- col-sm-8 -->
 
@@ -62,8 +83,20 @@
                 </div><!-- panel -->
             </div>
         </div><!-- row -->
-
-    </div><!-- contentpanel -->
+    }
+    else
+    {
+        <div class="col-sm-4 col-md-3 col-lg-2">
+            <div class="panel">
+                <div class="panel-body">
+                    <a href="@Url.Action("JoinStudent","Groups")" class="btn btn-danger btn-quirk btn-block profile-btn-follow">
+                        Unirse a un Grupo
+                    </a>
+                </div>
+            </div>
+        </div>
+     }
+ </div><!-- contentpanel -->
 
 }
 

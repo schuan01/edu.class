@@ -3,16 +3,17 @@
 @using EduClass.Entities
 
 @{
-    ViewBag.Title = "Perfil";
+        ViewBag.Title = "Perfil";
+        
+        
+        
+
 }
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
-    <div class="mainpanel">
-
-      <div class="contentpanel">
 
         <div class="row profile-wrapper">
           <div class="col-xs-12 col-md-3 col-lg-2 profile-left">
@@ -53,16 +54,10 @@
                 <li class="list-group-item">Followers <a href="people-directory-grid.html">32,434</a></li>
               </ul>
 
-              <a href="@Url.Action("Edit","Users")">
-              <button type="button" class="btn btn-danger btn-quirk btn-block profile-btn-follow">Editar Perfil</button>
+              <a href="@Url.Action("Edit","Users")" class="btn btn-danger btn-quirk btn-block profile-btn-follow"> Editar perfil
               </a>
             </div>
             <div class="profile-left-body">
-              <h4 class="panel-title">Sobre mi</h4>
-              <p>Soy un estudiante mediocre.</p>
-              <p>O Profesor mediocre x2.</p>
-
-              <hr class="fadeout">
 
               <h4 class="panel-title">Email</h4>
               <p><i class="glyphicon glyphicon-envelope mr5"></i> @UserSession.GetCurrentUser().Email</p>
@@ -70,22 +65,13 @@
               <hr class="fadeout">
 
               <h4 class="panel-title">Cumpleaños</h4>
+              
               <p><i class="glyphicon glyphicon-gift mr5"></i> @UserSession.GetCurrentUser().Birthday</p>
 
               <hr class="fadeout">
 
               <h4 class="panel-title">Cédula</h4>
               <p><i class="glyphicon glyphicon-pencil mr5"></i> @UserSession.GetCurrentUser().IdentificationCard</p>
-
-              <hr class="fadeout">
-
-              <h4 class="panel-title">Social</h4>
-              <ul class="list-inline profile-social">
-                <li><a href=""><i class="fa fa-facebook-official"></i></a></li>
-                <li><a href=""><i class="fa fa-twitter"></i></a></li>
-                <li><a href=""><i class="fa fa-dribbble"></i></a></li>
-                <li><a href=""><i class="fa fa-linkedin"></i></a></li>
-              </ul>
 
             </div>
           </div>
@@ -387,7 +373,5 @@
 
           </div>
         </div><!-- row -->
-      </div>
-    </div>
 }
 

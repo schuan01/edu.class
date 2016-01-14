@@ -30,10 +30,6 @@ namespace EduClass.Web.Infrastructure.ViewModels
 
         public bool Enabled { get; set; }
 
-        [Display(Name = "Email")]
-        [Required]
-        [EmailAddress(ErrorMessage = "Email invalido")]
-        public string PersonEmailFrom { get; set; }
 
         [Required]
         [Display(Name = "Destinatarios")]

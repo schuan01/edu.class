@@ -1,14 +1,11 @@
 ﻿
 @model IOrderedEnumerable<EduClass.Entities.Mail>
-
+@using EduClass.Web.Infrastructure.Sessions
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Emails";
 }
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
 <div class="mainpanel">
     <div class="emailcontent">
         <div class="email-options">
@@ -54,7 +51,15 @@
                
                         <div class="media" >
                             <div class="media-left">
-                                <img class="media-object img-circle" src="img/images_photos_user1.png" alt="">
+                                @if (elemento.PersonFrom.Avatar == null || elemento.PersonFrom.Avatar.UrlPhoto == "")
+                                {
+                                    <img class="media-object img-circle" src="img/images_photos_user1.png" alt="">
+                                }
+                                else
+                                {
+                                    <img class="media-object img-circle" src="@Url.Content(elemento.PersonFrom.Avatar.UrlPhoto)" alt="" />
+                                }
+                                
                             </div>
                             <div class="media-body">
                                 <span class="pull-right">@elemento.CreateAt</span>
@@ -77,7 +82,6 @@
                    
                         <div class="email-header">
                             <div class="pull-right">
-                                1 hour ago &nbsp;
                                 <div class="btn-group mr5">
                                     <button class="btn btn-default" type="button"><i class="fa fa-reply"></i></button>
                                     <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button" aria-expanded="false">
@@ -100,7 +104,15 @@
                             <div class="media">
                                 <div class="media-left">
                                     <a href="#">
+                                        @if (elemento.PersonFrom.Avatar == null || elemento.PersonFrom.Avatar.UrlPhoto == "")
+                                        {
                                         <img class="media-object img-circle" src="img/images_photos_user1.png" alt="">
+                                        }
+                                        else
+                                        {
+                                        <img class="media-object img-circle" src="@Url.Content(elemento.PersonFrom.Avatar.UrlPhoto)" alt="" />
+                                        }
+                                        
                                     </a>
                                 </div>
                                 <div class="media-body">
@@ -108,15 +120,16 @@
                                     para: mi, 
                                     @foreach (var persona in elemento.PersonsTo)
                                     {
-                                       @persona.FirstName
+                                       @persona.FirstName;
                                        
-                                    } 
+                                    }
+                                    
                                 </div>
                             </div><!-- media -->
                         </div><!-- email-header -->
 
                         <hr>
-
+                        
                         <h3 class="email-subject">@elemento.Subject <span class="markstar"><i class="glyphicon glyphicon-star"></i></span></h3>
                         <div class="email-body">
                             <p>@Html.Raw(elemento.Description)</p>
@@ -125,25 +138,27 @@
                         <br>
                         <hr>
 
-                        
-
-                        
-
-                        <div class="form-group email-editor">
-                            <div>Responder</div>
-                            @Html.TextArea(elemento.Description, htmlAttributes: new { @class = "form-control", @Id = "wysiwyg", @placeholder = "Inserte contenido del mensaje", @rows = "10" })
-                        
-                        </div>
-
-
-                        <button class="btn btn-success">Enviar mensaje</button>
-                       
-
                         <br><br>
 
 
                     </div><!-- mailcontent -->
                 }
+                
+                
+                @using (Html.BeginForm("ReplyEmail", "Email", FormMethod.Post, htmlAttributes: new { @Id = "" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="text" id="" />
+                    <input type="text" id="valorId" hidden />
+                     
+                    <div class="form-group email-editor">
+                          <div>Responder solo al Remitente</div>
+                          @Html.TextArea("Mensaje", htmlAttributes: new { @class = "form-control", @Id = "wysiwyg", @placeholder = "Inserte contenido del mensaje", @rows = "10" })
+                          <button class="btn btn-success">Enviar mensaje</button>
+                    </div>
+                }
+
                 </div><!-- contentpanel -->
         
         
@@ -151,8 +166,15 @@
     
 </div>
 
+
 @Scripts.Render("~/bundles/jquery")
-    <script>
+@{
+    var sessionMessage = EduClass.Web.Infrastructure.Sessions.MessageSession.GetMessage();
+}
+
+<script src="~/Scripts/app/helpersSite.js"></script>
+<script>
+
 $(document).ready(function()
 {
   $('.emailcontent input[type=checkbox]').click(function() {
@@ -162,8 +184,15 @@ $(document).ready(function()
         $(this).closest('.list-group-item').removeClass('selected');
     }
 
-    $('.dropdown-toggle').dropdown()
+    $('.dropdown-toggle').dropdown();
+
   });
+
+
+  var message = "@Html.Raw(sessionMessage.ToString())";
+  if (message != "") {
+      showMessageJS(message);
+  }
 
   // Mark a star
   $('.markstar').click(function() {
@@ -174,6 +203,8 @@ $(document).ready(function()
     }
   });
 
+  //Agrego la clase hide al coso del responder
+  $('.email-editor').addClass('hide');
 
   // Clicking a message
   $('.list-group-item > .media').click(function () {
@@ -197,7 +228,10 @@ $(document).ready(function()
       //Agrego la clase hide a nomail
       $('.nomail').addClass('hide');
 
+      //Saco la clase hide al coso del responder
+      $('.email-editor').removeClass('hide');
 
+      
       var idMail = $(this).parent().data("id"); //Obtengo el valor del atributo Data-Id del Parent
 
 
@@ -209,14 +243,16 @@ $(document).ready(function()
 
       //$('.mailcontent').find("[data-id='" + idMail + "']").removeClass('hide');
 
+      //Seteo el idMail actual en un Input oculto
+      $('#valorId').text(idMail);
+      $('#valorId').val(idMail);
 
 
-
-
+      //TODO
       $('#btnDelete').click(function(e) {
           e.preventDefault();
 
-          // TODO: Validate input
+          
 
           var data = $('#mailId').attr('id');
 
@@ -242,6 +278,6 @@ $(document).ready(function()
     
 
 });
-    </script>
-}
+</script>
+
 
