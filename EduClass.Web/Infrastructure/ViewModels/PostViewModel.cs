@@ -21,6 +21,7 @@ namespace EduClass.Web.Infrastructure.ViewModels
         [Required]
         public int PostType { get; set; }
 
+
         public System.DateTime CreatedAt { get; set; }
 
         public Nullable<System.DateTime> UpdatedAt { get; set; }

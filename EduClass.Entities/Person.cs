@@ -22,6 +22,7 @@ namespace EduClass.Entities
             this.Alerts = new HashSet<Alert>();
             this.MailsSends = new HashSet<Mail>();
             this.MailsRecieved = new HashSet<Mail>();
+            this.Files = new HashSet<File>();
         }
     
         public int Id { get; set; }
@@ -47,5 +48,7 @@ namespace EduClass.Entities
         public virtual ICollection<Mail> MailsSends { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Mail> MailsRecieved { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<File> Files { get; set; }
     }
 }

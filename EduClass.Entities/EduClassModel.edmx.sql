@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 12/28/2015 11:06:59
+-- Date Created: 01/21/2016 15:48:52
 -- Generated from EDMX file: C:\Users\jvolpe\Documents\Cosas\edu.class\EduClass.Entities\EduClassModel.edmx
 -- --------------------------------------------------
 
@@ -80,6 +80,12 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_GroupPost]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Posts] DROP CONSTRAINT [FK_GroupPost];
 GO
+IF OBJECT_ID(N'[dbo].[FK_PersonFile]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Files] DROP CONSTRAINT [FK_PersonFile];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PostFile]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Files] DROP CONSTRAINT [FK_PostFile];
+GO
 IF OBJECT_ID(N'[dbo].[FK_Teacher_inherits_Person]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Person_Teacher] DROP CONSTRAINT [FK_Teacher_inherits_Person];
 GO
@@ -132,6 +138,9 @@ IF OBJECT_ID(N'[dbo].[Avatars]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[Replies]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Replies];
+GO
+IF OBJECT_ID(N'[dbo].[Files]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Files];
 GO
 IF OBJECT_ID(N'[dbo].[Person_Teacher]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Person_Teacher];
@@ -323,6 +332,17 @@ CREATE TABLE [dbo].[Replies] (
 );
 GO
 
+-- Creating table 'Files'
+CREATE TABLE [dbo].[Files] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [UrlFile] nvarchar(max)  NOT NULL,
+    [Name] nvarchar(max)  NOT NULL,
+    [PersonId] int  NOT NULL,
+    [CreatedAt] datetime  NOT NULL,
+    [PostId] int  NULL
+);
+GO
+
 -- Creating table 'Person_Teacher'
 CREATE TABLE [dbo].[Person_Teacher] (
     [GroupId] int  NOT NULL,
@@ -435,6 +455,12 @@ GO
 -- Creating primary key on [Id] in table 'Replies'
 ALTER TABLE [dbo].[Replies]
 ADD CONSTRAINT [PK_Replies]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'Files'
+ALTER TABLE [dbo].[Files]
+ADD CONSTRAINT [PK_Files]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -767,6 +793,36 @@ GO
 CREATE INDEX [IX_FK_GroupPost]
 ON [dbo].[Posts]
     ([GroupId]);
+GO
+
+-- Creating foreign key on [PersonId] in table 'Files'
+ALTER TABLE [dbo].[Files]
+ADD CONSTRAINT [FK_PersonFile]
+    FOREIGN KEY ([PersonId])
+    REFERENCES [dbo].[Person]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_PersonFile'
+CREATE INDEX [IX_FK_PersonFile]
+ON [dbo].[Files]
+    ([PersonId]);
+GO
+
+-- Creating foreign key on [PostId] in table 'Files'
+ALTER TABLE [dbo].[Files]
+ADD CONSTRAINT [FK_PostFile]
+    FOREIGN KEY ([PostId])
+    REFERENCES [dbo].[Posts]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_PostFile'
+CREATE INDEX [IX_FK_PostFile]
+ON [dbo].[Files]
+    ([PostId]);
 GO
 
 -- Creating foreign key on [Id] in table 'Person_Teacher'

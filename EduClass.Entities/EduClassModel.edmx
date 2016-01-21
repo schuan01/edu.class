@@ -20,6 +20,7 @@
     <EntitySet Name="Mails" EntityType="EduClassModel.Store.Mails" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Avatars" EntityType="EduClassModel.Store.Avatars" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Replies" EntityType="EduClassModel.Store.Replies" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Files" EntityType="EduClassModel.Store.Files" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Person_Teacher" EntityType="EduClassModel.Store.Person_Teacher" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Person_Student" EntityType="EduClassModel.Store.Person_Student" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="GroupStudent" EntityType="EduClassModel.Store.GroupStudent" store:Type="Tables" Schema="dbo" />
@@ -107,6 +108,14 @@
     <AssociationSet Name="GroupPost" Association="EduClassModel.Store.GroupPost">
       <End Role="Group" EntitySet="Groups" />
       <End Role="Post" EntitySet="Posts" />
+    </AssociationSet>
+    <AssociationSet Name="PersonFile" Association="EduClassModel.Store.PersonFile">
+      <End Role="Person" EntitySet="Person" />
+      <End Role="File" EntitySet="Files" />
+    </AssociationSet>
+    <AssociationSet Name="PostFile" Association="EduClassModel.Store.PostFile">
+      <End Role="Post" EntitySet="Posts" />
+      <End Role="File" EntitySet="Files" />
     </AssociationSet>
     <AssociationSet Name="FK_Teacher_inherits_Person" Association="EduClassModel.Store.FK_Teacher_inherits_Person">
       <End Role="Person" EntitySet="Person" />
@@ -289,6 +298,17 @@
     <Property Name="PersonId" Type="int" Nullable="false" />
     <Property Name="PostId" Type="int" Nullable="false" />
     <Property Name="Enabled" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Files">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UrlFile" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PersonId" Type="int" Nullable="false" />
+    <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+    <Property Name="PostId" Type="int" Nullable="true" />
   </EntityType>
   <EntityType Name="Person_Teacher">
     <Key>
@@ -523,6 +543,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="PersonFile">
+    <End Role="Person" Type="EduClassModel.Store.Person" Multiplicity="1" />
+    <End Role="File" Type="EduClassModel.Store.Files" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Person">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="File">
+        <PropertyRef Name="PersonId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PostFile">
+    <End Role="Post" Type="EduClassModel.Store.Posts" Multiplicity="0..1" />
+    <End Role="File" Type="EduClassModel.Store.Files" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Post">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="File">
+        <PropertyRef Name="PostId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_GroupStudent_Group">
     <End Role="Group" Type="EduClassModel.Store.Groups" Multiplicity="1" />
     <End Role="GroupStudent" Type="EduClassModel.Store.GroupStudent" Multiplicity="*" />
@@ -694,6 +738,15 @@
             <End Role="Group" EntitySet="Groups" />
             <End Role="Post" EntitySet="Posts" />
           </AssociationSet>
+          <EntitySet Name="Files" EntityType="EduClassModel.File" />
+          <AssociationSet Name="PersonFile" Association="EduClassModel.PersonFile">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="File" EntitySet="Files" />
+          </AssociationSet>
+          <AssociationSet Name="PostFile" Association="EduClassModel.PostFile">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="File" EntitySet="Files" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Person">
           <Key>
@@ -716,6 +769,7 @@
           <NavigationProperty Name="Alerts" Relationship="EduClassModel.PersonAlert" FromRole="Person" ToRole="Alert" />
           <NavigationProperty Name="MailsSends" Relationship="EduClassModel.PersonMail" FromRole="Person" ToRole="Mail" />
           <NavigationProperty Name="MailsRecieved" Relationship="EduClassModel.MailPerson" FromRole="Person" ToRole="Mail" />
+          <NavigationProperty Name="Files" Relationship="EduClassModel.PersonFile" FromRole="Person" ToRole="File" />
         </EntityType>
         <EntityType Name="Teacher" BaseType="EduClassModel.Person" >
           <Property Name="GroupId" Type="Int32" Nullable="false" />
@@ -741,6 +795,7 @@
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Group" Relationship="EduClassModel.GroupPost" FromRole="Post" ToRole="Group" />
           <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Files" Relationship="EduClassModel.PostFile" FromRole="Post" ToRole="File" />
         </EntityType>
         <Association Name="PersonPost">
           <End Type="EduClassModel.Person" Role="Person" Multiplicity="1" />
@@ -1090,6 +1145,43 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="File">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UrlFile" Type="String" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Person" Relationship="EduClassModel.PersonFile" FromRole="File" ToRole="Person" />
+          <Property Name="PersonId" Type="Int32" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Post" Relationship="EduClassModel.PostFile" FromRole="File" ToRole="Post" />
+          <Property Name="PostId" Type="Int32" Nullable="true" />
+        </EntityType>
+        <Association Name="PersonFile">
+          <End Type="EduClassModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="EduClassModel.File" Role="File" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="File">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PostFile">
+          <End Type="EduClassModel.Post" Role="Post" Multiplicity="0..1" />
+          <End Type="EduClassModel.File" Role="File" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="File">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1286,6 +1378,18 @@
           <ScalarProperty Name="PersonId" ColumnName="PersonId" />
           <ScalarProperty Name="PostId" ColumnName="PostId" />
           <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Files">
+      <EntityTypeMapping TypeName="IsTypeOf(EduClassModel.File)">
+        <MappingFragment StoreEntitySet="Files">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UrlFile" ColumnName="UrlFile" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+          <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+          <ScalarProperty Name="PostId" ColumnName="PostId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -64,17 +64,29 @@ namespace EduClass.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Post([Bind(Include = "Title, Content, PostType")]PostViewModel postVm)
         {
+            
             if (ModelState.IsValid)
             {
                 try
                 {
-
+                    
                     var post = AutoMapper.Mapper.Map<PostViewModel, Post>(postVm);
 
                     post.CreatedAt = DateTime.Now;
                     post.Enabled = true;
                     post.PersonId = UserSession.GetCurrentUser().Id;
                     post.GroupId = UserSession.GetCurrentGroup().Id;
+
+                    //TODO FILES
+                    for (int i = 0; i < Request.Files.Count; i++)
+                    {
+                        HttpPostedFileBase file = Request.Files[i];
+                        if (file != null)
+                        {
+
+                        }
+                    }
+
 
                     _post.Create(post);
 

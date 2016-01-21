@@ -42,6 +42,10 @@
         <AssociationConnector Association="EduClassModel.PersonMail" />
         <AssociationConnector Association="EduClassModel.MailPerson" />
         <AssociationConnector Association="EduClassModel.GroupPost" />
+        <EntityTypeShape EntityType="EduClassModel.File" Width="1.5" PointX="7.875" PointY="5.25" />
+        <EntityTypeShape EntityType="EduClassModel.FilesLibrary" Width="1.5" PointX="8.875" PointY="7.75" />
+        <AssociationConnector Association="EduClassModel.PersonFile" />
+        <AssociationConnector Association="EduClassModel.PostFile" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

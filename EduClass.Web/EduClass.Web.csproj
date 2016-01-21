@@ -150,6 +150,7 @@
     <Compile Include="Controllers\BoardController.cs" />
     <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
+    <Compile Include="Controllers\FilesLibraryController.cs" />
     <Compile Include="Controllers\GroupsController.cs" />
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\PagesController.cs" />
@@ -515,6 +516,8 @@
     <Content Include="Views\Users\Me.cshtml" />
     <Content Include="Views\Users\ChangeAvatar.cshtml" />
     <Content Include="Views\Users\ChangePassword.cshtml" />
+    <Content Include="Views\FilesLibrary\Index.cshtml" />
+    <Content Include="Views\FilesLibrary\UploadFile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

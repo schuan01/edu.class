@@ -1,10 +1,10 @@
 ﻿
 @{
-    ViewBag.Title = "Cambiar Foto Perfil";
+    ViewBag.Title = "Subir archivo";
 }
 
 <div class="jumbotron">
-    <form action="~/Users/ChangeAvatar" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
+    <form action="~/FilesLibrary/UploadFile" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
         <div class="fallback">
             <input name="file" type="file" multiple />
             <input type="submit" value="Upload" />
@@ -19,9 +19,8 @@
 
         //File Upload response from the server
         Dropzone.options.dropzoneForm = {
-            maxFiles: 1,
+            maxFiles: 10,
             maxFilesize: 5,
-            acceptedFiles: "image/jpeg,image/png,image/bmp",
             init: function () {
                 this.on("maxfilesexceeded", function (data) {
                     var res = eval('(' + data.xhr.responseText + ')');

@@ -81,6 +81,9 @@
     <Compile Include="EventType.cs">
       <DependentUpon>EduClassModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="File.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Group.cs">
       <DependentUpon>EduClassModel.tt</DependentUpon>
     </Compile>

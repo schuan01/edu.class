@@ -18,6 +18,7 @@ namespace EduClass.Entities
         public Post()
         {
             this.Replays = new HashSet<Reply>();
+            this.Files = new HashSet<File>();
         }
     
         public int Id { get; set; }
@@ -34,5 +35,7 @@ namespace EduClass.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Reply> Replays { get; set; }
         public virtual Group Group { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<File> Files { get; set; }
     }
 }
