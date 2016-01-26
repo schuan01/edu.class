@@ -17,12 +17,14 @@ namespace EduClass.Web.Controllers
 
         private static IFileServices _service;
         private static IPersonServices _servicePerson;
+        private static IPostServices _servicePost;
         private string carpetaUsuario;
 
-        public FilesLibraryController(IFileServices service, IPersonServices personService)
+        public FilesLibraryController(IFileServices service, IPersonServices personService, IPostServices postService)
         {
             _service = service;
             _servicePerson = personService;
+            _servicePost = postService;
             carpetaUsuario = "UsersFolders\\" + UserSession.GetCurrentUser().UserName;//Inicia el controlador y setea la carpeta
 
         }
@@ -31,10 +33,10 @@ namespace EduClass.Web.Controllers
         // GET: FilesLibrary
         public ActionResult Index()
         {
-            List<Entities.File> archivos = new List<Entities.File>();
+            
             //Obtengo los archivos que publico el Person
             Person p = _servicePerson.GetById(UserSession.GetCurrentUser().Id);
-            archivos = p.Files.ToList();
+            IOrderedEnumerable<Entities.File> archivos = p.Files.ToList().OrderByDescending(x => x.CreatedAt);
 
             return View(archivos);
         }
@@ -89,7 +91,7 @@ namespace EduClass.Web.Controllers
 
                         //Y creo el nuevo archivo
                         Entities.File f = new Entities.File();
-                        f.UrlFile = "~\\" + carpetaUsuario + "\\" + file.FileName;
+                        f.UrlFile = "~\\" + carpetaUsuario + "\\FileLibrary\\" + file.FileName;
                         f.Name = file.FileName;
                         f.Person = p;
                         f.CreatedAt = DateTime.Now;
@@ -138,6 +140,7 @@ namespace EduClass.Web.Controllers
                 Entities.File f = _service.GetById(fileId);
                 if (f != null)
                 {
+
                     return File(Request.MapPath(f.UrlFile), MediaTypeNames.Application.Octet, f.Name);
                 }
             }
@@ -161,12 +164,13 @@ namespace EduClass.Web.Controllers
                 Entities.File f = _service.GetById(fileId);
                 if (f != null)
                 {
-                    string fullPath = Request.MapPath(f.UrlFile);
+                    string fullPath = Server.MapPath(f.UrlFile);
                     if (System.IO.File.Exists(fullPath))
                     {
                         System.IO.File.Delete(fullPath);
                         _service.Delete(f);
-                        return RedirectToAction("Index", "FilesLibrary");
+                        MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Archivo", "Archivo borrado con éxito."));
+
                     }
                     
                 }
@@ -176,7 +180,41 @@ namespace EduClass.Web.Controllers
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al borrar el archivo."));
 
             }
-            return null;
+            return RedirectToAction("Index", "FilesLibrary");
+
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ShareFile(int fileId)
+        {
+            try
+            {
+                Entities.File f = _service.GetById(fileId);
+                if (f != null)
+                {
+                    Post post = new Post();
+                    post.Title = "Comparti algo nuevo papá";
+                    post.Content = "Carteate esos archivos";
+                    post.GroupId = UserSession.GetCurrentGroup().Id;
+                    post.PersonId = UserSession.GetCurrentUser().Id;
+                    post.PostType = new PostType();
+                    post.Files.Add(f);
+                    post.CreatedAt = DateTime.Now;
+                    post.Enabled = true;
+
+                    _servicePost.Create(post);
+                   
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al borrar el archivo."));
+
+            }
+            return RedirectToAction("Index", "FilesLibrary");
 
 
         }

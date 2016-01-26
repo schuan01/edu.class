@@ -378,6 +378,11 @@ namespace EduClass.Web.Controllers
                         a.UpdatedAt = DateTime.Now;
                         a.Person = p;
 
+                        if (System.IO.File.Exists(Server.MapPath(p.Avatar.UrlPhoto)))
+                        {
+                            return null;
+                        }
+
                         //Termino creando el Avatar
                         if (p.Avatar == null)
                         {
@@ -388,8 +393,8 @@ namespace EduClass.Web.Controllers
                         {
                             //Si ya existe, elimino la anterior. Relacion 1 - 1. Tambien elimino fisicamente
                             //TODO
-                            //FileInfo fi1 = new FileInfo(p.Avatar.UrlPhoto);
-                            //fi1.Delete();
+
+                            System.IO.File.Delete(Server.MapPath(p.Avatar.UrlPhoto));
                             _avatarService.Delete(p.Avatar);
                             
 

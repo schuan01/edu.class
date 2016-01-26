@@ -1,12 +1,10 @@
-﻿@model List<EduClass.Entities.File>
+﻿@model IOrderedEnumerable<EduClass.Entities.File>
+
 @using EduClass.Entities
 
 @{
     ViewBag.Title = "Libreria de Archivos";
 }
-
-
-
 
 <div class="row">
     <div class="col-sm-8 col-md-9 col-lg-10">
@@ -54,23 +52,46 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu pull-right fm-menu" role="menu">
-                                <li><a href="#"><i class="fa fa-share"></i> Compartir</a></li>
+
+                                @using (Html.BeginForm("ShareFile", "FilesLibrary", FormMethod.Post, htmlAttributes: new { @Id = elemento.Id }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <li><input type="hidden" name="fileId" value="@elemento.Id" /></li>
+                                    <li><button type="submit" class="btn btn-link"><i class="fa fa-share"></i>Compartir</button> </li>
+                                }
+                                
                                 @using (Html.BeginForm("DownloadFile", "FilesLibrary", FormMethod.Post, htmlAttributes: new { @Id = elemento.Id }))
                                 {
                                     @Html.AntiForgeryToken()
                                     <li><input type="hidden" name="fileId" value="@elemento.Id" /></li>
-                                    <li><button type="submit"><i class="fa fa-download"></i>Descargar</button> </li>
+                                    <li><button type="submit" class="btn btn-link"><i class="fa fa-download"></i>Descargar</button> </li>
                                 }
                                 @using (Html.BeginForm("DeleteFile", "FilesLibrary", FormMethod.Post, htmlAttributes: new { @Id = elemento.Id }))
                                 {
                                     @Html.AntiForgeryToken()
                                     <li><input type="hidden" name="fileId" value="@elemento.Id" /></li>
-                                    <li><button type="submit"><i class="fa fa-trash"></i>Borrar</button> </li>
+                                    <li><button type="submit" class="btn btn-link"><i class="fa fa-trash"></i>Borrar</button> </li>
                                 }
                             </ul>
                         </div><!-- btn-group -->
                         <div class="thmb-prev">
-                            <img src="img/images_mp4.png" class="img-responsive" alt="" />
+                        @if (System.Web.MimeMapping.GetMimeMapping(elemento.Name).Contains("image"))
+                        {
+                            <img src="@Url.Content(elemento.UrlFile)" class="img-responsive" alt="" />
+                        }
+                        else if (System.Web.MimeMapping.GetMimeMapping(elemento.Name).Contains("audio"))
+                        {
+                            <img src="@Url.Content("~/Content/images/images_mp3.png")" class="img-responsive" alt="" />
+                        }
+                        else if (System.Web.MimeMapping.GetMimeMapping(elemento.Name).Contains("office"))
+                        {
+                            <img src="@Url.Content("~/Content/images/images_doc.png")" class="img-responsive" alt="" />
+                        }
+                        else
+                        {
+                            <img src="@Url.Content("~/Content/images/images_file.png")" class="img-responsive" alt="" />
+                        }
+
                         </div>
                         <h5 class="fm-title"><a href="">@elemento.Name</a></h5>
                         <small class="text-muted">Subido: @elemento.CreatedAt</small>
@@ -83,7 +104,8 @@
     <div class="col-sm-4 col-md-3 col-lg-2">
         <div class="fm-sidebar">
 
-            <button class="btn btn-danger btn-quirk btn-block mb20">Subir Archivo</button>
+            
+            <a class="btn btn-danger btn-quirk btn-block mb20"  href="@Url.Action("UploadFile", "FilesLibrary")">Subir Archivo</a>
 
             <br>
 

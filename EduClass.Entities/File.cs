@@ -14,14 +14,20 @@ namespace EduClass.Entities
     
     public partial class File
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public File()
+        {
+            this.Posts = new HashSet<Post>();
+        }
+    
         public int Id { get; set; }
         public string UrlFile { get; set; }
         public string Name { get; set; }
         public int PersonId { get; set; }
         public System.DateTime CreatedAt { get; set; }
-        public Nullable<int> PostId { get; set; }
     
         public virtual Person Person { get; set; }
-        public virtual Post Post { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Post> Posts { get; set; }
     }
 }

@@ -2,8 +2,8 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 01/21/2016 15:48:52
--- Generated from EDMX file: C:\Users\jvolpe\Documents\Cosas\edu.class\EduClass.Entities\EduClassModel.edmx
+-- Date Created: 01/25/2016 22:17:58
+-- Generated from EDMX file: C:\Users\Schuan\Documents\edu.class\EduClass.Entities\EduClassModel.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
@@ -338,8 +338,7 @@ CREATE TABLE [dbo].[Files] (
     [UrlFile] nvarchar(max)  NOT NULL,
     [Name] nvarchar(max)  NOT NULL,
     [PersonId] int  NOT NULL,
-    [CreatedAt] datetime  NOT NULL,
-    [PostId] int  NULL
+    [CreatedAt] datetime  NOT NULL
 );
 GO
 
@@ -367,6 +366,13 @@ GO
 CREATE TABLE [dbo].[MailPerson] (
     [MailsRecieved_Id] int  NOT NULL,
     [PersonsTo_Id] int  NOT NULL
+);
+GO
+
+-- Creating table 'PostFile'
+CREATE TABLE [dbo].[PostFile] (
+    [Posts_Id] int  NOT NULL,
+    [Files_Id] int  NOT NULL
 );
 GO
 
@@ -486,6 +492,12 @@ GO
 ALTER TABLE [dbo].[MailPerson]
 ADD CONSTRAINT [PK_MailPerson]
     PRIMARY KEY CLUSTERED ([MailsRecieved_Id], [PersonsTo_Id] ASC);
+GO
+
+-- Creating primary key on [Posts_Id], [Files_Id] in table 'PostFile'
+ALTER TABLE [dbo].[PostFile]
+ADD CONSTRAINT [PK_PostFile]
+    PRIMARY KEY CLUSTERED ([Posts_Id], [Files_Id] ASC);
 GO
 
 -- --------------------------------------------------
@@ -810,19 +822,28 @@ ON [dbo].[Files]
     ([PersonId]);
 GO
 
--- Creating foreign key on [PostId] in table 'Files'
-ALTER TABLE [dbo].[Files]
-ADD CONSTRAINT [FK_PostFile]
-    FOREIGN KEY ([PostId])
+-- Creating foreign key on [Posts_Id] in table 'PostFile'
+ALTER TABLE [dbo].[PostFile]
+ADD CONSTRAINT [FK_PostFile_Post]
+    FOREIGN KEY ([Posts_Id])
     REFERENCES [dbo].[Posts]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
--- Creating non-clustered index for FOREIGN KEY 'FK_PostFile'
-CREATE INDEX [IX_FK_PostFile]
-ON [dbo].[Files]
-    ([PostId]);
+-- Creating foreign key on [Files_Id] in table 'PostFile'
+ALTER TABLE [dbo].[PostFile]
+ADD CONSTRAINT [FK_PostFile_File]
+    FOREIGN KEY ([Files_Id])
+    REFERENCES [dbo].[Files]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_PostFile_File'
+CREATE INDEX [IX_FK_PostFile_File]
+ON [dbo].[PostFile]
+    ([Files_Id]);
 GO
 
 -- Creating foreign key on [Id] in table 'Person_Teacher'
