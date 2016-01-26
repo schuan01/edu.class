@@ -25,7 +25,7 @@ namespace EduClass.Web.Controllers
             _service = service;
             _servicePerson = personService;
             _servicePost = postService;
-            carpetaUsuario = "UsersFolders\\" + UserSession.GetCurrentUser().UserName;//Inicia el controlador y setea la carpeta
+            carpetaUsuario = "~\\UsersFolders\\" + UserSession.GetCurrentUser().UserName;//Inicia el controlador y setea la carpeta
 
         }
 
@@ -91,7 +91,7 @@ namespace EduClass.Web.Controllers
 
                         //Y creo el nuevo archivo
                         Entities.File f = new Entities.File();
-                        f.UrlFile = "~\\" + carpetaUsuario + "\\FileLibrary\\" + file.FileName;
+                        f.UrlFile = carpetaUsuario + "\\FileLibrary\\" + file.FileName;
                         f.Name = file.FileName;
                         f.Person = p;
                         f.CreatedAt = DateTime.Now;
@@ -195,23 +195,25 @@ namespace EduClass.Web.Controllers
                 if (f != null)
                 {
                     Post post = new Post();
-                    post.Title = "Comparti algo nuevo papá";
-                    post.Content = "Carteate esos archivos";
+                    post.Title = "Nuevos archivos compartidos";
+                    post.Content = "Chequea los nuevos archivos que he compartido con ustedes";
                     post.GroupId = UserSession.GetCurrentGroup().Id;
                     post.PersonId = UserSession.GetCurrentUser().Id;
-                    post.PostType = new PostType();
+                    post.PostType = new PostType();//TODO tipo de Post
                     post.Files.Add(f);
                     post.CreatedAt = DateTime.Now;
                     post.Enabled = true;
 
                     _servicePost.Create(post);
-                   
+
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Post creado", "Has compartido correctamente los archivos"));
+
 
                 }
             }
             catch (Exception ex)
             {
-                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al borrar el archivo."));
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al compartir el archivo."));
 
             }
             return RedirectToAction("Index", "FilesLibrary");

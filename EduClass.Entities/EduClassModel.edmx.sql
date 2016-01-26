@@ -2,8 +2,8 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 01/25/2016 22:17:58
--- Generated from EDMX file: C:\Users\Schuan\Documents\edu.class\EduClass.Entities\EduClassModel.edmx
+-- Date Created: 01/26/2016 10:27:55
+-- Generated from EDMX file: C:\Users\jvolpe\Documents\Cosas\edu.class\EduClass.Entities\EduClassModel.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
@@ -83,8 +83,11 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_PersonFile]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Files] DROP CONSTRAINT [FK_PersonFile];
 GO
-IF OBJECT_ID(N'[dbo].[FK_PostFile]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Files] DROP CONSTRAINT [FK_PostFile];
+IF OBJECT_ID(N'[dbo].[FK_PostFile_Post]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PostFile] DROP CONSTRAINT [FK_PostFile_Post];
+GO
+IF OBJECT_ID(N'[dbo].[FK_PostFile_File]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PostFile] DROP CONSTRAINT [FK_PostFile_File];
 GO
 IF OBJECT_ID(N'[dbo].[FK_Teacher_inherits_Person]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Person_Teacher] DROP CONSTRAINT [FK_Teacher_inherits_Person];
@@ -153,6 +156,9 @@ IF OBJECT_ID(N'[dbo].[GroupStudent]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[MailPerson]', 'U') IS NOT NULL
     DROP TABLE [dbo].[MailPerson];
+GO
+IF OBJECT_ID(N'[dbo].[PostFile]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[PostFile];
 GO
 
 -- --------------------------------------------------

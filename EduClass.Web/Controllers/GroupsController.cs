@@ -195,8 +195,8 @@ namespace EduClass.Web.Controllers
 
 
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Grupo", "El grupo fue creado correctamente"));
-                    return RedirectToAction("Create", "Groups");
-                    
+                    return RedirectToAction("Index", "Groups");
+
 
                 }
                 catch (Exception ex)
@@ -254,7 +254,7 @@ namespace EduClass.Web.Controllers
                     _serviceGroup.Update(group);
 
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Grupo", "El grupo fue editado correctamente"));
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", "Groups");
                 }
                 catch (Exception ex)
                 {

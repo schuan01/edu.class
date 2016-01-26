@@ -34,16 +34,26 @@ namespace EduClass.Web.Controllers
 
             if (id == 0){
 
-                var groups = _group.GetActiveGroups(UserSession.GetCurrentUser());
+                var group = UserSession.GetCurrentGroup();
+
+                if (group != null)
+                {
+                    foreach (var item in group.Posts)
+                    {
+                        postList.Add(item);
+                    }
+                }
+
+                //var groups = _group.GetActiveGroups(UserSession.GetCurrentUser());
                 
-                if (groups.Count() != 0)
+                /*if (groups.Count() != 0)
 	            {
                     //TODO: VER forma de union
                     foreach (var item in groups)
                     {
                         postList.Union(item.Posts);
                     }
-	            }
+	            }*/
             }
             else
             {

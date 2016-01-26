@@ -97,6 +97,18 @@
             <div class="panel-body">
                 <strong>@item.Title</strong>
                 <p>@item.Content</p>
+                <ul class="list-unstyled list-attachments">
+                    @foreach (var archivo in item.Files)
+                    {
+                        using (Html.BeginForm("DownloadFile", "FilesLibrary", FormMethod.Post, htmlAttributes: new { @Id = archivo.Id }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <li><input type="hidden" name="fileId" value="@archivo.Id" /></li>
+                            <li><i class="fa fa-file"></i><button type="submit" class="btn btn-link">@archivo.Name</button> </li>
+                        }
+                   
+                    }
+                </ul>
             </div>
             <div class="panel-footer">
                 <ul class="list-inline">
