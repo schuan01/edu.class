@@ -12,21 +12,22 @@ namespace EduClass.Web.Infrastructure.ViewModels
 
         [Required]
         [MaxLength(100)]
-        public string Name { get; set; }
+        public string Title { get; set; }
 
         [Required]
         public string Description { get; set; }
 
         [Required]
-        public System.DateTime Date { get; set; }
+        public string Start { get; set; }
 
         [Required]
-        public int EventTypeId { get; set; }
-        
-        [Required]
-        public System.DateTime CreatedAt { get; set; }
+        public string End { get; set; }
 
-        public Nullable<System.DateTime> UpdatedAt { get; set; }
+        [Required]
+        public string EventType { get; set; }
+
+        [Required]
+        public int CalendarId { get; set; }
 
         public bool Enabled { get; set; }
     }

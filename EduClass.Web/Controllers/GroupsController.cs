@@ -20,13 +20,17 @@ namespace EduClass.Web.Controllers
     {
         private static IGroupServices _serviceGroup;
         private static IPersonServices _servicePerson;
+        private static ICalendarServices _serviceCalendar;
+
         private const int defaultPageSize = 10;
         
 
-        public GroupsController(IGroupServices serviceGroup, IPersonServices servicePerson)
+
+        public GroupsController(IGroupServices serviceGroup, IPersonServices servicePerson, ICalendarServices serviceCalendar)
         {
             _serviceGroup = serviceGroup;
             _servicePerson = servicePerson;
+            _serviceCalendar = serviceCalendar;
         }
 
         public ActionResult Index()
@@ -192,11 +196,19 @@ namespace EduClass.Web.Controllers
                     group.Key = Security.EncodePasswordBase64().Substring(0,8);
 
                     _serviceGroup.Create(group);
+                    
+                    var calendar = new Calendar() { 
+                        Description = string.Format("Calendar - {0}", group.Name),
+                        Group = group,
+                        CreatedAt = DateTime.Now,
+                        Enabled = true
+                    };
 
+                    _serviceCalendar.Create(calendar);
 
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Grupo", "El grupo fue creado correctamente"));
                     return RedirectToAction("Index", "Groups");
-
+                    
 
                 }
                 catch (Exception ex)

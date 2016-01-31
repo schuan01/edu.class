@@ -18,7 +18,8 @@ namespace EduClass.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public EventType EventType { get; set; }
-        public System.DateTime Date { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public System.DateTime EndDate { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public int CalendarId { get; set; }

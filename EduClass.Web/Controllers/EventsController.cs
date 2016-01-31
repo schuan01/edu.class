@@ -10,6 +10,8 @@ using EduClass.Web.Infrastructure;
 using EduClass.Web.Infrastructure.ViewModels;
 using EduClass.Entities;
 using EduClass.Web.Infrastructure.Mappers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace EduClass.Web.Controllers
 {
@@ -25,83 +27,54 @@ namespace EduClass.Web.Controllers
 
         public ActionResult Index()
         {
-            var list = _service.GetAll().OrderBy(a => a.Name);
+            var list = _service.GetAll().Where(x => x.Enabled).OrderBy(a => a.Name);
 
+            ViewBag.EventTypeList = Enum.GetValues(typeof(EventType)).Cast<EventType>().ToList();
+            ViewBag.CalendarId = 1;
             return View(list);
         }
 
-        // GET: Event
-        [HttpGet]
-        public ActionResult Create()
-        {
-            return View(new EventViewModel());
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name, Description, Date, EventTypeId")]EventViewModel eventVm) {
+        public ActionResult AddOrModifyEvent([Bind(Include = "Id, Title, Description, Start, End, EventType, CalendarId")]EventViewModel eventVm)
+        {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    
+                    if (eventVm.Id == 0)
+                    {
                         //Execute the mapping 
-                        var Event = AutoMapper.Mapper.Map<EventViewModel, Event>(eventVm);
+                        var _event = AutoMapper.Mapper.Map<EventViewModel, Event>(eventVm);
+ 
+                        _event.CreatedAt = DateTime.Now;
+                        _event.Enabled = true;
 
-                        
-                        Event.CreatedAt = DateTime.Now;
-                        Event.Enabled = true;
+                        _service.Create(_event);
+                    }
+                    else
+                    {
+                        var eEvent = _service.GetById(eventVm.Id);
 
-                        _service.Create(Event);
+                        var _event = AutoMapper.Mapper.Map<EventViewModel, Event>(eventVm, eEvent);
 
-                        //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario creado", string.Format("El usuario {0} fue creado con éxito", eventVm.EventName)));
+                        _event.UpdateAt = DateTime.Now;
+                        _event.Enabled = true;
 
-                        return RedirectToAction("Index");
-                   
-                }
-                catch (Exception ex)
-                {
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al crear usuario", typeof(EventController), ex));
-                }
-            }
+                        _service.Update(_event);
+                    }
 
-            return View(eventVm);
-        }
-
-        [HttpGet]
-        public ActionResult Edit(int id = 0)
-        {
-            if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
-            var Event = AutoMapper.Mapper.Map<Event, EventViewModel>(_service.GetById(id));
-
-            return View(Event);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Name, Description, Date, EventTypeId")]EventViewModel eventVm)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    //Execute the mapping 
-                    var Event = AutoMapper.Mapper.Map<EventViewModel, Event>(eventVm);
-                   
-
-                    _service.Create(Event);
-
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", eventVm.EventName)));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Éxito", string.Format("El evento {0} fue creado con éxito", eventVm.Title)));
 
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al modificar usuario", typeof(EventController), ex));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al crear evento"));
                 }
             }
 
-            return View(eventVm);
+            return RedirectToAction("Index");
         }
 
         public ActionResult Disable(int id = 0)
@@ -112,8 +85,8 @@ namespace EduClass.Web.Controllers
 
             if (Event == null) { return HttpNotFound(); }
 
-            if (Event.Enabled) Event.Enabled = true;
-            else Event.Enabled = false;
+            if (Event.Enabled) Event.Enabled = false;
+            else Event.Enabled = true;
 
             
 
@@ -123,6 +96,26 @@ namespace EduClass.Web.Controllers
             //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", Event.Name)));
 
             return RedirectToAction("Index");
+        }
+
+        public JsonResult GetAllEvents(int idCalendar = 0) 
+        {
+            if (idCalendar == 0) { return Json("Error", JsonRequestBehavior.AllowGet); }
+            
+            var eventList = _service.GetAll().OrderBy(a => a.Name);
+
+            var returnedList = (from e in eventList
+                                select new {
+                                    id = e.Id,
+                                    title = e.Name,
+                                    description = e.Description,
+                                    start = e.StartDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+                                    end = e.EndDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+                                    eventType = e.EventType.ToString(),
+                                    calendarId = e.CalendarId
+                                });
+
+            return Json(returnedList, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -241,7 +241,8 @@
     <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="250" />
     <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
     <Property Name="EventType" Type="int" Nullable="false" />
-    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="StartDate" Type="datetime" Nullable="false" />
+    <Property Name="EndDate" Type="datetime" Nullable="false" />
     <Property Name="CreatedAt" Type="datetime" Nullable="false" />
     <Property Name="UpdateAt" Type="datetime" Nullable="true" />
     <Property Name="CalendarId" Type="int" Nullable="false" />
@@ -927,7 +928,8 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="250" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="EventType" Type="EduClassModel.EventType" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Calendar" Relationship="EduClassModel.CalendarEvent" FromRole="Event" ToRole="Calendar" />
@@ -1327,7 +1329,8 @@
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Description" ColumnName="Description" />
           <ScalarProperty Name="EventType" ColumnName="EventType" />
-          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
           <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
           <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
           <ScalarProperty Name="CalendarId" ColumnName="CalendarId" />

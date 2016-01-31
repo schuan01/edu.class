@@ -1,0 +1,200 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+@section styles{
+    
+    <link href="~/Content/fullcalendar.min.css" rel="stylesheet" />
+    <link href="~/Content/fullcalendar.print.css" rel="stylesheet" media='print' />
+}
+
+<div class="row">
+    <div class="col-md-1 pull-right">
+        <button type="button" class="btn btn-primary pull-right" style="margin: 5px" data-toggle="modal" data-target="#modalEventView">Agregar evento</button>
+    </div>
+</div>
+<div id='calendar'></div>
+
+<!--MODAL VIEW EVENT-->
+<div class="modal bounceIn animated" id="modalEventView" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("AddOrModifyEvent", "Events"))
+            {
+                @Html.AntiForgeryToken()
+            
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Ver evento</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+
+                        <input type="hidden" class="evId" name="Id" value="0" />
+                        <input type="hidden" id="evCalendarId" name="CalendarId" value="@ViewBag.CalendarId" />
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="h5 col-md-4">Titulo</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="evTitle" name="Title" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="h5 col-md-4">Tipo de evento</label>
+                                    <div class="col-md-8">
+                                        <select id="evddlEventType" name="EventType" class="form-control" data_plugin="select2">
+                                            <option value="0">-- Seleccionar --</option>
+                                            @{
+                                                var index = 1;
+                                                foreach (EduClass.Entities.EventType item in ((List<EduClass.Entities.EventType>)ViewBag.EventTypeList))
+                                                {
+                                                                    <option value="@index">@item.ToString()</option>
+                                                    index++;
+                                                }
+                                            }
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="h5 col-md-4">Comienza</label>
+                                    <div class="col-md-8">
+                                        <div class='input-group date evControl'>
+                                            <input type="text" class="form-control" id="evStart" name="Start" />
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="h5 col-md-4">Finaliza</label>
+                                    <div class="col-md-8">
+                                        <div class='input-group date evControl'>
+                                            <input type="text" class="form-control" id="evEnd" name="End" />
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label class="h5 col-md-2">Descripción</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="evDescription" name="Description" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @if(EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser() is EduClass.Entities.Teacher)
+                    {
+                        <a href="#" class="btn btn-danger pull-left" id="btnDisable"><i class="fa fa-trash"></i> Borrar</a>
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    }
+
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            }
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div>
+
+<form action="@Url.Action("Disable", "Events")" method="post" id="formDisable">
+    <input type="hidden" class="evId" name="id" value="0" />
+</form>
+
+@section scripts
+{
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/fullcalendar.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/lang-all.js"></script>
+    <script type="text/javascript">
+
+        var isProfessor = @Html.Raw((EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser() is EduClass.Entities.Teacher).ToString().ToLower());
+        var calendarId = @Html.Raw(ViewBag.CalendarId);
+        
+
+        $(document).ready(function () {
+
+
+            $('#btnDisable').click(function(){
+                $('#formDisable').submit();
+            });
+
+            $('.evControl').datetimepicker({
+                locale: 'es'
+            });
+
+            getEvents(function(data){
+            
+                $('#calendar').fullCalendar({
+                    lang: 'es',
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'agendaWeek, month'
+                    },
+                    //defaultDate: '2014-06-12',
+                    defaultView: 'agendaWeek',
+                    editable: true,
+                    eventClick: function(calEvent, jsEvent, view) {
+
+
+                        $('.evId').val(calEvent.id);
+                        $('#evTitle').val(calEvent.title);
+                        $('#evDescription').val(calEvent.description);
+                        $('#evStart').val(calEvent.start.format('DD/MM/YYYY HH:mm:00'));
+                        $('#evEnd').val(calEvent.end.format('DD/MM/YYYY HH:mm:00'));
+                        $('#evEventType').val(calEvent.eventType);
+
+                        if (!isProfessor) {
+
+                            $('#evTitle').attr('disabled','disabled');
+                            $('#evDescription').attr('disabled','disabled');
+                            $('#evStart').attr('disabled','disabled');
+                            $('#evEnd').attr('disabled','disabled');
+                            $('#evddlEventType').attr('disabled','disabled');
+                        }
+                    
+                        $('#modalEventView').modal('show');
+
+                        // change the border color just for fun
+                        $(this).css('border-color', 'blue');
+
+                    },
+                    events: data
+                });
+
+            });
+        });
+
+        function getEvents(callback)
+        {
+            $.ajax({
+                url: '@Url.Action("GetAllEvents")',
+                data: { idCalendar: calendarId },
+                type: "GET",
+                success: function (data) {
+                    callback(data);
+                },
+                error: function(e){
+                    alert('Error');
+                }
+            })
+        }
+    </script>
+}

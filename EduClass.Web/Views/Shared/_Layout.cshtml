@@ -11,6 +11,7 @@
     <title>@ViewBag.Title | Edu.Class</title>
     @Styles.Render("~/Content/template")
     @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("styles", required: false)
 </head>
 <body>
     <header>
@@ -88,5 +89,14 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/template")
     @RenderSection("scripts", required: false)
+
+    @{var sessionMessage = EduClass.Web.Infrastructure.Sessions.MessageSession.GetMessage(); }
+    <script type="text/javascript">
+        var message = "@Html.Raw(sessionMessage.ToString())";
+        if (message != "") {
+
+            showMessageJS(message);
+        }
+    </script>
 </body>
 </html>

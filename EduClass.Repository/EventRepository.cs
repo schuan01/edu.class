@@ -10,5 +10,9 @@ namespace EduClass.Repository
         public EventRepository(DbContext context) : base(context)
         { }
 
+        public override Event GetById(int id)
+        {
+            return dbSet.FirstOrDefault(x => x.Id == id);
+        }
     }
 }
