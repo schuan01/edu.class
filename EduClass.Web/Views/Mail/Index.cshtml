@@ -78,7 +78,7 @@
                     <h3 class="nomail">Ningun email seleccionado</h3>
                 @foreach (var elemento in Model)
                 {
-                    <div class="mailcontent hide" data-id= "@elemento.Id" id="mailId" value="@elemento.Id">
+                    <div class="mailcontent hide" data-id= "@elemento.Id" id="@elemento.Id" value="@elemento.Id">
                    
                         <div class="email-header">
                             <div class="pull-right">
@@ -91,8 +91,13 @@
                                     <ul role="menu" class="dropdown-menu dm-icon pull-right">
                                         <li><a href="SendEmail"><i class="fa fa-reply-all"></i> Responder a todos</a></li>
                                         <li><a href="SendEmail"><i class="fa fa-arrow-right"></i> Reenviar</a></li>
-                                        <li><a href="#"><i class="fa fa-print"></i> Imprimir</a></li>
-                                        <li><a id="btnDelete"><i class="fa fa-trash"></i> Delete Message</a></li>
+                                        <li><button type="button" class="btn btn-link" onclick="PrintElem('#@elemento.Id')"><i class="fa fa-print"></i> Imprimir</button></li>
+                                        @using (Html.BeginForm("DeleteMail", "Mail", FormMethod.Post, htmlAttributes: new { @Id = "" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <li><input type="hidden" name="mailId" value="@elemento.Id" /></li>
+                                            <li><button type="submit" class="btn btn-link"><i class="fa fa-trash"></i>  Borrar Mensaje</button> </li>
+                                        }
                                     </ul>
                                 </div>
 
@@ -115,7 +120,7 @@
                                         
                                     </a>
                                 </div>
-                                <div class="media-body">
+                                <div class="media-body" id="@elemento.Id">
                                     <h4 class="media-heading">@elemento.PersonFrom.FirstName</h4>
                                     para: mi, 
                                     @foreach (var persona in elemento.PersonsTo)
@@ -145,12 +150,11 @@
                 }
                 
                 
-                @using (Html.BeginForm("ReplyEmail", "Email", FormMethod.Post, htmlAttributes: new { @Id = "" }))
+                @using (Html.BeginForm("ReplyMail", "Mail", FormMethod.Post, htmlAttributes: new { @Id = "" }))
                 {
                     @Html.AntiForgeryToken()
 
-                    <input type="text" id="" />
-                    <input type="text" id="valorId" hidden />
+                    <input type="text" id="valorId" name="valorId" value="" hidden />
                      
                     <div class="form-group email-editor">
                           <div>Responder solo al Remitente</div>
@@ -173,6 +177,32 @@
 }
 
 <script src="~/Scripts/app/helpersSite.js"></script>
+<script type="text/javascript">
+
+    function PrintElem(elem)
+    {
+        Popup($(elem).html());
+    }
+
+    function Popup(data)
+    {
+        var mywindow = window.open('', 'Mensaje', 'height=400,width=600');
+        mywindow.document.write('<html><head><title>Mensaje</title>');
+        /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+        mywindow.document.write('</head><body >');
+        mywindow.document.write(data);
+        mywindow.document.write('</body></html>');
+
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10
+
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+    }
+
+</script>
 <script>
 
 $(document).ready(function()
@@ -246,23 +276,6 @@ $(document).ready(function()
       //Seteo el idMail actual en un Input oculto
       $('#valorId').text(idMail);
       $('#valorId').val(idMail);
-
-
-      //TODO
-      $('#btnDelete').click(function(e) {
-          e.preventDefault();
-
-          
-
-          var data = $('#mailId').attr('id');
-
-          $.ajax({
-              url: '@Url.Action("DeleteMail", "Mail")',
-              type: 'POST',
-              contentType: 'application/json;',
-              data: JSON.stringify({ id: data })
-          });
-      });
 
   });
 

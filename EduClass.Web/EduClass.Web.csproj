@@ -596,6 +596,7 @@
     <Content Include="Views\Tests\Create.cshtml" />
     <Content Include="Views\Groups\Index.cshtml" />
     <Content Include="Views\Groups\Edit.cshtml" />
+    <Content Include="Views\Groups\InviteStudentByMail.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\SaveUploadedFile.cshtml" />
     <Content Include="Views\Users\Me.cshtml" />
@@ -604,6 +605,7 @@
     <Content Include="Views\Users\ChangePassword.cshtml" />
     <Content Include="Views\FilesLibrary\Index.cshtml" />
     <Content Include="Views\FilesLibrary\UploadFile.cshtml" />
+    <Content Include="Views\UserMailer\InvitedToGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

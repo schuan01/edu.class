@@ -3,7 +3,7 @@
 {
     var texto = System.Text.RegularExpressions.Regex.Replace(contenido, @"<(.|\n)*?>", string.Empty);
     
-    if (contenido.Length > 100)
+    if (texto.Length > 100)
     {
             <p>@texto.Substring(0, 100)</p>
     }

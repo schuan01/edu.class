@@ -23,6 +23,9 @@ namespace EduClass.Web.Infrastructure.ViewModels
         [Display(Name = "Descripcion")]
         public string Description { get; set; }
 
+        [Display(Name = "Remitente")]
+        public string PersonEmailFrom { get; set; }
+
         [Required]
         public System.DateTime CreatedAt { get; set; }
 

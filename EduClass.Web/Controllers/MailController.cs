@@ -6,6 +6,7 @@ using System.Linq;
 using EduClass.Web.Infrastructure.ViewModels;
 using EduClass.Entities;
 using System.Web;
+using System.Collections.Generic;
 
 namespace EduClass.Web.Controllers
 {
@@ -51,14 +52,23 @@ namespace EduClass.Web.Controllers
         [HttpGet]
         public ActionResult SendEmail()
         {
-            ViewBag.FromUser = UserSession.GetCurrentUser().FirstName + UserSession.GetCurrentUser().LastName;
-            ViewBag.PersonsTo = new SelectList(_personService.GetAll().Where(g => g.Enabled == true && g.Id != UserSession.GetCurrentUser().Id).ToList()
-                .Select(s => new
-                {
-                    Id = s.Id,
-                    NombreCompleto = s.FirstName +" "+ s.LastName
-                })
-            , "Id", "NombreCompleto");
+            try
+            {
+                ViewBag.FromUser = UserSession.GetCurrentUser().FirstName + UserSession.GetCurrentUser().LastName;
+
+                //ViewBag.PersonsTo = new SelectList(_personService.GetAll().Where(g => g.Enabled == true && g.Id != UserSession.GetCurrentUser().Id && (UserSession.GetCurrentGroup().Students.Any(x => x.Id == g.Id) || UserSession.GetCurrentGroup().Teacher.Id == g.Id)).ToList()
+                ViewBag.PersonsTo = new SelectList(_personService.GetAll().Where(g => g.Enabled == true && g.Id != UserSession.GetCurrentUser().Id).ToList()
+                    .Select(s => new
+                    {
+                        Id = s.Id,
+                        NombreCompleto = s.FirstName + " " + s.LastName
+                    })
+                , "Id", "NombreCompleto");
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error abrir SendMail."));
+            }
 
             return View(new MailViewModel());
         }
@@ -116,12 +126,92 @@ namespace EduClass.Web.Controllers
             return View(mailVm);
         }
 
-        //TODO
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteMail(int id)
+        [ValidateInput(false)]
+        public ActionResult ReplyMail(int valorId, string Mensaje)
         {
-            return View();
+
+
+            try
+            {
+                if (valorId != 0)
+                {
+                    Mail mailAnterior = _service.GetById(valorId);
+                    Mail mailNuevo = new Mail();
+                    mailNuevo.Subject = mailAnterior.Subject;
+                    Mensaje = Mensaje + "<br><hr><p><b>Mensaje anterior de " + mailAnterior.PersonFrom.FirstName +" "+ mailAnterior.PersonFrom.LastName +"</b></p>" + HttpUtility.HtmlDecode(mailAnterior.Description);
+                    mailNuevo.Description = HttpUtility.HtmlEncode(Mensaje);
+                    mailNuevo.PersonFromId = UserSession.GetCurrentUser().Id;
+                    mailNuevo.CreateAt = DateTime.Now;
+                    mailNuevo.ReadAt = null;
+                    mailNuevo.Enabled = true;
+                    mailNuevo.PersonsTo.Add(mailAnterior.PersonFrom);//Solo al remitente
+
+                    _service.Create(mailNuevo);
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Envio Exitoso", "El Email fue enviado correctamente"));
+                }
+                else
+                {
+                    throw new Exception("No se ha seleccionado ningun mensaje");
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al enviar el correo."));
+            }
+
+            return RedirectToAction("Index", "Mail");
+        }
+
+        //BORRA DEFINITIVO RECIBIDOS
+        //SOLO BORRA DE LA COLECCION PERTINETE
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteMail(int mailId)
+        {
+            try
+            {
+                if (mailId != 0)
+                {
+                    Mail m = _service.GetById(mailId);
+                    
+                    Person p = _personService.GetById(UserSession.GetCurrentUser().Id);
+
+                    if (p.MailsRecieved.Any(x => x.Id == m.Id))
+                    {
+                        p.MailsRecieved.Remove(p.MailsRecieved.First(x => x.Id == m.Id));
+                        _personService.Update(p);
+                    }
+                    //NO PODES BORRAR ALGO ENVIADO POR LA RELACION 1 - N.
+                    /*else if (p.MailsSends.Any(x => x.Id == m.Id))
+                    {
+                        p.MailsSends.Remove(p.MailsSends.First(x => x.Id == m.Id));
+                        _personService.Update(p);
+                    }*/
+                    else
+                    {
+                        throw new Exception("El mail no pertence a tus Enviados/Recibidos");
+                    }
+
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Borrado Exitoso", "El mail fue borrado correctamente"));
+
+                }
+                else
+                {
+                    throw new Exception("Error al borrar el mail");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al borrar  el correo."));
+            }
+
+            return RedirectToAction("Index", "Mail");
         }
     }
 }

@@ -12,6 +12,7 @@ using EduClass.Entities;
 using EduClass.Web.Infrastructure.Mappers;
 using System.Collections.Generic;
 using MvcPaging;
+using EduClass.Web.Mailers;
 
 namespace EduClass.Web.Controllers
 {
@@ -162,7 +163,66 @@ namespace EduClass.Web.Controllers
             return RedirectToAction("JoinStudent", "Groups");
         }
 
+        [HttpGet]
+        public ActionResult InviteStudentByMail(string key)
+        {
+            try
+            {
+                Person student = null;
+                int idStudent = UserSession.GetCurrentUser().Id;//Obtengo el usuario Actual
 
+                var group = _serviceGroup.GetByKey(key);//Obtengo el Grupo del Id pasado por parametro
+                student = _servicePerson.GetById(idStudent);
+
+                if (group == null || student == null) { return HttpNotFound(); }
+
+                if (group.Students.FirstOrDefault(st => st.Id == student.Id) != null)//Si ya existe en la collecion
+                {
+                    throw new Exception("El usuario actual ya existe en el grupo seleccionado");
+                }
+
+                if (student is Student)//Solo aplica si es tipo Student
+                {
+                    group.Students.Add((Student)student);
+                    _serviceGroup.Update(group);
+
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Unirse", "El usuario actual se agrego correctamente"));
+                }
+                else
+                    throw new Exception("El usuario actual no es un estudiante");
+
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult InviteStudentByMail(FormCollection formCollection)
+        {
+            try
+            {
+                String valores = formCollection["select6"];
+                List<string> mails = valores.Split(',').ToList<string>();
+                mails.Reverse();
+
+                var uMailer = new UserMailer();
+
+                Group g = UserSession.GetCurrentGroup();
+                var urlGroup = Url.Action("InviteStudentByMail", "Groups", new { key = g.Key }, Request.Url.Scheme);
+                uMailer.InviteUserToGroup(mails, g, urlGroup).Send(); 
+
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+            }
+
+            return RedirectToAction("Index");
+        }
 
 
         [HttpGet]

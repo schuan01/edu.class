@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 01/26/2016 10:27:55
+-- Date Created: 02/01/2016 10:51:52
 -- Generated from EDMX file: C:\Users\jvolpe\Documents\Cosas\edu.class\EduClass.Entities\EduClassModel.edmx
 -- --------------------------------------------------
 
@@ -273,7 +273,8 @@ CREATE TABLE [dbo].[Events] (
     [Name] nvarchar(250)  NOT NULL,
     [Description] nvarchar(max)  NOT NULL,
     [EventType] int  NOT NULL,
-    [Date] datetime  NOT NULL,
+    [StartDate] datetime  NOT NULL,
+    [EndDate] datetime  NOT NULL,
     [CreatedAt] datetime  NOT NULL,
     [UpdateAt] datetime  NULL,
     [CalendarId] int  NOT NULL,

@@ -131,7 +131,7 @@ namespace EduClass.Web.Controllers
 
                         MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Cambio de contraseña", "Su contraseña fue modificada con éxito."));
 
-                        return RedirectToAction("Index", "User");
+                        return RedirectToAction("Me", "Users");
                     }
                     else
                     {
@@ -329,7 +329,7 @@ namespace EduClass.Web.Controllers
             return View();
         }
 
-        //TODO
+
         [HttpPost]
         public ActionResult ChangeAvatar(int id= 0)
         {
@@ -377,11 +377,7 @@ namespace EduClass.Web.Controllers
                         a.UrlPhoto = "~\\Content\\avatars\\" + UserSession.GetCurrentUser().UserName+"\\"+file.FileName;
                         a.UpdatedAt = DateTime.Now;
                         a.Person = p;
-
-                        if (System.IO.File.Exists(Server.MapPath(p.Avatar.UrlPhoto)))
-                        {
-                            return null;
-                        }
+                        
 
                         //Termino creando el Avatar
                         if (p.Avatar == null)

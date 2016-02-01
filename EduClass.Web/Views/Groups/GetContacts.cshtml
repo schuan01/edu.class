@@ -7,6 +7,15 @@
 }
 
 <h2>Contactos</h2>
+<head>
+    <style>
+        #imagenes{
+        width:200px;
+        height:200px;
+}
+    </style>
+</head>
+
 
 @using (Html.BeginForm())
 {
@@ -67,13 +76,13 @@
                                         <a href="#" class="panel-profile-photo">
                                         @try
                                         {
-                                            if (UserSession.GetCurrentUser().Avatar == null || UserSession.GetCurrentUser().Avatar.UrlPhoto == "")
+                                            if (p.Avatar == null || p.Avatar.UrlPhoto == "")
                                             {
-                                                    <img class="img-circle" src="@Url.Content("~/Content/images/default.png")" alt="" />
+                                                    <img class="img-circle" id="imagenes" src="@Url.Content("~/Content/images/default.png")" alt="" />
                                             }
                                             else
                                             {
-                                                <img class="img-circle" src="@Url.Content(UserSession.GetCurrentUser().Avatar.UrlPhoto)" alt="">
+                                                <img class="img-circle" id="imagenes" src="@Url.Content(p.Avatar.UrlPhoto)" alt="">
                                                 
                                             }
 
@@ -81,7 +90,7 @@
                                         }
                                         catch (Exception ex)
                                         {
-                                            <img class="img-circle" src="@Url.Content("~/Content/images/default.png")" alt="">
+                                            <img class="img-circle" id ="imagenes"src="@Url.Content("~/Content/images/default.png")" alt="">
                                         }
                                             
                                         </a>
@@ -134,9 +143,6 @@
     </div><!-- contentpanel -->
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 @Scripts.Render("~/bundles/jquery")
 @{var sessionMessage = EduClass.Web.Infrastructure.Sessions.MessageSession.GetMessage(); }
 <script src="~/Scripts/app/helpersSite.js"></script>

@@ -25,7 +25,7 @@ namespace EduClass.Web.Controllers
             _service = service;
             _servicePerson = personService;
             _servicePost = postService;
-            carpetaUsuario = "~\\UsersFolders\\" + UserSession.GetCurrentUser().UserName;//Inicia el controlador y setea la carpeta
+            carpetaUsuario = "UsersFolders\\" + UserSession.GetCurrentUser().UserName;//Inicia el controlador y setea la carpeta
 
         }
 
@@ -91,7 +91,7 @@ namespace EduClass.Web.Controllers
 
                         //Y creo el nuevo archivo
                         Entities.File f = new Entities.File();
-                        f.UrlFile = carpetaUsuario + "\\FileLibrary\\" + file.FileName;
+                        f.UrlFile = "~\\"+carpetaUsuario + "\\FileLibrary\\" + file.FileName;
                         f.Name = file.FileName;
                         f.Person = p;
                         f.CreatedAt = DateTime.Now;
@@ -172,7 +172,15 @@ namespace EduClass.Web.Controllers
                         MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Archivo", "Archivo borrado con éxito."));
 
                     }
-                    
+                    else
+                    {
+                        MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Archivo", "El archivo no existe."));
+                    }
+
+                }
+                else
+                {
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Archivo", "El archivo no existe."));
                 }
             }
             catch(Exception ex)
