@@ -28,15 +28,15 @@ namespace EduClass.Web.Controllers
             
             var list = _service.GetMailsReceived(UserSession.GetCurrentUser()).OrderByDescending(a => a.CreateAt);
 
-            if(type == "Enviados")
+            if (type == "Enviados")
             {
                 list = _service.GetMailsSent(UserSession.GetCurrentUser()).OrderByDescending(a => a.CreateAt);//Obtengo enviados
                 
+                    
             }
             else if(type == "Borrados")
             {
                 list = _service.GetMailsDeleted(UserSession.GetCurrentUser()).OrderByDescending(a => a.CreateAt);//Obtengo los borrados
-                
             }
 
             foreach (var v in list)
@@ -128,6 +128,32 @@ namespace EduClass.Web.Controllers
 
 
         [HttpPost]
+        public ActionResult ReadMail(int id)
+        {
+
+            try
+            {
+                Mail m = _service.GetById(id);
+                Person p = _personService.GetById(UserSession.GetCurrentUser().Id);
+
+                if (p.MailsRecieved.Any(x => x.Id == m.Id))//Siempre y cuando el mail este en recibidos
+                {
+                    m.ReadAt = DateTime.Now;
+                    _service.Update(m);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al leer el correo."));
+
+            }
+
+            return RedirectToAction("Index", "Mail");
+        }
+
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
         public ActionResult ReplyMail(int valorId, string Mensaje)
@@ -140,7 +166,7 @@ namespace EduClass.Web.Controllers
                 {
                     Mail mailAnterior = _service.GetById(valorId);
                     Mail mailNuevo = new Mail();
-                    mailNuevo.Subject = mailAnterior.Subject;
+                    mailNuevo.Subject = mailAnterior.Subject;//Mismo Asunto
                     Mensaje = Mensaje + "<br><hr><p><b>Mensaje anterior de " + mailAnterior.PersonFrom.FirstName +" "+ mailAnterior.PersonFrom.LastName +"</b></p>" + HttpUtility.HtmlDecode(mailAnterior.Description);
                     mailNuevo.Description = HttpUtility.HtmlEncode(Mensaje);
                     mailNuevo.PersonFromId = UserSession.GetCurrentUser().Id;

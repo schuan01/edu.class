@@ -49,7 +49,7 @@
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading">@UserSession.GetCurrentUser().FirstName @UserSession.GetCurrentUser().LastName  </h4>
+                        <h4 class="media-heading">@UserSession.GetCurrentUser().FirstName @UserSession.GetCurrentUser().LastName<a data-toggle="collapse" data-target="#loguserinfo" class="pull-right"><i class="fa fa-angle-down"></i></a>  </h4>
                         @if (@UserSession.GetCurrentUser() is Student)
                         {
                             <span>Estudiante</span>
@@ -61,6 +61,24 @@
 
                     </div>
                 </div><!-- leftpanel-profile -->
+
+                <div class="leftpanel-userinfo collapse" id="loguserinfo">
+                    <h5 class="sidebar-title">Contacto</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <label class="pull-left">Email</label>
+                            <span class="pull-right">@UserSession.GetCurrentUser().Email</span>
+                        </li>
+                        <li class="list-group-item">
+                            <label class="pull-left">Cumpleaños</label>
+                            <span class="pull-right">@UserSession.GetCurrentUser().Birthday</span>
+                        </li>
+                        <li class="list-group-item">
+                            <label class="pull-left">Cédula</label>
+                            <span class="pull-right">@UserSession.GetCurrentUser().IdentificationCard</span>
+                        </li>
+                    </ul>
+                </div><!-- leftpanel-userinfo -->
 
                 <div class="tab-content">
 

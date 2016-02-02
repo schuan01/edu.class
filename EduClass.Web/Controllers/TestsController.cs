@@ -52,7 +52,7 @@ namespace EduClass.Web.Controllers
                     //Execute the mapping 
                     var test = AutoMapper.Mapper.Map<TestViewModel, Test>(testVm);
 
-                    test.GroupId = 1;//TODO GET CURRENT GROUP
+                    test.GroupId = UserSession.GetCurrentGroup().Id;
                     test.CreatedAt = DateTime.Now;
                     test.Enabled = true;
 
@@ -74,6 +74,8 @@ namespace EduClass.Web.Controllers
 
             return View(testVm);
         }
+
+        
 
         [HttpGet]
         public ActionResult Edit(int id = 0)

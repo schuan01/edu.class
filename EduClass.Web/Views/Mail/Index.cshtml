@@ -41,7 +41,13 @@
         
         @foreach (var elemento in Model)
         {
-                    <div class="list-group-item unread" style="position: static; z-index: 1;" data-id= "@Html.Raw(elemento.Id)">
+            string leido = null;
+            if (elemento.ReadAt == null)
+            {
+                leido = "unread";
+            }
+
+                    <div class="list-group-item @leido" style="position: static; z-index: 1;" data-id= "@Html.Raw(elemento.Id)">
                         <div class="list-left">
                             <label class="ckbox">
                                 <input type="checkbox"><span></span>
@@ -224,6 +230,13 @@ $(document).ready(function()
       showMessageJS(message);
   }
 
+  //PARA LEIDO
+  $("#gruposDDL").click(function () {
+
+
+
+  });
+
   // Mark a star
   $('.markstar').click(function() {
     if($(this).hasClass('starred')) {
@@ -261,9 +274,7 @@ $(document).ready(function()
       //Saco la clase hide al coso del responder
       $('.email-editor').removeClass('hide');
 
-      
       var idMail = $(this).parent().data("id"); //Obtengo el valor del atributo Data-Id del Parent
-
 
       $('.list-group-item').find('[data-id="' + idMail + '"]').addClass('active');//ESTO ASI NO ANDA
 
@@ -271,11 +282,17 @@ $(document).ready(function()
 
       $('.mailcontent[data-id="' + idMail + '"]').removeClass('hide');//Saco el hide solo al seleccionado, Asi si anda el "find"
 
-      //$('.mailcontent').find("[data-id='" + idMail + "']").removeClass('hide');
-
       //Seteo el idMail actual en un Input oculto
       $('#valorId').text(idMail);
       $('#valorId').val(idMail);
+
+      //Marco como leido
+      $.ajax({
+          url: '@Url.Action("ReadMail", "Mail")',
+          type: 'POST',
+          contentType: 'application/json;',
+          data: JSON.stringify({ id: idMail })
+      });
 
   });
 
@@ -288,7 +305,7 @@ $(document).ready(function()
   });
 
 
-    
+
 
 });
 </script>

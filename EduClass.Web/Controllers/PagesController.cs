@@ -77,6 +77,15 @@ namespace EduClass.Web.Controllers
         }
 
         [HttpGet]
+        public ActionResult ViewPage(int id = 0)
+        {
+            if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+            var page = AutoMapper.Mapper.Map<Page, PageViewModel>(_service.GetById(id));
+            page.Content = HttpUtility.HtmlDecode(page.Content);
+            return View(page);
+        }
+
+        [HttpGet]
         public ActionResult Edit(int id = 0)
         {
             if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }

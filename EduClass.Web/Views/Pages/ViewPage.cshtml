@@ -1,0 +1,59 @@
+﻿@model EduClass.Web.Infrastructure.ViewModels.PageViewModel
+@using EduClass.Entities
+@{
+    ViewBag.Title = "Ver Página";
+}
+
+<div class="panel panel-site-traffic col-md-8 col-md-offset-2">
+    <div class="panel-heading">
+        <ul class="panel-options">
+        </ul>
+    </div>
+    <div class="panel-body">
+
+
+        <div class="form-horizontal">
+         <p>@Html.Raw(Model.Content)</p>
+        </div>
+    </div>
+
+
+    <div>
+        @Html.ActionLink("Volver", "Index")
+    </div>
+</div>
+@Scripts.Render("~/bundles/jquery")
+@{var sessionMessage = EduClass.Web.Infrastructure.Sessions.MessageSession.GetMessage(); }
+<script>
+        $(document).ready(function () {
+
+            var message = "@Html.Raw(sessionMessage.ToString())";
+            if (message != "") {
+
+
+
+                showMessageJS(message);
+            }
+        });
+</script>
+<script src="~/Scripts/app/helpersSite.js"></script>
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $("#select6").select2({
+            tags: true,
+            tokenSeparators: [',', ' ', '\t']
+        });
+
+        // HTML5 WYSIWYG Editor
+        $('#wysiwyg').wysihtml5({
+            toolbar: {
+                fa: true
+            }
+        });
+
+    </script>
+}
+
+

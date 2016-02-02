@@ -5,14 +5,16 @@
 </div><!-- logopanel -->
 
 <div class="headerbar">
-
+    <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
     <div class="searchpanel">
         <div class="input-group">
                 @if (UserSession.GetCurrentGroup() != null)
                 {
-                <button id="botonMenu" type="button" class="btn btn-success dropdown-toggle btn-lg" data-toggle="dropdown" aria-expanded="false">
-                    @UserSession.GetCurrentGroup().Name <span class="caret"></span>
-                </button>
+                    
+                        <button id="botonMenu" type="button" class="btn btn-success dropdown-toggle btn-lg" data-toggle="dropdown" aria-expanded="false">
+                            @UserSession.GetCurrentGroup().Name <span class="caret"></span>
+                        </button>
+                    
                 }
                 else
                 {
@@ -38,7 +40,7 @@
                 </ul>
         </div><!-- input-group -->
     </div>
-
+    
     <div class="header-right">
 
         <ul class="headermenu">
@@ -243,7 +245,11 @@
                     url: '@Url.Action("ChangeGroup", "Groups")',
                     type: 'POST',
                     contentType: 'application/json;',
-                    data: JSON.stringify({ id: selectedId })
+                    data: JSON.stringify({ id: selectedId }),
+                    success: function() { 
+                        location.reload();//Recarga la pagina entera 
+                       
+                    }
                 });
 
                 $("#botonMenu:first-child").text($(this).text());

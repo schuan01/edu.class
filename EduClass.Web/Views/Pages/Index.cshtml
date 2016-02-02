@@ -17,10 +17,11 @@
             </div>
             @foreach (var elemento in Model)
             {
-                <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-                    <a class="thumbnail" href="#">
-                        @HelperView.LimitContentPage(elemento.Content, 500)
+                <div class="col-lg-2 col-md-3 col-xs-5 thumb">
+                    <a class="thumbnail" href="@Url.Action("ViewPage", "Pages", new { id = elemento.Id })">
+                        <img class="img-thumbnail" id="imagenes" src="@Url.Content("~/Content/images/images_file.png")" alt="" />
                     </a>
+                    
                 </div>
             }
             
