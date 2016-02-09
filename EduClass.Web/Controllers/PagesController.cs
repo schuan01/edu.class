@@ -26,7 +26,8 @@ namespace EduClass.Web.Controllers
 
         public ActionResult Index()
         {
-            var list = _service.GetAll().OrderBy(a => a.Id);
+            //var list = _service.GetAll().OrderBy(a => a.Id);
+            var list = _service.GetAll().Where(x => x.GroupId == UserSession.GetCurrentGroup().Id).OrderBy(a => a.Id);
             foreach (var v in list)
             {
                 v.Content = HttpUtility.HtmlDecode(v.Content);
@@ -45,7 +46,7 @@ namespace EduClass.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Content")]PageViewModel pageVm)
+        public ActionResult Create([Bind(Include = "Name,Content")]PageViewModel pageVm)
         {
             if (ModelState.IsValid)
             {
@@ -57,7 +58,7 @@ namespace EduClass.Web.Controllers
 
                     page.CreatedAt = DateTime.Now;
                     page.Enabled = true;
-                    page.GroupId = 1;//TODO GET CURRENT Group
+                    page.GroupId = UserSession.GetCurrentGroup().Id;
                     page.Content = HttpUtility.HtmlEncode(page.Content);
 
                     _service.Create(page);
@@ -77,11 +78,35 @@ namespace EduClass.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult ViewPage(int id = 0)
+        public ActionResult ViewPage(int pageId = 0)
         {
-            if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
-            var page = AutoMapper.Mapper.Map<Page, PageViewModel>(_service.GetById(id));
-            page.Content = HttpUtility.HtmlDecode(page.Content);
+            PageViewModel page = null;
+            try
+            {
+                if (pageId == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+
+                Page p = _service.GetById(pageId);
+                if (p.GroupId != UserSession.GetCurrentGroup().Id)
+                {
+                    throw new Exception("La página no pertence al grupo actual");
+                }
+
+                if (p.Enabled == false)
+                {
+                    throw new Exception("No se puede visualizar esta página");
+
+                }
+
+                page = AutoMapper.Mapper.Map<Page, PageViewModel>(_service.GetById(pageId));
+                page.Content = HttpUtility.HtmlDecode(page.Content);
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                return RedirectToAction("Index");
+
+            }
+
             return View(page);
         }
 
@@ -90,40 +115,47 @@ namespace EduClass.Web.Controllers
         {
             if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
             var page = AutoMapper.Mapper.Map<Page, PageViewModel>(_service.GetById(id));
+            page.Content = HttpUtility.HtmlDecode(page.Content);
 
             return View(page);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Title, Content")]PageViewModel pageVm)
+        public ActionResult Edit([Bind(Include = "Id, Name, Content")]PageViewModel pageVm)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     //Execute the mapping 
-                    var page = AutoMapper.Mapper.Map<PageViewModel, Page>(pageVm);
+                    var page = _service.GetById(pageVm.Id);
+                    page.Name = pageVm.Name;
+                    page.Content = HttpUtility.HtmlEncode(page.Content);
+
+                    if (page.GroupId != UserSession.GetCurrentGroup().Id)
+                    {
+                        throw new Exception("La página no pertence al grupo actual");
+                    }
 
                     page.UpdatedAt = DateTime.Now;
+                    _service.Update(page);
 
-
-
-                    _service.Create(page);
-
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", pageVm.pageName)));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Página", "Página modificada con éxito"));
 
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al modificar usuario", typeof(pageController), ex));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
                 }
             }
 
             return View(pageVm);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Disable(int id = 0)
         {
             if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
@@ -132,15 +164,14 @@ namespace EduClass.Web.Controllers
 
             if (page == null) { return HttpNotFound(); }
 
-            if (page.Enabled) page.Enabled = true;
+            if (page.Enabled) page.Enabled = false;
             else page.Enabled = true;
 
             page.UpdatedAt = DateTime.Now;
 
             _service.Update(page);
 
-            //TODO: AGREGAR LA CLASE MESSAGE SESSION
-            //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", page.Name)));
+            MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Error", "Página modificada con éxito"));
 
             return RedirectToAction("Index");
         }

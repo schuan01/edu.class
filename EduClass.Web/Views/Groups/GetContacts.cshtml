@@ -7,14 +7,7 @@
 }
 
 <h2>Contactos</h2>
-<head>
-    <style>
-        #imagenes{
-        width:200px;
-        height:200px;
-}
-    </style>
-</head>
+
 
 
 @using (Html.BeginForm())
@@ -78,11 +71,11 @@
                                         {
                                             if (p.Avatar == null || p.Avatar.UrlPhoto == "")
                                             {
-                                                    <img class="img-circle" id="imagenes" src="@Url.Content("~/Content/images/default.png")" alt="" />
+                                                    <img class="img-circle" id="imgGetContacts" src="@Url.Content("~/Content/images/default.png")" alt="" />
                                             }
                                             else
                                             {
-                                                <img class="img-circle" id="imagenes" src="@Url.Content(p.Avatar.UrlPhoto)" alt="">
+                                                <img class="img-circle" id="imgGetContacts" src="@Url.Content(p.Avatar.UrlPhoto)" alt="">
                                                 
                                             }
 
@@ -90,7 +83,7 @@
                                         }
                                         catch (Exception ex)
                                         {
-                                            <img class="img-circle" id ="imagenes"src="@Url.Content("~/Content/images/default.png")" alt="">
+                                            <img class="img-circle" id ="imgGetContacts"src="@Url.Content("~/Content/images/default.png")" alt="">
                                         }
                                             
                                         </a>

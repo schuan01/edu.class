@@ -258,6 +258,7 @@
     <Property Name="UpdatedAt" Type="datetime" Nullable="true" />
     <Property Name="GroupId" Type="int" Nullable="false" />
     <Property Name="Enabled" Type="bit" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <EntityType Name="Alerts">
     <Key>
@@ -947,6 +948,7 @@
           <NavigationProperty Name="Group" Relationship="EduClassModel.GroupPage" FromRole="Page" ToRole="Group" />
           <Property Name="GroupId" Type="Int32" Nullable="false" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="Alert">
           <Key>
@@ -1347,6 +1349,7 @@
           <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
           <ScalarProperty Name="GroupId" ColumnName="GroupId" />
           <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

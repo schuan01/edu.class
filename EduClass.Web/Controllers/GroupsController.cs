@@ -41,9 +41,8 @@ namespace EduClass.Web.Controllers
             if (UserSession.GetCurrentUser() is Teacher)//Si el que ingresa es un teacher
             {
                 //Obtengo los grupos en los que esta el Teacher.
-                //grupos = _serviceGroup.GetAll().Where(a => a.Teacher.Id == UserSession.GetCurrentUser().Id).OrderBy(a => a.Id).ToList();
                 Teacher t = (Teacher)_servicePerson.GetById(UserSession.GetCurrentUser().Id);
-                grupos = t.Group.ToList();
+                grupos = t.Group.ToList();//Todos los grupos
             }
             
             return View(grupos);
@@ -337,24 +336,39 @@ namespace EduClass.Web.Controllers
             return View(groupVm);
         }
 
-        public ActionResult Disable(int id = 0)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Disable(int groupId = 0)
         {
-            if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+            try
+            {
+                if (groupId == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
-            var group = _serviceGroup.GetById(id);
+                var group = _serviceGroup.GetById(groupId);
 
-            if (group == null) { return HttpNotFound(); }
+                //Verifico si el Teacher que esta Logeado pertenece al Grupo
+                if (group.Teacher.Id != UserSession.GetCurrentUser().Id)
+                {
+                    throw new Exception("El Profesor actual no pertenece a este grupo");
+                }
 
-            if (group.Enabled) group.Enabled = false;
-            else group.Enabled = true;
 
-            group.UpdatedAt = DateTime.Now;
+                if (group == null) { return HttpNotFound(); }
 
-            _serviceGroup.Update(group);
+                if (group.Enabled) group.Enabled = false;
+                else group.Enabled = true;
 
-            //TODO: AGREGAR LA CLASE MESSAGE SESSION
-            //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", group.Name)));
+                group.UpdatedAt = DateTime.Now;
 
+                _serviceGroup.Update(group);
+
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Grupo", "El grupo fue editado correctamente"));
+
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+            }
             return RedirectToAction("Index");
         }
     }

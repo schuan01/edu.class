@@ -1,32 +1,167 @@
 ﻿@model IOrderedEnumerable<EduClass.Entities.Page>
 
+@using EduClass.Entities
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Páginas Publicas";
 }
 
- @using (Html.BeginForm())
- {
-    @Html.AntiForgeryToken()
-    <!-- Page Content -->
-    <div class="container">
+<div class="row">
+    <div class="col-sm-8 col-md-9 col-lg-10">
+        <div class="well well-asset-options clearfix">
+            <div class="btn-toolbar btn-toolbar-media-manager pull-left" role="toolbar">
+                <a class="btn btn-danger btn-quirk btn-block mb20" href="@Url.Action("Create", "Pages")">Crear nueva Página</a>
+            </div><!-- btn-toolbar -->
 
-        <div class="row">
-
-            <div class="col-lg-12">
-                <h1 class="page-header">Páginas</h1>
-            </div>
-            @foreach (var elemento in Model)
-            {
-                <div class="col-lg-2 col-md-3 col-xs-5 thumb">
-                    <a class="thumbnail" href="@Url.Action("ViewPage", "Pages", new { id = elemento.Id })">
-                        <img class="img-thumbnail" id="imagenes" src="@Url.Content("~/Content/images/images_file.png")" alt="" />
-                    </a>
-                    
-                </div>
-            }
             
         </div>
 
-    </div>
-    <!-- /.container -->
- }
+        <div class="row filemanager">
+            @foreach (var elemento in Model)
+            {
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 video">
+                    <div class="thmb">
+                        <div class="btn-group fm-group">
+                            <button type="button" class="btn btn-default dropdown-toggle fm-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right fm-menu" role="menu">
+                                
+                                <li><a href="@Url.Action("Edit", "Pages", new { id = elemento.Id })"><i class="fa fa-pencil"></i>Editar</a> </li>
+                                @using (Html.BeginForm("Disable", "Pages", FormMethod.Post, htmlAttributes: new { @Id = elemento.Id }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <li><input type="hidden" name="id" value="@elemento.Id" /></li>
+                                    <li>
+                                        @if (elemento.Enabled == true)
+                                        {
+                                            <button type="submit" class="btn btn-link">
+                                                <i class="fa fa-trash"></i>
+                                                Inactivar
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit" class="btn btn-link">
+                                                <i class="fa fa-trash"></i>
+                                                Activar
+                                            </button>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        </div><!-- btn-group -->                      
+                        <div class="thmb-prev">
+                            <a href="@Url.Action("ViewPage", "Pages", new { pageId = elemento.Id })">
+                                <img src="@Url.Content("~/Content/images/images_file.png")" class="img-responsive" alt="" />
+                            </a>
+                        </div>
+                        <h5 class="fm-title"><a href="@Url.Action("ViewPage", "Pages", new { pageId = elemento.Id })">@elemento.Name</a></h5>
+                        <small class="text-muted">Creado: @elemento.CreatedAt</small>
+                    </div><!-- thmb -->
+                </div><!-- col-xs-6 -->
+            }
+
+        </div><!-- row -->
+    </div><!-- col-sm-9 -->
+    <div class="col-sm-4 col-md-3 col-lg-2">
+        <div class="fm-sidebar">
+
+
+            
+
+            <div class="mb30 clearfix"></div>
+
+        </div>
+    </div><!-- col-sm-3 -->
+</div>
+
+
+@Scripts.Render("~/bundles/jquery")
+@{var sessionMessage = EduClass.Web.Infrastructure.Sessions.MessageSession.GetMessage(); }
+<script src="~/Scripts/app/helpersSite.js"></script>
+<script>
+    jQuery(document).ready(function () {
+
+        'use strict';
+
+        var message = "@Html.Raw(sessionMessage.ToString())";
+        if (message != "") {
+            showMessageJS(message);
+        }
+
+        jQuery('.thmb').hover(function () {
+            var t = jQuery(this);
+            t.find('.ckbox').show();
+            t.find('.fm-group').show();
+        }, function () {
+            var t = jQuery(this);
+            if (!t.closest('.thmb').hasClass('checked')) {
+                t.find('.ckbox').hide();
+                t.find('.fm-group').hide();
+            }
+        });
+
+        jQuery('.ckbox').each(function () {
+            var t = jQuery(this);
+            var parent = t.parent();
+            if (t.find('input').is(':checked')) {
+                t.show();
+                parent.find('.fm-group').show();
+                parent.addClass('checked');
+            }
+        });
+
+
+        jQuery('.ckbox').click(function () {
+            var t = jQuery(this);
+            if (!t.find('input').is(':checked')) {
+                t.closest('.thmb').removeClass('checked');
+                enable_itemopt(false);
+            } else {
+                t.closest('.thmb').addClass('checked');
+                enable_itemopt(true);
+            }
+        });
+
+        jQuery('#selectall').click(function () {
+            if (jQuery(this).is(':checked')) {
+                jQuery('.thmb').each(function () {
+                    jQuery(this).find('input').attr('checked', true);
+                    jQuery(this).addClass('checked');
+                    jQuery(this).find('.ckbox, .fm-group').show();
+                });
+                enable_itemopt(true);
+            } else {
+                jQuery('.thmb').each(function () {
+                    jQuery(this).find('input').attr('checked', false);
+                    jQuery(this).removeClass('checked');
+                    jQuery(this).find('.ckbox, .fm-group').hide();
+                });
+                enable_itemopt(false);
+            }
+        });
+
+        function enable_itemopt(enable) {
+            if (enable) {
+                jQuery('.itemopt').removeClass('disabled');
+            } else {
+
+                // check all thumbs if no remaining checks
+                // before we can disabled the options
+                var ch = false;
+                jQuery('.thmb').each(function () {
+                    if (jQuery(this).hasClass('checked'))
+                        ch = true;
+                });
+
+                if (!ch)
+                    jQuery('.itemopt').addClass('disabled');
+            }
+        }
+
+        jQuery("a[data-rel^='prettyPhoto']").prettyPhoto();
+
+    });
+
+</script>

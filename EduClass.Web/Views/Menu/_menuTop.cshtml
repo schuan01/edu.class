@@ -1,5 +1,6 @@
 ﻿@using EduClass.Web.Infrastructure.Sessions
 @using EduClass.Entities
+
 <div class="logopanel">
     <h2><a href="index.html">Edu.Class</a></h2>
 </div><!-- logopanel -->
@@ -195,18 +196,18 @@
                     {
                         if (UserSession.GetCurrentUser().Avatar == null || UserSession.GetCurrentUser().Avatar.UrlPhoto == "")
                         {
-                            <img src="@Url.Content("~/Content/images/default.png")" alt="" />
+                            <img id="imgAvatarTop" src="@Url.Content("~/Content/images/default.png")" alt="" />
                         }
                         else
                         {
-                            <img src="@Url.Content(UserSession.GetCurrentUser().Avatar.UrlPhoto)" alt="" />
+                            <img id="imgAvatarTop" src="@Url.Content(UserSession.GetCurrentUser().Avatar.UrlPhoto)" alt="" />
                         }
 
 
                     }
                     catch (Exception ex)
                     {
-                        <img src="@Url.Content("~/Content/images/default.png")" alt="" />
+                        <img id="imgAvatarTop" src="@Url.Content("~/Content/images/default.png")" alt="" />
                     }
 
                     @UserSession.GetCurrentUser().FirstName

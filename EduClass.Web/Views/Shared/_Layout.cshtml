@@ -9,9 +9,34 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>@ViewBag.Title | Edu.Class</title>
+    <link rel="shortcut icon" href="~/Content/images/logo.ico" type="image/x-icon" />
+    <link rel="icon" href="~/Content/images/logo.ico" type="image/ico" />
     @Styles.Render("~/Content/template")
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("styles", required: false)
+    <style>
+        #imgGetContacts {
+            width: 200px;
+            height: 200px;
+        }
+
+        #imgAvatarTop {
+            width: 24px;
+            height: 24px;
+        }
+
+        #imgAvatarLeft {
+            width: 48px;
+            height: 48px;
+
+        }
+
+        #imgAvatarMe {
+            width: 128px;
+            height: 128px;
+
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -35,16 +60,16 @@
                        {
                            if (UserSession.GetCurrentUser().Avatar == null || UserSession.GetCurrentUser().Avatar.UrlPhoto == "")
                            {
-                            <img src="@Url.Content("~/Content/images/default.png")" alt="" class="media-object img-circle">
+                            <img id="imgAvatarLeft" src="@Url.Content("~/Content/images/default.png")" alt="" class="media-object img-circle">
                            }
                            else
                            {
-                            <img src="@Url.Content(UserSession.GetCurrentUser().Avatar.UrlPhoto)" alt="" class="media-object img-circle">
+                            <img id="imgAvatarLeft"src="@Url.Content(UserSession.GetCurrentUser().Avatar.UrlPhoto)" alt="" class="media-object img-circle">
                            }
                        }
                        catch (Exception ex)
                        {
-                            <img src="@Url.Content("~/Content/images/default.png")" alt="" class="media-object img-circle">
+                            <img id="imgAvatarLeft" src="@Url.Content("~/Content/images/default.png")" alt="" class="media-object img-circle">
                        }
                         </a>
                     </div>

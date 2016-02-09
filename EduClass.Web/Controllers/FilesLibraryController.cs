@@ -154,7 +154,7 @@ namespace EduClass.Web.Controllers
 
 
         }
-
+        //TODO Elimina solo fisicamente, que pasa si est asociado a un Post?
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteFile(int fileId)

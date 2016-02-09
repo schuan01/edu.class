@@ -61,21 +61,65 @@ namespace EduClass.Web.Controllers
                     else
                         throw new Exception("El usuario actual no es un Profesor");
 
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Creacion Exitosa", "El Test se creo correctamente"));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Creacion Exitosa", "La prueba se creo correctamente"));
 
                     return RedirectToAction("Create");
 
                 }
                 catch (Exception ex)
                 {
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se pudo crear el Test"));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se pudo crear la prueba"));
                 }
             }
 
             return View(testVm);
         }
 
-        
+        [HttpGet]
+        public ActionResult AddQuestion()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddQuestion([Bind(Include = "Name, Description, StartDate, EndDate")]TestViewModel testVm)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    //Se creara primero el test sin preguntas.
+                    //Luego se editara el mismo.
+
+
+                    //Execute the mapping 
+                    var test = AutoMapper.Mapper.Map<TestViewModel, Test>(testVm);
+
+                    test.GroupId = UserSession.GetCurrentGroup().Id;
+                    test.CreatedAt = DateTime.Now;
+                    test.Enabled = true;
+
+                    if (UserSession.GetCurrentUser() is Teacher)
+                        _service.Create(test);
+                    else
+                        throw new Exception("El usuario actual no es un Profesor");
+
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Creacion Exitosa", "La prueba se creo correctamente"));
+
+                    return RedirectToAction("Create");
+
+                }
+                catch (Exception ex)
+                {
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se pudo crear la prueba"));
+                }
+            }
+
+            return View(testVm);
+        }
+
+
 
         [HttpGet]
         public ActionResult Edit(int id = 0)

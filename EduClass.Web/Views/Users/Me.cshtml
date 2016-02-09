@@ -26,16 +26,16 @@
               {
               	    if (UserSession.GetCurrentUser().Avatar == null || UserSession.GetCurrentUser().Avatar.UrlPhoto == "")
                     {
-              			<img class="img-circle img-responsive" src="@Url.Content("~/Content/images/default.png")" alt="">
+              			<img id ="imgAvatarMe" class="img-circle img-responsive" src="@Url.Content("~/Content/images/default.png")" alt="">
               		}
               		else
                     {
-                        <img class="img-circle img-responsive" src="@Url.Content(UserSession.GetCurrentUser().Avatar.UrlPhoto)" alt="">
+                        <img id ="imgAvatarMe" class="img-circle img-responsive" src="@Url.Content(UserSession.GetCurrentUser().Avatar.UrlPhoto)" alt="">
                     }
               }
               catch (Exception ex)
               {
-                <img class="img-circle img-responsive" src="@Url.Content("~/Content/images/default.png")" alt="">
+                <img id ="imgAvatarMe" class="img-circle img-responsive" src="@Url.Content("~/Content/images/default.png")" alt="">
               }
               </a>
               <h2 class="profile-name">@UserSession.GetCurrentUser().FirstName @UserSession.GetCurrentUser().LastName</h2>

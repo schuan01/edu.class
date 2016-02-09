@@ -8,9 +8,7 @@
 }
 <h2>Grupos</h2>
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+
 
     <div class="contentpanel">
 
@@ -39,6 +37,7 @@
                                 <th>Nombre</th>
                                 <th>Descripción</th>
                                 <th>Clave</th>
+                                <th>Estado</th>
                                 <th class="text-center">Alumnos</th>
                                 <th></th>
                             </tr>
@@ -52,12 +51,30 @@
                                     <td>@elemento.Name</td>
                                     <td>@elemento.Description</td>
                                     <td>@elemento.Key</td>
-                                    <td class="text-center">@elemento.Students.Count</td>
+                                    @if (@elemento.Enabled == true)
+                                    {
+                                        <td>Activo</td>
+                                    }
+                                    else
+                                    {
+                                        <td >Inactivo</td>
+                                    }
+                                    <td class="text-center">@elemento.Students.Count</td>   
+                                    @using (Html.BeginForm("Disable", "Groups", FormMethod.Post, htmlAttributes: new { @Id = @elemento.Id }))
+                                    {
                                     <td>
                                         <ul class="table-options">
                                             <li><a href="@Url.Action("Edit", "Groups", new { id = elemento.Id })"><i class="fa fa-pencil"></i></a></li>
+                                            
+                                                @Html.AntiForgeryToken()
+                                                <li><input type="hidden" name="groupId" value="@elemento.Id" /></li>
+                                                <li><button type="submit" class="btn-link"><i class="fa fa-trash"></i></button></li>
+                                            
                                         </ul>
                                     </td>
+                                    }
+
+                                    
                                 </tr>
                             }
 
@@ -98,5 +115,5 @@
      }
  </div><!-- contentpanel -->
 
-}
+
 

@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 02/01/2016 10:51:52
+-- Date Created: 02/08/2016 15:37:52
 -- Generated from EDMX file: C:\Users\jvolpe\Documents\Cosas\edu.class\EduClass.Entities\EduClassModel.edmx
 -- --------------------------------------------------
 
@@ -289,7 +289,8 @@ CREATE TABLE [dbo].[Pages] (
     [CreatedAt] datetime  NOT NULL,
     [UpdatedAt] datetime  NULL,
     [GroupId] int  NOT NULL,
-    [Enabled] bit  NOT NULL
+    [Enabled] bit  NOT NULL,
+    [Name] nvarchar(max)  NOT NULL
 );
 GO
 
