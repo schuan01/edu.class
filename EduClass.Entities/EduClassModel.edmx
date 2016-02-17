@@ -146,6 +146,7 @@
     <Property Name="CreatedAt" Type="datetime" Nullable="false" />
     <Property Name="UpdatedAt" Type="datetime" Nullable="true" />
     <Property Name="Enabled" Type="bit" Nullable="false" />
+    <Property Name="Silenced" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Posts">
     <Key>
@@ -796,6 +797,7 @@
           <NavigationProperty Name="MailsSends" Relationship="EduClassModel.PersonMail" FromRole="Person" ToRole="Mail" />
           <NavigationProperty Name="MailsRecieved" Relationship="EduClassModel.MailPerson" FromRole="Person" ToRole="Mail" />
           <NavigationProperty Name="Files" Relationship="EduClassModel.PersonFile" FromRole="Person" ToRole="File" />
+          <Property Name="Silenced" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Teacher" BaseType="EduClassModel.Person" >
           <Property Name="GroupId" Type="Int32" Nullable="false" />
@@ -1221,6 +1223,7 @@
           <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
           <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
           <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+          <ScalarProperty Name="Silenced" ColumnName="Silenced" />
         </MappingFragment>
       </EntityTypeMapping>
       <EntityTypeMapping TypeName="IsTypeOf(EduClassModel.Teacher)">

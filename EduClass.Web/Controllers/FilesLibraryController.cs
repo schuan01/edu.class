@@ -58,7 +58,7 @@ namespace EduClass.Web.Controllers
             string path = "";
             try
             {
-
+                
 
                 foreach (string fileName in Request.Files)
                 {
@@ -199,6 +199,10 @@ namespace EduClass.Web.Controllers
         {
             try
             {
+                Person p = _servicePerson.GetById(UserSession.GetCurrentUser().Id);
+                if (p is Student && p.Silenced)
+                    throw new Exception("No puedes compartir un archivo cuando estas silenciado, contacte al Profesor del grupo");
+
                 Entities.File f = _service.GetById(fileId);
                 if (f != null)
                 {
@@ -221,7 +225,7 @@ namespace EduClass.Web.Controllers
             }
             catch (Exception ex)
             {
-                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al compartir el archivo."));
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
 
             }
             return RedirectToAction("Index", "FilesLibrary");

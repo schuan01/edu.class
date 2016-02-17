@@ -27,7 +27,7 @@
                             </button>
                             <ul class="dropdown-menu pull-right fm-menu" role="menu">
                                 
-                                <li><a href="@Url.Action("Edit", "Pages", new { id = elemento.Id })"><i class="fa fa-pencil"></i>Editar</a> </li>
+                                <li><a href="@Url.Action("Edit", "Pages", new { id = elemento.Id })"><i class="fa fa-pencil"></i>Editar</a> </li>                                
                                 @using (Html.BeginForm("Disable", "Pages", FormMethod.Post, htmlAttributes: new { @Id = elemento.Id }))
                                 {
                                     @Html.AntiForgeryToken()

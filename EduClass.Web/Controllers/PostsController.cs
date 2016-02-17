@@ -28,6 +28,7 @@ namespace EduClass.Web.Controllers
         public PostsController(IPostServices service)
         {
             _service = service;
+            
         }
 
         public ActionResult Index()
@@ -52,6 +53,7 @@ namespace EduClass.Web.Controllers
             {
                 try
                 {
+                   
 
                     //Execute the mapping 
                     var post = AutoMapper.Mapper.Map<PostViewModel, Post>(postVm);

@@ -34,26 +34,14 @@ namespace EduClass.Web.Controllers
 
             if (id == 0){
 
-                var groups = _group.GetActiveGroups(UserSession.GetCurrentUser());
+                var group = _group.GetGroupByIdWithPosts(UserSession.GetCurrentGroup().Id);
                 
-                if (groups.Count() != 0)
+                if (group != null)
 	            {
-                    //TODO: VER forma de union
-                    foreach (var item in groups)
-                    {
-                        postList.Union(item.Posts);
-                    }
+                    postList = group.Posts.ToList();
 	            }
             }
-            else
-            {
-                var group = _group.GetGroupByIdWithPosts(id);
-
-                if (group != null)
-                {
-                    postList = group.Posts.ToList();
-                }
-            }
+            
 
             ViewBag.PostTypeList = Enum.GetValues(new PostType().GetType());
 
@@ -69,8 +57,12 @@ namespace EduClass.Web.Controllers
             {
                 try
                 {
-                    
+                    Person p = _person.GetById(UserSession.GetCurrentUser().Id);
+                    if (p is Student && p.Silenced)
+                        throw new Exception("No puedes crear Post cuando estas silenciado, contacte al Profesor del grupo");
+
                     var post = AutoMapper.Mapper.Map<PostViewModel, Post>(postVm);
+                    
 
                     post.CreatedAt = DateTime.Now;
                     post.Enabled = true;
@@ -92,7 +84,7 @@ namespace EduClass.Web.Controllers
 
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Post creado", "El post fue creado con éxito"));
 
-                    return RedirectToAction("Index", new { id = UserSession.GetCurrentGroup().Id });
+                    return RedirectToAction("Index");
                 }
                 catch (System.Data.Entity.Infrastructure.DbUpdateException du)
                 {
@@ -104,7 +96,7 @@ namespace EduClass.Web.Controllers
                 }
             }
 
-            return RedirectToAction("Index", new { id = UserSession.GetCurrentGroup().Id });
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -120,6 +112,10 @@ namespace EduClass.Web.Controllers
 
                 try
                 {
+
+                    Person p = _person.GetById(UserSession.GetCurrentUser().Id);
+                    if (p is Student && p.Silenced)
+                        throw new Exception("No puedes comentar un Post cuando estas silenciado, contacte al Profesor del grupo");
 
                     var reply = new Reply();
                     reply.Content = Server.HtmlEncode(content);
@@ -143,7 +139,7 @@ namespace EduClass.Web.Controllers
                 }
             }
 
-            return RedirectToAction("Index", new { id = UserSession.GetCurrentGroup().Id });
+            return RedirectToAction("Index");
         }
 
         public ActionResult RemovePost(int id = 0)
@@ -183,7 +179,7 @@ namespace EduClass.Web.Controllers
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al eliminar post, por favor contacte con el Administrador."));
             }
 
-            return RedirectToAction("Index", new { id = UserSession.GetCurrentGroup().Id });
+            return RedirectToAction("Index");
         }
 
         public ActionResult RemoveReply(int id = 0)
@@ -191,7 +187,7 @@ namespace EduClass.Web.Controllers
             if (id == 0)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error al eliminar el reply", "Reply id no existe"));
-                return RedirectToAction("Index", new { id = UserSession.GetCurrentGroup().Id });
+                return RedirectToAction("Index");
             }
 
             try
@@ -206,7 +202,7 @@ namespace EduClass.Web.Controllers
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al eliminar reply, por favor contacte con el Administrador."));
             }
-            return RedirectToAction("Index", new { id = UserSession.GetCurrentGroup().Id });
+            return RedirectToAction("Index");
         }
     }
 }

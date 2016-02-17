@@ -116,6 +116,8 @@ namespace EduClass.Web.Controllers
                 return View();
         }
 
+       
+
         // GET: Group
         [HttpGet]
         public ActionResult JoinStudent()
@@ -135,7 +137,7 @@ namespace EduClass.Web.Controllers
                 var group = _serviceGroup.GetByKey(groupVm.Key);//Obtengo el Grupo del Id pasado por parametro
                 student = _servicePerson.GetById(idStudent);
 
-                if (group == null || student == null) { return HttpNotFound(); }
+                if (group == null || student == null) { throw new Exception("El usuario o el grupo no existe"); }
 
                 if (group.Students.FirstOrDefault(st => st.Id == student.Id) != null)//Si ya existe en la collecion
                 {
@@ -159,7 +161,7 @@ namespace EduClass.Web.Controllers
             }
 
 
-            return RedirectToAction("JoinStudent", "Groups");
+            return RedirectToAction("Index", "Board");
         }
 
         [HttpGet]

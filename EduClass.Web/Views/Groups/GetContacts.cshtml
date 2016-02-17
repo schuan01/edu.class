@@ -9,20 +9,15 @@
 <h2>Contactos</h2>
 
 
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-
-
-
     <div class="contentpanel">
 
         <div class="row">
             <div class="col-sm-8 col-md-9 col-lg-10 people-list">
-
+               
                 <div class="people-options clearfix">
-
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
                     <div class="pager">
                         @Html.Raw(Html.Pager(
                             new Options
@@ -39,7 +34,7 @@
                                 IsShowPages = true
                             }, new { student_name = ViewData["student_name"] }))
                     </div>
-
+                }
 
 
                     <div class="btn-group pull-right people-pager">
@@ -90,9 +85,23 @@
                                         <h4 class="panel-profile-name">@p.FirstName</h4>
                                         <p class="media-usermeta"><i class="glyphicon glyphicon-briefcase"></i> Estudiante</p>
                                     </div>
-                                    <ul class="panel-options">
-                                        <li><a class="tooltips" href="" data-toggle="tooltip" title="View Options"><i class="glyphicon glyphicon-option-vertical"></i></a></li>
-                                    </ul>
+                                    @using (Html.BeginForm("SilenceStudent", "Users", FormMethod.Post, htmlAttributes: new { @Id = "" }))
+                                    {
+                                        <ul class="panel-options">
+                                        
+                                                @Html.AntiForgeryToken()
+                                                <li><input type="text" id="idStudent" name="idStudent" value="@p.Id" hidden /></li>
+                                                 @if (p.Silenced)
+                                                 {
+                                                    <li><button class="btn btn-link tooltips" type="submit" data-toggle="tooltip" title="Desilenciar"><i class="glyphicon glyphicon-volume-up"></i></button></li>
+                                                 }
+                                                 else
+                                                 {
+                                                    <li><button class="btn btn-link tooltips" type="submit" data-toggle="tooltip" title="Silenciar"><i class="glyphicon glyphicon-volume-off"></i></button></li>
+                                                 }
+
+                                        </ul>
+                                    }
                                 </div><!-- panel-heading -->
                                 <div class="panel-body people-info">
 
@@ -134,7 +143,7 @@
         </div><!-- row -->
 
     </div><!-- contentpanel -->
-}
+
 
 @Scripts.Render("~/bundles/jquery")
 @{var sessionMessage = EduClass.Web.Infrastructure.Sessions.MessageSession.GetMessage(); }

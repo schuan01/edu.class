@@ -20,6 +20,9 @@ namespace EduClass.WebApi
             // Web API routes
             config.MapHttpAttributeRoutes();
 
+            // New code
+            config.EnableCors();
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",

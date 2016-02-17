@@ -8,6 +8,8 @@ namespace EduClass.WebApi.Infrastructure.Mappers
     {
         public static void RegisterMappings()
         {
+
+            
             Mapper.Initialize(x => {
                 x.AddProfile<PersonMapperProfiles>();
                

@@ -183,6 +183,7 @@ namespace EduClass.Web.Controllers
                         
                         person.CreatedAt = DateTime.Now;
                         person.Enabled = true;
+                        person.Silenced = false;
 
                         _service.Create(person);
 
@@ -282,6 +283,41 @@ namespace EduClass.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        //Silencia o quita el silencio
+        //TODO Hay un tema con la relacion, el alumno solo deberia ser silenciado del grupo del profesor que lo silencio.
+        //Hoy esta silenciando toda la cuenta
+        [HttpPost]
+        public ActionResult SilenceStudent(int idStudent)
+        {
+
+            try
+            {
+                Person s = _service.GetById(idStudent);
+                if (s is Student)
+                {
+                    if (s.Silenced)
+                        s.Silenced = false;
+                    else
+                        s.Silenced = true;
+
+                    _service.Update(s);
+                    if(s.Silenced)
+                        MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Silenciado", "Alumno silenciado con éxito"));
+                    else
+                        MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Aceptado", "El alumno ya no se encuentra silenciado"));
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+            }
+
+            return RedirectToAction("GetContacts", "Groups");
+
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public ActionResult ResetPasswordEmail()
@@ -320,6 +356,10 @@ namespace EduClass.Web.Controllers
 		[HttpGet]
         public ActionResult Me()//Accede al Perfil actual
         {
+            //Actualizo la Session por las dudas
+            Person p = _service.GetById(UserSession.GetCurrentUser().Id);
+            UserSession.SetCurrentUser(p);
+
             return View();
         }
 

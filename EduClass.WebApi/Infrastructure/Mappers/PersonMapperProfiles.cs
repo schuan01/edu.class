@@ -46,6 +46,8 @@ namespace EduClass.WebApi.Infrastructure.Mappers
                 .ForMember(u => u.IdentificationCard, src => src.MapFrom(x => x.IdentificationCard));
 
             Mapper.CreateMap<Student, PersonViewModel>();
+
+
         }
     }
 }

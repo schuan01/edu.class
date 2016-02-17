@@ -26,7 +26,7 @@ namespace EduClass.Web.Controllers
 
         public ActionResult Index()
         {
-            //var list = _service.GetAll().OrderBy(a => a.Id);
+            //Las páginas publicas del grupo actual
             var list = _service.GetAll().Where(x => x.GroupId == UserSession.GetCurrentGroup().Id).OrderBy(a => a.Id);
             foreach (var v in list)
             {
@@ -175,6 +175,8 @@ namespace EduClass.Web.Controllers
 
             return RedirectToAction("Index");
         }
+
+        
     }
 }
 

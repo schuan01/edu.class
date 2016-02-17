@@ -15,11 +15,13 @@ namespace EduClass.Web.Controllers
     {
         private static IMailServices _service;
         private static IPersonServices _personService;
+        private static IGroupServices _groupService;
 
-        public MailController(IMailServices service, IPersonServices personService)
+        public MailController(IMailServices service, IPersonServices personService, IGroupServices groupService)
         {
             _service = service;
             _personService = personService;
+            _groupService = groupService;
         }
 
 
@@ -48,16 +50,21 @@ namespace EduClass.Web.Controllers
             return View(list);
         }
 
-        // GET: Mail
+      
         [HttpGet]
         public ActionResult SendEmail()
         {
             try
             {
+                //El remitente. simplemente para mostrar
                 ViewBag.FromUser = UserSession.GetCurrentUser().FirstName + UserSession.GetCurrentUser().LastName;
 
-                //ViewBag.PersonsTo = new SelectList(_personService.GetAll().Where(g => g.Enabled == true && g.Id != UserSession.GetCurrentUser().Id && (UserSession.GetCurrentGroup().Students.Any(x => x.Id == g.Id) || UserSession.GetCurrentGroup().Teacher.Id == g.Id)).ToList()
-                ViewBag.PersonsTo = new SelectList(_personService.GetAll().Where(g => g.Enabled == true && g.Id != UserSession.GetCurrentUser().Id).ToList()
+                //Obtengo los miembros del grupo actual
+                IEnumerable<Person> miembros = _groupService.GetById(UserSession.GetCurrentGroup().Id).Students;
+
+                //Filtro los miembros
+                //Solo los activos
+                ViewBag.PersonsTo = new SelectList(miembros.Where(g => g.Enabled == true).ToList()
                     .Select(s => new
                     {
                         Id = s.Id,
@@ -67,7 +74,7 @@ namespace EduClass.Web.Controllers
             }
             catch (Exception ex)
             {
-                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error abrir SendMail."));
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error abrir nuevo Mensaje."));
             }
 
             return View(new MailViewModel());
@@ -82,6 +89,10 @@ namespace EduClass.Web.Controllers
             {
                 try
                 {
+                    Person p = _personService.GetById(UserSession.GetCurrentUser().Id);
+                    if (p is Student && p.Silenced)
+                        throw new Exception("No puedes enviar mensajes cuando estas silenciado, contacte al Profesor del grupo");
+
                     //Execute the mapping 
                     var mail = AutoMapper.Mapper.Map<MailViewModel, Mail>(mailVm);
 
@@ -109,13 +120,18 @@ namespace EduClass.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al enviar el correo."));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
                 }
             }
 
+            //Cargo de nuevo la lista para que no de Exception(si aplica)
 
-            //Vuelvo a cargar la lista para que no de exception(si aplica)
-            ViewBag.PersonsTo = new SelectList(_personService.GetAll().Where(g => g.Enabled == true && g.Id != UserSession.GetCurrentUser().Id).ToList()
+            //Obtengo los miembros del grupo actual
+            IEnumerable<Person> miembros = _groupService.GetById(UserSession.GetCurrentGroup().Id).Students;
+
+            //Filtro los miembros
+            //Solo los activos
+            ViewBag.PersonsTo = new SelectList(miembros.Where(g => g.Enabled == true).ToList()
                 .Select(s => new
                 {
                     Id = s.Id,
