@@ -238,22 +238,26 @@ namespace EduClass.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UserName, FirstName, LastName, Birthday, Email, IdentificationCard")]PersonViewModel userVm)
+        public ActionResult Edit([Bind(Include = "Id,UserName, FirstName, LastName, Birthday, Email, IdentificationCard")]PersonViewModel userVm)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     //Execute the mapping 
-                    var user = AutoMapper.Mapper.Map<PersonViewModel, Person>(userVm);
-
+                    var user =_service.GetById(userVm.Id);
+                    user.FirstName = userVm.FirstName;
+                    user.LastName = userVm.LastName;
+                    user.Birthday = userVm.Birthday;
+                    user.Email = userVm.Email;
+                    user.IdentificationCard = userVm.IdentificationCard;
                     user.UpdatedAt = DateTime.Now;
 
                     _service.Update(user);
 
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", userVm.UserName)));
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Me");
                 }
                 catch (Exception ex)
                 {
@@ -280,7 +284,7 @@ namespace EduClass.Web.Controllers
             
             MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", user.UserName)));
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Me");
         }
 
         //Silencia o quita el silencio

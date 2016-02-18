@@ -2,7 +2,7 @@
 
 @{
     
-    ViewBag.Title = "Linea de tiempo";
+    ViewBag.Title = "Línea de tiempo";
     var earlierDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
     var postTypeFlag = 1;
     var avatar = String.Empty;
@@ -78,7 +78,7 @@
                         <h4 class="media-heading">@item.Person.FirstName @item.Person.LastName</h4>
                         <p class="media-usermeta">
                             <span class="media-time">@item.CreatedAt.ToString("hh:mm tt")</span>
-                            <i class="glyphicon glyphicon-map-marker"></i>
+                            
                         </p>
                     </div>
                 </div>
@@ -112,7 +112,7 @@
             </div>
             <div class="panel-footer">
                 <ul class="list-inline">
-                    <li><a data-target="#comment-@item.Id" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comments (@item.Replays.Count())</a></li>
+                    <li><a data-target="#comment-@item.Id" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comentarios (@item.Replays.Count())</a></li>
                 </ul>
             </div>
             <div class="collapse" id="comment-@item.Id">
@@ -152,7 +152,7 @@
                 {
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="postId" value="@item.Id" />
-                    <input type="text" name="content" class="form-control btnSubmit" data-Id="@item.Id" placeholder="Write some comments">
+                    <input type="text" name="content" class="form-control btnSubmit" data-Id="@item.Id" placeholder="Escribe algún comentario">
                 }
             </div>
         </div><!-- panel panel-post -->

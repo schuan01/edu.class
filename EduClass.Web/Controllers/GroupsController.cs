@@ -84,24 +84,33 @@ namespace EduClass.Web.Controllers
         [HttpGet]
         public ActionResult GetContacts(string student_name, int? page)
         {
-            IList<Student> estudiantes = null;
+            IList<Student> estudiantes = new List<Student>();
             try
             {
-                ViewData["student_name"] = student_name;
-                var group = _serviceGroup.GetById(UserSession.GetCurrentGroup().Id);
-                ViewBag.StudentsGroup = group.Students;
-                ViewBag.TeacherGroup = group.Teacher;
-
-                int currentPageIndex = page.HasValue ? page.Value : 1;
-                estudiantes = group.Students.ToList();
-
-                if (string.IsNullOrWhiteSpace(student_name))
+                if (UserSession.GetCurrentGroup() != null)
                 {
-                    estudiantes = estudiantes.ToPagedList(currentPageIndex, defaultPageSize);
+                    ViewData["student_name"] = student_name;
+                    var group = _serviceGroup.GetById(UserSession.GetCurrentGroup().Id);
+                    ViewBag.StudentsGroup = group.Students;
+                    ViewBag.TeacherGroup = group.Teacher;
+
+                    int currentPageIndex = page.HasValue ? page.Value : 1;
+                    estudiantes = group.Students.ToList();
+
+                    if (string.IsNullOrWhiteSpace(student_name))
+                    {
+                        estudiantes = estudiantes.ToPagedList(currentPageIndex, defaultPageSize);
+                    }
+                    else
+                    {
+                        estudiantes = estudiantes.Where(p => p.FirstName.ToLower().Contains(student_name.ToLower())).ToPagedList(currentPageIndex, defaultPageSize);
+                    }
                 }
                 else
                 {
-                    estudiantes = estudiantes.Where(p => p.FirstName.ToLower().Contains(student_name.ToLower())).ToPagedList(currentPageIndex, defaultPageSize);
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No hay grupo seleccionado"));
+                    estudiantes = estudiantes.ToPagedList(1, defaultPageSize);
+
                 }
 
 
@@ -110,10 +119,9 @@ namespace EduClass.Web.Controllers
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
             }
-            if(estudiantes != null)
-                return View(estudiantes);
-            else
-                return View();
+            
+            return View(estudiantes);
+            
         }
 
        

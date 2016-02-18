@@ -1060,19 +1060,19 @@ function renderPagination(wizard, options, state)
 
         if (!options.forceMoveForward)
         {
-            buttons += buttonTemplate.format("anterior", options.labels.previous);
+            buttons += buttonTemplate.format("previous", options.labels.previous);
         }
 
-        buttons += buttonTemplate.format("siguiente", options.labels.next);
+        buttons += buttonTemplate.format("next", options.labels.next);
 
         if (options.enableFinishButton)
         {
-            buttons += buttonTemplate.format("finalizar", options.labels.finish);
+            buttons += buttonTemplate.format("finish", options.labels.finish);
         }
 
         if (options.enableCancelButton)
         {
-            buttons += buttonTemplate.format("cancelar", options.labels.cancel);
+            buttons += buttonTemplate.format("cancel", options.labels.cancel);
         }
 
         wizard.append(pagination.format(options.actionContainerTag, options.clearFixCssClass,

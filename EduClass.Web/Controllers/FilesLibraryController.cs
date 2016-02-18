@@ -203,6 +203,10 @@ namespace EduClass.Web.Controllers
                 if (p is Student && p.Silenced)
                     throw new Exception("No puedes compartir un archivo cuando estas silenciado, contacte al Profesor del grupo");
 
+                Group g = UserSession.GetCurrentGroup();
+                if(g == null)
+                    throw new Exception("No hay grupo seleccionado");
+
                 Entities.File f = _service.GetById(fileId);
                 if (f != null)
                 {

@@ -12,6 +12,7 @@ using EduClass.Entities;
 using EduClass.Web.Infrastructure.Mappers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Collections.Generic;
 
 namespace EduClass.Web.Controllers
 {
@@ -19,18 +20,33 @@ namespace EduClass.Web.Controllers
     public class EventsController : Controller
     {
         private static IEventServices _service;
+        private static IGroupServices _serviceGroup;
 
-        public EventsController(IEventServices service)
+        public EventsController(IEventServices service, IGroupServices serviceGroup)
         {
             _service = service;
+            _serviceGroup = serviceGroup;
         }
 
         public ActionResult Index()
         {
-            var list = _service.GetAll().Where(x => x.Enabled).OrderBy(a => a.Name);
+            IOrderedEnumerable<Event> list = null;
+            if (UserSession.GetCurrentGroup() != null)
+            {
+                Group g = _serviceGroup.GetById(UserSession.GetCurrentGroup().Id);
+                list = g.Calendar.Events.Where(x => x.Enabled).OrderBy(a => a.Name);
 
-            ViewBag.EventTypeList = Enum.GetValues(typeof(EventType)).Cast<EventType>().ToList();
-            ViewBag.CalendarId = 1;
+                ViewBag.EventTypeList = Enum.GetValues(typeof(EventType)).Cast<EventType>().ToList();
+                ViewBag.CalendarId = _serviceGroup.GetById(UserSession.GetCurrentGroup().Id).Calendar.Id;
+
+            }
+            else
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER,"Error", "No hay grupo seleccionado"));
+                ViewBag.EventTypeList = Enum.GetValues(typeof(EventType)).Cast<EventType>().ToList();
+                ViewBag.CalendarId = "";
+            }
+
             return View(list);
         }
 

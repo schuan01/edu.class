@@ -15,13 +15,13 @@ namespace EduClass.Web.Infrastructure.ViewModels
         [Display(Name = "Nombre Usuario")]
         public string UserName { get; set; }
 
-        [Required]
+        
         [DataType(DataType.Password)]
         [Display(Name = "Contraseña")]
         [StringLength(255, MinimumLength = 6)]
         public string Password { get; set; }
 
-        [Required]
+        
         [DataType(DataType.Password)]
         [Display(Name = "Confirmar contraseña")]
         [Compare("Password")]
@@ -38,7 +38,7 @@ namespace EduClass.Web.Infrastructure.ViewModels
         public string LastName { get; set; }
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Fecha Nacimiento")]
         public System.DateTime Birthday { get; set; }
 
@@ -50,7 +50,6 @@ namespace EduClass.Web.Infrastructure.ViewModels
         [Display(Name = "Cédula")]
         public string IdentificationCard { get; set; }
 
-        [Required]
         public string PersonType { get; set; }
 
         public System.DateTime CreatedAt { get; set; }

@@ -56,25 +56,36 @@ namespace EduClass.Web.Controllers
         {
             try
             {
-                //El remitente. simplemente para mostrar
-                ViewBag.FromUser = UserSession.GetCurrentUser().FirstName + UserSession.GetCurrentUser().LastName;
+                if (UserSession.GetCurrentGroup() != null)
+                {
+                    //El remitente. simplemente para mostrar
+                    ViewBag.FromUser = UserSession.GetCurrentUser().FirstName + UserSession.GetCurrentUser().LastName;
 
-                //Obtengo los miembros del grupo actual
-                IEnumerable<Person> miembros = _groupService.GetById(UserSession.GetCurrentGroup().Id).Students;
+                    //Obtengo los miembros del grupo actual
+                    IEnumerable<Person> miembros = _groupService.GetById(UserSession.GetCurrentGroup().Id).Students;
 
-                //Filtro los miembros
-                //Solo los activos
-                ViewBag.PersonsTo = new SelectList(miembros.Where(g => g.Enabled == true).ToList()
-                    .Select(s => new
-                    {
-                        Id = s.Id,
-                        NombreCompleto = s.FirstName + " " + s.LastName
-                    })
-                , "Id", "NombreCompleto");
+                    //Filtro los miembros
+                    //Solo los activos
+                    ViewBag.PersonsTo = new SelectList(miembros.Where(g => g.Enabled == true).ToList()
+                        .Select(s => new
+                        {
+                            Id = s.Id,
+                            NombreCompleto = s.FirstName + " " + s.LastName
+                        })
+                    , "Id", "NombreCompleto");
+                }
+                else
+                {
+                    ViewBag.FromUser = "";
+                    ViewBag.PersonsTo = new SelectList("VACIO");
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No hay un grupo seleccionado."));
+                    return RedirectToAction("Index", "Mail");
+                }
             }
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error abrir nuevo Mensaje."));
+                return RedirectToAction("Index", "Mail");
             }
 
             return View(new MailViewModel());
@@ -90,31 +101,37 @@ namespace EduClass.Web.Controllers
                 try
                 {
                     Person p = _personService.GetById(UserSession.GetCurrentUser().Id);
-                    if (p is Student && p.Silenced)
-                        throw new Exception("No puedes enviar mensajes cuando estas silenciado, contacte al Profesor del grupo");
-
-                    //Execute the mapping 
-                    var mail = AutoMapper.Mapper.Map<MailViewModel, Mail>(mailVm);
-
-                    mail.PersonFromId = UserSession.GetCurrentUser().Id;
-                    mail.CreateAt = DateTime.Now;
-                    mail.ReadAt = null;
-                    mail.Enabled = true;
-
-                    foreach (int i in mailVm.PersonIdTo)
+                    if (p.Silenced)
                     {
-                        Person personTo = _personService.GetById(i);
-                        if (personTo.Enabled && personTo != null)
+
+
+                        //Execute the mapping 
+                        var mail = AutoMapper.Mapper.Map<MailViewModel, Mail>(mailVm);
+
+                        mail.PersonFromId = UserSession.GetCurrentUser().Id;
+                        mail.CreateAt = DateTime.Now;
+                        mail.ReadAt = null;
+                        mail.Enabled = true;
+
+                        foreach (int i in mailVm.PersonIdTo)
                         {
-                            mail.PersonsTo.Add(personTo);
+                            Person personTo = _personService.GetById(i);
+                            if (personTo.Enabled && personTo != null)
+                            {
+                                mail.PersonsTo.Add(personTo);
 
+                            }
                         }
-                    }
 
-                    mail.Description = HttpUtility.HtmlEncode(mail.Description);
-                    _service.Create(mail);
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Envio Exitoso", "El Email fue enviado correctamente"));
-                    return RedirectToAction("Index", "Mail");
+                        mail.Description = HttpUtility.HtmlEncode(mail.Description);
+                        _service.Create(mail);
+                        MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Envio Exitoso", "El Email fue enviado correctamente"));
+                        return RedirectToAction("Index", "Mail");
+                    }
+                    else
+                    {
+                        MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "No Autorizado", "No puedes mandar un Mensaje cuando estas silenciado, contacte al Profesor del grupo"));
+                    }
                     
 
                 }
