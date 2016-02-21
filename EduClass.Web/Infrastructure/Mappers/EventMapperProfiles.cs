@@ -49,7 +49,7 @@ namespace EduClass.Web.Infrastructure.Mappers
                     return default(DateTime);
                 }
 
-                dateTime = DateTime.ParseExact(source, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                dateTime = DateTime.ParseExact(source, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
 
                 return dateTime;
             }
