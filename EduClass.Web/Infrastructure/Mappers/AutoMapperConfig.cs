@@ -16,6 +16,7 @@ namespace EduClass.Web.Infrastructure.Mappers
 		        x.AddProfile<PageMapperProfiles>();
                 x.AddProfile<EventMapperProfiles>();
                 x.AddProfile<TestMapperProfiles>();
+                x.AddProfile<CalificationMapperProfiles>();
             });
 
            // Mapper.CreateMap<string, DateTime>().ConvertUsing<StringToDateTimeConverter>();

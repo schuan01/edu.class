@@ -55,12 +55,14 @@
     <Compile Include="Base\IService.cs" />
     <Compile Include="BoardServices.cs" />
     <Compile Include="CalendarServices.cs" />
+    <Compile Include="CalificationServices.cs" />
     <Compile Include="EventServices.cs" />
     <Compile Include="FileServices.cs" />
     <Compile Include="GroupServices.cs" />
     <Compile Include="IAvatarServices.cs" />
     <Compile Include="IBoardServices.cs" />
     <Compile Include="ICalendarServices.cs" />
+    <Compile Include="ICalificationServices.cs" />
     <Compile Include="IEventServices.cs" />
     <Compile Include="IFileServices.cs" />
     <Compile Include="IGroupServices.cs" />

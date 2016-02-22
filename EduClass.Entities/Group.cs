@@ -21,6 +21,7 @@ namespace EduClass.Entities
             this.Tests = new HashSet<Test>();
             this.Students = new HashSet<Student>();
             this.Posts = new HashSet<Post>();
+            this.Califications = new HashSet<Calification>();
         }
     
         public int Id { get; set; }
@@ -41,5 +42,7 @@ namespace EduClass.Entities
         public virtual ICollection<Student> Students { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Post> Posts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Calification> Califications { get; set; }
     }
 }

@@ -85,22 +85,25 @@
                                         <h4 class="panel-profile-name">@p.FirstName</h4>
                                         <p class="media-usermeta"><i class="glyphicon glyphicon-briefcase"></i> Estudiante</p>
                                     </div>
-                                    @using (Html.BeginForm("SilenceStudent", "Users", FormMethod.Post, htmlAttributes: new { @Id = "" }))
+                                    @if (UserSession.GetCurrentUser() is Teacher)
                                     {
-                                        <ul class="panel-options">
+                                        using (Html.BeginForm("SilenceStudent", "Users", FormMethod.Post, htmlAttributes: new { @Id = "" }))
+                                        {
+                                            <ul class="panel-options">
                                         
-                                                @Html.AntiForgeryToken()
-                                                <li><input type="text" id="idStudent" name="idStudent" value="@p.Id" hidden /></li>
-                                                 @if (p.Silenced)
-                                                 {
-                                                    <li><button class="btn btn-link tooltips" type="submit" data-toggle="tooltip" title="Desilenciar"><i class="glyphicon glyphicon-volume-up"></i></button></li>
-                                                 }
-                                                 else
-                                                 {
-                                                    <li><button class="btn btn-link tooltips" type="submit" data-toggle="tooltip" title="Silenciar"><i class="glyphicon glyphicon-volume-off"></i></button></li>
-                                                 }
+                                                    @Html.AntiForgeryToken()
+                                                    <li><input type="text" id="idStudent" name="idStudent" value="@p.Id" hidden /></li>
+                                                     @if (p.Silenced)
+                                                     {
+                                                        <li><button class="btn btn-link tooltips" type="submit" data-toggle="tooltip" title="Desilenciar"><i class="glyphicon glyphicon-volume-up"></i></button></li>
+                                                     }
+                                                     else
+                                                     {
+                                                        <li><button class="btn btn-link tooltips" type="submit" data-toggle="tooltip" title="Silenciar"><i class="glyphicon glyphicon-volume-off"></i></button></li>
+                                                     }
 
-                                        </ul>
+                                            </ul>
+                                        }
                                     }
                                 </div><!-- panel-heading -->
                                 <div class="panel-body people-info">

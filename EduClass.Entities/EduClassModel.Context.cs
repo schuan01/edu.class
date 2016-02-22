@@ -41,5 +41,6 @@ namespace EduClass.Entities
         public virtual DbSet<Avatar> Avatars { get; set; }
         public virtual DbSet<Reply> Replies { get; set; }
         public virtual DbSet<File> Files { get; set; }
+        public virtual DbSet<Calification> Califications { get; set; }
     }
 }

@@ -58,21 +58,44 @@ namespace EduClass.Web.Controllers
             {
                 if (UserSession.GetCurrentGroup() != null)
                 {
-                    //El remitente. simplemente para mostrar
-                    ViewBag.FromUser = UserSession.GetCurrentUser().FirstName + UserSession.GetCurrentUser().LastName;
+                    if (!_personService.GetById(UserSession.GetCurrentUser().Id).Silenced)
+                    {
+                        List<Person> personas = new List<Person>();
+                        //El remitente. simplemente para mostrar
+                        ViewBag.FromUser = UserSession.GetCurrentUser().FirstName + UserSession.GetCurrentUser().LastName;
 
-                    //Obtengo los miembros del grupo actual
-                    IEnumerable<Person> miembros = _groupService.GetById(UserSession.GetCurrentGroup().Id).Students;
-
-                    //Filtro los miembros
-                    //Solo los activos
-                    ViewBag.PersonsTo = new SelectList(miembros.Where(g => g.Enabled == true).ToList()
-                        .Select(s => new
+                        //Obtengo los miembros del grupo actual
+                        IEnumerable<Person> miembros = _groupService.GetById(UserSession.GetCurrentGroup().Id).Students;
+                        foreach (Person m in miembros)
                         {
-                            Id = s.Id,
-                            NombreCompleto = s.FirstName + " " + s.LastName
-                        })
-                    , "Id", "NombreCompleto");
+                            personas.Add(m);
+                        }
+
+                        if (UserSession.GetCurrentUser() is Student)
+                        {
+                            //Ademas de los miembros, agrego al Teacher
+                            personas.Add(_groupService.GetById(UserSession.GetCurrentGroup().Id).Teacher);
+                        }
+
+                        miembros = personas;
+
+
+                        //Filtro los miembros
+                        //Solo los activos
+                        //Ademas no tengo que ser yo
+                        ViewBag.PersonsTo = new SelectList(miembros.Where(g => g.Enabled == true && g.Id != UserSession.GetCurrentUser().Id).ToList()
+                           .Select(s => new
+                           {
+                               Id = s.Id,
+                               NombreCompleto = s.FirstName + " " + s.LastName
+                           })
+                       , "Id", "NombreCompleto");
+                    }
+                    else
+                    {
+                        MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "No Autorizado", "No puedes mandar un Mensaje cuando estas silenciado, contacte al Profesor del grupo"));
+                        return RedirectToAction("Index", "Mail");
+                    }
                 }
                 else
                 {
@@ -101,7 +124,7 @@ namespace EduClass.Web.Controllers
                 try
                 {
                     Person p = _personService.GetById(UserSession.GetCurrentUser().Id);
-                    if (p.Silenced)
+                    if (!p.Silenced)
                     {
 
 
@@ -126,7 +149,7 @@ namespace EduClass.Web.Controllers
                         mail.Description = HttpUtility.HtmlEncode(mail.Description);
                         _service.Create(mail);
                         MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Envio Exitoso", "El Email fue enviado correctamente"));
-                        return RedirectToAction("Index", "Mail");
+                        
                     }
                     else
                     {
@@ -141,22 +164,7 @@ namespace EduClass.Web.Controllers
                 }
             }
 
-            //Cargo de nuevo la lista para que no de Exception(si aplica)
-
-            //Obtengo los miembros del grupo actual
-            IEnumerable<Person> miembros = _groupService.GetById(UserSession.GetCurrentGroup().Id).Students;
-
-            //Filtro los miembros
-            //Solo los activos
-            ViewBag.PersonsTo = new SelectList(miembros.Where(g => g.Enabled == true).ToList()
-                .Select(s => new
-                {
-                    Id = s.Id,
-                    NombreCompleto = s.FirstName + " " + s.LastName
-                })
-            , "Id", "NombreCompleto");
-
-            return View(mailVm);
+            return RedirectToAction("Index", "Mail");
         }
 
 
@@ -267,7 +275,7 @@ namespace EduClass.Web.Controllers
             }
             catch (Exception ex)
             {
-                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al borrar  el correo."));
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
             }
 
             return RedirectToAction("Index", "Mail");

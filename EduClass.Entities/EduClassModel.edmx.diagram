@@ -46,6 +46,9 @@
         <EntityTypeShape EntityType="EduClassModel.FilesLibrary" Width="1.5" PointX="8.875" PointY="7.75" />
         <AssociationConnector Association="EduClassModel.PersonFile" />
         <AssociationConnector Association="EduClassModel.PostFile" />
+        <EntityTypeShape EntityType="EduClassModel.Calification" Width="1.5" PointX="9.875" PointY="3.5" />
+        <AssociationConnector Association="EduClassModel.StudentCalification" />
+        <AssociationConnector Association="EduClassModel.GroupCalification" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

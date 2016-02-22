@@ -21,6 +21,7 @@
     <EntitySet Name="Avatars" EntityType="EduClassModel.Store.Avatars" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Replies" EntityType="EduClassModel.Store.Replies" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Files" EntityType="EduClassModel.Store.Files" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Califications" EntityType="EduClassModel.Store.Califications" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Person_Teacher" EntityType="EduClassModel.Store.Person_Teacher" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Person_Student" EntityType="EduClassModel.Store.Person_Student" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="GroupStudent" EntityType="EduClassModel.Store.GroupStudent" store:Type="Tables" Schema="dbo" />
@@ -121,6 +122,14 @@
     <AssociationSet Name="FK_PostFile_File" Association="EduClassModel.Store.FK_PostFile_File">
       <End Role="File" EntitySet="Files" />
       <End Role="PostFile" EntitySet="PostFile" />
+    </AssociationSet>
+    <AssociationSet Name="StudentCalification" Association="EduClassModel.Store.StudentCalification">
+      <End Role="Student" EntitySet="Person_Student" />
+      <End Role="Calification" EntitySet="Califications" />
+    </AssociationSet>
+    <AssociationSet Name="GroupCalification" Association="EduClassModel.Store.GroupCalification">
+      <End Role="Group" EntitySet="Groups" />
+      <End Role="Calification" EntitySet="Califications" />
     </AssociationSet>
     <AssociationSet Name="FK_Teacher_inherits_Person" Association="EduClassModel.Store.FK_Teacher_inherits_Person">
       <End Role="Person" EntitySet="Person" />
@@ -316,6 +325,20 @@
     <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="PersonId" Type="int" Nullable="false" />
     <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Califications">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Oral" Type="int" Nullable="false" />
+    <Property Name="Test" Type="int" Nullable="false" />
+    <Property Name="Other" Type="int" Nullable="false" />
+    <Property Name="Average" Type="float" Nullable="false" />
+    <Property Name="StudentId" Type="int" Nullable="false" />
+    <Property Name="GroupId" Type="int" Nullable="false" />
+    <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+    <Property Name="UpdatedAt" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <EntityType Name="Person_Teacher">
     <Key>
@@ -570,6 +593,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="StudentCalification">
+    <End Role="Student" Type="EduClassModel.Store.Person_Student" Multiplicity="1" />
+    <End Role="Calification" Type="EduClassModel.Store.Califications" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Student">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Calification">
+        <PropertyRef Name="StudentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="GroupCalification">
+    <End Role="Group" Type="EduClassModel.Store.Groups" Multiplicity="1" />
+    <End Role="Calification" Type="EduClassModel.Store.Califications" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Group">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Calification">
+        <PropertyRef Name="GroupId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_GroupStudent_Group">
     <End Role="Group" Type="EduClassModel.Store.Groups" Multiplicity="1" />
     <End Role="GroupStudent" Type="EduClassModel.Store.GroupStudent" Multiplicity="*" />
@@ -774,6 +821,15 @@
             <End Role="Post" EntitySet="Posts" />
             <End Role="File" EntitySet="Files" />
           </AssociationSet>
+          <EntitySet Name="Califications" EntityType="EduClassModel.Calification" />
+          <AssociationSet Name="StudentCalification" Association="EduClassModel.StudentCalification">
+            <End Role="Student" EntitySet="Person" />
+            <End Role="Calification" EntitySet="Califications" />
+          </AssociationSet>
+          <AssociationSet Name="GroupCalification" Association="EduClassModel.GroupCalification">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="Calification" EntitySet="Califications" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Person">
           <Key>
@@ -806,6 +862,7 @@
         <EntityType Name="Student" BaseType="EduClassModel.Person" >
           <NavigationProperty Name="Groups" Relationship="EduClassModel.GroupStudent" FromRole="Student" ToRole="Group" />
           <NavigationProperty Name="Responses" Relationship="EduClassModel.StudentResponse" FromRole="Student" ToRole="Response" />
+          <NavigationProperty Name="Califications" Relationship="EduClassModel.StudentCalification" FromRole="Student" ToRole="Calification" />
         </EntityType>
         <EntityType Name="Post">
           <Key>
@@ -854,6 +911,7 @@
           <NavigationProperty Name="Students" Relationship="EduClassModel.GroupStudent" FromRole="Group" ToRole="Student" />
           <Property Name="Key" Type="String" Nullable="false" />
           <NavigationProperty Name="Posts" Relationship="EduClassModel.GroupPost" FromRole="Group" ToRole="Post" />
+          <NavigationProperty Name="Califications" Relationship="EduClassModel.GroupCalification" FromRole="Group" ToRole="Calification" />
         </EntityType>
         <EntityType Name="Test">
           <Key>
@@ -1203,6 +1261,46 @@
           <End Type="EduClassModel.Post" Role="Post" Multiplicity="*" />
           <End Type="EduClassModel.File" Role="File" Multiplicity="*" />
         </Association>
+        <EntityType Name="Calification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Oral" Type="Int32" Nullable="false" />
+          <Property Name="Test" Type="Int32" Nullable="false" />
+          <Property Name="Other" Type="Int32" Nullable="false" />
+          <Property Name="Average" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Student" Relationship="EduClassModel.StudentCalification" FromRole="Calification" ToRole="Student" />
+          <Property Name="StudentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Group" Relationship="EduClassModel.GroupCalification" FromRole="Calification" ToRole="Group" />
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
+          <Property Name="UpdatedAt" Type="String" Nullable="false" />
+        </EntityType>
+        <Association Name="StudentCalification">
+          <End Type="EduClassModel.Student" Role="Student" Multiplicity="1" />
+          <End Type="EduClassModel.Calification" Role="Calification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Calification">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GroupCalification">
+          <End Type="EduClassModel.Group" Role="Group" Multiplicity="1" />
+          <End Type="EduClassModel.Calification" Role="Calification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Calification">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1413,6 +1511,21 @@
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="PersonId" ColumnName="PersonId" />
           <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Califications">
+      <EntityTypeMapping TypeName="IsTypeOf(EduClassModel.Calification)">
+        <MappingFragment StoreEntitySet="Califications">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Oral" ColumnName="Oral" />
+          <ScalarProperty Name="Test" ColumnName="Test" />
+          <ScalarProperty Name="Other" ColumnName="Other" />
+          <ScalarProperty Name="Average" ColumnName="Average" />
+          <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+          <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+          <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

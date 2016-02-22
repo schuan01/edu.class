@@ -60,6 +60,9 @@
     <Compile Include="Calendar.cs">
       <DependentUpon>EduClassModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Calification.cs">
+      <DependentUpon>EduClassModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EduClassModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
