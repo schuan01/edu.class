@@ -431,10 +431,10 @@ namespace EduClass.Web.Controllers
                         }
                         else
                         {
-                            //Si ya existe, elimino la anterior. Relacion 1 - 1. Tambien elimino fisicamente
-                            //TODO
+                            //Si ya existe, elimino la anterior. Relacion 1 - 1. Tambien elimino fisicamente si no es Default
+                            if(p.Avatar.UrlPhoto != "~\\Content\\images\\default.png")
+                                System.IO.File.Delete(Server.MapPath(p.Avatar.UrlPhoto));
 
-                            System.IO.File.Delete(Server.MapPath(p.Avatar.UrlPhoto));
                             _avatarService.Delete(p.Avatar);
                             
 

@@ -3,18 +3,16 @@ using EduClass.Logic;
 using EduClass.WebApi.Infrastructure;
 using EduClass.WebApi.Infrastructure.Sessions;
 using EduClass.WebApi.Infrastructure.ViewModels;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity.Validation;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+
 using System.Web.Http;
 using System.Web.Http.Cors;
-using System.Web.Http.Filters;
-using System.Web.Http.Results;
-using System.Web.Script.Serialization;
+
+using System.Web.Security;
 
 namespace EduClass.WebApi.Controllers
 {
@@ -22,7 +20,7 @@ namespace EduClass.WebApi.Controllers
     [RoutePrefix("api/Users")]
     public class UsersController : ApiController
     {
-        private string carpetaRaiz = "~/UsersFolders/";//Carpeta raiz, no incluye los Avatars
+        private string carpetaRaiz = "UsersFolders";//Carpeta raiz, no incluye los Avatars
         private static IPersonServices _service;
         private static IAvatarServices _avatarService;
 
@@ -33,11 +31,18 @@ namespace EduClass.WebApi.Controllers
 
 
         }
-
-        /*[HttpPost]
+ 
+        [HttpPost]
         [AllowAnonymous]
-        public IHttpActionResult SignIn(string userName, string password, string returnurl)
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        public IHttpActionResult SignIn(string datosUsu)
         {
+
+            dynamic datos = JsonConvert.DeserializeObject<string>(datosUsu);
+
+            string userName = datos.UserName;
+            string password = datos.Password;
+
             if (!User.Identity.IsAuthenticated)
             {
 
@@ -49,49 +54,26 @@ namespace EduClass.WebApi.Controllers
 
                     UserSession.SetCurrentUser(user);
 
-                    //Prevent Redirection attack
-                    if (!String.IsNullOrEmpty(returnurl) && Url.IsLocalUrl(returnurl))
-                        return Redirect(returnurl);
-
-
-
-                    return RedirectToAction("Index", "Board");
+                    return Json(new { mensaje = "Bienvenido a EduClass", url = "Board.html" });
                 }
                 else
                 {
-                    ViewBag.UserName = userName;
-                    ViewBag.ReturnUrl = returnurl;
-                    ViewBag.Message = "El usuario y la contraseña no coinciden.";
+                    return Json(new { error = "El usuario y la contraseña no cohinciden" });
+                    
                 }
             }
             else
             {
-                //Prevent Redirection attack
-                if (!String.IsNullOrEmpty(returnurl) && Url.IsLocalUrl(returnurl))
-                    return Redirect(returnurl);
-
-                return RedirectToAction("SignIn", "Users");
+                return Json(new { mensaje = "Bienvenido a EduClass", url = "Board.html" });
             }
 
-            return View();
-        }*/
-
-        public class AllowCrossSiteJsonAttribute : ActionFilterAttribute
-        {
-            public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
-            {
-                if (actionExecutedContext.Response != null)
-                    actionExecutedContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-
-                base.OnActionExecuted(actionExecutedContext);
-            }
+                      
         }
 
         [HttpPost]
         [AllowAnonymous]
-        [EnableCors(origins: "192.168.66.27", headers: "*", methods: "*")]
-        [AllowCrossSiteJson]
-        public System.Web.Mvc.JsonResult Register(PersonViewModel personVm)
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        public IHttpActionResult Register(PersonViewModel personVm)
         {
             if (ModelState.IsValid)
             {
@@ -115,48 +97,43 @@ namespace EduClass.WebApi.Controllers
 
                         person.CreatedAt = DateTime.Now;
                         person.Enabled = true;
+                        person.Silenced = false;
 
                         _service.Create(person);
-
-                       //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario creado", string.Format("El usuario {0} fue creado con éxito", personVm.UserName)));
 
                         CreateUserFolder(person);
                         SetDefaultAvatar(person);
 
-                        return new System.Web.Mvc.JsonResult()
-                        {
-                            Data = person,
-                            JsonRequestBehavior = System.Web.Mvc.JsonRequestBehavior.AllowGet
-                        };
+                        return Json(new { mensaje = "Se creo correcamente", url="SignIn.html" });
                     }
                     else
                     {
-                        //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error al crear usuario", string.Format("El usuario {0} ya existe", personVm.UserName)));
+                        return Json(new { error = "El usuario y contraseña no coinciden" });
                     }
                 }
                 catch (DbEntityValidationException dex)
                 {
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al crear usuario, por favor contacte con el Administrador."));
+                    return Json(new { error = dex.Message });
                 }
                 catch (Exception ex)
                 {
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al crear usuario, por favor contacte con el Administrador."));
+                    return Json(new { error = ex.Message });
                 }
             }
 
-            return new System.Web.Mvc.JsonResult()
-            {
-                Data = null,
-                JsonRequestBehavior = System.Web.Mvc.JsonRequestBehavior.AllowGet
-            };
+            return Json(new { error = "Error al crear el usuario" });
         }
 
+        //TODO REDIRECCIONE A LA CARPETA EN WEB Y NO EN WEB API
         private void CreateUserFolder(Person person)
         {
-            string carpetaUsuario = carpetaRaiz + person.UserName;
-            if (!Directory.Exists(System.Web.Hosting.HostingEnvironment.MapPath(carpetaUsuario)))
+            string carpetaUsuario = carpetaRaiz +"\\" +  person.UserName;
+            string rutaServidor = ConfigurationManager.AppSettings["ServerPath"];
+            string originalDirectory = new DirectoryInfo(string.Format("{0}\\"+carpetaUsuario, rutaServidor)).ToString();
+
+            if (!Directory.Exists(originalDirectory))
             {
-                Directory.CreateDirectory(System.Web.Hosting.HostingEnvironment.MapPath(carpetaUsuario));
+                Directory.CreateDirectory(originalDirectory);
             }
         }
 

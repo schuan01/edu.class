@@ -50,7 +50,7 @@ namespace EduClass.WebApi.Infrastructure.ViewModels
         [Display(Name = "Cédula")]
         public string IdentificationCard { get; set; }
 
-        [Required]
+       
         public string PersonType { get; set; }
 
         public System.DateTime CreatedAt { get; set; }

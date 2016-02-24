@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
 using EduClass.Entities;
+using EduClass.WebApi.Infrastructure.Mappers;
 using EduClass.WebApi.Infrastructure.Modules;
 using System;
 using System.Collections.Generic;
@@ -44,31 +45,11 @@ namespace EduClass.WebApi
             var container = builder.Build();
 
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+
+            //AutoMapper
+            AutoMapperConfig.RegisterMappings();
         }
 
-        public class PersonBinder : IModelBinder
-        {
-            public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
-            {
-                var contentType = controllerContext.HttpContext.Request.ContentType;
-                if (!contentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
-                    return (null);
-
-                string bodyText;
-
-                using (var stream = controllerContext.HttpContext.Request.InputStream)
-                {
-                    stream.Seek(0, SeekOrigin.Begin);
-                    using (var reader = new StreamReader(stream))
-                        bodyText = reader.ReadToEnd();
-                }
-
-                if (string.IsNullOrEmpty(bodyText)) return (null);
-
-                var xx = new JavaScriptSerializer().Deserialize<Person>(bodyText);
-
-                return xx;
-            }
-        }
+        
     }
 }
