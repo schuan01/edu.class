@@ -614,11 +614,11 @@
     <Content Include="Views\UserMailer\InvitedToGroup.cshtml" />
     <Content Include="Views\Pages\ViewPage.cshtml" />
     <Content Include="Views\Pages\Edit.cshtml" />
+    <Content Include="Views\Califications\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\avatars\" />
-    <Folder Include="Views\Califications\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

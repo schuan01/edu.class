@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<EduClass.Entities.Post>
 
 @{
-    
+
     ViewBag.Title = "Línea de tiempo";
     var earlierDate = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
     var postTypeFlag = 1;
@@ -16,8 +16,7 @@
 
         @{var meAvatar = String.Empty;}
 
-        @if (currentUser.Avatar == null) { meAvatar = "~/Content/images/default.png"; }
-        else { meAvatar = currentUser.Avatar.UrlPhoto; }
+        @{meAvatar = currentUser.Avatar.UrlPhoto;}
 
         <div class="panel" style="height:200px">
             <div class="panel-body">

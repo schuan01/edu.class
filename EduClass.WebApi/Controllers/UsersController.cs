@@ -79,7 +79,7 @@ namespace EduClass.WebApi.Controllers
             {
                 try
                 {
-                    //PersonViewModel personVm = new JavaScriptSerializer().Deserialize<PersonViewModel>(viewModelPersonAddress);
+                    
 
                     //TODO: El chequeo debe ser con username y Email
                     if (_service.GetByUserName(personVm.UserName) == null)
@@ -124,9 +124,10 @@ namespace EduClass.WebApi.Controllers
             return Json(new { error = "Error al crear el usuario" });
         }
 
-        //TODO REDIRECCIONE A LA CARPETA EN WEB Y NO EN WEB API
+        
         private void CreateUserFolder(Person person)
         {
+            //REDIRECCIONA A LA CARPETA DEL WEB, DONDE ESTARIA TODO
             string carpetaUsuario = carpetaRaiz +"\\" +  person.UserName;
             string rutaServidor = ConfigurationManager.AppSettings["ServerPath"];
             string originalDirectory = new DirectoryInfo(string.Format("{0}\\"+carpetaUsuario, rutaServidor)).ToString();

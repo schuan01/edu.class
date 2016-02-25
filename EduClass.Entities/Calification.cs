@@ -22,7 +22,7 @@ namespace EduClass.Entities
         public int StudentId { get; set; }
         public int GroupId { get; set; }
         public System.DateTime CreatedAt { get; set; }
-        public string UpdatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
     
         public virtual Student Student { get; set; }
         public virtual Group Group { get; set; }

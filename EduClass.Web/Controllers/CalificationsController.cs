@@ -26,15 +26,27 @@ namespace EduClass.Web.Controllers
         }
 
 
-        // GET: Califications
+
         public ActionResult Index()
         {
-            return View();
+            IEnumerable<Person> miembros = new List<Person>();
+            if (UserSession.GetCurrentGroup() != null)
+            {
+                //LOS ALUMNOS DEL GRUPO ACTUAL
+                miembros = _groupService.GetById(UserSession.GetCurrentGroup().Id).Students;
+
+            }
+            else
+            {
+                
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No hay un grupo seleccionado."));
+                return RedirectToAction("Index", "Board");
+            }
+            return View(miembros);
         }
 
-        // GET: Page
         [HttpGet]
-        public ActionResult Edit()
+        public ActionResult Save()
         {
             return View(new CalificationViewModel());
         }
@@ -42,34 +54,69 @@ namespace EduClass.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Oral,Test,Average,StudentId")]CalificationViewModel calficationVm)
+        public ActionResult Save(FormCollection formCollection)
         {
-            if (ModelState.IsValid)
+
+            try
             {
-                try
+                string idOral = "";
+                string idEscrito = "";
+                string idOtro = "";
+                String valorOral = "";
+                String valorEscrito = "";
+                String valorOtro = "";
+
+                IEnumerable<Person> miembros = _groupService.GetById(UserSession.GetCurrentGroup().Id).Students;
+                IEnumerable<Calification> notasAlumno = new List<Calification>();
+                foreach (Person m in miembros)
                 {
+                    idOral = "oral" + m.Id;
+                    idEscrito = "escrito" + m.Id;
+                    idOtro = "otro" + m.Id;
 
-                    //Execute the mapping 
-                    var calification = AutoMapper.Mapper.Map<CalificationViewModel, Calification>(calficationVm);
+                    valorOral = formCollection[idOral];
+                    valorEscrito = formCollection[idEscrito];
+                    valorOtro = formCollection[idOtro];
 
-                    calification.CreatedAt = DateTime.Now;
-                    calification.GroupId = UserSession.GetCurrentGroup().Id;
-                    
+                    if ((valorEscrito != null && valorEscrito != "")&& (valorOral != null && valorOral != "") && (valorOtro != null && valorOtro != ""))
+                    {
+                        //Si ya tiene una calificacion, la buscamos y la editamos
+                        notasAlumno = ((Student)m).Califications;
+                        Calification c = notasAlumno.FirstOrDefault(x => x.GroupId == UserSession.GetCurrentGroup().Id);//Deberia ser una unica nota por alumno del grupo
+                        if (c != null)
+                        {
+                            c.Oral = Convert.ToInt32(valorOral);
+                            c.Test = Convert.ToInt32(valorEscrito);
+                            c.Other = Convert.ToInt32(valorOtro);
+                            c.Average = (c.Oral + c.Test + c.Other) / 3;//Calculo promedio
+                            c.UpdatedAt = DateTime.Now;
+                            _service.Update(c);
+                        }
+                        else//Si es la primera vez
+                        {
 
-                    _service.Create(calification);
-
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Creacion Exitosa", "La Calificacion se creo correctamente"));
-
-                    return RedirectToAction("Index");
+                            Calification ca = new Calification();
+                            ca.Oral = Convert.ToInt32(valorOral);
+                            ca.Test = Convert.ToInt32(valorEscrito);
+                            ca.Other = Convert.ToInt32(valorOtro);
+                            ca.Average = (ca.Oral + ca.Test + ca.Other) / 3;//Calculo promedio
+                            ca.CreatedAt = DateTime.Now;
+                            ca.GroupId = UserSession.GetCurrentGroup().Id;
+                            ca.StudentId = m.Id;
+                            _service.Create(ca);
+                        }
+                    }
 
                 }
-                catch (Exception ex)
-                {
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se pudo crear la Calificacion"));
-                }
+
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Modificacion Exitosa", "Las calificaciones se modificaron correctamente"));
+
             }
-
-            return View(calficationVm);
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se pudo crear la Calificacion"));
+            }
+            return RedirectToAction("Index");
         }
     }
 }

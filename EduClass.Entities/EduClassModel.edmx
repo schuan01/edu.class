@@ -338,7 +338,7 @@
     <Property Name="StudentId" Type="int" Nullable="false" />
     <Property Name="GroupId" Type="int" Nullable="false" />
     <Property Name="CreatedAt" Type="datetime" Nullable="false" />
-    <Property Name="UpdatedAt" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="UpdatedAt" Type="datetime" Nullable="true" />
   </EntityType>
   <EntityType Name="Person_Teacher">
     <Key>
@@ -1275,7 +1275,7 @@
           <NavigationProperty Name="Group" Relationship="EduClassModel.GroupCalification" FromRole="Calification" ToRole="Group" />
           <Property Name="GroupId" Type="Int32" Nullable="false" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" />
-          <Property Name="UpdatedAt" Type="String" Nullable="false" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="true" />
         </EntityType>
         <Association Name="StudentCalification">
           <End Type="EduClassModel.Student" Role="Student" Multiplicity="1" />

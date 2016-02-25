@@ -31,12 +31,27 @@ namespace EduClass.Web.Controllers
 
 
         // GET: FilesLibrary
-        public ActionResult Index()
+        public ActionResult Index(string tipo)
         {
             
             //Obtengo los archivos que publico el Person
             Person p = _servicePerson.GetById(UserSession.GetCurrentUser().Id);
             IOrderedEnumerable<Entities.File> archivos = p.Files.ToList().OrderByDescending(x => x.CreatedAt);
+
+            if (tipo == "imagenes")
+                archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("image")).ToList().OrderByDescending(x => x.CreatedAt);
+
+            if (tipo == "audio")
+
+                archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("audio")).ToList().OrderByDescending(x => x.CreatedAt);
+
+            if (tipo == "documentos")
+                archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("office")).ToList().OrderByDescending(x => x.CreatedAt);
+
+            if (tipo == "pdf")
+                archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("application/pdf")).ToList().OrderByDescending(x => x.CreatedAt);
+
+            
 
             return View(archivos);
         }
@@ -192,6 +207,122 @@ namespace EduClass.Web.Controllers
 
 
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ShareMoreFiles(FormCollection formCollection)
+        {
+            try
+            {
+                String valores = formCollection["seleccionados"];
+                List<string> identificadores = valores.Split(',').ToList<string>();
+                identificadores.Reverse();
+
+                Person p = _servicePerson.GetById(UserSession.GetCurrentUser().Id);
+                if (p is Student && p.Silenced)
+                    throw new Exception("No puedes compartir un archivo cuando estas silenciado, contacte al Profesor del grupo");
+
+                Group g = UserSession.GetCurrentGroup();
+                if (g == null)
+                    throw new Exception("No hay grupo seleccionado");
+
+                Post post = new Post();
+                post.Title = "Nuevos archivos compartidos";
+                post.Content = "Chequea los nuevos archivos que he compartido con ustedes";
+                post.GroupId = UserSession.GetCurrentGroup().Id;
+                post.PersonId = UserSession.GetCurrentUser().Id;
+                post.PostType = new PostType();//TODO tipo de Post
+                post.CreatedAt = DateTime.Now;
+                post.Enabled = true;
+
+                foreach (string valor in identificadores)
+                {
+                    if (valor != "")
+                    {
+                        Entities.File f = _service.GetById(Convert.ToInt32(valor));
+                        if (f != null && f.PersonId == UserSession.GetCurrentUser().Id)//Solo puedo compartir archivos mios
+                        {
+                            post.Files.Add(f);
+                        }
+                    }
+                }
+
+                if (post.Files.Count > 0)
+                {
+                    _servicePost.Create(post);
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Post creado", "Has compartido correctamente los archivos"));
+                }
+                else
+                {
+                    throw new Exception("No hay archivos seleccionados para compartir");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+
+            }
+            return RedirectToAction("Index", "FilesLibrary");
+
+
+        }
+
+        //TODO Elimina solo fisicamente, que pasa si est asociado a un Post?
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteMoreFiles(FormCollection formCollection)
+        {
+            try
+            {
+                String valores = formCollection["seleccionadosBorrar"];
+                List<string> identificadores = valores.Split(',').ToList<string>();
+                identificadores.Reverse();
+
+                try
+                {
+                    foreach (string valor in identificadores)
+                    {
+                        if (valor != "")
+                        {
+                            Entities.File f = _service.GetById(Convert.ToInt32(valor));
+
+                            if (f != null && f.PersonId == UserSession.GetCurrentUser().Id)//Solo puedo borrar archivos mios
+                            {
+                                string fullPath = Server.MapPath(f.UrlFile);
+                                if (System.IO.File.Exists(fullPath))
+                                {
+                                    System.IO.File.Delete(fullPath);
+                                    _service.Delete(f);
+                                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Archivo", "Archivo borrado con éxito."));
+
+                                }
+                                else
+                                {
+                                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Archivo", "El archivo no existe."));
+                                }
+
+                            }
+                            else
+                            {
+                                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Archivo", "El archivo no existe."));
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al borrar el archivo."));
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+            }
+            return RedirectToAction("Index", "FilesLibrary");
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
