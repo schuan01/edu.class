@@ -18,6 +18,7 @@ namespace EduClass.WebApi.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Users")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UsersController : ApiController
     {
         private string carpetaRaiz = "UsersFolders";//Carpeta raiz, no incluye los Avatars
@@ -34,14 +35,12 @@ namespace EduClass.WebApi.Controllers
  
         [HttpPost]
         [AllowAnonymous]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
-        public IHttpActionResult SignIn(string datosUsu)
+        [Route("SignIn")]
+        public IHttpActionResult SignIn(PersonViewModel person)
         {
 
-            dynamic datos = JsonConvert.DeserializeObject<string>(datosUsu);
-
-            string userName = datos.UserName;
-            string password = datos.Password;
+            string userName = person.UserName;
+            string password = person.Password;
 
             if (!User.Identity.IsAuthenticated)
             {
@@ -54,11 +53,17 @@ namespace EduClass.WebApi.Controllers
 
                     UserSession.SetCurrentUser(user);
 
-                    return Json(new { mensaje = "Bienvenido a EduClass", url = "Board.html" });
+                    string tipo = "";
+                    if (user is Teacher)
+                        tipo = "Profesor";
+                    else
+                        tipo = "Estudiante";
+                    
+                    return Json(new { usuario = user.UserName, nombre = user.FirstName, apellido = user.LastName, cumpleanios = user.Birthday, tipoUsuario = tipo, email = user.Email, identificacion = user.IdentificationCard, url = "Board.html" });
                 }
                 else
                 {
-                    return Json(new { error = "El usuario y la contraseña no cohinciden" });
+                    return Json(new { error = "El usuario y la contraseña no coinciden" });
                     
                 }
             }
@@ -72,7 +77,7 @@ namespace EduClass.WebApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        [Route("Register")]
         public IHttpActionResult Register(PersonViewModel personVm)
         {
             if (ModelState.IsValid)

@@ -29,6 +29,12 @@ namespace EduClass.Web.Controllers
 
         public ActionResult Index()
         {
+            if (UserSession.GetCurrentUser() is Student)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "No Autorizado", "No puede acceder a esta página"));
+                return RedirectToAction("Index", "Board");
+            }
+
             IEnumerable<Person> miembros = new List<Person>();
             if (UserSession.GetCurrentGroup() != null)
             {

@@ -1,6 +1,7 @@
 ﻿using EduClass.Entities;
 using EduClass.Logic;
 using EduClass.Web.Infrastructure.Sessions;
+using Ionic.Zip;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -158,6 +159,53 @@ namespace EduClass.Web.Controllers
 
                     return File(Request.MapPath(f.UrlFile), MediaTypeNames.Application.Octet, f.Name);
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al descargar el archivo."));
+
+            }
+
+            return null;
+
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public FileResult DownloadMoreFiles(FormCollection formCollection)
+        {
+            try
+            {
+                String valores = formCollection["seleccionadosDescargar"];
+                List<string> identificadores = valores.Split(',').ToList<string>();
+                identificadores.Reverse();
+
+                var outputStream = new MemoryStream();
+
+                using (var zip = new ZipFile())
+                {
+                    foreach (string arch in identificadores)
+                    {
+                        if (arch != "")
+                        {
+                            Entities.File f = _service.GetById(Convert.ToInt32(arch));
+                            if (f != null)
+                            {
+                                string fullPath = Server.MapPath(f.UrlFile);
+                                zip.AddFile(fullPath,"");
+
+                            }
+                        }
+                    }
+
+                    zip.Save(outputStream);
+                    outputStream.Position = 0;
+                }
+
+                
+                return File(outputStream, "application/zip", "ArchivosEduClass.zip");
+
             }
             catch (Exception ex)
             {

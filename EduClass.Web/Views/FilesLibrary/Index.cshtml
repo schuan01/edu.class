@@ -18,7 +18,16 @@
                     <button id="compartirArchivos" type="submit" class="btn btn-default"><i class="fa fa-share"></i> Compartir</button>
                     
                 }
-                    <button type="button" class="btn btn-default"><i class="fa fa-download"></i> Descargar</button>
+                    
+                </div>
+                <div class="btn-group" role="group">
+                    @using (Html.BeginForm("DownloadMoreFiles", "FilesLibrary", FormMethod.Post, htmlAttributes: new { @Id = "frmShareFiles" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input id="seleccionadosDescargar" name="seleccionadosDescargar" hidden />
+                        <button id="descargarArchivos" type="submit" class="btn btn-default"><i class="fa fa-download"></i> Descargar</button>
+
+                    }
                 </div>
                 <div class="btn-group" role="group">
                     @using (Html.BeginForm("DeleteMoreFiles", "FilesLibrary", FormMethod.Post, htmlAttributes: new { @Id = "frmShareFiles" }))
@@ -146,6 +155,13 @@
                 return $(this).val();
             }).get();
             $('#seleccionadosBorrar').val(checkValues);
+        });
+
+        $('#descargarArchivos').click(function () {
+            var checkValues = $('input[name=archivo]:checked').map(function () {
+                return $(this).val();
+            }).get();
+            $('#seleccionadosDescargar').val(checkValues);
         });
 
         jQuery('.thmb').hover(function () {
