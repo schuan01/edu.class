@@ -86,17 +86,6 @@ namespace EduClass.Web.Controllers
                     post.PersonId = UserSession.GetCurrentUser().Id;
                     post.GroupId = UserSession.GetCurrentGroup().Id;
 
-                    //TODO FILES
-                    for (int i = 0; i < Request.Files.Count; i++)
-                    {
-                        HttpPostedFileBase file = Request.Files[i];
-                        if (file != null)
-                        {
-
-                        }
-                    }
-
-
                     _post.Create(post);
 
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Post creado", "El post fue creado con éxito"));

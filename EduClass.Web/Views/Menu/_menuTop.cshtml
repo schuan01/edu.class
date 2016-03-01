@@ -8,40 +8,43 @@
 <div class="headerbar">
     <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
     <div class="searchpanel">
-        
-            <div class="input-group">
-                @if (UserSession.GetCurrentGroup() != null)
+
+        <div class="input-group">
+            @if (UserSession.GetCurrentGroup() != null)
+            {
+
+                <button id="botonMenu" type="button" class="btn btn-success dropdown-toggle btn-lg" data-toggle="dropdown" aria-expanded="false">
+                    @UserSession.GetCurrentGroup().Name <span class="caret"></span>
+                </button>
+
+            }
+            else
+            {
+                <button id="botonMenu" type="button" class="btn btn-success dropdown-toggle btn-lg" data-toggle="dropdown" aria-expanded="false">
+                    Mis Grupos<span class="caret"></span>
+                </button>
+            }
+            <ul class="dropdown-menu" id="gruposDDL" role="menu">
+                @try
                 {
 
-            <button id="botonMenu" type="button" class="btn btn-success dropdown-toggle btn-lg" data-toggle="dropdown" aria-expanded="false">
-                @UserSession.GetCurrentGroup().Name <span class="caret"></span>
-            </button>
-
+                    foreach (Group item in UserSession.GetUserGroups())
+                    {
+                        <li><a href="#" id="@item.Id">@item.Name</a></li>
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-            <button id="botonMenu" type="button" class="btn btn-success dropdown-toggle btn-lg" data-toggle="dropdown" aria-expanded="false">
-                Mis Grupos<span class="caret"></span>
-            </button>
-                }
-                <ul class="dropdown-menu" id="gruposDDL" role="menu">
-                    @try
-                        {
-
-                            foreach (Group item in UserSession.GetUserGroups())
-                            {
-                    <li><a href="#" id="@item.Id">@item.Name</a></li>
-                            }
-                        }
-                        catch (Exception ex)
-                        {
                     <li><a href="#">No estas en ningun grupo</a></li>
-                        }
+                }
 
 
-                </ul>
-            </div><!-- input-group -->
-            </div>
+            </ul>
+        </div><!-- input-group -->
+    </div>
+
+
+
         
     
     <div class="header-right">

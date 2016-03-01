@@ -84,10 +84,7 @@ namespace EduClass.WebApi.Controllers
             {
                 try
                 {
-                    
-
-                    //TODO: El chequeo debe ser con username y Email
-                    if (_service.GetByUserName(personVm.UserName) == null)
+                    if (_service.GetByUserNameAndMail(personVm.UserName, personVm.Email) == null)
                     {
                         Person person;
 

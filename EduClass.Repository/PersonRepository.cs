@@ -19,9 +19,18 @@ namespace EduClass.Repository
                 .FirstOrDefault();
         }
 
+        public Person GetByUserNameAndMail(string userName, string email)
+        {
+            return dbSet.Where(x => x.UserName == userName || x.Email == email)//Si el mail o el ususario coinciden
+                .Include(x => x.Avatar)
+                .Include(x => x.Posts)
+                .Include(x => x.Files)
+                .FirstOrDefault();
+        }
+
         public Person GetByUserName(string userName)
         {
-            return dbSet.Where(x => x.UserName == userName)
+            return dbSet.Where(x => x.UserName == userName)//Si el mail o el ususario coinciden
                 .Include(x => x.Avatar)
                 .Include(x => x.Posts)
                 .Include(x => x.Files)

@@ -120,7 +120,7 @@ namespace EduClass.Web.Controllers
 
             _service.Update(calendar);
 
-            //TODO: AGREGAR LA CLASE MESSAGE SESSION
+
             //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", calendar.Name)));
 
             return RedirectToAction("Index");

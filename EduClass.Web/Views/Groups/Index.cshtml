@@ -39,7 +39,9 @@
                                 <th>Clave</th>
                                 <th>Estado</th>
                                 <th class="text-center">Alumnos</th>
-                                <th></th>
+                                <th>Editar</th>
+                                <th>Deshabilitar/Habilitar</th>
+                                <th>Eliminar</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -60,19 +62,37 @@
                                         <td >Inactivo</td>
                                     }
                                     <td class="text-center">@elemento.Students.Count</td>   
-                                    @using (Html.BeginForm("Disable", "Groups", FormMethod.Post, htmlAttributes: new { @Id = @elemento.Id }))
-                                    {
                                     <td>
                                         <ul class="table-options">
                                             <li><a href="@Url.Action("Edit", "Groups", new { id = elemento.Id })"><i class="fa fa-pencil"></i></a></li>
-                                            
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <ul class="table-options">
+                                            @using (Html.BeginForm("Disable", "Groups", FormMethod.Post, htmlAttributes: new { @Id = @elemento.Id }))
+                                            {
+
+
+                                                @Html.AntiForgeryToken()
+                                                <li><input type="hidden" name="groupId" value="@elemento.Id" /></li>
+                                                <li><button type="submit" class="btn-link"><i class="fa fa-close"></i></button></li>
+                                            }
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <ul class="table-options">
+                                    
+                                            @using (Html.BeginForm("DeleteGroup", "Groups", FormMethod.Post, htmlAttributes: new { @Id = @elemento.Id }))
+                                            {
+
                                                 @Html.AntiForgeryToken()
                                                 <li><input type="hidden" name="groupId" value="@elemento.Id" /></li>
                                                 <li><button type="submit" class="btn-link"><i class="fa fa-trash"></i></button></li>
+                                            }
                                             
                                         </ul>
                                     </td>
-                                    }
+                                   
 
                                     
                                 </tr>

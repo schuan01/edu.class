@@ -22,16 +22,26 @@ namespace EduClass.Web.Controllers
         private static IGroupServices _serviceGroup;
         private static IPersonServices _servicePerson;
         private static ICalendarServices _serviceCalendar;
+        private static IEventServices _serviceEvent;
+        private static IPostServices _servicePost;
+        private static ICalificationServices _serviceCalification;
+        private static IPageServices _servicePage;
+        private static ITestServices _serviceTest;
 
         private const int defaultPageSize = 10;
         
 
 
-        public GroupsController(IGroupServices serviceGroup, IPersonServices servicePerson, ICalendarServices serviceCalendar)
+        public GroupsController(IGroupServices serviceGroup, IPersonServices servicePerson, ICalendarServices serviceCalendar, IEventServices serviceEvent, IPostServices servicePost, ICalificationServices serviceCalification, IPageServices servicePage, ITestServices serviceTest)
         {
             _serviceGroup = serviceGroup;
             _servicePerson = servicePerson;
             _serviceCalendar = serviceCalendar;
+            _serviceEvent = serviceEvent;
+            _servicePost = servicePost;
+            _serviceCalification = serviceCalification;
+            _servicePage = servicePage;
+            _serviceTest = serviceTest;
         }
 
         public ActionResult Index()
@@ -373,6 +383,165 @@ namespace EduClass.Web.Controllers
                 _serviceGroup.Update(group);
 
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Grupo", "El grupo fue editado correctamente"));
+
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+            }
+            return RedirectToAction("Index");
+        }
+
+
+        //ELIMINARA TOTALMENTE EL GRUPO, Y CUALQUIER RELACION CON EL
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteGroup(int groupId = 0)
+        {
+            try
+            {
+                if (groupId == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+
+                var group = _serviceGroup.GetById(groupId);
+
+                //Verifico si el Teacher que esta Logeado pertenece al Grupo
+                if (group.Teacher.Id != UserSession.GetCurrentUser().Id)
+                {
+                    throw new Exception("El Profesor actual no pertenece a este grupo");
+                }
+
+
+                if (group == null) { return HttpNotFound(); }
+
+                List<int> idEventos = new List<int>();
+                //BORRO EVENTOS Y CALENDARIO
+                if (group.Calendar != null)
+                {
+                    foreach (var a in group.Calendar.Events)
+                    {
+                        idEventos.Add(a.Id);
+                    }
+
+                    foreach (int id in idEventos)
+                    {
+                        Event e = group.Calendar.Events.FirstOrDefault(x => x.Id == id);
+                        group.Calendar.Events.Remove(e);
+                        _serviceEvent.Delete(_serviceEvent.GetById(e.Id));
+                    }
+
+                    _serviceCalendar.Delete(group.Calendar);
+                }
+
+
+                List<int> idFiles = new List<int>();
+                List<int> idPosts = new List<int>();
+                List<int> idReplys = new List<int>();
+                //BORRO ARCHIVOS DE LOS POSTS
+                foreach (var a in group.Posts)
+                {
+                    foreach (var b in a.Files)
+                    {
+                        idFiles.Add(b.Id);
+                    }
+
+                    foreach (int i in idFiles)
+                    {
+                        a.Files.Remove(a.Files.FirstOrDefault(x => x.Id == i));
+                    }
+
+                    idPosts.Add(a.Id);
+                }
+
+                //BORRO LOS POSTS
+                foreach (int i in idPosts)
+                {
+                    Post p = _servicePost.GetById(i);
+                    foreach (var reply in p.Replays)
+                    {
+                        idReplys.Add(reply.Id);
+                    }
+                    foreach (int a in idReplys)
+                    {
+                        p.Replays.Remove(p.Replays.FirstOrDefault(x => x.Id == a));
+                    }
+                    group.Posts.Remove(group.Posts.FirstOrDefault(x => x.Id == i));
+                    _servicePost.Delete(_servicePost.GetById(i));
+                }
+
+                //BORRO LAS CALIFICACIONES
+                List<int> idCalificaciones = new List<int>();
+                foreach(Calification i in group.Califications)
+                {
+                    idCalificaciones.Add(i.Id);
+                }
+
+                foreach (int i in idCalificaciones)
+                {
+                    group.Califications.Remove(group.Califications.FirstOrDefault(x => x.Id == i));
+                    _serviceCalification.Delete(_serviceCalification.GetById(i));
+                    
+                }
+
+                //BORRO LAS PAGINAS
+                List<int> idPaginas = new List<int>();
+                foreach (Page i in group.Pages)
+                {
+                    idPaginas.Add(i.Id);
+                }
+
+                foreach (int i in idPaginas)
+                {
+                    group.Pages.Remove(group.Pages.FirstOrDefault(x => x.Id == i));
+                    _servicePage.Delete(_servicePage.GetById(i));
+                }
+
+                //BORRO LOS ALUMNOS, SOLO DE LA COLECCION
+                List<int> idAlumnos = new List<int>();
+                foreach (Student i in group.Students)
+                {
+                    idAlumnos.Add(i.Id);
+                }
+
+                foreach (int i in idAlumnos)
+                {
+                    group.Students.Remove(group.Students.FirstOrDefault(x => x.Id == i));
+                    
+                }
+
+                //TODO
+                //BORRO LOS TESTS
+                /*
+                List<int> idTests = new List<int>();
+                List<int> idPreguntas = new List<int>();
+                List<int> idRespuestas = new List<int>();
+                foreach (Page i in group.Pages)
+                {
+                    idTests.Add(i.Id);
+                }
+
+                foreach (int i in idTests)
+                {
+                    Test t = _serviceTest.GetById(i);
+                    foreach (var a in t.Questions)
+                    {
+                        idPreguntas.Add(a.Id);
+                        foreach (var b in a.Response)
+                        {
+                            idRespuestas.Add(b.Id);
+                        }
+
+                        foreach (int c in idRespuestas)
+                        {
+                            a.Response.Remove(a.Response.FirstOrDefault(x => x.Id == c));
+
+                        }
+                    }
+                }*/
+
+                _serviceGroup.Delete(group);
+                UserSession.SetCurrentUser(_servicePerson.GetById(UserSession.GetCurrentUser().Id));
+
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Grupo", "El grupo fue eliminado correctamente"));
 
             }
             catch (Exception ex)

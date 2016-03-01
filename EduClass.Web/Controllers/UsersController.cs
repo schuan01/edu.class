@@ -169,8 +169,8 @@ namespace EduClass.Web.Controllers
             {
                 try
                 {
-                    //TODO: El chequeo debe ser con username y Email
-                    if (_service.GetByUserName(personVm.UserName) == null)
+                    
+                    if (_service.GetByUserNameAndMail(personVm.UserName, personVm.Email) == null)
                     {
                         Person person;
 
@@ -182,7 +182,7 @@ namespace EduClass.Web.Controllers
                         }
                         
                         person.CreatedAt = DateTime.Now;
-                        person.Enabled = true;
+                        person.Enabled = false;//Sea crea siempre inactivo, falta activar por MAIL
                         person.Silenced = false;
 
                         _service.Create(person);
@@ -192,12 +192,16 @@ namespace EduClass.Web.Controllers
                         CreateUserFolder(person);
                         SetDefaultAvatar(person);
 
-                        //TODO: HACER EL ENVIO DE MAIL
+                        var uMailer = new UserMailer();
+ 
+                        var urlPerson = Url.Action("EnableByMail", "Users", new { person = person.Id }, Request.Url.Scheme);
+                        uMailer.Welcome(person,urlPerson).Send();
+
                         return View("_ActivationAccount");
                     }
                     else
                     {
-                        MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error al crear usuario", string.Format("El usuario {0} ya existe", personVm.UserName)));
+                        MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error al crear usuario", string.Format("El usuario {0} o mail {1} ya existe", personVm.UserName,personVm.Email)));
                     }
                 }
                 catch (DbEntityValidationException dex)
@@ -267,6 +271,35 @@ namespace EduClass.Web.Controllers
 
             return View(userVm);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult EnableByMail(int person = 0)
+        {
+            if (person == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+
+            var user = _service.GetById(person);
+
+            if (user == null) { return HttpNotFound(); }
+
+            if (!user.Enabled)
+            {
+                user.Enabled = true;
+            }
+            else
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.INFO, "ACTIVADO", "Su cuenta ya esta activa"));
+                return RedirectToAction("SignIn");
+            }
+           
+            user.UpdatedAt = DateTime.Now;
+            _service.Update(user);
+            
+            MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario Activado", string.Format("El usuario {0} fue activado con éxito", user.UserName)));
+
+            return RedirectToAction("SignIn");
+        }
+
         public ActionResult Disable(int id = 0)
         {
             if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
@@ -281,7 +314,7 @@ namespace EduClass.Web.Controllers
             user.UpdatedAt = DateTime.Now;
 
             _service.Update(user);
-            
+
             MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", user.UserName)));
 
             return RedirectToAction("Me");
@@ -341,7 +374,7 @@ namespace EduClass.Web.Controllers
 
             var key = Guid.NewGuid().ToString();
             var urlReset = Url.Action("EmailUrlResetPassword", "Users", new { key = key }, Request.Url.Scheme);
-            uMailer.PasswordReset(email, urlReset);
+            uMailer.PasswordReset(email, urlReset).Send();
 
             //_service.SaveKeyResetPassword(email, key);
 

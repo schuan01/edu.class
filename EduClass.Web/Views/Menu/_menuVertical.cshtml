@@ -15,8 +15,57 @@
         {
             <li><a href="@Url.Action("Index", "Califications")"><i class="fa fa-sort-numeric-asc"></i> <span>Calificaciones</span></a></li>
         }
+        <li class="nav-parent" >
+            <a href=""><i class="fa fa-list-alt"></i> <span>Mis Grupos</span></a>
+            <ul class="children" id="gruposDDLVertical">
+                @try
+                {
+
+                    foreach (Group item in UserSession.GetUserGroups())
+                    {
+                        <li><a href="#" id="@item.Id">@item.Name</a></li>
+                    }
+                }
+                catch (Exception ex)
+                {
+                    <li><a href="#">No estas en ningun grupo</a></li>
+                }
+                
+            </ul>
+        </li>
     </ul>
 
    
     
 </div><!-- tab-pane -->
+@Scripts.Render("~/bundles/jquery")
+<script>
+    $(document).ready(function () {
+
+       
+
+        $("#gruposDDLVertical li a").click(function () {
+
+                var selectedId = $(this).attr('id');
+
+                $.ajax({
+                    url: '@Url.Action("ChangeGroup", "Groups")',
+                    type: 'POST',
+                    contentType: 'application/json;',
+                    data: JSON.stringify({ id: selectedId }),
+                    success: function() {
+                        location.reload();//Recarga la pagina entera
+
+                    }
+                });
+
+                //$("#botonMenu:first-child").text($(this).text());
+                //$("#botonMenu:first-child").val($(this).text());
+
+            });
+
+
+        });
+
+    
+</script>

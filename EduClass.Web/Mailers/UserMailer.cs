@@ -11,10 +11,11 @@ namespace EduClass.Web.Mailers
 			MasterName="_Layout";
 		}
 		
-		public virtual MvcMailMessage Welcome(Person user)
+		public virtual MvcMailMessage Welcome(Person user, string urlPerson)
 		{
-			//ViewBag.Data = someObject;
-			return Populate(x =>
+            ViewBag.urlPerson = urlPerson;
+
+            return Populate(x =>
 			{
 				x.Subject = "Bienvenido " + user.FirstName;
 				x.ViewName = "Welcome";

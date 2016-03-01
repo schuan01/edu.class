@@ -23,6 +23,11 @@ namespace EduClass.Logic
             return _personRepository.SignIn(userName, password);
         }
 
+        public Person GetByUserNameAndMail(string userName, string email)
+        {
+            return _personRepository.GetByUserNameAndMail(userName, email);
+        }
+
         public Person GetByUserName(string userName)
         {
             return _personRepository.GetByUserName(userName);

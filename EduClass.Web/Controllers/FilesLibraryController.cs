@@ -217,21 +217,59 @@ namespace EduClass.Web.Controllers
 
 
         }
-        //TODO Elimina solo fisicamente, que pasa si est asociado a un Post?
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteFile(int fileId)
         {
             try
             {
+                List<int> idFiles = new List<int>();
+                List<int> idPosts = new List<int>();
+                List<int> idReplys = new List<int>();
                 Entities.File f = _service.GetById(fileId);
-                if (f != null)
+                if (f != null && f.PersonId == UserSession.GetCurrentUser().Id)
                 {
                     string fullPath = Server.MapPath(f.UrlFile);
                     if (System.IO.File.Exists(fullPath))
                     {
                         System.IO.File.Delete(fullPath);
+
+                        //BORRO ARCHIVOS DE LOS POSTS
+                        foreach (var a in f.Posts)
+                        {
+                            foreach (var b in a.Files)
+                            {
+                                idFiles.Add(b.Id);
+                            }
+
+                            foreach (int i in idFiles)
+                            {
+                                a.Files.Remove(a.Files.FirstOrDefault(x => x.Id == i));
+                            }
+
+                            idPosts.Add(a.Id);
+                        }
+
+                        //BORRO LOS POSTS
+                        foreach (int i in idPosts)
+                        {
+                            Post p = _servicePost.GetById(i);
+                            foreach (var reply in p.Replays)
+                            {
+                                idReplys.Add(reply.Id);
+                            }
+                            foreach (int a in idReplys)
+                            {
+                                p.Replays.Remove(p.Replays.FirstOrDefault(x => x.Id == a));
+                            }
+                            f.Posts.Remove(f.Posts.FirstOrDefault(x => x.Id == i));
+                            _servicePost.Delete(_servicePost.GetById(i));
+                        }
+
+                        //BORRO LA IMAGEN DEFINITIVAMENTE
                         _service.Delete(f);
+
                         MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Archivo", "Archivo borrado con éxito."));
 
                     }
@@ -279,10 +317,11 @@ namespace EduClass.Web.Controllers
                 post.Content = "Chequea los nuevos archivos que he compartido con ustedes";
                 post.GroupId = UserSession.GetCurrentGroup().Id;
                 post.PersonId = UserSession.GetCurrentUser().Id;
-                post.PostType = new PostType();//TODO tipo de Post
+                post.PostType = PostType.Material;
                 post.CreatedAt = DateTime.Now;
                 post.Enabled = true;
 
+                
                 foreach (string valor in identificadores)
                 {
                     if (valor != "")
@@ -315,13 +354,14 @@ namespace EduClass.Web.Controllers
 
         }
 
-        //TODO Elimina solo fisicamente, que pasa si est asociado a un Post?
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteMoreFiles(FormCollection formCollection)
         {
             try
             {
+
                 String valores = formCollection["seleccionadosBorrar"];
                 List<string> identificadores = valores.Split(',').ToList<string>();
                 identificadores.Reverse();
@@ -332,6 +372,9 @@ namespace EduClass.Web.Controllers
                     {
                         if (valor != "")
                         {
+                            List<int> idFiles = new List<int>();
+                            List<int> idPosts = new List<int>();
+                            List<int> idReplys = new List<int>();
                             Entities.File f = _service.GetById(Convert.ToInt32(valor));
 
                             if (f != null && f.PersonId == UserSession.GetCurrentUser().Id)//Solo puedo borrar archivos mios
@@ -340,6 +383,39 @@ namespace EduClass.Web.Controllers
                                 if (System.IO.File.Exists(fullPath))
                                 {
                                     System.IO.File.Delete(fullPath);
+                                    //BORRO ARCHIVOS DE LOS POSTS
+                                    foreach (var a in f.Posts)
+                                    {
+                                        foreach (var b in a.Files)
+                                        {
+                                            idFiles.Add(b.Id);
+                                        }
+
+                                        foreach (int i in idFiles)
+                                        {
+                                            a.Files.Remove(a.Files.FirstOrDefault(x => x.Id == i));
+                                        }
+
+                                        idPosts.Add(a.Id);
+                                    }
+
+                                    //BORRO LOS POSTS
+                                    foreach (int i in idPosts)
+                                    {
+                                        Post p = _servicePost.GetById(i);
+                                        foreach (var reply in p.Replays)
+                                        {
+                                            idReplys.Add(reply.Id);
+                                        }
+                                        foreach (int a in idReplys)
+                                        {
+                                            p.Replays.Remove(p.Replays.FirstOrDefault(x => x.Id == a));
+                                        }
+                                        f.Posts.Remove(f.Posts.FirstOrDefault(x => x.Id == i));
+                                        _servicePost.Delete(_servicePost.GetById(i));
+                                    }
+
+                                    //BORRO LA IMAGEN DEFINITIVAMENTE
                                     _service.Delete(f);
                                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Archivo", "Archivo borrado con éxito."));
 
@@ -394,7 +470,11 @@ namespace EduClass.Web.Controllers
                     post.Content = "Chequea los nuevos archivos que he compartido con ustedes";
                     post.GroupId = UserSession.GetCurrentGroup().Id;
                     post.PersonId = UserSession.GetCurrentUser().Id;
-                    post.PostType = new PostType();//TODO tipo de Post
+                    post.PostType = PostType.Material;//Por defecto es Material
+                    if (System.Web.MimeMapping.GetMimeMapping(f.Name).Contains("image"))
+                    {
+                        post.PostType = PostType.Image;
+                    }  
                     post.Files.Add(f);
                     post.CreatedAt = DateTime.Now;
                     post.Enabled = true;

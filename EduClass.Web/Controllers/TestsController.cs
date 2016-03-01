@@ -172,7 +172,6 @@ namespace EduClass.Web.Controllers
 
             _service.Update(test);
 
-            //TODO: AGREGAR LA CLASE MESSAGE SESSION
             //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", test.Name)));
 
             return RedirectToAction("Index");
