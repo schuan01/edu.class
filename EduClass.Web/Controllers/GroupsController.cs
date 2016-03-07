@@ -60,33 +60,40 @@ namespace EduClass.Web.Controllers
         [HttpPost]
         public ActionResult ChangeGroup(int id)
         {
-            Group g = _serviceGroup.GetById(id);
-            if (g != null)
+            try
             {
-                Person p = _servicePerson.GetById(UserSession.GetCurrentUser().Id);
-                if (p is Teacher)
+                Group g = _serviceGroup.GetById(id);
+                if (g != null)
                 {
-                    //Buscamos si el grupo seleccionado forma parte del Usuario
-                    if (((Teacher)p).Group.FirstOrDefault(gr => gr.Id == g.Id) == null)
+                    Person p = _servicePerson.GetById(UserSession.GetCurrentUser().Id);
+                    if (p is Teacher)
                     {
-                        throw new Exception("El usuario seleccionado no forma parte de este grupo ");
+                        //Buscamos si el grupo seleccionado forma parte del Usuario
+                        if (((Teacher)p).Group.FirstOrDefault(gr => gr.Id == g.Id) == null)
+                        {
+                            throw new Exception("El usuario seleccionado no forma parte de este grupo ");
+                        }
                     }
-                }
-                else if (p is Student)
-                {
-                    //Buscamos si el grupo seleccionado forma parte del Usuario
-                    if (((Student)p).Groups.FirstOrDefault(gr => gr.Id == g.Id) == null)
+                    else if (p is Student)
                     {
-                        throw new Exception("El usuario seleccionado no forma parte de este grupo ");
+                        //Buscamos si el grupo seleccionado forma parte del Usuario
+                        if (((Student)p).Groups.FirstOrDefault(gr => gr.Id == g.Id) == null)
+                        {
+                            throw new Exception("El usuario seleccionado no forma parte de este grupo ");
+                        }
                     }
-                }
 
-                //Si sale todo OK, seteo el Current Group
-                UserSession.SetCurrentGroup(g);
+                    //Si sale todo OK, seteo el Current Group
+                    UserSession.SetCurrentGroup(g);
+                }
+                else
+                {
+                    throw new Exception("El grupo actual no existe");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                throw new Exception("El grupo actual no existe");
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
             }
 
             return RedirectToAction("Index", "Groups");//Esto es al pedo porque la llamda es por AJAX

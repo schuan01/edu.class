@@ -59,7 +59,7 @@ namespace EduClass.WebApi.Controllers
                     else
                         tipo = "Estudiante";
                     
-                    return Json(new { usuario = user.UserName, nombre = user.FirstName, apellido = user.LastName, cumpleanios = user.Birthday, tipoUsuario = tipo, email = user.Email, identificacion = user.IdentificationCard, url = "Board.html" });
+                    return Json(new { idUsuario = user.Id, usuario = user.UserName, nombre = user.FirstName, apellido = user.LastName, cumpleanios = user.Birthday, tipoUsuario = tipo, email = user.Email, identificacion = user.IdentificationCard, url = "Board.html" });
                 }
                 else
                 {

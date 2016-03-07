@@ -1,4 +1,5 @@
-﻿using EduClass.Entities;
+﻿using Dropbox.Api;
+using EduClass.Entities;
 using EduClass.Logic;
 using EduClass.Web.Infrastructure.Sessions;
 using Ionic.Zip;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Mime;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -30,11 +32,21 @@ namespace EduClass.Web.Controllers
 
         }
 
+        /*static async Task Run()
+        {
+            using (var dbx = new DropboxClient("Z413XdG4OvAAAAAAAAAABwb-5zhx1geQeGocvvYms9JFMrT-jLaOsm_D9lCCWIDn"))
+            {
+                var full = await dbx.Users.GetCurrentAccountAsync();
+                Console.WriteLine("{0} - {1}", full.Name.DisplayName, full.Email);
+            }
+        }*/
 
         // GET: FilesLibrary
         public ActionResult Index(string tipo)
         {
-            
+            //var task = Task.Run((Func<Task>)Run);
+            //task.Wait();
+
             //Obtengo los archivos que publico el Person
             Person p = _servicePerson.GetById(UserSession.GetCurrentUser().Id);
             IOrderedEnumerable<Entities.File> archivos = p.Files.ToList().OrderByDescending(x => x.CreatedAt);
@@ -145,6 +157,33 @@ namespace EduClass.Web.Controllers
             {
                 return Json(new { Message = "Error al guardar el archivo" });
             }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public FileResult ImportFromDropBox(int fileId)
+        {
+
+           
+
+            try
+            {
+                Entities.File f = _service.GetById(fileId);
+                if (f != null)
+                {
+
+                    return File(Request.MapPath(f.UrlFile), MediaTypeNames.Application.Octet, f.Name);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al descargar el archivo."));
+
+            }
+
+            return null;
+
+
         }
 
         [HttpPost]

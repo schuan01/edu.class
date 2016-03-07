@@ -10,7 +10,8 @@ namespace EduClass.WebApi.Infrastructure.Mappers
         {
             Mapper.Initialize(x => {
                 x.AddProfile<PersonMapperProfiles>();
-               
+                x.AddProfile<GroupMapperProfiles>();
+
             });
 
            // Mapper.CreateMap<string, DateTime>().ConvertUsing<StringToDateTimeConverter>();
