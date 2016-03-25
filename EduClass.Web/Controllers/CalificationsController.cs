@@ -74,6 +74,7 @@ namespace EduClass.Web.Controllers
 
                 IEnumerable<Person> miembros = _groupService.GetById(UserSession.GetCurrentGroup().Id).Students;
                 IEnumerable<Calification> notasAlumno = new List<Calification>();
+               
                 foreach (Person m in miembros)
                 {
                     idOral = "oral" + m.Id;
@@ -115,12 +116,19 @@ namespace EduClass.Web.Controllers
 
                 }
 
-                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Modificacion Exitosa", "Las calificaciones se modificaron correctamente"));
+                if (miembros.Count() == 0)
+                {
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No hay alumnos en el grupo seleccionado"));
+                }
+                else
+                {
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Modificacion Exitosa", "Las calificaciones se modificaron correctamente"));
+                }
 
             }
             catch (Exception ex)
             {
-                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se pudo crear la Calificacion"));
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se pudo guardar las calificaciones"));
             }
             return RedirectToAction("Index");
         }

@@ -13,9 +13,11 @@ namespace EduClass.Web.Infrastructure.ViewModels
 
         [AllowHtml]
         [Required]
+        [Display(Name = "Contenido")]
         public string Content { get; set; }
 
         [Required]
+        [Display(Name = "Título")]
         public string Name { get; set; }
 
         [Required]

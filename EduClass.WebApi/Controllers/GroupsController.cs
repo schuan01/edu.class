@@ -22,11 +22,13 @@ namespace EduClass.WebApi.Controllers
        
         private static IGroupServices _service;
         private static IPersonServices _personService;
+        private static IPostServices _postService;
 
-        public GroupsController(IGroupServices service, IPersonServices personService)
+        public GroupsController(IGroupServices service, IPersonServices personService, IPostServices postService)
         {
             _service = service;
             _personService = personService;
+            _postService = postService;
 
 
         }
@@ -36,21 +38,33 @@ namespace EduClass.WebApi.Controllers
         [AllowAnonymous]
         public IHttpActionResult GetGroups(int id)
         {
-            Person p = _personService.GetById(id);
-
-            List<Group> grupos = new List<Group>();
-            if (p is Teacher)
+            List<Group> gruposSencillo = new List<Group>();
+            try
             {
-                grupos = ((Teacher)p).Group.ToList();
+                Person p = _personService.GetById(id);
+
+                List<Group> grupos = new List<Group>();
+                if (p is Teacher)
+                {
+                    grupos = ((Teacher)p).Group.ToList();
+                }
+                else
+                {
+                    grupos = ((Student)p).Groups.ToList();
+                }
+
+
+                foreach (Group g in grupos)
+                {
+                    Group gr = new Group();
+                    gr.Id = g.Id;
+                    gr.Name = g.Name;
+                    gruposSencillo.Add(gr);
+                }
             }
-
-            List <Group> gruposSencillo = new List<Group>();
-            foreach (Group g in grupos)
+            catch (Exception ex)
             {
-                Group gr = new Group();
-                gr.Id = g.Id;
-                gr.Name = g.Name;
-                gruposSencillo.Add(gr);
+                return Json(new { error = "Ocurrio un error en la solicitud" });
             }
             return Json(JsonConvert.SerializeObject(gruposSencillo));
         }
@@ -58,19 +72,23 @@ namespace EduClass.WebApi.Controllers
         [HttpPost]
         [Route("ChangeGroup")]
         [AllowAnonymous]
-        public IHttpActionResult ChangeGroup(int grupo)
+        public IHttpActionResult ChangeGroup([FromBody]JObject parametros)
         {
+            var usuario = parametros["usuario"].ToObject<int>();
+            var idGrupo = parametros["grupo"].ToObject<int>();
+
             //Group g = _service.GetById(grupo.Id);
-            Group g = _service.GetById(grupo);
+            Group g = _service.GetById(idGrupo);
             if (g != null)
             {
-                Person p = _personService.GetById(UserSession.GetCurrentUser().Id);
+                Person p = _personService.GetById(usuario);
                 if (p is Teacher)
                 {
                     //Buscamos si el grupo seleccionado forma parte del Usuario
                     if (((Teacher)p).Group.FirstOrDefault(gr => gr.Id == g.Id) == null)
                     {
-                        throw new Exception("El usuario seleccionado no forma parte de este grupo ");
+                        return Json(new { error = "El usuario seleccionado no forma parte de este grupo " });
+                        
                     }
                 }
                 else if (p is Student)
@@ -78,7 +96,9 @@ namespace EduClass.WebApi.Controllers
                     //Buscamos si el grupo seleccionado forma parte del Usuario
                     if (((Student)p).Groups.FirstOrDefault(gr => gr.Id == g.Id) == null)
                     {
-                        throw new Exception("El usuario seleccionado no forma parte de este grupo ");
+                        return Json(new { error = "El usuario seleccionado no forma parte de este grupo " });
+                        
+
                     }
                 }
 
@@ -87,10 +107,12 @@ namespace EduClass.WebApi.Controllers
             }
             else
             {
-                throw new Exception("El grupo actual no existe");
+                return Json(new { error = "El grupo actual no existe" });
             }
 
             return Json(new { idGrupo = g.Id, nombreGrupo = g.Name});
         }
+
+        
     }
 }

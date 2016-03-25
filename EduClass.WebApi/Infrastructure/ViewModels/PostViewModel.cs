@@ -18,6 +18,11 @@ namespace EduClass.WebApi.Infrastructure.ViewModels
         [MaxLength(2500)]
         public string Content { get; set; }
 
+        
+        public int GroupId { get; set; }
+
+        public int PersonId { get; set; }
+
         [Required]
         public int PostType { get; set; }
 

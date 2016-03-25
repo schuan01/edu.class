@@ -70,7 +70,7 @@
                 <div class="media">
                     <div class="media-left">
                         <a href="#">
-                            <img alt="" src="@Url.Content(avatar)" class="media-object img-circle">
+                            <img alt="" id="imgAvatarBoard" src="@Url.Content(avatar)" class="media-object img-circle">
                         </a>
                     </div>
                     <div class="media-body">
@@ -125,11 +125,11 @@
                         <li class="media">
                             <div class="media-left">
                                 <a href="#">
-                                    <img class="media-object img-circle" src="@Url.Content(avatarComment)" alt="">
+                                    <img class="media-object img-circle" id="imgAvatarBoard" src="@Url.Content(avatarComment)" alt="">
                                 </a>
                             </div>
                             <div class="media-body">
-                                <h4 class="media-heading">@reply.Person.FirstName @reply.Person.LastName<small>@(reply.CreatedAt - item.CreatedAt)</small></h4>
+                                <h4 class="media-heading">@reply.Person.FirstName @reply.Person.LastName<small>@reply.CreatedAt.ToShortDateString() @reply.CreatedAt.ToShortTimeString()</small></h4>
                                 @reply.Content
                             </div>
                             <div class="media-right">
@@ -157,8 +157,6 @@
         </div><!-- panel panel-post -->
     }
     </div> 
-
-        <div class="timeline-date"><a href="">Load more...</a></div>
 
     </div><!-- timeline-wrapper -->
 </div>

@@ -34,10 +34,19 @@ namespace EduClass.Web.Controllers
             if (UserSession.GetCurrentGroup() != null)
             {
                 Group g = _serviceGroup.GetById(UserSession.GetCurrentGroup().Id);
-                list = g.Calendar.Events.Where(x => x.Enabled).OrderBy(a => a.Name);
+                if (g != null)
+                {
+                    list = g.Calendar.Events.Where(x => x.Enabled).OrderBy(a => a.Name);
 
-                ViewBag.EventTypeList = Enum.GetValues(typeof(EventType)).Cast<EventType>().ToList();
-                ViewBag.CalendarId = _serviceGroup.GetById(UserSession.GetCurrentGroup().Id).Calendar.Id;
+                    ViewBag.EventTypeList = Enum.GetValues(typeof(EventType)).Cast<EventType>().ToList();
+                    ViewBag.CalendarId = _serviceGroup.GetById(UserSession.GetCurrentGroup().Id).Calendar.Id;
+                }
+                else
+                {
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No hay grupo seleccionado"));
+                    ViewBag.EventTypeList = Enum.GetValues(typeof(EventType)).Cast<EventType>().ToList();
+                    ViewBag.CalendarId = "";
+                }
 
             }
             else

@@ -82,6 +82,13 @@
             </div>
           
         }
+        @using (Html.BeginForm("Disable", "Users", FormMethod.Post, htmlAttributes: new { @Id = Model.Id }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button type="submit" class="btn  btn-sm btn-danger"  onclick="return confirm('¿Esta seguro de darse de baja permanentemente?');">Eliminar Usuario</button>
+
+        }
         </div>
     </div>
 

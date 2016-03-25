@@ -75,7 +75,7 @@ namespace EduClass.Web.Controllers
                     if (p is Student && p.Silenced)
                         throw new Exception("No puedes crear Post cuando estas silenciado, contacte al Profesor del grupo");
 
-                    if(UserSession.GetCurrentUser() == null)
+                    if(UserSession.GetCurrentGroup() == null)
                         throw new Exception("No puedes crear Post si no hay grupo seleccionado");
 
                     var post = AutoMapper.Mapper.Map<PostViewModel, Post>(postVm);

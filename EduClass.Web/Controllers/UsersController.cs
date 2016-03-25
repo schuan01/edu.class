@@ -300,24 +300,31 @@ namespace EduClass.Web.Controllers
             return RedirectToAction("SignIn");
         }
 
+        [HttpPost]
         public ActionResult Disable(int id = 0)
         {
-            if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+            try
+            {
+                if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
-            var user = _service.GetById(id);
+                var user = _service.GetById(id);
 
-            if (user == null) { return HttpNotFound(); }
+                if (user == null) { return HttpNotFound(); }
 
-            if (user.Enabled) user.Enabled = false;
-            else user.Enabled = true;
 
-            user.UpdatedAt = DateTime.Now;
+                if (user.Enabled) user.Enabled = false;
 
-            _service.Update(user);
+                user.UpdatedAt = DateTime.Now;
 
-            MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", user.UserName)));
+                _service.Update(user);
 
-            return RedirectToAction("Me");
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", user.UserName)));
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+            }
+            return RedirectToAction("SignOut");
         }
 
         //Silencia o quita el silencio

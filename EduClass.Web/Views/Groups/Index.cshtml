@@ -87,7 +87,7 @@
 
                                                 @Html.AntiForgeryToken()
                                                 <li><input type="hidden" name="groupId" value="@elemento.Id" /></li>
-                                                <li><button type="submit" class="btn-link"><i class="fa fa-trash"></i></button></li>
+                                                <li><button type="submit" class="btn-link" onclick="return confirm('Esta accion borrara completamente el Grupo, esta seguro?');"><i class="fa fa-trash"></i></button></li>
                                             }
                                             
                                         </ul>

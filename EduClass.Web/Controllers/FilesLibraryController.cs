@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 
 
@@ -23,6 +24,12 @@ namespace EduClass.Web.Controllers
         private static IPostServices _servicePost;
         private string carpetaUsuario;
 
+        private string App_key = "";
+        private string App_secret = "";
+
+        
+        
+
         public FilesLibraryController(IFileServices service, IPersonServices personService, IPostServices postService)
         {
             _service = service;
@@ -30,16 +37,20 @@ namespace EduClass.Web.Controllers
             _servicePost = postService;
             carpetaUsuario = "UsersFolders\\" + UserSession.GetCurrentUser().UserName;//Inicia el controlador y setea la carpeta
 
+            App_key = WebConfigurationManager.AppSettings["DropboxAppKey"];
+            App_secret = WebConfigurationManager.AppSettings["DropboxAppSecret"];
+
         }
 
-        /*static async Task Run()
+        static async Task Run()
         {
-            using (var dbx = new DropboxClient("Z413XdG4OvAAAAAAAAAABwb-5zhx1geQeGocvvYms9JFMrT-jLaOsm_D9lCCWIDn"))
+            using (var dbx = new DropboxClient("Z413XdG4OvAAAAAAAAAACt-98b9GqkzqtyIap78Ac5vNBO4gB10VTHlf2fIBKZaB"))
             {
+
                 var full = await dbx.Users.GetCurrentAccountAsync();
                 Console.WriteLine("{0} - {1}", full.Name.DisplayName, full.Email);
             }
-        }*/
+        }
 
         // GET: FilesLibrary
         public ActionResult Index(string tipo)
@@ -47,6 +58,7 @@ namespace EduClass.Web.Controllers
             //var task = Task.Run((Func<Task>)Run);
             //task.Wait();
 
+           
             //Obtengo los archivos que publico el Person
             Person p = _servicePerson.GetById(UserSession.GetCurrentUser().Id);
             IOrderedEnumerable<Entities.File> archivos = p.Files.ToList().OrderByDescending(x => x.CreatedAt);
@@ -67,6 +79,72 @@ namespace EduClass.Web.Controllers
             
 
             return View(archivos);
+        }
+
+        [Authorize]
+        public ActionResult Connect()
+        {
+            var redirect = DropboxOAuth2Helper.GetAuthorizeUri(
+                OAuthResponseType.Code,
+                App_key,
+                RedirectUri,
+                "");
+                //RedirectUri,
+                //this.currentUser.ConnectState);
+
+            return Redirect(redirect.ToString());
+        }
+
+        private string RedirectUri
+        {
+            get
+            {
+                if (this.Request.Url.Host.ToLowerInvariant() == "localhost")
+                {
+                    return "http://localhost:55555/FilesLibrary/Index";
+                }
+
+                var builder = new UriBuilder(
+                    Uri.UriSchemeHttps,
+                    this.Request.Url.Host);
+
+                builder.Path = "/FilesLibrary/Auth";
+
+                return builder.ToString();
+            }
+        }
+
+        // GET: /FilesLibrary/Auth
+        [Authorize]
+        public async Task<ActionResult> AuthAsync(string code, string state)
+        {
+            try
+            {
+                /*if (this.currentUser.ConnectState != state)
+                {
+                    this.Flash("There was an error connecting to Dropbox.");
+                    return this.RedirectToAction("Index");
+                }*/
+
+                var response = await DropboxOAuth2Helper.ProcessCodeFlowAsync(
+                    code,
+                    App_key,
+                    App_secret,
+                    this.RedirectUri);
+
+                /*this.currentUser.DropboxAccessToken = response.AccessToken;
+                this.currentUser.ConnectState = string.Empty;
+                await this.store.SaveChangesAsync();
+
+                this.Flash("This account has been connected to Dropbox.", FlashLevel.Success);*/
+                //return RedirectToAction("Profile");
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", e.Message));
+                return RedirectToAction("Index");
+            }
         }
 
 
@@ -126,7 +204,7 @@ namespace EduClass.Web.Controllers
 
                         _service.Create(f);
 
-                        UserSession.SetCurrentUser(p);//Actualizo la Session
+
 
 
 
