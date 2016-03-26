@@ -15,11 +15,13 @@ namespace EduClass.Entities
     public partial class QuestionOption
     {
         public int Id { get; set; }
-        public string Content { get; set; }
+        public int QuestionId { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public Nullable<System.DateTime> UpdatedAt { get; set; }
-        public int QuestionId { get; set; }
-        public bool Enabled { get; set; }
+        public Nullable<bool> TrueOrFalse { get; set; }
+        public string Content { get; set; }
+        public string Text { get; set; }
+        public Nullable<bool> IsCorrect { get; set; }
     
         public virtual Question Question { get; set; }
         public virtual Response Response { get; set; }

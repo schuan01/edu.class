@@ -215,11 +215,13 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="QuestionId" Type="int" Nullable="false" />
     <Property Name="CreatedAt" Type="datetime" Nullable="false" />
     <Property Name="UpdatedAt" Type="datetime" Nullable="true" />
-    <Property Name="QuestionId" Type="int" Nullable="false" />
-    <Property Name="Enabled" Type="bit" Nullable="false" />
+    <Property Name="TrueOrFalse" Type="bit" Nullable="true" />
+    <Property Name="Content" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Text" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="IsCorrect" Type="bit" Nullable="true" />
   </EntityType>
   <EntityType Name="Responses">
     <Key>
@@ -229,6 +231,9 @@
     <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
     <Property Name="CreatedAt" Type="datetime" Nullable="false" />
     <Property Name="StudentId" Type="int" Nullable="false" />
+    <Property Name="QuestionId" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="TrueOrFalse" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="QuestionOptionId" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Question_Id" Type="int" Nullable="false" />
     <Property Name="QuestionOption_Id" Type="int" Nullable="false" />
   </EntityType>
@@ -949,13 +954,15 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="QuestionId" Type="Int32" Nullable="false" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Question" Relationship="EduClassModel.QuestionQuestionOption" FromRole="QuestionOption" ToRole="Question" />
-          <Property Name="QuestionId" Type="Int32" Nullable="false" />
-          <Property Name="Enabled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Response" Relationship="EduClassModel.QuestionOptionResponse" FromRole="QuestionOption" ToRole="Response" />
+          <Property Name="TrueOrFalse" Type="Boolean" Nullable="true" />
+          <Property Name="Content" Type="String" Nullable="true" />
+          <Property Name="Text" Type="String" Nullable="true" />
+          <Property Name="IsCorrect" Type="Boolean" Nullable="true" />
         </EntityType>
         <EntityType Name="Response">
           <Key>
@@ -968,6 +975,9 @@
           <NavigationProperty Name="QuestionOption" Relationship="EduClassModel.QuestionOptionResponse" FromRole="Response" ToRole="QuestionOption" />
           <NavigationProperty Name="Student" Relationship="EduClassModel.StudentResponse" FromRole="Response" ToRole="Student" />
           <Property Name="StudentId" Type="Int32" Nullable="false" />
+          <Property Name="QuestionId" Type="String" Nullable="false" />
+          <Property Name="TrueOrFalse" Type="String" Nullable="false" />
+          <Property Name="QuestionOptionId" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="Calendar">
           <Key>
@@ -1191,7 +1201,10 @@
           <Member Name="Material" Value="4" />
         </EnumType>
         <EnumType Name="QuestionType">
-          <Member Name="ZarazaQuestion" Value="1" />
+        <Member Name="TRUEORFALSE" Value="0" />
+          <Member Name="REDACTION" Value="1" />
+          <Member Name="OPTIONS" Value="2" />
+          <Member Name="CHECKS" Value="3" />
         </EnumType>
         <Association Name="StudentResponse">
           <End Type="EduClassModel.Student" Role="Student" Multiplicity="1" />
@@ -1396,11 +1409,13 @@
       <EntityTypeMapping TypeName="IsTypeOf(EduClassModel.QuestionOption)">
         <MappingFragment StoreEntitySet="QuestionOptions">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Content" ColumnName="Content" />
+          <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
           <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
           <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-          <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
-          <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+          <ScalarProperty Name="TrueOrFalse" ColumnName="TrueOrFalse" />
+          <ScalarProperty Name="Content" ColumnName="Content" />
+          <ScalarProperty Name="Text" ColumnName="Text" />
+          <ScalarProperty Name="IsCorrect" ColumnName="IsCorrect" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1411,6 +1426,9 @@
           <ScalarProperty Name="Content" ColumnName="Content" />
           <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
           <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+          <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+          <ScalarProperty Name="TrueOrFalse" ColumnName="TrueOrFalse" />
+          <ScalarProperty Name="QuestionOptionId" ColumnName="QuestionOptionId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

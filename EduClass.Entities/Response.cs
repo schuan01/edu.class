@@ -18,6 +18,9 @@ namespace EduClass.Entities
         public string Content { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public int StudentId { get; set; }
+        public string QuestionId { get; set; }
+        public string TrueOrFalse { get; set; }
+        public string QuestionOptionId { get; set; }
     
         public virtual Question Question { get; set; }
         public virtual QuestionOption QuestionOption { get; set; }

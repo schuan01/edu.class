@@ -13,6 +13,9 @@ namespace EduClass.Entities
     
     public enum QuestionType : int
     {
-        ZarazaQuestion = 1
+        TRUEORFALSE = 0,
+        REDACTION = 1,
+        OPTIONS = 2,
+        CHECKS = 3
     }
 }

@@ -2,8 +2,8 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 02/25/2016 12:50:26
--- Generated from EDMX file: C:\Users\jvolpe\Documents\Cosas\edu.class\EduClass.Entities\EduClassModel.edmx
+-- Date Created: 03/26/2016 19:44:19
+-- Generated from EDMX file: C:\Users\Bruno\Documents\edu.class\EduClass.Entities\EduClassModel.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
@@ -247,11 +247,13 @@ GO
 -- Creating table 'QuestionOptions'
 CREATE TABLE [dbo].[QuestionOptions] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Content] nvarchar(max)  NOT NULL,
+    [QuestionId] int  NOT NULL,
     [CreatedAt] datetime  NOT NULL,
     [UpdatedAt] datetime  NULL,
-    [QuestionId] int  NOT NULL,
-    [Enabled] bit  NOT NULL
+    [TrueOrFalse] bit  NULL,
+    [Content] nvarchar(max)  NULL,
+    [Text] nvarchar(max)  NULL,
+    [IsCorrect] bit  NULL
 );
 GO
 
@@ -261,6 +263,9 @@ CREATE TABLE [dbo].[Responses] (
     [Content] nvarchar(max)  NOT NULL,
     [CreatedAt] datetime  NOT NULL,
     [StudentId] int  NOT NULL,
+    [QuestionId] nvarchar(max)  NOT NULL,
+    [TrueOrFalse] nvarchar(max)  NOT NULL,
+    [QuestionOptionId] nvarchar(max)  NOT NULL,
     [Question_Id] int  NOT NULL,
     [QuestionOption_Id] int  NOT NULL
 );
