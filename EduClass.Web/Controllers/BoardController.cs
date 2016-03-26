@@ -2,6 +2,7 @@
 using EduClass.Logic;
 using EduClass.Web.Infrastructure.Sessions;
 using EduClass.Web.Infrastructure.ViewModels;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +19,17 @@ namespace EduClass.Web.Controllers
         private IPostServices _post;
         private IReplyServices _reply;
         private IFileServices _file;
+		private ILog _log;
 
-        public BoardController(IPersonServices person, IGroupServices group, IPostServices post, IReplyServices reply, IFileServices file)
+        public BoardController(IPersonServices person, IGroupServices group, IPostServices post, IReplyServices reply, IFileServices file, ILog log)
         {
             _person = person;
             _group = group;
             _post = post;
             _reply = reply;
             _file = file;
+
+			_log = log;
         }
 
         // GET: Board
@@ -56,6 +60,7 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se puede abrir el Board"));
+				_log.Error("Board - index -> ", ex);
             }
 
 
@@ -78,6 +83,9 @@ namespace EduClass.Web.Controllers
                     if(UserSession.GetCurrentGroup() == null)
                         throw new Exception("No puedes crear Post si no hay grupo seleccionado");
 
+					if (String.IsNullOrEmpty(postVm.Title) || String.IsNullOrEmpty(postVm.Content))
+						{throw new Exception("El titulo o el contenido no pueden estar vacios");}
+
                     var post = AutoMapper.Mapper.Map<PostViewModel, Post>(postVm);
                     
 
@@ -95,12 +103,14 @@ namespace EduClass.Web.Controllers
                 catch (System.Data.Entity.Infrastructure.DbUpdateException du)
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al crear Post en la BD"));
+					_log.Error("Board - Post -> ", du);
 
                 }
                 catch (Exception ex)
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al crear post, por favor contacte con el Administrador."));
-                }
+					_log.Error("Board - Post -> ", ex);
+				}
             }
 
             return RedirectToAction("Index");
@@ -138,18 +148,18 @@ namespace EduClass.Web.Controllers
                     else
                     {
                         MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "No Autorizado", "No puedes comentar un Post cuando estas silenciado, contacte al Profesor del grupo"));
-
+						_log.Warn("Board - Reply => No authorize");
                     }
-                    
-
                 }
                 catch (System.Data.Entity.Infrastructure.DbUpdateException du)
                 {
+					_log.Error("Board - Reply -> ", du);
                     throw;
                 }
                 catch (Exception ex)
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al crear post, por favor contacte con el Administrador."));
+					_log.Error("Board - Reply", ex);
                 }
             }
 
@@ -161,6 +171,9 @@ namespace EduClass.Web.Controllers
             if (id == 0)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error al eliminar el post", "Post id no existe"));
+
+				_log.Warn("Board - RemovePost -> Post not exists");
+
                 return RedirectToAction("Index", new { id = UserSession.GetCurrentGroup().Id });
             }
 
@@ -200,15 +213,18 @@ namespace EduClass.Web.Controllers
                 else
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "No Autorizado", "No tiene permisos para borrar el Post"));
+					_log.Warn("Board - RemovePost -> Not Authorize");
                 }
             }
             catch (System.Data.Entity.Infrastructure.DbUpdateException du)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al eliminar Post en la BD"));
+				_log.Error("Board - RemovePost -> ", du);
             }
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al eliminar post, por favor contacte con el Administrador."));
+				_log.Error("Board - RemovePost -> ", ex);
             }
 
             return RedirectToAction("Index");
@@ -219,6 +235,9 @@ namespace EduClass.Web.Controllers
             if (id == 0)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error al eliminar el reply", "Reply id no existe"));
+
+				_log.Warn("Board - RemoveReply -> Post not exists");
+
                 return RedirectToAction("Index");
             }
 
@@ -239,6 +258,7 @@ namespace EduClass.Web.Controllers
             }
             catch (Exception ex)
             {
+				_log.Warn("Board - RemoveReply -> ", ex);
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al eliminar reply, por favor contacte con el Administrador."));
             }
             return RedirectToAction("Index");

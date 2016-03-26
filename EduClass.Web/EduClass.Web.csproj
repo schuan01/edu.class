@@ -76,6 +76,10 @@
       <HintPath>..\packages\DotNetZip.1.9.8\lib\net20\Ionic.Zip.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -183,6 +187,7 @@
     <Compile Include="Infrastructure\Mappers\ReplyMapperProfiles.cs" />
     <Compile Include="Infrastructure\Mappers\TestMapperProfiles.cs" />
     <Compile Include="Infrastructure\Modules\EntitiesModule.cs" />
+    <Compile Include="Infrastructure\Modules\LogModule.cs" />
     <Compile Include="Infrastructure\Modules\RepositoryModule.cs" />
     <Compile Include="Infrastructure\Modules\SecurityModule.cs" />
     <Compile Include="Infrastructure\Modules\ServiceModule.cs" />

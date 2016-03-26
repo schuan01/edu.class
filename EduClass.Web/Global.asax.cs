@@ -27,6 +27,7 @@ namespace EduClass.Web
             builder.RegisterModule(new EntitiesModule());
             builder.RegisterModule(new RepositoryModule());
             builder.RegisterModule(new ServiceModule());
+			builder.RegisterModule(new LogModule());
 
             builder.RegisterFilterProvider();
 
@@ -36,6 +37,9 @@ namespace EduClass.Web
 
             //AutoMapper
             AutoMapperConfig.RegisterMappings();
+
+			//LOG4NET
+			log4net.Config.XmlConfigurator.Configure();
         }
     }
 }
