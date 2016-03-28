@@ -47,7 +47,7 @@
     </div>
 
     <div>
-        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Volver", "Index")
     </div>
 </div>
 
@@ -74,7 +74,9 @@
             // HTML5 WYSIWYG Editor
             $('#wysiwyg').wysihtml5({
                 toolbar: {
-                    fa: true
+                    fa: true,
+                    "image": false,
+                    "link": false
                 }
             });
 

@@ -13,6 +13,7 @@ using EduClass.Web.Infrastructure.Mappers;
 using System.Collections.Generic;
 using MvcPaging;
 using EduClass.Web.Mailers;
+using log4net;
 
 namespace EduClass.Web.Controllers
 {
@@ -27,12 +28,12 @@ namespace EduClass.Web.Controllers
         private static ICalificationServices _serviceCalification;
         private static IPageServices _servicePage;
         private static ITestServices _serviceTest;
-
+        private ILog _log;
         private const int defaultPageSize = 10;
         
 
 
-        public GroupsController(IGroupServices serviceGroup, IPersonServices servicePerson, ICalendarServices serviceCalendar, IEventServices serviceEvent, IPostServices servicePost, ICalificationServices serviceCalification, IPageServices servicePage, ITestServices serviceTest)
+        public GroupsController(IGroupServices serviceGroup, IPersonServices servicePerson, ICalendarServices serviceCalendar, IEventServices serviceEvent, IPostServices servicePost, ICalificationServices serviceCalification, IPageServices servicePage, ITestServices serviceTest, ILog log)
         {
             _serviceGroup = serviceGroup;
             _servicePerson = servicePerson;
@@ -42,6 +43,7 @@ namespace EduClass.Web.Controllers
             _serviceCalification = serviceCalification;
             _servicePage = servicePage;
             _serviceTest = serviceTest;
+            _log = log;
         }
 
         public ActionResult Index()
@@ -94,6 +96,7 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                _log.Error("Groups - ChangeGroup", ex);
             }
 
             return RedirectToAction("Index", "Groups");//Esto es al pedo porque la llamda es por AJAX
@@ -122,11 +125,15 @@ namespace EduClass.Web.Controllers
                     {
                         estudiantes = estudiantes.Where(p => p.FirstName.ToLower().Contains(student_name.ToLower())).ToPagedList(currentPageIndex, defaultPageSize);
                     }
+                    
+                    ViewBag.nombreTeacher = group.Teacher.FirstName + " " + group.Teacher.LastName;
+                    ViewBag.urlTeacher = group.Teacher.Avatar.UrlPhoto;
                 }
                 else
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No hay grupo seleccionado"));
                     estudiantes = estudiantes.ToPagedList(1, defaultPageSize);
+                    _log.Error("Groups - GetContacts => No hay grupo seleccionado");
 
                 }
 
@@ -135,6 +142,7 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                _log.Error("Groups - GetContacts", ex);
             }
             
             return View(estudiantes);
@@ -183,6 +191,7 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                _log.Error("Groups - JoinStudent", ex);
             }
 
 
@@ -221,6 +230,7 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                _log.Error("Groups - InviteStudentByMail", ex);
             }
 
             return View();
@@ -232,19 +242,29 @@ namespace EduClass.Web.Controllers
             try
             {
                 String valores = formCollection["select6"];
+                string idGrupo = formCollection["groupId"];
                 List<string> mails = valores.Split(',').ToList<string>();
                 mails.Reverse();
 
                 var uMailer = new UserMailer();
 
-                Group g = UserSession.GetCurrentGroup();
-                var urlGroup = Url.Action("InviteStudentByMail", "Groups", new { key = g.Key }, Request.Url.Scheme);
-                uMailer.InviteUserToGroup(mails, g, urlGroup).Send(); 
+                Group g = _serviceGroup.GetById(Convert.ToInt32(idGrupo));
+                if (g != null)
+                {
+                    var urlGroup = Url.Action("InviteStudentByMail", "Groups", new { key = g.Key }, Request.Url.Scheme);
+                    uMailer.InviteUserToGroup(mails, g, urlGroup).Send();
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Invitación Enviada", "Se ha enviado la invitación correctamente"));
+                }
+                else
+                {
+                    throw new Exception("El grupo seleccionado no existe");
+                }
 
             }
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                _log.Error("Groups - InviteStudentByMail", ex);
             }
 
             return RedirectToAction("Index");
@@ -300,6 +320,7 @@ namespace EduClass.Web.Controllers
                 catch (Exception ex)
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                    _log.Error("Groups - Create", ex);
                 }
             }
 
@@ -323,6 +344,7 @@ namespace EduClass.Web.Controllers
             catch(Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                _log.Error("Groups - Edit", ex);
             }
 
             return View(group);
@@ -357,6 +379,7 @@ namespace EduClass.Web.Controllers
                 catch (Exception ex)
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                    _log.Error("Groups - Edit", ex);
                 }
             }
 
@@ -395,6 +418,7 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                _log.Error("Groups - Disable", ex);
             }
             return RedirectToAction("Index");
         }
@@ -546,7 +570,12 @@ namespace EduClass.Web.Controllers
                 }*/
 
                 _serviceGroup.Delete(group);
-                UserSession.SetCurrentUser(_servicePerson.GetById(UserSession.GetCurrentUser().Id));
+
+
+                //HAGO ESTO SOLO PARA QUE SE CARGUE LA SESSION CON EL SIGUIENTE GRUPO DISPONIBLE
+                var grupos = _serviceGroup.GetActiveGroups(UserSession.GetCurrentUser());
+                if(grupos.Count > 0)
+                    UserSession.SetCurrentGroup(grupos[0]);//Obtengo el primer grupo que venga y lo coloco en la Session
 
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Grupo", "El grupo fue eliminado correctamente"));
 
@@ -554,6 +583,7 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                _log.Error("Groups - DeleteGroup", ex);
             }
             return RedirectToAction("Index");
         }

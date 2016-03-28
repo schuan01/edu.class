@@ -11,6 +11,7 @@ using System.Data.Entity.Validation;
 using EduClass.Web.Mailers;
 using System.IO;
 using System.Web;
+using log4net;
 
 namespace EduClass.Web.Controllers
 {
@@ -20,11 +21,13 @@ namespace EduClass.Web.Controllers
         private static IPersonServices _service;
         private static IAvatarServices _avatarService;
         private string carpetaRaiz = "~/UsersFolders/";//Carpeta raiz, no incluye los Avatars
+        private ILog _log;
 
-        public UsersController(IPersonServices service, IAvatarServices avatarService)
+        public UsersController(IPersonServices service, IAvatarServices avatarService, ILog log)
         {
             _service = service;
             _avatarService = avatarService;
+            _log = log;
 
         }
 
@@ -58,23 +61,34 @@ namespace EduClass.Web.Controllers
 
                 if (user != null)
                 {
-                    FormsAuthentication.SetAuthCookie(userName, false);
+                    if (user.Enabled)
+                    {
+                        FormsAuthentication.SetAuthCookie(userName, false);
 
-                    UserSession.SetCurrentUser(user);
+                        UserSession.SetCurrentUser(user);
 
-                    //Prevent Redirection attack
-                    if (!String.IsNullOrEmpty(returnurl) && Url.IsLocalUrl(returnurl))
-                        return Redirect(returnurl);
+                        //Prevent Redirection attack
+                        if (!String.IsNullOrEmpty(returnurl) && Url.IsLocalUrl(returnurl))
+                            return Redirect(returnurl);
 
-                    
 
-                    return RedirectToAction("Index", "Board");
+
+                        return RedirectToAction("Index", "Board");
+                    }
+                    else
+                    {
+                        ViewBag.UserName = userName;
+                        ViewBag.ReturnUrl = returnurl;
+                        ViewBag.Message = " El usuario no está habilitado.";
+                        _log.Error("Users - SignIn => Usuario no habilitado");
+                    }
                 }
                 else
                 {
                     ViewBag.UserName = userName;
                     ViewBag.ReturnUrl = returnurl;
                     ViewBag.Message = "El usuario y la contraseña no coinciden.";
+                    _log.Error("Users - SignIn => Wrong Credentials");
                 }
             }
             else
@@ -136,11 +150,13 @@ namespace EduClass.Web.Controllers
                     else
                     {
                         MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error al ingresar la contraseña", "La contraseña actual no es valida."));
+                        _log.Error("Users - ChangePassword => La contraseña actual no es valida");
                     }
                 }
                 catch (Exception ex)
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, ex.Message, "Error al cambiar la contraseña"));
+                    _log.Error("Users - ChangePassword",ex);
 
                     return View(value);
                 }
@@ -202,15 +218,18 @@ namespace EduClass.Web.Controllers
                     else
                     {
                         MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error al crear usuario", string.Format("El usuario {0} o mail {1} ya existe", personVm.UserName,personVm.Email)));
+                        _log.Error("Users - Register => El usuario o mail ya existe");
                     }
                 }
                 catch (DbEntityValidationException dex)
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al crear usuario, por favor contacte con el Administrador."));
+                    _log.Error("Users - Register",dex);
                 }
                 catch (Exception ex)
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al crear usuario, por favor contacte con el Administrador."));
+                    _log.Error("Users - Register", ex);
                 }
             }
 
@@ -235,6 +254,7 @@ namespace EduClass.Web.Controllers
             catch(Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                _log.Error("Users - Edit", ex);
             }
 
             return View(user);
@@ -266,6 +286,7 @@ namespace EduClass.Web.Controllers
                 catch (Exception ex)
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al modificar usuario"));
+                    _log.Error("Users - Edit", ex);
                 }
             }
 
@@ -289,6 +310,7 @@ namespace EduClass.Web.Controllers
             else
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.INFO, "ACTIVADO", "Su cuenta ya esta activa"));
+                _log.Error("Users - EnableByMail => Su cuenta ya esta activa");
                 return RedirectToAction("SignIn");
             }
            
@@ -319,12 +341,14 @@ namespace EduClass.Web.Controllers
                 _service.Update(user);
 
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", user.UserName)));
+                return RedirectToAction("SignOut");
             }
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                _log.Error("Users - Disable", ex);
             }
-            return RedirectToAction("SignOut");
+            return RedirectToAction("Index", "Board");
         }
 
         //Silencia o quita el silencio
@@ -356,6 +380,7 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                _log.Error("Users - SilenceStudent", ex);
             }
 
             return RedirectToAction("GetContacts", "Groups");
@@ -379,8 +404,8 @@ namespace EduClass.Web.Controllers
 
             var uMailer = new UserMailer();
 
-            var key = Guid.NewGuid().ToString();
-            var urlReset = Url.Action("EmailUrlResetPassword", "Users", new { key = key }, Request.Url.Scheme);
+            //var key = Guid.NewGuid().ToString();
+            var urlReset = Url.Action("EmailUrlResetPassword", "Users", new { email = email }, Request.Url.Scheme);
             uMailer.PasswordReset(email, urlReset).Send();
 
             //_service.SaveKeyResetPassword(email, key);
@@ -499,6 +524,7 @@ namespace EduClass.Web.Controllers
                 }
 
                  MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al actualizar el Avatar."));
+                _log.Error("Users - ChangeAvatar", ex);
 
             }
 

@@ -1,6 +1,8 @@
 ﻿@using EduClass.Web.Infrastructure.Sessions
 @using EduClass.Entities
-
+@{
+    DateTime cumple = UserSession.GetCurrentUser().Birthday ?? DateTime.Now;
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,7 +104,7 @@
                         </li>
                         <li class="list-group-item">
                             <label class="pull-left">Cumpleaños</label>
-                            <span class="pull-right">@UserSession.GetCurrentUser().Birthday</span>
+                            <span class="pull-right">@cumple.ToShortDateString()</span>
                         </li>
                         <li class="list-group-item">
                             <label class="pull-left">Cédula</label>

@@ -10,6 +10,7 @@ using EduClass.Web.Infrastructure;
 using EduClass.Web.Infrastructure.ViewModels;
 using EduClass.Entities;
 using EduClass.Web.Infrastructure.Mappers;
+using log4net;
 
 namespace EduClass.Web.Controllers
 {
@@ -17,10 +18,11 @@ namespace EduClass.Web.Controllers
     public class TestsController : Controller
     {
         private static ITestServices _service;
-
-        public TestsController(ITestServices service)
+        private ILog _log;
+        public TestsController(ITestServices service, ILog log)
         {
             _service = service;
+            _log = log;
         }
 
         public ActionResult Index()
@@ -69,6 +71,7 @@ namespace EduClass.Web.Controllers
                 catch (Exception ex)
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se pudo crear la prueba"));
+                    _log.Error("Tests - Create", ex);
                 }
             }
 
@@ -113,6 +116,7 @@ namespace EduClass.Web.Controllers
                 catch (Exception ex)
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se pudo crear la prueba"));
+                    _log.Error("Tests - AddQuestion", ex);
                 }
             }
 

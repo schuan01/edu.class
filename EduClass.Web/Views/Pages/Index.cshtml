@@ -1,5 +1,5 @@
 ﻿@model IOrderedEnumerable<EduClass.Entities.Page>
-
+@using EduClass.Web.Infrastructure.Sessions
 @using EduClass.Entities
 
 @{
@@ -8,19 +8,23 @@
 
 <div class="row">
     <div class="col-sm-8 col-md-9 col-lg-10">
-        <div class="well well-asset-options clearfix">
-            <div class="btn-toolbar btn-toolbar-media-manager pull-left" role="toolbar">
-                <a class="btn btn-danger btn-quirk btn-block mb20" href="@Url.Action("Create", "Pages")">Crear nueva Página</a>
-            </div><!-- btn-toolbar -->
+        @if (UserSession.GetCurrentUser() is Teacher)
+        {
+            <div class="well well-asset-options clearfix">
+                <div class="btn-toolbar btn-toolbar-media-manager pull-left" role="toolbar">
+                    <a class="btn btn-danger btn-quirk btn-block mb20" href="@Url.Action("Create", "Pages")">Crear nueva Página</a>
+                </div><!-- btn-toolbar -->
 
             
-        </div>
-
+            </div>
+        }
         <div class="row filemanager">
             @foreach (var elemento in Model)
             {
                 <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 video">
                     <div class="thmb">
+                    @if (UserSession.GetCurrentUser() is Teacher)
+                    {
                         <div class="btn-group fm-group">
                             <button type="button" class="btn btn-default dropdown-toggle fm-toggle" data-toggle="dropdown">
                                 <span class="caret"></span>
@@ -36,21 +40,34 @@
                                         @if (elemento.Enabled == true)
                                         {
                                             <button type="submit" class="btn btn-link">
-                                                <i class="fa fa-trash"></i>
+                                                <i class="fa fa-close"></i>
                                                 Inactivar
                                             </button>
                                         }
                                         else
                                         {
                                             <button type="submit" class="btn btn-link">
-                                                <i class="fa fa-trash"></i>
+                                                <i class="fa fa-check"></i>
                                                 Activar
                                             </button>
                                         }
                                     </li>
                                 }
+                                @using (Html.BeginForm("Delete", "Pages", FormMethod.Post, htmlAttributes: new { @Id = elemento.Id }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <li><input type="hidden" name="id" value="@elemento.Id" /></li>
+                                    <li>
+                                        <button type="submit" class="btn btn-link">
+                                           <i class="fa fa-trash"></i>
+                                           Eliminar
+                                        </button>
+                                        
+                                    </li>
+                                }
                             </ul>
-                        </div><!-- btn-group -->                      
+                        </div><!-- btn-group -->
+                    }
                         <div class="thmb-prev">
                             <a href="@Url.Action("ViewPage", "Pages", new { pageId = elemento.Id })">
                                 <img src="@Url.Content("~/Content/images/images_file.png")" class="img-responsive" alt="" />

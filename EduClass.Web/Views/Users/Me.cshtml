@@ -4,9 +4,7 @@
 
 @{
     ViewBag.Title = "Perfil";
-
-
-
+    DateTime cumple = UserSession.GetCurrentUser().Birthday ?? DateTime.Now;
 
 }
 
@@ -59,7 +57,7 @@
 
             <h4 class="panel-title">Cumpleaños</h4>
 
-            <p><i class="glyphicon glyphicon-gift mr5"></i> @UserSession.GetCurrentUser().Birthday</p>
+            <p><i class="glyphicon glyphicon-gift mr5"></i>@cumple.ToShortDateString()</p>
 
             <hr class="fadeout">
 

@@ -108,9 +108,76 @@ namespace EduClass.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al crear post, por favor contacte con el Administrador."));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
 					_log.Error("Board - Post -> ", ex);
 				}
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult RePost(int id = 0)
+        {
+
+            if (id != 0)
+            {
+                try
+                {
+                    Post post = _post.GetById(id);
+                    Post nuevoPost = new Post();
+                    if (post != null)
+                    {
+                        Person p = _person.GetById(UserSession.GetCurrentUser().Id);
+                        if (p is Student && p.Silenced)
+                            throw new Exception("No puedes crear Post cuando estas silenciado, contacte al Profesor del grupo");
+
+                        if (UserSession.GetCurrentGroup() == null)
+                            throw new Exception("No puedes crear Post si no hay grupo seleccionado");
+
+                        if (String.IsNullOrEmpty(post.Title) || String.IsNullOrEmpty(post.Content))
+                        { throw new Exception("El titulo o el contenido no pueden estar vacios"); }
+
+                        nuevoPost.Title = post.Title;
+                        nuevoPost.Content = post.Content;
+                        nuevoPost.CreatedAt = DateTime.Now;
+                        nuevoPost.Enabled = true;
+                        nuevoPost.PersonId = post.PersonId;//El id es el mismo porq solo la misma persona puede hacer Repost
+                        nuevoPost.GroupId = post.GroupId;
+                        foreach (File f in post.Files)
+                        {
+                            if (f != null)
+                            {
+                                Entities.File nuevoFile = _file.GetById(f.Id);
+                                if (nuevoFile != null && nuevoFile.PersonId == nuevoPost.PersonId)//Solo puedo compartir archivos mios
+                                {
+                                    nuevoPost.Files.Add(f);
+                                }
+                            }
+                        }
+
+                        _post.Create(nuevoPost);
+
+                        MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "RePost creado", "El repost fue creado con éxito"));
+
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        throw new Exception("El Post seleccionado no existe");
+                    }
+                }
+                catch (System.Data.Entity.Infrastructure.DbUpdateException du)
+                {
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al crear Post en la BD"));
+                    _log.Error("Board - Post -> ", du);
+
+                }
+                catch (Exception ex)
+                {
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                    _log.Error("Board - Post -> ", ex);
+                }
             }
 
             return RedirectToAction("Index");

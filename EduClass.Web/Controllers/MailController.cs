@@ -7,6 +7,7 @@ using EduClass.Web.Infrastructure.ViewModels;
 using EduClass.Entities;
 using System.Web;
 using System.Collections.Generic;
+using log4net;
 
 namespace EduClass.Web.Controllers
 {
@@ -16,12 +17,14 @@ namespace EduClass.Web.Controllers
         private static IMailServices _service;
         private static IPersonServices _personService;
         private static IGroupServices _groupService;
+        private ILog _log;
 
-        public MailController(IMailServices service, IPersonServices personService, IGroupServices groupService)
+        public MailController(IMailServices service, IPersonServices personService, IGroupServices groupService, ILog log)
         {
             _service = service;
             _personService = personService;
             _groupService = groupService;
+            _log = log;
         }
 
 
@@ -94,6 +97,7 @@ namespace EduClass.Web.Controllers
                     else
                     {
                         MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "No Autorizado", "No puedes mandar un Mensaje cuando estas silenciado, contacte al Profesor del grupo"));
+                        _log.Error("Mail - SendEmail => Alumno Silenciado");
                         return RedirectToAction("Index", "Mail");
                     }
                 }
@@ -102,12 +106,14 @@ namespace EduClass.Web.Controllers
                     ViewBag.FromUser = "";
                     ViewBag.PersonsTo = new SelectList("VACIO");
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No hay un grupo seleccionado."));
+                    _log.Error("Mail - SendEmail => No hay grupo seleccionado");
                     return RedirectToAction("Index", "Mail");
                 }
             }
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error abrir nuevo Mensaje."));
+                _log.Error("Mail - SendEmail", ex);
                 return RedirectToAction("Index", "Mail");
             }
 
@@ -133,8 +139,10 @@ namespace EduClass.Web.Controllers
 
                         mail.PersonFromId = UserSession.GetCurrentUser().Id;
                         mail.CreateAt = DateTime.Now;
+                        mail.Subject = "(" + UserSession.GetCurrentGroup().Name + ") - " + mail.Subject;
                         mail.ReadAt = null;
                         mail.Enabled = true;
+
 
                         foreach (int i in mailVm.PersonIdTo)
                         {
@@ -154,6 +162,7 @@ namespace EduClass.Web.Controllers
                     else
                     {
                         MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "No Autorizado", "No puedes mandar un Mensaje cuando estas silenciado, contacte al Profesor del grupo"));
+                        _log.Error("Mail - SendEmail => Alumno Silenciado");
                     }
                     
 
@@ -161,6 +170,7 @@ namespace EduClass.Web.Controllers
                 catch (Exception ex)
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                    _log.Error("Mail - SendEmail", ex);
                 }
             }
 
@@ -187,6 +197,7 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al leer el correo."));
+                _log.Error("Mail - ReadMail", ex);
 
             }
 
@@ -230,6 +241,7 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al enviar el correo."));
+                _log.Error("Mail - ReplyEmail", ex);
             }
 
             return RedirectToAction("Index", "Mail");
@@ -276,6 +288,7 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                _log.Error("Mail - DeleteMail", ex);
             }
 
             return RedirectToAction("Index", "Mail");

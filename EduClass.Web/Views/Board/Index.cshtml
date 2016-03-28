@@ -8,6 +8,7 @@
     var avatar = String.Empty;
     var first = true;
     var currentUser = EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser();
+    var esImagen = false;
 }
 
 <div>   
@@ -28,7 +29,7 @@
                             <h4>Escribe un post</h4>
                         </div>
                         <div class="row">
-                            <input type="text" name="Title" class="form-control" placeholder="Título">
+                            <input type="text" name="Title" class="form-control" placeholder="Título" >
                         </div>
 
                         <div class="row" style="margin-top: 10px">
@@ -61,7 +62,7 @@
 
             { earlierDate = item.CreatedAt.ToString("dd/MM/yyyy"); }
         }
-        
+
         if (item.Person.Avatar == null) { avatar = "~/Content/images/default.png"; }
         else { avatar = item.Person.Avatar.UrlPhoto; }
 
@@ -86,14 +87,46 @@
                 {
                     <ul class="panel-options">
                         <li>
-                            <a class="tooltips" href="@Url.Action("RemovePost", "Board", new { Id = item.Id })" data-toggle="tooltip" title="" data-original-title="Remove">
+                            <a class="tooltips" href="@Url.Action("RemovePost", "Board", new { Id = item.Id })" data-toggle="tooltip" title="" data-original-title="Borrar">
                                 <i class="glyphicon glyphicon-remove"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="tooltips" href="@Url.Action("RePost", "Board", new { Id = item.Id })" data-toggle="tooltip" title="" data-original-title="RePost">
+                                <i class="glyphicon glyphicon-refresh"></i>
                             </a>
                         </li>
                     </ul>
                 }
             </div><!-- panel-heading -->
             <div class="panel-body">
+                @foreach (var archivo in item.Files)
+                {
+                    if (System.Web.MimeMapping.GetMimeMapping(archivo.Name).Contains("image"))
+                    {
+                        esImagen = true;
+                    }
+                    else
+                    {
+                        esImagen = false;
+                        break;
+                    }
+                }
+                
+                @if (esImagen && item.Files.Count < 6)
+                {
+                    <div class="row photos">
+                        <div class="col-xs-4">
+                            @foreach (var archivo in item.Files)
+                            {
+                                <a href="@Url.Content(archivo.UrlFile)"><img class="img-responsive" src="@Url.Content(archivo.UrlFile)" alt=""></a>
+                            }
+                        </div>
+                        
+                    </div>
+                }
+                else
+                {
                 <strong>@item.Title</strong>
                 <p>@item.Content</p>
                 <ul class="list-unstyled list-attachments">
@@ -105,9 +138,10 @@
                             <li><input type="hidden" name="fileId" value="@archivo.Id" /></li>
                             <li><i class="fa fa-file"></i><button type="submit" class="btn btn-link">@archivo.Name</button> </li>
                         }
-                   
+
                     }
                 </ul>
+                }
             </div>
             <div class="panel-footer">
                 <ul class="list-inline">

@@ -121,20 +121,29 @@
             </div><!-- col-sm-8 -->
 
             <div class="col-sm-4 col-md-3 col-lg-2">
-
                 <div class="panel">
                     <div class="panel-heading">
-                        <h4 class="panel-title">Filtrar Usuarios</h4>
+                        <h4 class="panel-title">Profesor del Grupo</h4>
                     </div>
                     <div class="panel-body">
-                        <div class="form-group">
-                            <label class="control-label center-block">Nombre:</label>
-                            <input type="text" class="form-control" placeholder="Ingrese un nombre" name="student_name" value="@ViewData["student_name"]">
-                        </div>
-                        <button class="btn btn-success btn-block" type="submit">Filtrar Lista</button>
+                        <ul class="media-list user-list">
+                            <li class="media">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object img-circle" src="@Url.Content(ViewBag.urlTeacher)" alt="">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading"><a href="">@ViewBag.nombreTeacher</a></h4>
+                                    
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                </div><!-- panel -->
+                </div>
             </div>
+
+           
         </div><!-- row -->
 
     </div><!-- contentpanel -->

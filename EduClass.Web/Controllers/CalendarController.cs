@@ -10,6 +10,7 @@ using EduClass.Web.Infrastructure;
 using EduClass.Web.Infrastructure.ViewModels;
 using EduClass.Entities;
 using EduClass.Web.Infrastructure.Mappers;
+using log4net;
 
 namespace EduClass.Web.Controllers
 {
@@ -17,10 +18,12 @@ namespace EduClass.Web.Controllers
     public class CalendarsController : Controller
     {
         private static ICalendarServices _service;
+        private ILog _log;
 
-        public CalendarsController(ICalendarServices service)
+        public CalendarsController(ICalendarServices service, ILog log)
         {
             _service = service;
+            _log = log;
         }
 
         public ActionResult Index()
@@ -61,6 +64,7 @@ namespace EduClass.Web.Controllers
                 }
                 catch (Exception ex)
                 {
+                    _log.Error("Calendar - Create -> ", ex);
                     //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al crear usuario", typeof(calendarController), ex));
                 }
             }
@@ -98,6 +102,7 @@ namespace EduClass.Web.Controllers
                 }
                 catch (Exception ex)
                 {
+                    _log.Error("Calendar - Edit -> ", ex);
                     //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al modificar usuario", typeof(calendarController), ex));
                 }
             }

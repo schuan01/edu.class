@@ -2,6 +2,7 @@
 using EduClass.Logic;
 using EduClass.Web.Infrastructure.Sessions;
 using EduClass.Web.Infrastructure.ViewModels;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +18,14 @@ namespace EduClass.Web.Controllers
         private static ICalificationServices _service;
         private static IPersonServices _personService;
         private static IGroupServices _groupService;
+        private ILog _log;
 
-        public CalificationsController(ICalificationServices service, IPersonServices personService, IGroupServices groupService)
+        public CalificationsController(ICalificationServices service, IPersonServices personService, IGroupServices groupService, ILog log)
         {
             _service = service;
             _personService = personService;
             _groupService = groupService;
+            _log = log;
         }
 
 
@@ -32,6 +35,7 @@ namespace EduClass.Web.Controllers
             if (UserSession.GetCurrentUser() is Student)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "No Autorizado", "No puede acceder a esta página"));
+                _log.Error("Califications - Index => No Autorizado");
                 return RedirectToAction("Index", "Board");
             }
 
@@ -46,6 +50,7 @@ namespace EduClass.Web.Controllers
             {
                 
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No hay un grupo seleccionado."));
+                _log.Error("Califications - Index => No hay grupo seleccioado");
                 return RedirectToAction("Index", "Board");
             }
             return View(miembros);
@@ -119,6 +124,7 @@ namespace EduClass.Web.Controllers
                 if (miembros.Count() == 0)
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No hay alumnos en el grupo seleccionado"));
+                    _log.Error("Califications - Save => No hay alumnos en el grupo seleccionado");
                 }
                 else
                 {
@@ -129,6 +135,7 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se pudo guardar las calificaciones"));
+                _log.Error("Califications - Save", ex);
             }
             return RedirectToAction("Index");
         }

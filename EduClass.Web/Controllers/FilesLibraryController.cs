@@ -3,6 +3,7 @@ using EduClass.Entities;
 using EduClass.Logic;
 using EduClass.Web.Infrastructure.Sessions;
 using Ionic.Zip;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,19 +24,20 @@ namespace EduClass.Web.Controllers
         private static IPersonServices _servicePerson;
         private static IPostServices _servicePost;
         private string carpetaUsuario;
-
+        private ILog _log;
         private string App_key = "";
         private string App_secret = "";
 
         
         
 
-        public FilesLibraryController(IFileServices service, IPersonServices personService, IPostServices postService)
+        public FilesLibraryController(IFileServices service, IPersonServices personService, IPostServices postService, ILog log)
         {
             _service = service;
             _servicePerson = personService;
             _servicePost = postService;
             carpetaUsuario = "UsersFolders\\" + UserSession.GetCurrentUser().UserName;//Inicia el controlador y setea la carpeta
+            _log = log;
 
             App_key = WebConfigurationManager.AppSettings["DropboxAppKey"];
             App_secret = WebConfigurationManager.AppSettings["DropboxAppSecret"];
@@ -58,25 +60,34 @@ namespace EduClass.Web.Controllers
             //var task = Task.Run((Func<Task>)Run);
             //task.Wait();
 
-           
+            IOrderedEnumerable<Entities.File> archivos = null;
             //Obtengo los archivos que publico el Person
             Person p = _servicePerson.GetById(UserSession.GetCurrentUser().Id);
-            IOrderedEnumerable<Entities.File> archivos = p.Files.ToList().OrderByDescending(x => x.CreatedAt);
+            if (p is Teacher)
+            {
+                archivos = p.Files.ToList().OrderByDescending(x => x.CreatedAt);
 
-            if (tipo == "imagenes")
-                archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("image")).ToList().OrderByDescending(x => x.CreatedAt);
+                if (tipo == "imagenes")
+                    archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("image")).ToList().OrderByDescending(x => x.CreatedAt);
 
-            if (tipo == "audio")
+                if (tipo == "audio")
 
-                archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("audio")).ToList().OrderByDescending(x => x.CreatedAt);
+                    archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("audio")).ToList().OrderByDescending(x => x.CreatedAt);
 
-            if (tipo == "documentos")
-                archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("office")).ToList().OrderByDescending(x => x.CreatedAt);
+                if (tipo == "documentos")
+                    archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("office")).ToList().OrderByDescending(x => x.CreatedAt);
 
-            if (tipo == "pdf")
-                archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("application/pdf")).ToList().OrderByDescending(x => x.CreatedAt);
+                if (tipo == "pdf")
+                    archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("application/pdf")).ToList().OrderByDescending(x => x.CreatedAt);
 
-            
+            }
+            else
+            {
+                //Lleva  a Board si no sos Alumno
+                _log.Error("FilesLibrary - Index => El usuario actual no es Profesor");
+                return RedirectToAction("Board","Index");
+
+            }
 
             return View(archivos);
         }
@@ -164,8 +175,11 @@ namespace EduClass.Web.Controllers
             string path = "";
             try
             {
-                
 
+                if (!(UserSession.GetCurrentUser() is Teacher))
+                {
+                    throw new Exception("El usuario actual no es un Profesor");
+                }
                 foreach (string fileName in Request.Files)
                 {
                     file = Request.Files[fileName];
@@ -197,7 +211,7 @@ namespace EduClass.Web.Controllers
 
                         //Y creo el nuevo archivo
                         Entities.File f = new Entities.File();
-                        f.UrlFile = "~\\"+carpetaUsuario + "\\FileLibrary\\" + file.FileName;
+                        f.UrlFile = "~\\" + carpetaUsuario + "\\FileLibrary\\" + file.FileName;
                         f.Name = file.FileName;
                         f.Person = p;
                         f.CreatedAt = DateTime.Now;
@@ -224,8 +238,9 @@ namespace EduClass.Web.Controllers
                 }
 
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al subir el archivo."));
+                _log.Error("FilesLibrary - UploadFile", ex);
 
-            }
+        }
 
             if (isSavedSuccessfully)
             {
@@ -280,6 +295,7 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al descargar el archivo."));
+                _log.Error("FilesLibrary - DownloadFile", ex);
 
             }
 
@@ -327,6 +343,7 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al descargar el archivo."));
+                _log.Error("FilesLibrary - DownloadMoreFiles", ex);
 
             }
 
@@ -350,7 +367,7 @@ namespace EduClass.Web.Controllers
                     string fullPath = Server.MapPath(f.UrlFile);
                     if (System.IO.File.Exists(fullPath))
                     {
-                        System.IO.File.Delete(fullPath);
+                        
 
                         //BORRO ARCHIVOS DE LOS POSTS
                         foreach (var a in f.Posts)
@@ -382,10 +399,14 @@ namespace EduClass.Web.Controllers
                             }
                             f.Posts.Remove(f.Posts.FirstOrDefault(x => x.Id == i));
                             _servicePost.Delete(_servicePost.GetById(i));
+                           
                         }
 
                         //BORRO LA IMAGEN DEFINITIVAMENTE
                         _service.Delete(f);
+
+                        //Borro fisicamente
+                        System.IO.File.Delete(fullPath);
 
                         MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Archivo", "Archivo borrado con éxito."));
 
@@ -393,17 +414,20 @@ namespace EduClass.Web.Controllers
                     else
                     {
                         MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Archivo", "El archivo no existe."));
+                        _log.Error("FilesLibrary - DeleteFile => File not Found");
                     }
 
                 }
                 else
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Archivo", "El archivo no existe."));
+                    _log.Error("FilesLibrary - DeleteFile => File not Found");
                 }
             }
             catch(Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al borrar el archivo."));
+                _log.Error("FilesLibrary - DeleteFile", ex);
 
             }
             return RedirectToAction("Index", "FilesLibrary");
@@ -464,6 +488,7 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                _log.Error("FilesLibrary - ShareMoreFiles", ex);
 
             }
             return RedirectToAction("Index", "FilesLibrary");
@@ -499,7 +524,7 @@ namespace EduClass.Web.Controllers
                                 string fullPath = Server.MapPath(f.UrlFile);
                                 if (System.IO.File.Exists(fullPath))
                                 {
-                                    System.IO.File.Delete(fullPath);
+                                    
                                     //BORRO ARCHIVOS DE LOS POSTS
                                     foreach (var a in f.Posts)
                                     {
@@ -534,18 +559,23 @@ namespace EduClass.Web.Controllers
 
                                     //BORRO LA IMAGEN DEFINITIVAMENTE
                                     _service.Delete(f);
+                                    //Borro fisicamente
+                                    System.IO.File.Delete(fullPath);
+
                                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Archivo", "Archivo borrado con éxito."));
 
                                 }
                                 else
                                 {
                                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Archivo", "El archivo no existe."));
+                                    _log.Error("FilesLibrary - DeleteMoreFiles => File not Found");
                                 }
 
                             }
                             else
                             {
                                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Archivo", "El archivo no existe."));
+                                _log.Error("FilesLibrary - DeleteMoreFiles => File not Found");
                             }
                         }
                     }
@@ -553,6 +583,7 @@ namespace EduClass.Web.Controllers
                 catch (Exception ex)
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al borrar el archivo."));
+                    _log.Error("FilesLibrary - DeleteMoreFiles",ex);
 
                 }
 
@@ -560,6 +591,8 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                _log.Error("FilesLibrary - DeleteMoreFiles", ex);
+
             }
             return RedirectToAction("Index", "FilesLibrary");
         }
@@ -606,6 +639,7 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+                _log.Error("FilesLibrary - ShareFile", ex);
 
             }
             return RedirectToAction("Index", "FilesLibrary");

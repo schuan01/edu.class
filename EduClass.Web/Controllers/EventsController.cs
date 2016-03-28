@@ -13,6 +13,7 @@ using EduClass.Web.Infrastructure.Mappers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
+using log4net;
 
 namespace EduClass.Web.Controllers
 {
@@ -21,11 +22,13 @@ namespace EduClass.Web.Controllers
     {
         private static IEventServices _service;
         private static IGroupServices _serviceGroup;
+        private ILog _log;
 
-        public EventsController(IEventServices service, IGroupServices serviceGroup)
+        public EventsController(IEventServices service, IGroupServices serviceGroup, ILog log)
         {
             _service = service;
             _serviceGroup = serviceGroup;
+            _log = log;
         }
 
         public ActionResult Index()
@@ -44,6 +47,7 @@ namespace EduClass.Web.Controllers
                 else
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No hay grupo seleccionado"));
+                    _log.Error("Events - Index => No hay grupo seleccionado");
                     ViewBag.EventTypeList = Enum.GetValues(typeof(EventType)).Cast<EventType>().ToList();
                     ViewBag.CalendarId = "";
                 }
@@ -52,6 +56,7 @@ namespace EduClass.Web.Controllers
             else
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER,"Error", "No hay grupo seleccionado"));
+                _log.Error("Events - Index => No hay grupo seleccionado");
                 ViewBag.EventTypeList = Enum.GetValues(typeof(EventType)).Cast<EventType>().ToList();
                 ViewBag.CalendarId = "";
             }
@@ -96,6 +101,7 @@ namespace EduClass.Web.Controllers
                 catch (Exception ex)
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al crear evento"));
+                    _log.Error("Events - AddOrModifyEvent", ex);
                 }
             }
 
@@ -126,7 +132,7 @@ namespace EduClass.Web.Controllers
         {
             if (idCalendar == 0) { return Json("Error", JsonRequestBehavior.AllowGet); }
             
-            var eventList = _service.GetAll().OrderBy(a => a.Name);
+            var eventList = _service.GetAll().Where(x=> x.CalendarId == idCalendar).OrderBy(a => a.Name);
 
             var returnedList = (from e in eventList
                                 select new {
