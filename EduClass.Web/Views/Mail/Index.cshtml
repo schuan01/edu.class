@@ -23,7 +23,6 @@
                     <ul role="menu" class="dropdown-menu dm-icon pull-right">
                         <li><a href="@Url.Action("Index", "Mail", new { type = "Recibidos" })"><i class="fa fa-reply-all"></i> Recibidos</a></li>
                         <li><a href="@Url.Action("Index", "Mail", new { type = "Enviados" })"><i class="fa fa-arrow-right"></i> Enviados</a></li>
-                        <li><a href="@Url.Action("Index", "Mail", new { type = "Borrados" })"><i class="fa fa-trash"></i> Borrados</a></li>
                     </ul>
                 </div>
                 
@@ -33,8 +32,8 @@
 
             </div>
 
-            <label class="ckbox">
-                <input type="checkbox"><span></span>
+            <label class="ckbox ">
+                
             </label>
         </div><!-- email-options -->
         <div class="list-group">
@@ -48,12 +47,7 @@
             }
 
                     <div class="list-group-item @leido" style="position: static; z-index: 1;" data-id= "@Html.Raw(elemento.Id)">
-                        <div class="list-left">
-                            <label class="ckbox">
-                                <input type="checkbox"><span></span>
-                            </label>
-                            <span class="markstar"><i class="glyphicon glyphicon-star"></i></span>
-                        </div>
+                        
                
                         <div class="media" >
                             <div class="media-left">

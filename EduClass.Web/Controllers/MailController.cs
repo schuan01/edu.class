@@ -39,10 +39,6 @@ namespace EduClass.Web.Controllers
                 
                     
             }
-            else if(type == "Borrados")
-            {
-                list = _service.GetMailsDeleted(UserSession.GetCurrentUser()).OrderByDescending(a => a.CreateAt);//Obtengo los borrados
-            }
 
             foreach (var v in list)
             {

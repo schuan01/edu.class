@@ -53,10 +53,10 @@ namespace EduClass.Web.Infrastructure.Mappers
 
                 return dateTime;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 
-                throw;
+                throw ex;
             }
 
         }
@@ -72,10 +72,10 @@ namespace EduClass.Web.Infrastructure.Mappers
             {
                 if (source != String.Empty) { Enum.TryParse(source, out eType); }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
             return eType;
         }

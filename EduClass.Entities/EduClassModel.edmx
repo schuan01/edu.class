@@ -1192,7 +1192,10 @@
           <End Type="EduClassModel.Student" Role="Student" Multiplicity="*" />
         </Association>
         <EnumType Name="EventType">
-          <Member Name="Zaraza" Value="1" />
+        <Member Name="Examen" Value="1" />
+          <Member Name="Entrega_trabajo" Value="2" />
+          <Member Name="Falta" Value="3" />
+          <Member Name="Otro" Value="4" />
         </EnumType>
         <EnumType Name="PostType">
         <Member Name="Texto" Value="1" />

@@ -13,6 +13,9 @@ namespace EduClass.Entities
     
     public enum EventType : int
     {
-        Zaraza = 1
+        Examen = 1,
+        Entrega_trabajo = 2,
+        Falta = 3,
+        Otro = 4
     }
 }

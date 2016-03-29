@@ -133,6 +133,8 @@ namespace EduClass.Web.Controllers
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No hay grupo seleccionado"));
                     estudiantes = estudiantes.ToPagedList(1, defaultPageSize);
+                    ViewBag.nombreTeacher = "";
+                    ViewBag.urlTeacher = "";
                     _log.Error("Groups - GetContacts => No hay grupo seleccionado");
 
                 }
@@ -144,6 +146,8 @@ namespace EduClass.Web.Controllers
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
                 _log.Error("Groups - GetContacts", ex);
             }
+
+            
             
             return View(estudiantes);
             

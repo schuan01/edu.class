@@ -110,21 +110,32 @@ namespace EduClass.Web.Controllers
 
         public ActionResult Disable(int id = 0)
         {
-            if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+            try
+            {
+                if (id == 0)
+                {
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "El evento seleccionado no existe"));
+                    return RedirectToAction("Index");
+                }
 
-            var Event = _service.GetById(id);
+                var Event = _service.GetById(id);
 
-            if (Event == null) { return HttpNotFound(); }
+                if (Event == null) { return HttpNotFound(); }
 
-            if (Event.Enabled) Event.Enabled = false;
-            else Event.Enabled = true;
+                if (Event.Enabled) Event.Enabled = false;
+                else Event.Enabled = true;
 
-            
 
-            _service.Update(Event);
 
-            MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Éxito", "El evento fue deshabilitado con éxito"));
+                _service.Update(Event);
 
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Éxito", "El evento fue deshabilitado con éxito"));
+            }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al deshabilitar evento"));
+                _log.Error("Events - Disable", ex);
+            }
             return RedirectToAction("Index");
         }
 
@@ -132,7 +143,7 @@ namespace EduClass.Web.Controllers
         {
             if (idCalendar == 0) { return Json("Error", JsonRequestBehavior.AllowGet); }
             
-            var eventList = _service.GetAll().Where(x=> x.CalendarId == idCalendar).OrderBy(a => a.Name);
+            var eventList = _service.GetAll().Where(x=> x.CalendarId == idCalendar && x.Enabled).OrderBy(a => a.Name);
 
             var returnedList = (from e in eventList
                                 select new {
