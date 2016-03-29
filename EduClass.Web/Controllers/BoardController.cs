@@ -19,15 +19,17 @@ namespace EduClass.Web.Controllers
         private IPostServices _post;
         private IReplyServices _reply;
         private IFileServices _file;
+        private ITestServices _test;
 		private ILog _log;
 
-        public BoardController(IPersonServices person, IGroupServices group, IPostServices post, IReplyServices reply, IFileServices file, ILog log)
+        public BoardController(IPersonServices person, IGroupServices group, IPostServices post, IReplyServices reply, IFileServices file, ITestServices test, ILog log)
         {
             _person = person;
             _group = group;
             _post = post;
             _reply = reply;
             _file = file;
+            _test = test;
 
 			_log = log;
         }
@@ -40,29 +42,33 @@ namespace EduClass.Web.Controllers
 
             try
             {
-                if (id == 0)
-                {
+                if (UserSession.GetUserGroups().Count() != 0)
+                { 
+                    var group = _group.GetGroupByIdWithPosts(UserSession.GetCurrentGroup().Id);
 
-                    if (UserSession.GetCurrentGroup() != null)
+                    if (group != null)
                     {
-                        var group = _group.GetGroupByIdWithPosts(UserSession.GetCurrentGroup().Id);
-
-                        if (group != null)
-                        {
-                            postList = group.Posts.ToList();
-                        }
+                        postList = group.Posts.ToList();
                     }
                 }
+                else
+                {
+                    return View();
+                }
 
+                if (UserSession.GetCurrentUser() is Student)
+                {
+                    var testList = _test.GetEnabledTestForStudents(UserSession.GetCurrentGroup().Id);
+
+                    if (testList.Count() > 0) { ViewBag.GetTests = testList; }
+                }
 
                 ViewBag.PostTypeList = Enum.GetValues(new PostType().GetType());
             }
             catch (Exception ex)
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se puede abrir el Board"));
-				_log.Error("Board - index -> ", ex);
             }
-
 
             return View(postList.OrderByDescending(i => i.CreatedAt));
         }

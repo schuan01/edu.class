@@ -169,6 +169,7 @@
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="Controllers\PagesController.cs" />
     <Compile Include="Controllers\PostsController.cs" />
+    <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\ReplysController.cs" />
     <Compile Include="Controllers\TestsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -176,6 +177,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\Helpers\EmailHelper.cs" />
+    <Compile Include="Infrastructure\Helpers\StringHelper.cs" />
     <Compile Include="Infrastructure\Mappers\AutoMapperConfig.cs" />
     <Compile Include="Infrastructure\Mappers\CalendarMapperProfiles.cs" />
     <Compile Include="Infrastructure\Mappers\CalificationMapperProfiles.cs" />
@@ -185,7 +187,9 @@
     <Compile Include="Infrastructure\Mappers\PageMapperProfiles.cs" />
     <Compile Include="Infrastructure\Mappers\PersonMapperProfiles.cs" />
     <Compile Include="Infrastructure\Mappers\PostMapperProfiles.cs" />
+    <Compile Include="Infrastructure\Mappers\QuestionMapperProfiles.cs" />
     <Compile Include="Infrastructure\Mappers\ReplyMapperProfiles.cs" />
+    <Compile Include="Infrastructure\Mappers\Resolvers.cs" />
     <Compile Include="Infrastructure\Mappers\TestMapperProfiles.cs" />
     <Compile Include="Infrastructure\Modules\EntitiesModule.cs" />
     <Compile Include="Infrastructure\Modules\LogModule.cs" />
@@ -204,6 +208,7 @@
     <Compile Include="Infrastructure\ViewModels\PageViewModel.cs" />
     <Compile Include="Infrastructure\ViewModels\PersonViewModel.cs" />
     <Compile Include="Infrastructure\ViewModels\PostViewModel.cs" />
+    <Compile Include="Infrastructure\ViewModels\QuestionViewModel.cs" />
     <Compile Include="Infrastructure\ViewModels\ReplyViewModel.cs" />
     <Compile Include="Infrastructure\ViewModels\TestViewModel.cs" />
     <Compile Include="Mailers\IUserMailer.cs" />
@@ -614,7 +619,6 @@
     <Content Include="Views\Board\Index.cshtml" />
     <Content Include="Views\Users\EmailUrlResetPassword.cshtml" />
     <Content Include="Views\Shared\_SimpleLayout.cshtml" />
-    <Content Include="Views\Tests\Create.cshtml" />
     <Content Include="Views\Groups\Index.cshtml" />
     <Content Include="Views\Groups\Edit.cshtml" />
     <Content Include="Views\Groups\InviteStudentByMail.cshtml" />
@@ -630,6 +634,13 @@
     <Content Include="Views\Pages\Edit.cshtml" />
     <Content Include="Views\Califications\Index.cshtml" />
     <Content Include="Views\Faq\ViewFaq.cshtml" />
+    <Content Include="Views\Question\Create.cshtml" />
+    <Content Include="Views\Question\Edit.cshtml" />
+    <Content Include="Views\Question\Index.cshtml" />
+    <Content Include="Views\Tests\Create.cshtml" />
+    <Content Include="Views\Tests\Edit.cshtml" />
+    <Content Include="Views\Tests\Index.cshtml" />
+    <Content Include="Views\Tests\ReadyToTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

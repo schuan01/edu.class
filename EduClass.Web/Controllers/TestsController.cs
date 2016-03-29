@@ -10,7 +10,6 @@ using EduClass.Web.Infrastructure;
 using EduClass.Web.Infrastructure.ViewModels;
 using EduClass.Entities;
 using EduClass.Web.Infrastructure.Mappers;
-using log4net;
 
 namespace EduClass.Web.Controllers
 {
@@ -18,16 +17,19 @@ namespace EduClass.Web.Controllers
     public class TestsController : Controller
     {
         private static ITestServices _service;
-        private ILog _log;
-        public TestsController(ITestServices service, ILog log)
+
+        public TestsController(ITestServices service)
         {
             _service = service;
-            _log = log;
         }
 
         public ActionResult Index()
         {
-            var list = _service.GetAll().OrderBy(a => a.Name);
+            if (UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+            
+            if (UserSession.GetCurrentGroup() == null) { return View(); }
+
+            var list = _service.GetAll(UserSession.GetCurrentGroup().Id).OrderByDescending(a => a.CreatedAt);
 
             return View(list);
         }
@@ -36,94 +38,44 @@ namespace EduClass.Web.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return View(new TestViewModel());
+            var test = new TestViewModel();
+            test.GroupId = UserSession.GetCurrentGroup().Id;
+            return View(test);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name, Description, StartDate, EndDate")]TestViewModel testVm)
+        public ActionResult Create([Bind(Include = "Name, Description, StartDate, EndDate, GroupId")]TestViewModel testVm)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    //Se creara primero el test sin preguntas.
-                    //Luego se editara el mismo.
-
-
                     //Execute the mapping 
                     var test = AutoMapper.Mapper.Map<TestViewModel, Test>(testVm);
 
                     test.GroupId = UserSession.GetCurrentGroup().Id;
                     test.CreatedAt = DateTime.Now;
-                    test.Enabled = true;
+                    test.Enabled = false; //Se pone deshabilitada para que no les aparezcan a los alumnos
 
                     if (UserSession.GetCurrentUser() is Teacher)
                         _service.Create(test);
                     else
                         throw new Exception("El usuario actual no es un Profesor");
 
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Creacion Exitosa", "La prueba se creo correctamente"));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Creacion Exitosa", "La prueba se creo correctamente. <br />Haz clic en el icono [ <i class=\"fa fa-question\" style=\"font-size: 25px\"></i> ] para agregar preguntas a la prueba."));
 
-                    return RedirectToAction("Create");
-
-                }
-                catch (Exception ex)
-                {
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se pudo crear la prueba"));
-                    _log.Error("Tests - Create", ex);
-                }
-            }
-
-            return View(testVm);
-        }
-
-        [HttpGet]
-        public ActionResult AddQuestion()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult AddQuestion([Bind(Include = "Name, Description, StartDate, EndDate")]TestViewModel testVm)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    //Se creara primero el test sin preguntas.
-                    //Luego se editara el mismo.
-
-
-                    //Execute the mapping 
-                    var test = AutoMapper.Mapper.Map<TestViewModel, Test>(testVm);
-
-                    test.GroupId = UserSession.GetCurrentGroup().Id;
-                    test.CreatedAt = DateTime.Now;
-                    test.Enabled = true;
-
-                    if (UserSession.GetCurrentUser() is Teacher)
-                        _service.Create(test);
-                    else
-                        throw new Exception("El usuario actual no es un Profesor");
-
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Creacion Exitosa", "La prueba se creo correctamente"));
-
-                    return RedirectToAction("Create");
+                    return RedirectToAction("Index");
 
                 }
                 catch (Exception ex)
                 {
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se pudo crear la prueba"));
-                    _log.Error("Tests - AddQuestion", ex);
                 }
             }
 
             return View(testVm);
         }
-
-
 
         [HttpGet]
         public ActionResult Edit(int id = 0)
@@ -136,25 +88,26 @@ namespace EduClass.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Name, Description, StartDate, EndDate, GroupId")]TestViewModel testVm)
+        public ActionResult Edit([Bind(Include = "Id, Name, Description, StartDate, EndDate, GroupId")]TestViewModel testVm)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    //Execute the mapping 
-                    var test = AutoMapper.Mapper.Map<TestViewModel, Test>(testVm);
+                    var entity = _service.GetById(testVm.Id);
+
+                    var test = AutoMapper.Mapper.Map<TestViewModel, Test>(testVm, entity);
                     test.UpdatedAt = DateTime.Now;
 
                     _service.Update(test);
 
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", testVm.testName)));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Test modificado", string.Format("El test {0} fue modificado con éxito", testVm.Name)));
 
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
-                    //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al modificar usuario", typeof(testController), ex));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al modificar test"));
                 }
             }
 
@@ -169,16 +122,40 @@ namespace EduClass.Web.Controllers
 
             if (test == null) { return HttpNotFound(); }
 
-            if (test.Enabled) test.Enabled = true;
-            else test.Enabled = true;
+            if (test.Enabled)
+            {
+                test.Enabled = false;
+            }
+            else 
+            { 
+                test.Enabled = true; 
+            }
 
             test.UpdatedAt = DateTime.Now;
 
             _service.Update(test);
 
-            //MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Usuario modificado", string.Format("El usuario {0} fue modificado con éxito", test.Name)));
+            MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Test modificado", string.Format("Se ha agregado una alerta a los alumnos para que comienzen el test.", test.Name)));
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult ReadyToTest(int id)
+        { 
+            if (UserSession.GetCurrentUser() is Teacher) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+
+            return View(_service.GetById(id));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ReadyToTest(FormCollection frm)
+        {
+            if (UserSession.GetCurrentUser() is Teacher) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+
+            return View();
+            /*return View(_service.GetById(id));*/
         }
     }
 }

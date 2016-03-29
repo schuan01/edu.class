@@ -5,7 +5,7 @@
 }
 
 @section styles{
-    
+
     <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 }
 
@@ -14,7 +14,7 @@
         <ul class="panel-options">
             <li><a><i class="fa fa-refresh"></i></a></li>
         </ul>
-        <h4 class="panel-title text-success">Crear una prueba diagnostica para los Alumnos </h4>
+        <h4 class="panel-title text-success">Editar prueba diagnostica</h4>
 
     </div>
     <div class="panel-body">
@@ -22,12 +22,13 @@
         {
             @Html.AntiForgeryToken()
 
-            
+
             <div class="form-horizontal">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    
-                @Html.Hidden(Model.GroupId.ToString())
-    
+
+                @Html.Hidden("GroupId", Model.GroupId)
+                @Html.Hidden("Id", Model.Id)
+
                 <div class="form-group">
                     @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
@@ -72,14 +73,16 @@
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Crear" class="btn btn-primary pull-right" />
+                        <input type="submit" value="Guardar" class="btn btn-primary pull-right" />
                         <a href="@Url.Action("Index")" class="btn btn-default-active pull-right mr10">Volver</a>
                     </div>
                 </div>
             </div>
         }
-        </div>
     </div>
+    <div>
+    </div>
+</div>
 
 @section scripts
 {
@@ -89,7 +92,7 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-        
+
             $('.evControl').datetimepicker({
                 locale: 'es',
                 format: 'DD/MM/YYYY HH:mm'

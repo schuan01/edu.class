@@ -32,6 +32,24 @@
 
 }
 
+@helper LabelEnableOrDisable(bool value)
+{
+    if (value)
+    {
+        <span class="label label-success">Activa</span>
+    }
+    else
+    {
+        <span class="label label-danger">Desactivada</span>
+    }
+
+}
+
+@helper FormatDateTime(DateTime value)
+{
+    <span>@value.ToString("dd/MM/yyyy HH:mm")</span>
+}
+
 
 
 

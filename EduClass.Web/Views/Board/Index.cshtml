@@ -11,186 +11,239 @@
     var esImagen = false;
 }
 
-<div>   
-<div class="col-sm-8 col-md-9 col-lg-10">
-    <div class="timeline-wrapper">
-
-        @{var meAvatar = String.Empty;}
-
-        @{meAvatar = currentUser.Avatar.UrlPhoto;}
-
-        <div class="panel" style="height:200px">
-            <div class="panel-body">
-                <div class="form-horizontal">
-                    @using (Html.BeginForm("Post", "Board"))
+@if (Model == null)
+{
+    if (EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser() is EduClass.Entities.Student)
+    {
+        <div class="alert alert-warning">
+            <strong>Bienvenido ...</strong> Para poder continuar debes unirte a un grupo. <a href="@Url.Action("JoinStudent", "Groups")" class="alert-link">Haz clic aquí </a> para unirse a un grupo.
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            <strong>Bienvenido ...</strong> Para poder continuar necesitas tener un grupo creado. <a href="@Url.Action("Create", "Groups")" class="alert-link">Haz clic aquí </a> para crear un grupo.
+        </div>
+    }
+}
+else
+{
+    if (EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser() is EduClass.Entities.Student && ViewBag.GetTests != null)
+    {
+        <div class="col-sm-8 col-md-9 col-lg-10 col-md-offset-1">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Tienes pruebas pendientes</h3>
+                </div>
+                <div class="panel-body">
+                    @foreach (EduClass.Entities.Test item in ViewBag.GetTests)
                     {
-                        @Html.AntiForgeryToken()
-                        <div class="row">
-                            <h4>Escribe un post</h4>
-                        </div>
-                        <div class="row">
-                            <input type="text" name="Title" class="form-control" placeholder="Título" >
-                        </div>
-
-                        <div class="row" style="margin-top: 10px">
-                            <textarea type="text" name="Content" class="form-control" placeholder="Contenido"></textarea>
-                            <select name="PostType" class="hidden">
-                                @foreach (var pType in (Array)ViewBag.PostTypeList)
-                                {
-                                    <option value="@postTypeFlag">@pType</option>
-                                    { postTypeFlag++; }
-                                }
-                            </select>
-                        </div>
-                        
-                        
-
-                        <div class="row" style="margin-top: 10px">
-                            <button class="btn btn-primary btn-xs pull-right" style="padding-left: 20px; padding-right: 20px">Post</button>
-                        </div>
-
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Nombre prueba</th>
+                                    <th>Comenzó</th>
+                                    <th>Termina</th>
+                                    <th>Profesor</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@HelperView.FormatDateTime(item.StartDate)</td>
+                                    <td>@HelperView.FormatDateTime(item.EndDate)</td>
+                                    <td>@item.Group.Teacher.FirstName @item.Group.Teacher.LastName</td>
+                                    <td>
+                                        <a href="@Url.Action("ReadyToTest", "Tests", new { id = item.Id })" class="btn btn-primary btn-xs">Comenzar prueba</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     }
-
                 </div>
             </div>
-        </div><!-- panel panel-post -->
-    @foreach (var item in Model)
-    {
-        if (!earlierDate.Equals(item.CreatedAt.ToString("dd/MM/yyyy")))
-        {
-            <div class="timeline-date">@item.CreatedAt.ToLongDateString()</div>
+        </div>
+    }
 
-            { earlierDate = item.CreatedAt.ToString("dd/MM/yyyy"); }
-        }
+    <div class="col-sm-8 col-md-9 col-lg-10">
+        <div class="timeline-wrapper">
 
-        if (item.Person.Avatar == null) { avatar = "~/Content/images/default.png"; }
-        else { avatar = item.Person.Avatar.UrlPhoto; }
+            @{var meAvatar = String.Empty;}
 
-        <div class="panel panel-post-item status">
-            <div class="panel-heading">
-                <div class="media">
-                    <div class="media-left">
-                        <a href="#">
-                            <img alt="" id="imgAvatarBoard" src="@Url.Content(avatar)" class="media-object img-circle">
-                        </a>
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading">@item.Person.FirstName @item.Person.LastName</h4>
-                        <p class="media-usermeta">
-                            <span class="media-time">@item.CreatedAt.ToString("hh:mm tt")</span>
-                            
-                        </p>
+            @{meAvatar = currentUser.Avatar.UrlPhoto;}
+
+            <div class="panel" style="height:200px">
+                <div class="panel-body">
+                    <div class="form-horizontal">
+                        @using (Html.BeginForm("Post", "Board"))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="row">
+                                <h4>Escribe un post</h4>
+                            </div>
+                            <div class="row">
+                                <input type="text" name="Title" class="form-control" placeholder="Título" >
+                            </div>
+
+                            <div class="row" style="margin-top: 10px">
+                                <textarea type="text" name="Content" class="form-control" placeholder="Contenido"></textarea>
+                                <select name="PostType" class="hidden">
+                                    @foreach (var pType in (Array)ViewBag.PostTypeList)
+                                    {
+                                        <option value="@postTypeFlag">@pType</option>
+                                        { postTypeFlag++; }
+                                    }
+                                </select>
+                            </div>
+                        
+                        
+
+                            <div class="row" style="margin-top: 10px">
+                                <button class="btn btn-primary btn-xs pull-right" style="padding-left: 20px; padding-right: 20px">Post</button>
+                            </div>
+
+                        }
+
                     </div>
                 </div>
-                <!-- media -->
-                @if (item.PersonId == EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser().Id)
-                {
-                    <ul class="panel-options">
-                        <li>
-                            <a class="tooltips" href="@Url.Action("RemovePost", "Board", new { Id = item.Id })" data-toggle="tooltip" title="" data-original-title="Borrar">
-                                <i class="glyphicon glyphicon-remove"></i>
+            </div>
+        @foreach (var item in Model)
+        {
+            if (!earlierDate.Equals(item.CreatedAt.ToString("dd/MM/yyyy")))
+            {
+                <div class="timeline-date">@item.CreatedAt.ToLongDateString()</div>
+
+                { earlierDate = item.CreatedAt.ToString("dd/MM/yyyy"); }
+            }
+
+            if (item.Person.Avatar == null) { avatar = "~/Content/images/default.png"; }
+            else { avatar = item.Person.Avatar.UrlPhoto; }
+
+            <div class="panel panel-post-item status">
+                <div class="panel-heading">
+                    <div class="media">
+                        <div class="media-left">
+                            <a href="#">
+                                <img alt="" id="imgAvatarBoard" src="@Url.Content(avatar)" class="media-object img-circle">
                             </a>
-                        </li>
-                        <li>
-                            <a class="tooltips" href="@Url.Action("RePost", "Board", new { Id = item.Id })" data-toggle="tooltip" title="" data-original-title="RePost">
-                                <i class="glyphicon glyphicon-refresh"></i>
-                            </a>
-                        </li>
-                    </ul>
-                }
-            </div><!-- panel-heading -->
-            <div class="panel-body">
-                @foreach (var archivo in item.Files)
-                {
-                    if (System.Web.MimeMapping.GetMimeMapping(archivo.Name).Contains("image"))
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">@item.Person.FirstName @item.Person.LastName</h4>
+                            <p class="media-usermeta">
+                                <span class="media-time">@item.CreatedAt.ToString("hh:mm tt")</span>
+                            
+                            </p>
+                        </div>
+                    </div>
+                    <!-- media -->
+                    @if (item.PersonId == EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser().Id)
                     {
-                        esImagen = true;
+                        <ul class="panel-options">
+                            <li>
+                                <a class="tooltips" href="@Url.Action("RemovePost", "Board", new { Id = item.Id })" data-toggle="tooltip" title="" data-original-title="Borrar">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="tooltips" href="@Url.Action("RePost", "Board", new { Id = item.Id })" data-toggle="tooltip" title="" data-original-title="RePost">
+                                    <i class="glyphicon glyphicon-refresh"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    }
+                </div><!-- panel-heading -->
+                <div class="panel-body">
+                    @foreach (var archivo in item.Files)
+                    {
+                        if (System.Web.MimeMapping.GetMimeMapping(archivo.Name).Contains("image"))
+                        {
+                            esImagen = true;
+                        }
+                        else
+                        {
+                            esImagen = false;
+                            break;
+                        }
+                    }
+                
+                    @if (esImagen && item.Files.Count < 6)
+                    {
+                        <div class="row photos">
+                            <div class="col-xs-4">
+                                @foreach (var archivo in item.Files)
+                                {
+                                    <a href="@Url.Content(archivo.UrlFile)"><img class="img-responsive" src="@Url.Content(archivo.UrlFile)" alt=""></a>
+                                }
+                            </div>
+                        
+                        </div>
                     }
                     else
                     {
-                        esImagen = false;
-                        break;
-                    }
-                }
-                
-                @if (esImagen && item.Files.Count < 6)
-                {
-                    <div class="row photos">
-                        <div class="col-xs-4">
-                            @foreach (var archivo in item.Files)
-                            {
-                                <a href="@Url.Content(archivo.UrlFile)"><img class="img-responsive" src="@Url.Content(archivo.UrlFile)" alt=""></a>
-                            }
-                        </div>
-                        
-                    </div>
-                }
-                else
-                {
-                <strong>@item.Title</strong>
-                <p>@item.Content</p>
-                <ul class="list-unstyled list-attachments">
-                    @foreach (var archivo in item.Files)
-                    {
-                        using (Html.BeginForm("DownloadFile", "FilesLibrary", FormMethod.Post, htmlAttributes: new { @Id = archivo.Id }))
+                    <strong>@item.Title</strong>
+                    <p>@item.Content</p>
+                    <ul class="list-unstyled list-attachments">
+                        @foreach (var archivo in item.Files)
                         {
-                            @Html.AntiForgeryToken()
-                            <li><input type="hidden" name="fileId" value="@archivo.Id" /></li>
-                            <li><i class="fa fa-file"></i><button type="submit" class="btn btn-link">@archivo.Name</button> </li>
+                            using (Html.BeginForm("DownloadFile", "FilesLibrary", FormMethod.Post, htmlAttributes: new { @Id = archivo.Id }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <li><input type="hidden" name="fileId" value="@archivo.Id" /></li>
+                                <li><i class="fa fa-file"></i><button type="submit" class="btn btn-link">@archivo.Name</button> </li>
+                            }
+
                         }
-
+                    </ul>
                     }
-                </ul>
-                }
-            </div>
-            <div class="panel-footer">
-                <ul class="list-inline">
-                    <li><a data-target="#comment-@item.Id" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comentarios (@item.Replays.Count())</a></li>
-                </ul>
-            </div>
-            <div class="collapse" id="comment-@item.Id">
-                <ul class="media-list">
-                    @foreach (var reply in item.Replays)
-                    {
-                        var avatarComment = "~/Content/images/default.png";
+                </div>
+                <div class="panel-footer">
+                    <ul class="list-inline">
+                        <li><a data-target="#comment-@item.Id" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comentarios (@item.Replays.Count())</a></li>
+                    </ul>
+                </div>
+                <div class="collapse" id="comment-@item.Id">
+                    <ul class="media-list">
+                        @foreach (var reply in item.Replays)
+                        {
+                            var avatarComment = "~/Content/images/default.png";
 
-                        if (reply.Person.Avatar != null) { avatarComment = reply.Person.Avatar.UrlPhoto; }
+                            if (reply.Person.Avatar != null) { avatarComment = reply.Person.Avatar.UrlPhoto; }
 
-                        <li class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object img-circle" id="imgAvatarBoard" src="@Url.Content(avatarComment)" alt="">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading">@reply.Person.FirstName @reply.Person.LastName<small>@reply.CreatedAt.ToShortDateString() @reply.CreatedAt.ToShortTimeString()</small></h4>
-                                @reply.Content
-                            </div>
-                            <div class="media-right">
-                                @if (item.PersonId == EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser().Id)
-                                {
-                                    
-                                    <a class="tooltips" href="@Url.Action("RemoveReply", "Board", new { id = reply.Id })" data-toggle="tooltip" title="" data-original-title="Remove">
-                                        <i class="glyphicon glyphicon-remove"></i>
+                            <li class="media">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object img-circle" id="imgAvatarBoard" src="@Url.Content(avatarComment)" alt="">
                                     </a>
-                                }
-                            </div>
-                        </li>
-                    }
-                </ul>
-            </div>
-            <div class="form-group">
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">@reply.Person.FirstName @reply.Person.LastName<small>@reply.CreatedAt.ToShortDateString() @reply.CreatedAt.ToShortTimeString()</small></h4>
+                                    @reply.Content
+                                </div>
+                                <div class="media-right">
+                                    @if (item.PersonId == EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser().Id)
+                                    {
+                                    
+                                        <a class="tooltips" href="@Url.Action("RemoveReply", "Board", new { id = reply.Id })" data-toggle="tooltip" title="" data-original-title="Remove">
+                                            <i class="glyphicon glyphicon-remove"></i>
+                                        </a>
+                                    }
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div class="form-group">
                 
-                @using (Html.BeginForm("Reply", "Board", FormMethod.Post, htmlAttributes: new { @Id = "form-replay-"+item.Id }))
-                {
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" name="postId" value="@item.Id" />
-                    <input type="text" name="content" class="form-control btnSubmit" data-Id="@item.Id" placeholder="Escribe algún comentario">
-                }
+                    @using (Html.BeginForm("Reply", "Board", FormMethod.Post, htmlAttributes: new { @Id = "form-replay-"+item.Id }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="postId" value="@item.Id" />
+                        <input type="text" name="content" class="form-control btnSubmit" data-Id="@item.Id" placeholder="Escribe algún comentario">
+                    }
+                </div>
             </div>
-        </div><!-- panel panel-post -->
-    }
-    </div> 
-
-    </div><!-- timeline-wrapper -->
-</div>
+        }
+        </div> 
+    </div>
+}

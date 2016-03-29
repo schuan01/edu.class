@@ -70,6 +70,8 @@
     <Compile Include="IPageServices.cs" />
     <Compile Include="IPersonServices.cs" />
     <Compile Include="IPostServices.cs" />
+    <Compile Include="IQuestionOptionServices.cs" />
+    <Compile Include="IQuestionServices.cs" />
     <Compile Include="IReplyServices.cs" />
     <Compile Include="ITestServices.cs" />
     <Compile Include="MailServices.cs" />
@@ -77,6 +79,8 @@
     <Compile Include="PersonServices.cs" />
     <Compile Include="PostServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionOptionServices.cs" />
+    <Compile Include="QuestionServices.cs" />
     <Compile Include="ReplyServices.cs" />
     <Compile Include="TestServices.cs" />
   </ItemGroup>

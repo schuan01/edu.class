@@ -1,0 +1,263 @@
+﻿@model EduClass.Web.Infrastructure.ViewModels.QuestionViewModel
+@{
+    ViewBag.Title = "Create";
+}
+
+
+<div class="panel panel-site-traffic col-md-8 col-md-offset-2">
+    <div class="panel-heading">
+        <ul class="panel-options">
+            <li><a><i class="fa fa-refresh"></i></a></li>
+        </ul>
+        <h4 class="panel-title text-success">Crear pregunta</h4>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("Create", "Question", FormMethod.Post, new { id = "frmCreateQuestion"}))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.TestId)
+
+                
+
+                <div class="form-group">
+                    <label for="QuestionType" class="control-label col-md-2">Tipo de pregunta</label>
+                    <div class="col-md-10">
+                        <select id="evddlQuestionType" name="QuestionType" class="form-control" data_plugin="select2">
+                            <option value="0">-- Seleccionar --</option>
+                            @{
+            var index = 1;
+            foreach (EduClass.Entities.QuestionType item in ((List<EduClass.Entities.QuestionType>)ViewBag.QuestionType))
+            {
+                                        <option value="@index">@item.ToString()</option>
+                index++;
+            }
+                            }
+                        </select>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="Content" class="control-label col-md-2">Pregunta</label>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <hr/>
+                <div id="opTrueOrFalse" class="hidden">
+                    <div class="form-horizontal" id="opTrueOrFalseContent">
+                        <div class="row">
+                            <div class="col-md-6 center">
+                                <label for="chkTrue">Verdadero</label>
+                                <input id="chkTrue" name="chkTrue" type="checkbox" class="form-control checkbox" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="chkFalse">Falso</label>
+                                <input id="chkFalse" name="chkFalse" type="checkbox" class="form-control checkbox" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="opRedaction" class="hidden">
+                    <div class="form-horizontal" id="opRedactionContent">
+                        <textarea rows="20" id="txtRedaction" name="txtRedaction" class="form-control"></textarea>
+                    </div>
+                </div>
+
+                <div id="opDiv" class="hidden">
+                    <button type="button" id="btnAddOption" class="btn btn-link pull-right mb15 mr10"><i class="fa fa-plus"></i> Agregar opciones</button>
+
+                    <div class="form-horizontal" id="opContent">
+                        
+                    </div>
+                </div>
+                <hr/>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="button" value="Crear" id="btnSubmit" class="btn btn-success pull-right ml10" />
+                        <a href="@Url.Action("Index", new { id = Model.TestId })" class="btn btn-primary pull-right">Volver</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+@{var sessionMessage = EduClass.Web.Infrastructure.Sessions.MessageSession.GetMessage(); }
+<script src="~/Scripts/app/helpersSite.js"></script>
+<script type="text/javascript">
+    var qtyOption = 0
+    var optionTypeSelected = "";
+
+    $(document).ready(function () {
+        var message = "@Html.Raw(sessionMessage.ToString())";
+        if (message != "") {
+            showMessageJS(message);
+        }
+
+        $('#btnSubmit').click(function () {
+            
+            var flag = false;
+
+            if ($('#evddlQuestionType option:selected').val() == 0) {
+                showMessageJS('info,Atención,El campo tipo de pregunta es requerido')
+                return false;
+            }
+
+            if ($('#Content').val() == '') {
+                showMessageJS('info,Atención,El campo pregunta es requerido')
+                return false;
+            }
+
+            switch ($('#evddlQuestionType option:selected').text()) {
+                case "REDACTION":
+                    flag = true;
+                    break;
+                case "OPTIONS":
+
+                    $('input[type="radio"]').each(function (index, item) {
+                        
+                        if ($(item).prop('checked')) { flag = true; }
+                    });
+
+                    break;
+                case "CHECKS",
+                     "TRUEORFALSE":
+
+                    $('input[type="checkbox"]').each(function (index, item) {
+
+                        if ($(item).prop('checked')) { flag = true; }
+                    });
+
+                    break;
+                default:
+
+            }
+
+            //Envio formulario.
+            if (flag) {
+                $('#frmCreateQuestion').submit();
+            } else {
+                showMessageJS('info,Atención,Debes seleccionar por lo menos una opción correcta.')
+            }
+
+        });
+
+        $('#chkTrue').click(function () {
+            $('#chkFalse').removeAttr('checked');
+        });
+
+        $('#chkFalse').click(function () {
+            $('#chkTrue').removeAttr('checked');
+        });
+        
+        $('#evddlQuestionType').change(function () {
+            $("select option:selected").each(function () {
+
+                switch ($(this).text()) {
+                    case "TRUEORFALSE":
+
+                        $('#opContent').empty()
+
+                        $('#opDiv').addClass("hidden");
+                        $('#opRedaction').addClass("hidden");
+                        $('#opTrueOrFalse').removeClass("hidden");
+                        break;
+                    case "REDACTION":
+
+                        $('#opContent').empty()
+
+                        $('#opTrueOrFalse').addClass("hidden");
+                        $('#opDiv').addClass("hidden");
+                        $('#opRedaction').removeClass("hidden");
+                        break;
+                    case "OPTIONS":
+                    case "CHECKS":
+                        
+                        optionTypeSelected = $(this).text();
+
+                        $('#opContent').empty()
+
+                        $('#opTrueOrFalse').addClass("hidden");
+                        $('#opRedaction').addClass("hidden");
+                        $('#opDiv').removeClass("hidden");
+                        break;
+                    default:
+
+                }
+            });
+        });
+
+        $('#btnAddOption').click(function () {
+
+            if ($('#opContent').children().length < 6) {
+
+                qtyOption++;
+
+                var themplate = '<div class="form-group option" id="op-' + qtyOption + '"> \
+                                    <div class="row"> \
+                                        <div class="col-md-10 col-lg-offset-2 pull-left"> \
+                                            <div class="row"> \
+                                                <div class="col-md-1"> ';
+
+                                                if (optionTypeSelected == "OPTIONS") {
+                                                    themplate += '<input type="radio" id="chkOp-' + qtyOption + '" name="chkOp-' + qtyOption + '" value="True"/> '
+                                                }else {
+                                                    themplate += '<input type="checkbox" id="chkOp-' + qtyOption + '" name="chkOp-' + qtyOption + '" class="form-control"/> '
+                                                }
+                
+                                  themplate += '</div> \
+                                                <div class="col-md-11"> \
+                                                    <div class="input-group mr20"> \
+                                                        <input class="form-control" type="text" name="opTxt-' + qtyOption + '" id="opTxt-' + qtyOption + '"> \
+                                                        <span class="input-group-btn"> \
+                                                            <button type="button" class="btn btn-danger removeOp" data-op="' + qtyOption + '"><i class="fa fa-trash"></i></button> \
+                                                        </span> \
+                                                    </div> \
+                                                </div> \
+                                            </div> \
+                                        </div> \
+                                    </div> \
+                                 </div>';
+
+                $('#opContent').append(themplate);
+
+                reBind();
+
+            } else {
+                showMessageJS('warning,Atención,No se pueden agregar más de 6 opciones')
+            }
+        });
+    });
+
+    function reBind()
+    {
+        $('#opContent').on('click', '.removeOp', function (e) {
+
+            var id = $(this).data('op');
+
+            $('#op-' + id).remove();
+
+            qtyOption = qtyOption - 1;
+        });
+
+        $('#opContent').on('click', 'input[type="radio"]', function (e) {
+
+            $('input[type="radio"]').removeAttr('checked');
+
+            $(this).prop('checked', 'checked');
+        });
+    }
+</script>
+

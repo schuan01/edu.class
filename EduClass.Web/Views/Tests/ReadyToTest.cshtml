@@ -1,0 +1,68 @@
+﻿@model EduClass.Entities.Test
+
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<div class="col-md-10 col-md-offset-1">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()   
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">@Model.Name (Prof: @Model.Group.Teacher.FirstName @Model.Group.Teacher.LastName)</h3>
+                <div class="row">
+                    <button type="button" class="btn btn-success pull-right">Enviar prueba</button> 
+                </div>
+            </div>
+            <div class="panel-body">
+                @foreach (var item in Model.Questions)
+                {
+                    if (item.Enabled)
+                    {
+                    
+                        <h4>@item.Content</h4>
+                        if(item.QuestionType == EduClass.Entities.QuestionType.TRUEORFALSE)
+                        {                    
+                            <input type="radio" name="@item.Id" value="true"/> 
+                            <span>Verdadero</span>                    
+                            <br />
+                            <input type="radio" name="chkFalse-@item.Id" value="false"/>
+                            <span>Falso</span>
+                        }
+                        else if (item.QuestionType == EduClass.Entities.QuestionType.REDACTION)
+                        {
+                            <textarea class="form-control" name="chkRedaction-@item.Id" cols="60"rows="10"></textarea>
+                        }
+                        else if (item.QuestionType == EduClass.Entities.QuestionType.OPTIONS)
+                        {
+                            foreach (var qop in item.QuestionOptions)
+                            {
+                                <input type="radio" name="op-@item.Id" value="@qop.Id"/> 
+                                <span>@qop.Content</span><br />
+                            }
+                        }
+                        else if (item.QuestionType == EduClass.Entities.QuestionType.CHECKS)
+                        {
+                            foreach (var qop in item.QuestionOptions)
+                            {
+                                <input type="checkbox" name="chk-@item.Id" value="@qop.Id"/> 
+                                <span>@qop.Content</span> <br/>
+                            }
+                        }
+
+                        <hr/>
+                    }
+                }
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <button type="submit" class="btn btn-success pull-right">Enviar prueba</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+

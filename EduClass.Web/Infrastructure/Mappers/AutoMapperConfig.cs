@@ -8,40 +8,46 @@ namespace EduClass.Web.Infrastructure.Mappers
     {
         public static void RegisterMappings()
         {
-            Mapper.Initialize(x => {
+            Mapper.Initialize(x =>
+            {
                 x.AddProfile<PersonMapperProfiles>();
                 x.AddProfile<MailMapperProfiles>();
                 x.AddProfile<GroupMapperProfiles>();
                 x.AddProfile<PostMapperProfiles>();
-		        x.AddProfile<PageMapperProfiles>();
+                x.AddProfile<PageMapperProfiles>();
                 x.AddProfile<EventMapperProfiles>();
                 x.AddProfile<TestMapperProfiles>();
-                x.AddProfile<CalificationMapperProfiles>();
+                x.AddProfile<QuestionMapperProfiles>();
             });
 
-           // Mapper.CreateMap<string, DateTime>().ConvertUsing<StringToDateTimeConverter>();
+            Mapper.CreateMap<string, DateTime>().ConvertUsing<StringToDateTimeConverter>();
         }
     }
 
     /*CONVERTERS*/
-    /*public class StringToDateTimeConverter : ITypeConverter<string, DateTime>
+    public class StringToDateTimeConverter : ITypeConverter<string, DateTime>
     {
         public DateTime Convert(ResolutionContext context)
         {
-            object objDateTime = context.SourceValue;
-            DateTime dateTime;
-
-            if (objDateTime == null)
+            try
             {
-                return default(DateTime);
-            }
 
-            if (DateTime.TryParseExact(objDateTime.ToString(), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime))
-            {
+                object objDateTime = context.SourceValue;
+                DateTime dateTime;
+
+                if (objDateTime == null)
+                {
+                    return default(DateTime);
+                }
+
+                dateTime = DateTime.ParseExact(context.SourceValue.ToString(), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+
                 return dateTime;
             }
-
-            return default(DateTime);
+            catch (Exception)
+            {
+                throw;
+            }
         }
-    }*/
+    }
 }

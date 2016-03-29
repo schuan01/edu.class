@@ -14,8 +14,8 @@
                 break;
             case "info":
                  $.gritter.add({
-                     title: strArray[0],
-                     text: strArray[1],
+                     title: strArray[1],
+                     text: strArray[2],
                      class_name: 'with-icon question-circle primary'
                 });
                 break;

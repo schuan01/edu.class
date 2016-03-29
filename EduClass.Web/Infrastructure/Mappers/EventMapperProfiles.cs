@@ -34,34 +34,6 @@ namespace EduClass.Web.Infrastructure.Mappers
         }
     }
 
-    public class StringToDateTimeResolver : ValueResolver<string, DateTime>
-    {
-        protected override DateTime ResolveCore(string source)
-        {
-            try
-            {
-
-                object objDateTime = source;
-                DateTime dateTime;
-            
-                if (objDateTime == null)
-                {
-                    return default(DateTime);
-                }
-
-                dateTime = DateTime.ParseExact(source, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
-
-                return dateTime;
-            }
-            catch (Exception ex)
-            {
-                
-                throw ex;
-            }
-
-        }
-    }
-
     public class StringToEventTypeResolver : ValueResolver<string, EventType>
     {
         protected override EventType ResolveCore(string source)
@@ -72,10 +44,10 @@ namespace EduClass.Web.Infrastructure.Mappers
             {
                 if (source != String.Empty) { Enum.TryParse(source, out eType); }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
             return eType;
         }
