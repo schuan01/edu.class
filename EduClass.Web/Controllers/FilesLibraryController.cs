@@ -1,4 +1,4 @@
-﻿using Dropbox.Api;
+﻿using DropNet;
 using EduClass.Entities;
 using EduClass.Logic;
 using EduClass.Web.Infrastructure.Sessions;
@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Web;
@@ -27,7 +28,7 @@ namespace EduClass.Web.Controllers
         private ILog _log;
         private string App_key = "";
         private string App_secret = "";
-
+        private DropNetClient _client;
         
         
 
@@ -44,21 +45,49 @@ namespace EduClass.Web.Controllers
 
         }
 
-        static async Task Run()
+        private void initDropBox()
         {
-            using (var dbx = new DropboxClient("Z413XdG4OvAAAAAAAAAACt-98b9GqkzqtyIap78Ac5vNBO4gB10VTHlf2fIBKZaB"))
-            {
+            WebProxy p = new WebProxy();
+            p.Address = new Uri("192.168.0.254:3128");
+            p.UseDefaultCredentials = true;
+            _client = new DropNetClient(App_key, App_secret,p);
+            _client.GetToken();
+            var url = _client.BuildAuthorizeUrl();
+            
+            //var accessToken = _client.GetAccessToken();
+            //var metaData = _client.GetMetaData("/Public",false,false); //Folder
+            //var archivo = _client.GetFile("/ejemploGMC.html");
 
-                var full = await dbx.Users.GetCurrentAccountAsync();
-                Console.WriteLine("{0} - {1}", full.Name.DisplayName, full.Email);
+        }
+
+        [HttpGet]
+        public ActionResult Connect()
+        {
+            string url = "";
+            try
+            {
+               
+                _client = new DropNetClient(App_key, App_secret);
+                _client.GetToken();
+
+                url = _client.BuildAuthorizeUrl();
+                return Redirect(url);
             }
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al conectar a Dropbox."));
+                _log.Error("FilesLibrary - Connect", ex);
+            }
+            return RedirectToAction("Index");
+
+
         }
 
         // GET: FilesLibrary
         public ActionResult Index(string tipo)
         {
-            //var task = Task.Run((Func<Task>)Run);
-            //task.Wait();
+
+            //initDropBox();
 
             IOrderedEnumerable<Entities.File> archivos = null;
             //Obtengo los archivos que publico el Person
@@ -91,73 +120,6 @@ namespace EduClass.Web.Controllers
 
             return View(archivos);
         }
-
-        [Authorize]
-        public ActionResult Connect()
-        {
-            var redirect = DropboxOAuth2Helper.GetAuthorizeUri(
-                OAuthResponseType.Code,
-                App_key,
-                RedirectUri,
-                "");
-                //RedirectUri,
-                //this.currentUser.ConnectState);
-
-            return Redirect(redirect.ToString());
-        }
-
-        private string RedirectUri
-        {
-            get
-            {
-                if (this.Request.Url.Host.ToLowerInvariant() == "localhost")
-                {
-                    return "http://localhost:55555/FilesLibrary/Index";
-                }
-
-                var builder = new UriBuilder(
-                    Uri.UriSchemeHttps,
-                    this.Request.Url.Host);
-
-                builder.Path = "/FilesLibrary/Auth";
-
-                return builder.ToString();
-            }
-        }
-
-        // GET: /FilesLibrary/Auth
-        [Authorize]
-        public async Task<ActionResult> AuthAsync(string code, string state)
-        {
-            try
-            {
-                /*if (this.currentUser.ConnectState != state)
-                {
-                    this.Flash("There was an error connecting to Dropbox.");
-                    return this.RedirectToAction("Index");
-                }*/
-
-                var response = await DropboxOAuth2Helper.ProcessCodeFlowAsync(
-                    code,
-                    App_key,
-                    App_secret,
-                    this.RedirectUri);
-
-                /*this.currentUser.DropboxAccessToken = response.AccessToken;
-                this.currentUser.ConnectState = string.Empty;
-                await this.store.SaveChangesAsync();
-
-                this.Flash("This account has been connected to Dropbox.", FlashLevel.Success);*/
-                //return RedirectToAction("Profile");
-                return RedirectToAction("Index");
-            }
-            catch (Exception e)
-            {
-                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", e.Message));
-                return RedirectToAction("Index");
-            }
-        }
-
 
         [HttpGet]
         public ActionResult UploadFile()
