@@ -39,24 +39,26 @@
                 <div class="form-group">
                     <label for="QuestionType" class="control-label col-md-2">Tipo de pregunta</label>
                     <div class="col-md-10">
-                        <select id="evddlQuestionType" name="QuestionType" class="form-control disabled" data_plugin="select2" >
+                        <select id="evddlQuestionType" name="QuestionType" class="form-control" data_plugin="select2" disabled>
                             <option value="0">-- Seleccionar --</option>
                             @{
-                                var index = 1;
-                                foreach (EduClass.Entities.QuestionType item in ((List<EduClass.Entities.QuestionType>)ViewBag.QuestionType))
-                                {
-                                    if (_dictionaryQuestionType[Convert.ToInt32(Model.QuestionType)].ToString() == item.ToString())
-                                    {
-                                        <option value="@index" selected>@item.ToString()</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@index">@item.ToString()</option>
-                                    }
-                                    index++;
-                                }
+            var index = 1;
+            foreach (EduClass.Entities.QuestionType item in ((List<EduClass.Entities.QuestionType>)ViewBag.QuestionType))
+            {
+                if (_dictionaryQuestionType[Convert.ToInt32(Model.QuestionType)].ToString() == item.ToString())
+                {
+                    <option value="@index" selected>@item.ToString()</option>
+                }
+                else
+                {
+                    <option value="@index">@item.ToString()</option>
+                }
+                index++;
+            }
                             }
                         </select>
+
+
 
                     </div>
                 </div>
@@ -130,7 +132,6 @@
 
     $(document).ready(function () {
 
-        updateFields();
         showQuestionType();
 
         var message = "@Html.Raw(sessionMessage.ToString())";
@@ -210,6 +211,8 @@
         $('#chkFalse').click(function(){
             $('#chkTrue').removeAttr('checked');
         });
+
+        updateFields();
     });
 
     function showQuestionType() {
