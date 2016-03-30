@@ -30,7 +30,8 @@ namespace EduClass.Web.Controllers
         private string App_secret = "";
         private DropNetClient _client;
         
-        
+
+
 
         public FilesLibraryController(IFileServices service, IPersonServices personService, IPostServices postService, ILog log)
         {
@@ -39,39 +40,34 @@ namespace EduClass.Web.Controllers
             _servicePost = postService;
             carpetaUsuario = "UsersFolders\\" + UserSession.GetCurrentUser().UserName;//Inicia el controlador y setea la carpeta
             _log = log;
+            
 
             App_key = WebConfigurationManager.AppSettings["DropboxAppKey"];
             App_secret = WebConfigurationManager.AppSettings["DropboxAppSecret"];
+            _client = new DropNetClient(App_key, App_secret);
 
         }
 
-        private void initDropBox()
+        private string initDropBox()
         {
-            WebProxy p = new WebProxy();
-            p.Address = new Uri("192.168.0.254:3128");
-            p.UseDefaultCredentials = true;
-            _client = new DropNetClient(App_key, App_secret,p);
-            _client.GetToken();
-            var url = _client.BuildAuthorizeUrl();
+
+
+            Session["DropNetUserLogin"] = _client.GetToken();
+            string indexServer = System.Web.HttpContext.Current.Request.Url.ToString();
+            indexServer = indexServer.Replace("Connect", "Index");
+            return _client.BuildAuthorizeUrl(indexServer);
             
-            //var accessToken = _client.GetAccessToken();
-            //var metaData = _client.GetMetaData("/Public",false,false); //Folder
-            //var archivo = _client.GetFile("/ejemploGMC.html");
+            
 
         }
 
         [HttpGet]
         public ActionResult Connect()
         {
-            string url = "";
+
             try
             {
-               
-                _client = new DropNetClient(App_key, App_secret);
-                _client.GetToken();
-
-                url = _client.BuildAuthorizeUrl();
-                return Redirect(url);
+                return Redirect(initDropBox());
             }
             catch (Exception ex)
             {
@@ -84,11 +80,35 @@ namespace EduClass.Web.Controllers
         }
 
         // GET: FilesLibrary
-        public ActionResult Index(string tipo)
+        public ActionResult Index(string tipo, string oauth_token)
         {
 
             //initDropBox();
+            if (oauth_token != null)
+            {
+                if (Session["DropNetUserLogin"] != null)
+                {
+                    _client.UserLogin = Session["DropNetUserLogin"] as DropNet.Models.UserLogin;
+                    var accessToken = _client.GetAccessToken();
+                    
+                    string carpeta = "/Aplicaciones/EduClassFolder";
+                    var metaData = _client.GetMetaData(carpeta, false, false); //Folder
+                    
+                    //Creamos si no existe
+                    //var folder = _client.CreateFolder("/Aplicaciones/EduClassFolder");
+                    //metaData = _client.GetMetaData(carpeta, false, false); //Folder
+                    
 
+                    var archivo = _client.GetFile("/Aplicaciones/EduClassFolder/asd.txt");
+
+                    //La carpeta es el userName del usuario
+                    //var originalDirectory = new DirectoryInfo(string.Format("{0}" + carpetaUsuario + "\\", Server.MapPath(@"\")));
+                    //string pathString = System.IO.Path.Combine(originalDirectory.ToString(), "FileLibrary");
+                    //pathString = string.Format("{0}\\{1}", pathString, "Temp.html");
+                    //System.IO.File.WriteAllBytes(pathString,archivo);
+                    
+                }
+            }
             IOrderedEnumerable<Entities.File> archivos = null;
             //Obtengo los archivos que publico el Person
             Person p = _servicePerson.GetById(UserSession.GetCurrentUser().Id);
