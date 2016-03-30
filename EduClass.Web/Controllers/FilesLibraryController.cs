@@ -82,60 +82,106 @@ namespace EduClass.Web.Controllers
         // GET: FilesLibrary
         public ActionResult Index(string tipo, string oauth_token)
         {
-
-            //initDropBox();
-            if (oauth_token != null)
+            IOrderedEnumerable<Entities.File> archivos = new List<Entities.File>().OrderBy(x => x.Id);
+            try
             {
-                if (Session["DropNetUserLogin"] != null)
+                
+                if (oauth_token != null)
                 {
-                    _client.UserLogin = Session["DropNetUserLogin"] as DropNet.Models.UserLogin;
-                    var accessToken = _client.GetAccessToken();
-                    
-                    string carpeta = "/Aplicaciones/EduClassFolder";
-                    var metaData = _client.GetMetaData(carpeta, false, false); //Folder
-                    
-                    //Creamos si no existe
-                    //var folder = _client.CreateFolder("/Aplicaciones/EduClassFolder");
-                    //metaData = _client.GetMetaData(carpeta, false, false); //Folder
-                    
+                    if (Session["DropNetUserLogin"] != null)
+                    {
+                        _client.UserLogin = Session["DropNetUserLogin"] as DropNet.Models.UserLogin;
+                        var accessToken = _client.GetAccessToken();
 
-                    var archivo = _client.GetFile("/Aplicaciones/EduClassFolder/asd.txt");
+                        string carpeta = "/Aplicaciones/EduClassFolder";
+                        var metaData = _client.GetMetaData(carpeta, null, false, false); //Folder
+                        var carpetaRaiz = _client.GetMetaData("/Aplicaciones", null, false, false);
 
-                    //La carpeta es el userName del usuario
-                    //var originalDirectory = new DirectoryInfo(string.Format("{0}" + carpetaUsuario + "\\", Server.MapPath(@"\")));
-                    //string pathString = System.IO.Path.Combine(originalDirectory.ToString(), "FileLibrary");
-                    //pathString = string.Format("{0}\\{1}", pathString, "Temp.html");
-                    //System.IO.File.WriteAllBytes(pathString,archivo);
-                    
+                        if (!(carpetaRaiz.Contents.Any(c => c.Is_Dir && c.Path.Contains("EduClassFolder"))))
+                        {
+                            //Creamos si no existe
+                            var folder = _client.CreateFolder(carpeta);
+                            metaData = _client.GetMetaData(carpeta, null, false, false); //Folder
+                        }
+
+                        //La carpeta es el userName del usuario
+                        var originalDirectory = new DirectoryInfo(string.Format("{0}" + carpetaUsuario + "\\", Server.MapPath(@"\")));
+                        string pathString = System.IO.Path.Combine(originalDirectory.ToString(), "FileLibrary");
+                        byte[] archivo = null;
+
+                        bool isExists = System.IO.Directory.Exists(pathString);
+
+                        if (!isExists)
+                            System.IO.Directory.CreateDirectory(pathString);
+
+                        foreach (DropNet.Models.MetaData arch in metaData.Contents)
+                        {
+                            pathString = string.Format("{0}\\{1}", pathString, arch.Name);
+                            archivo = _client.GetFile("/Aplicaciones/EduClassFolder/" + arch.Name);
+                            if (archivo != null)
+                            {
+                                //Crar en el disco, en la carpeta del usuario
+                                System.IO.File.WriteAllBytes(pathString, archivo);
+
+                                //Despues de guardar el archivo
+                                Person pe = UserSession.GetCurrentUser();//Traigo el usuario actual
+                                pe = _servicePerson.GetById(pe.Id);
+
+                                //Y creo el nuevo archivo
+                                Entities.File f = new Entities.File();
+                                f.UrlFile = "~\\" + carpetaUsuario + "\\FileLibrary\\" + arch.Name;
+                                f.Name = arch.Name;
+                                f.Person = pe;
+                                f.CreatedAt = DateTime.Now;
+
+                                _service.Create(f);
+                            }
+                            else
+                            {
+                                _log.Error("FilesLibrary - Index => El byte de archivo " + pathString + " no existe");
+                            }
+                        }
+
+                        Session["DropNetUserLogin"] = null;
+                    }
                 }
+
+                
+                //Obtengo los archivos que publico el Person
+                Person p = _servicePerson.GetById(UserSession.GetCurrentUser().Id);
+                if (p is Teacher)
+                {
+                    archivos = p.Files.ToList().OrderByDescending(x => x.CreatedAt);
+
+                    if (tipo == "imagenes")
+                        archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("image")).ToList().OrderByDescending(x => x.CreatedAt);
+
+                    if (tipo == "audio")
+
+                        archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("audio")).ToList().OrderByDescending(x => x.CreatedAt);
+
+                    if (tipo == "documentos")
+                        archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("office")).ToList().OrderByDescending(x => x.CreatedAt);
+
+                    if (tipo == "pdf")
+                        archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("application/pdf")).ToList().OrderByDescending(x => x.CreatedAt);
+
+                }
+                else
+                {
+                    //Lleva  a Board si no sos Alumno
+                    _log.Error("FilesLibrary - Index => El usuario actual no es Profesor");
+                    return RedirectToAction("Board", "Index");
+
+                }
+
+                
             }
-            IOrderedEnumerable<Entities.File> archivos = null;
-            //Obtengo los archivos que publico el Person
-            Person p = _servicePerson.GetById(UserSession.GetCurrentUser().Id);
-            if (p is Teacher)
+            catch (Exception ex)
             {
-                archivos = p.Files.ToList().OrderByDescending(x => x.CreatedAt);
-
-                if (tipo == "imagenes")
-                    archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("image")).ToList().OrderByDescending(x => x.CreatedAt);
-
-                if (tipo == "audio")
-
-                    archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("audio")).ToList().OrderByDescending(x => x.CreatedAt);
-
-                if (tipo == "documentos")
-                    archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("office")).ToList().OrderByDescending(x => x.CreatedAt);
-
-                if (tipo == "pdf")
-                    archivos = archivos.Where(x => MimeMapping.GetMimeMapping(x.Name).Contains("application/pdf")).ToList().OrderByDescending(x => x.CreatedAt);
-
-            }
-            else
-            {
-                //Lleva  a Board si no sos Alumno
-                _log.Error("FilesLibrary - Index => El usuario actual no es Profesor");
-                return RedirectToAction("Board","Index");
-
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al abrir Index."));
+                _log.Error("FilesLibrary - Index",ex);
+                Session["DropNetUserLogin"] = null;
             }
 
             return View(archivos);
@@ -199,11 +245,6 @@ namespace EduClass.Web.Controllers
                         f.CreatedAt = DateTime.Now;
 
                         _service.Create(f);
-
-
-
-
-
                     }
 
                 }
@@ -213,6 +254,7 @@ namespace EduClass.Web.Controllers
             catch (Exception ex)
             {
                 //Borro el archivo fisico si se llega a crear
+                isSavedSuccessfully = false;
                 if (file != null)
                 {
                     FileInfo fi1 = new FileInfo(path);
