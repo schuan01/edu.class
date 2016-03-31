@@ -95,6 +95,10 @@
                         {
                             <img src="@Url.Content("~/Content/images/images_mp3.png")" class="img-responsive" alt="" />
                         }
+                        else if (System.Web.MimeMapping.GetMimeMapping(elemento.Name).Contains("pdf"))
+                        {
+                            <img src="@Url.Content("~/Content/images/images_pdf.png")" class="img-responsive" alt="" />
+                        }
                         else if (System.Web.MimeMapping.GetMimeMapping(elemento.Name).Contains("office"))
                         {
                             <img src="@Url.Content("~/Content/images/images_doc.png")" class="img-responsive" alt="" />
@@ -122,7 +126,7 @@
 
             <br>
 
-            <a class="btn btn-success btn-quirk btn-block mb20" href="@Url.Action("Connect", "FilesLibrary")">Conectar Dropbox</a>
+            <a class="btn btn-success btn-quirk btn-block mb20" href="@Url.Action("Connect", "FilesLibrary")"><i class="fa fa-dropbox"></i><span>Importar desde Dropbox</span></a>
 
             <br>
             

@@ -30,9 +30,6 @@ namespace EduClass.Web.Controllers
         private string App_secret = "";
         private DropNetClient _client;
         
-
-
-
         public FilesLibraryController(IFileServices service, IPersonServices personService, IPostServices postService, ILog log)
         {
             _service = service;
@@ -85,67 +82,85 @@ namespace EduClass.Web.Controllers
             IOrderedEnumerable<Entities.File> archivos = new List<Entities.File>().OrderBy(x => x.Id);
             try
             {
-                
-                if (oauth_token != null)
+                //SOLO APLICA A TEACHER
+                if (UserSession.GetCurrentUser() is Teacher)
                 {
-                    if (Session["DropNetUserLogin"] != null)
+                    if (oauth_token != null)
                     {
-                        _client.UserLogin = Session["DropNetUserLogin"] as DropNet.Models.UserLogin;
-                        var accessToken = _client.GetAccessToken();
-
-                        string carpeta = "/Aplicaciones/EduClassFolder";
-                        var metaData = _client.GetMetaData(carpeta, null, false, false); //Folder
-                        var carpetaRaiz = _client.GetMetaData("/Aplicaciones", null, false, false);
-
-                        if (!(carpetaRaiz.Contents.Any(c => c.Is_Dir && c.Path.Contains("EduClassFolder"))))
+                        if (Session["DropNetUserLogin"] != null)
                         {
-                            //Creamos si no existe
-                            var folder = _client.CreateFolder(carpeta);
-                            metaData = _client.GetMetaData(carpeta, null, false, false); //Folder
-                        }
+                            _client.UserLogin = Session["DropNetUserLogin"] as DropNet.Models.UserLogin;
+                            var accessToken = _client.GetAccessToken();
 
-                        //La carpeta es el userName del usuario
-                        var originalDirectory = new DirectoryInfo(string.Format("{0}" + carpetaUsuario + "\\", Server.MapPath(@"\")));
-                        string pathString = System.IO.Path.Combine(originalDirectory.ToString(), "FileLibrary");
-                        byte[] archivo = null;
+                            string carpeta = "/Aplicaciones/EduClassFolder";
+                            var metaData = _client.GetMetaData(carpeta, null, false, false); //Folder
+                            var carpetaRaiz = _client.GetMetaData("/Aplicaciones", null, false, false);
 
-                        bool isExists = System.IO.Directory.Exists(pathString);
-
-                        if (!isExists)
-                            System.IO.Directory.CreateDirectory(pathString);
-
-                        foreach (DropNet.Models.MetaData arch in metaData.Contents)
-                        {
-                            pathString = string.Format("{0}\\{1}", pathString, arch.Name);
-                            archivo = _client.GetFile("/Aplicaciones/EduClassFolder/" + arch.Name);
-                            if (archivo != null)
+                            if (!(carpetaRaiz.Contents.Any(c => c.Is_Dir && c.Path.Contains("EduClassFolder"))))
                             {
-                                //Crar en el disco, en la carpeta del usuario
-                                System.IO.File.WriteAllBytes(pathString, archivo);
-
-                                //Despues de guardar el archivo
-                                Person pe = UserSession.GetCurrentUser();//Traigo el usuario actual
-                                pe = _servicePerson.GetById(pe.Id);
-
-                                //Y creo el nuevo archivo
-                                Entities.File f = new Entities.File();
-                                f.UrlFile = "~\\" + carpetaUsuario + "\\FileLibrary\\" + arch.Name;
-                                f.Name = arch.Name;
-                                f.Person = pe;
-                                f.CreatedAt = DateTime.Now;
-
-                                _service.Create(f);
+                                //Creamos si no existe
+                                var folder = _client.CreateFolder(carpeta);
+                                metaData = _client.GetMetaData(carpeta, null, false, false); //Folder
+                                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Carpeta Creada", "Se creo la carpeta EduClassFolder en /Aplicaciones, vuelva a importar para obtener todos los archivos."));
+                                return RedirectToAction("Index");
                             }
-                            else
+
+                            //La carpeta es el userName del usuario
+                            var originalDirectory = new DirectoryInfo(string.Format("{0}" + carpetaUsuario + "\\", Server.MapPath(@"\")));
+                            string pathString = System.IO.Path.Combine(originalDirectory.ToString(), "FileLibrary");
+                            byte[] archivo = null;
+
+                            bool isExists = System.IO.Directory.Exists(pathString);
+
+                            if (!isExists)
+                                System.IO.Directory.CreateDirectory(pathString);
+
+                            string rutaArchActual = "";
+                            foreach (DropNet.Models.MetaData arch in metaData.Contents)
                             {
-                                _log.Error("FilesLibrary - Index => El byte de archivo " + pathString + " no existe");
-                            }
-                        }
+                                rutaArchActual = string.Format("{0}\\{1}", pathString, arch.Name);
+                                archivo = _client.GetFile("/Aplicaciones/EduClassFolder/" + arch.Name);
+                                if (archivo != null)
+                                {
+                                    Person pe = UserSession.GetCurrentUser();//Traigo el usuario actual
+                                    pe = _servicePerson.GetById(pe.Id);
 
-                        Session["DropNetUserLogin"] = null;
+                                    if (!pe.Files.Any(x => x.Name == arch.Name))
+                                    {
+                                        //Crar en el disco, en la carpeta del usuario
+                                        System.IO.File.WriteAllBytes(rutaArchActual, archivo);
+
+
+                                        //Y creo el nuevo archivo
+                                        Entities.File f = new Entities.File();
+                                        f.UrlFile = "~\\" + carpetaUsuario + "\\FileLibrary\\" + arch.Name;
+                                        f.Name = arch.Name;
+                                        f.Person = pe;
+                                        f.CreatedAt = DateTime.Now;
+
+                                        _service.Create(f);
+                                    }
+                                    else
+                                    {
+                                        MessageSession.SetMessage(new MessageHelper(Enum_MessageType.WARNING, "Atención", "Uno o mas archivos ya existian en EduClass, se importaron los nuevos"));
+                                    }
+                                }
+                                else
+                                {
+                                    _log.Error("FilesLibrary - Index => El byte de archivo " + rutaArchActual + " no existe");
+                                }
+                            }
+
+                            Session["DropNetUserLogin"] = null;
+                        }
                     }
                 }
-
+                else
+                {
+                    //Lleva  a Board si no sos Alumno
+                    _log.Error("FilesLibrary - Index => El usuario actual no es Profesor");
+                    return RedirectToAction("Board", "Index");
+                }
                 
                 //Obtengo los archivos que publico el Person
                 Person p = _servicePerson.GetById(UserSession.GetCurrentUser().Id);
@@ -215,36 +230,44 @@ namespace EduClass.Web.Controllers
                     fName = file.FileName;
                     if (file != null && file.ContentLength > 0)
                     {
-                        //La carpeta es el userName del usuario
-                        var originalDirectory = new DirectoryInfo(string.Format("{0}" + carpetaUsuario + "\\", Server.MapPath(@"\")));
 
-                        string pathString = System.IO.Path.Combine(originalDirectory.ToString(), "FileLibrary");
-
-                        var fileName1 = Path.GetFileName(file.FileName);
-
-
-                        bool isExists = System.IO.Directory.Exists(pathString);
-
-                        if (!isExists)
-                            System.IO.Directory.CreateDirectory(pathString);
-
-                        path = string.Format("{0}\\{1}", pathString, file.FileName);
-
-                        file.SaveAs(path);//Termina el guardado del archivo fisico
-
-
-                        //Despues de guardar el archivo
                         Person p = UserSession.GetCurrentUser();//Traigo el usuario actual
                         p = _servicePerson.GetById(p.Id);
 
-                        //Y creo el nuevo archivo
-                        Entities.File f = new Entities.File();
-                        f.UrlFile = "~\\" + carpetaUsuario + "\\FileLibrary\\" + file.FileName;
-                        f.Name = file.FileName;
-                        f.Person = p;
-                        f.CreatedAt = DateTime.Now;
+                        if (!p.Files.Any(x => x.Name == file.FileName))
+                        {
+                            //La carpeta es el userName del usuario
+                            var originalDirectory = new DirectoryInfo(string.Format("{0}" + carpetaUsuario + "\\", Server.MapPath(@"\")));
 
-                        _service.Create(f);
+                            string pathString = System.IO.Path.Combine(originalDirectory.ToString(), "FileLibrary");
+
+                            var fileName1 = Path.GetFileName(file.FileName);
+
+
+                            bool isExists = System.IO.Directory.Exists(pathString);
+
+                            if (!isExists)
+                                System.IO.Directory.CreateDirectory(pathString);
+
+                            path = string.Format("{0}\\{1}", pathString, file.FileName);
+
+                            file.SaveAs(path);//Termina el guardado del archivo fisico
+
+                            //Y creo el nuevo archivo
+                            Entities.File f = new Entities.File();
+                            f.UrlFile = "~\\" + carpetaUsuario + "\\FileLibrary\\" + file.FileName;
+                            f.Name = file.FileName;
+                            f.Person = p;
+                            f.CreatedAt = DateTime.Now;
+
+                            _service.Create(f);
+                            
+                        }
+                        else
+                        {
+                            MessageSession.SetMessage(new MessageHelper(Enum_MessageType.WARNING, "Atención", "Uno o mas archivos ya existian en EduClass, se subieron los nuevos"));
+                            
+                        }
                     }
 
                 }
@@ -276,32 +299,7 @@ namespace EduClass.Web.Controllers
             }
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public FileResult ImportFromDropBox(int fileId)
-        {
-
-           
-
-            try
-            {
-                Entities.File f = _service.GetById(fileId);
-                if (f != null)
-                {
-
-                    return File(Request.MapPath(f.UrlFile), MediaTypeNames.Application.Octet, f.Name);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al descargar el archivo."));
-
-            }
-
-            return null;
-
-
-        }
+       
 
         [HttpPost]
         [ValidateAntiForgeryToken]
