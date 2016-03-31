@@ -37,6 +37,7 @@ namespace EduClass.Web
                       "~/Scripts/template/lib_wysihtml5x_wysihtml5x.js",
                       "~/Scripts/template/lib_dropzone_dropzone.js",
                       "~/Scripts/template/lib_timepicker_jquery.timepicker.js",
+                      "~/Scripts/template/anno.js",
                       "~/Scripts/template/js_quirk.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
@@ -57,6 +58,7 @@ namespace EduClass.Web
                           "~/Content/template/thumbnail-gallery.css",
                           "~/Content/template/lib_dropzone_dropzone.css",
                           "~/Content/template/basic.css",
+                          "~/Content/template/anno.css",
                           "~/Content/site.css",
                           "~/Content/template/lib_timepicker_jquery.timepicker.css",
                           "~/Content/template/css_quirk.css").IncludeDirectory("~/Content/font", "*.css", false));
