@@ -71,17 +71,9 @@
       <End Role="Test" EntitySet="Tests" />
       <End Role="Question" EntitySet="Questions" />
     </AssociationSet>
-    <AssociationSet Name="QuestionResponse" Association="EduClassModel.Store.QuestionResponse">
-      <End Role="Question" EntitySet="Questions" />
-      <End Role="Response" EntitySet="Responses" />
-    </AssociationSet>
     <AssociationSet Name="QuestionQuestionOption" Association="EduClassModel.Store.QuestionQuestionOption">
       <End Role="Question" EntitySet="Questions" />
       <End Role="QuestionOption" EntitySet="QuestionOptions" />
-    </AssociationSet>
-    <AssociationSet Name="QuestionOptionResponse" Association="EduClassModel.Store.QuestionOptionResponse">
-      <End Role="QuestionOption" EntitySet="QuestionOptions" />
-      <End Role="Response" EntitySet="Responses" />
     </AssociationSet>
     <AssociationSet Name="FK_GroupStudent_Group" Association="EduClassModel.Store.FK_GroupStudent_Group">
       <End Role="Group" EntitySet="Groups" />
@@ -130,6 +122,14 @@
     <AssociationSet Name="GroupCalification" Association="EduClassModel.Store.GroupCalification">
       <End Role="Group" EntitySet="Groups" />
       <End Role="Calification" EntitySet="Califications" />
+    </AssociationSet>
+    <AssociationSet Name="ResponseQuestionOption" Association="EduClassModel.Store.ResponseQuestionOption">
+      <End Role="Response" EntitySet="Responses" />
+      <End Role="QuestionOption" EntitySet="QuestionOptions" />
+    </AssociationSet>
+    <AssociationSet Name="QuestionResponse" Association="EduClassModel.Store.QuestionResponse">
+      <End Role="Question" EntitySet="Questions" />
+      <End Role="Response" EntitySet="Responses" />
     </AssociationSet>
     <AssociationSet Name="FK_Teacher_inherits_Person" Association="EduClassModel.Store.FK_Teacher_inherits_Person">
       <End Role="Person" EntitySet="Person" />
@@ -222,20 +222,20 @@
     <Property Name="Content" Type="nvarchar(max)" Nullable="true" />
     <Property Name="Text" Type="nvarchar(max)" Nullable="true" />
     <Property Name="IsCorrect" Type="bit" Nullable="true" />
+    <Property Name="ResponseQuestionOption_QuestionOption_Id" Type="int" Nullable="true" />
   </EntityType>
   <EntityType Name="Responses">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Content" Type="nvarchar(max)" Nullable="true" />
     <Property Name="CreatedAt" Type="datetime" Nullable="false" />
     <Property Name="StudentId" Type="int" Nullable="false" />
-    <Property Name="QuestionId" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="TrueOrFalse" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="QuestionOptionId" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Question_Id" Type="int" Nullable="false" />
-    <Property Name="QuestionOption_Id" Type="int" Nullable="false" />
+    <Property Name="TrueOrFalse" Type="bit" Nullable="true" />
+    <Property Name="QuestionOptionId" Type="int" Nullable="true" />
+    <Property Name="QuestionId" Type="int" Nullable="false" />
+    <Property Name="IsCorrect" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Calendars">
     <Key>
@@ -514,18 +514,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="QuestionResponse">
-    <End Role="Question" Type="EduClassModel.Store.Questions" Multiplicity="1" />
-    <End Role="Response" Type="EduClassModel.Store.Responses" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Question">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Response">
-        <PropertyRef Name="Question_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="QuestionQuestionOption">
     <End Role="Question" Type="EduClassModel.Store.Questions" Multiplicity="1" />
     <End Role="QuestionOption" Type="EduClassModel.Store.QuestionOptions" Multiplicity="*" />
@@ -535,18 +523,6 @@
       </Principal>
       <Dependent Role="QuestionOption">
         <PropertyRef Name="QuestionId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="QuestionOptionResponse">
-    <End Role="QuestionOption" Type="EduClassModel.Store.QuestionOptions" Multiplicity="1" />
-    <End Role="Response" Type="EduClassModel.Store.Responses" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="QuestionOption">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Response">
-        <PropertyRef Name="QuestionOption_Id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -619,6 +595,30 @@
       </Principal>
       <Dependent Role="Calification">
         <PropertyRef Name="GroupId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ResponseQuestionOption">
+    <End Role="Response" Type="EduClassModel.Store.Responses" Multiplicity="0..1" />
+    <End Role="QuestionOption" Type="EduClassModel.Store.QuestionOptions" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Response">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="QuestionOption">
+        <PropertyRef Name="ResponseQuestionOption_QuestionOption_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="QuestionResponse">
+    <End Role="Question" Type="EduClassModel.Store.Questions" Multiplicity="1" />
+    <End Role="Response" Type="EduClassModel.Store.Responses" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Question">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Response">
+        <PropertyRef Name="QuestionId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -785,17 +785,9 @@
             <End Role="Test" EntitySet="Tests" />
             <End Role="Question" EntitySet="Questions" />
           </AssociationSet>
-          <AssociationSet Name="QuestionResponse" Association="EduClassModel.QuestionResponse">
-            <End Role="Question" EntitySet="Questions" />
-            <End Role="Response" EntitySet="Responses" />
-          </AssociationSet>
           <AssociationSet Name="QuestionQuestionOption" Association="EduClassModel.QuestionQuestionOption">
             <End Role="Question" EntitySet="Questions" />
             <End Role="QuestionOption" EntitySet="QuestionOptions" />
-          </AssociationSet>
-          <AssociationSet Name="QuestionOptionResponse" Association="EduClassModel.QuestionOptionResponse">
-            <End Role="QuestionOption" EntitySet="QuestionOptions" />
-            <End Role="Response" EntitySet="Responses" />
           </AssociationSet>
           <AssociationSet Name="GroupStudent" Association="EduClassModel.GroupStudent">
             <End Role="Group" EntitySet="Groups" />
@@ -834,6 +826,14 @@
           <AssociationSet Name="GroupCalification" Association="EduClassModel.GroupCalification">
             <End Role="Group" EntitySet="Groups" />
             <End Role="Calification" EntitySet="Califications" />
+          </AssociationSet>
+          <AssociationSet Name="ResponseQuestionOption" Association="EduClassModel.ResponseQuestionOption">
+            <End Role="Response" EntitySet="Responses" />
+            <End Role="QuestionOption" EntitySet="QuestionOptions" />
+          </AssociationSet>
+          <AssociationSet Name="QuestionResponse" Association="EduClassModel.QuestionResponse">
+            <End Role="Question" EntitySet="Questions" />
+            <End Role="Response" EntitySet="Responses" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Person">
@@ -946,8 +946,8 @@
           <Property Name="TestId" Type="Int32" Nullable="false" />
           <Property Name="QuestionType" Type="EduClassModel.QuestionType" Nullable="false" />
           <Property Name="Enabled" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Response" Relationship="EduClassModel.QuestionResponse" FromRole="Question" ToRole="Response" />
           <NavigationProperty Name="QuestionOptions" Relationship="EduClassModel.QuestionQuestionOption" FromRole="Question" ToRole="QuestionOption" />
+          <NavigationProperty Name="Responses" Relationship="EduClassModel.QuestionResponse" FromRole="Question" ToRole="Response" />
         </EntityType>
         <EntityType Name="QuestionOption">
           <Key>
@@ -958,7 +958,6 @@
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Question" Relationship="EduClassModel.QuestionQuestionOption" FromRole="QuestionOption" ToRole="Question" />
-          <NavigationProperty Name="Response" Relationship="EduClassModel.QuestionOptionResponse" FromRole="QuestionOption" ToRole="Response" />
           <Property Name="TrueOrFalse" Type="Boolean" Nullable="true" />
           <Property Name="Content" Type="String" Nullable="true" />
           <Property Name="Text" Type="String" Nullable="true" />
@@ -969,15 +968,16 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Content" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" Nullable="true" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Question" Relationship="EduClassModel.QuestionResponse" FromRole="Response" ToRole="Question" />
-          <NavigationProperty Name="QuestionOption" Relationship="EduClassModel.QuestionOptionResponse" FromRole="Response" ToRole="QuestionOption" />
           <NavigationProperty Name="Student" Relationship="EduClassModel.StudentResponse" FromRole="Response" ToRole="Student" />
           <Property Name="StudentId" Type="Int32" Nullable="false" />
-          <Property Name="QuestionId" Type="String" Nullable="false" />
-          <Property Name="TrueOrFalse" Type="String" Nullable="false" />
-          <Property Name="QuestionOptionId" Type="String" Nullable="false" />
+          <Property Name="TrueOrFalse" Type="Boolean" Nullable="true" />
+          <Property Name="QuestionOptionId" Type="Int32" Nullable="true" />
+          <NavigationProperty Name="QuestionOption" Relationship="EduClassModel.ResponseQuestionOption" FromRole="Response" ToRole="QuestionOption" />
+          <NavigationProperty Name="Question" Relationship="EduClassModel.QuestionResponse" FromRole="Response" ToRole="Question" />
+          <Property Name="QuestionId" Type="Int32" Nullable="false" />
+          <Property Name="IsCorrect" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Calendar">
           <Key>
@@ -1167,10 +1167,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="QuestionResponse">
-          <End Type="EduClassModel.Question" Role="Question" Multiplicity="1" />
-          <End Type="EduClassModel.Response" Role="Response" Multiplicity="*" />
-        </Association>
         <Association Name="QuestionQuestionOption">
           <End Type="EduClassModel.Question" Role="Question" Multiplicity="1" />
           <End Type="EduClassModel.QuestionOption" Role="QuestionOption" Multiplicity="*" />
@@ -1182,10 +1178,6 @@
               <PropertyRef Name="QuestionId" />
             </Dependent>
           </ReferentialConstraint>
-        </Association>
-        <Association Name="QuestionOptionResponse">
-          <End Type="EduClassModel.QuestionOption" Role="QuestionOption" Multiplicity="1" />
-          <End Type="EduClassModel.Response" Role="Response" Multiplicity="0..1" />
         </Association>
         <Association Name="GroupStudent">
           <End Type="EduClassModel.Group" Role="Group" Multiplicity="*" />
@@ -1317,6 +1309,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="ResponseQuestionOption">
+          <End Type="EduClassModel.Response" Role="Response" Multiplicity="0..1" />
+          <End Type="EduClassModel.QuestionOption" Role="QuestionOption" Multiplicity="0..1" />
+        </Association>
+        <Association Name="QuestionResponse">
+          <End Type="EduClassModel.Question" Role="Question" Multiplicity="1" />
+          <End Type="EduClassModel.Response" Role="Response" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Response">
+              <PropertyRef Name="QuestionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1429,9 +1437,10 @@
           <ScalarProperty Name="Content" ColumnName="Content" />
           <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
           <ScalarProperty Name="StudentId" ColumnName="StudentId" />
-          <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
           <ScalarProperty Name="TrueOrFalse" ColumnName="TrueOrFalse" />
           <ScalarProperty Name="QuestionOptionId" ColumnName="QuestionOptionId" />
+          <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+          <ScalarProperty Name="IsCorrect" ColumnName="IsCorrect" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1574,22 +1583,6 @@
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="QuestionResponse" TypeName="EduClassModel.QuestionResponse" StoreEntitySet="Responses">
-      <EndProperty Name="Question">
-        <ScalarProperty Name="Id" ColumnName="Question_Id" />
-      </EndProperty>
-      <EndProperty Name="Response">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="QuestionOptionResponse" TypeName="EduClassModel.QuestionOptionResponse" StoreEntitySet="Responses">
-      <EndProperty Name="QuestionOption">
-        <ScalarProperty Name="Id" ColumnName="QuestionOption_Id" />
-      </EndProperty>
-      <EndProperty Name="Response">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
     <AssociationSetMapping Name="GroupStudent" TypeName="EduClassModel.GroupStudent" StoreEntitySet="GroupStudent">
       <EndProperty Name="Group">
         <ScalarProperty Name="Id" ColumnName="Groups_Id" />
@@ -1613,6 +1606,15 @@
       <EndProperty Name="File">
         <ScalarProperty Name="Id" ColumnName="Files_Id" />
       </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ResponseQuestionOption" TypeName="EduClassModel.ResponseQuestionOption" StoreEntitySet="QuestionOptions">
+      <EndProperty Name="Response">
+        <ScalarProperty Name="Id" ColumnName="ResponseQuestionOption_QuestionOption_Id" />
+      </EndProperty>
+      <EndProperty Name="QuestionOption">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+      <Condition ColumnName="ResponseQuestionOption_QuestionOption_Id" IsNull="false" />
     </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>

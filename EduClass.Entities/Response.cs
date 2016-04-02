@@ -18,12 +18,13 @@ namespace EduClass.Entities
         public string Content { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public int StudentId { get; set; }
-        public string QuestionId { get; set; }
-        public string TrueOrFalse { get; set; }
-        public string QuestionOptionId { get; set; }
+        public Nullable<bool> TrueOrFalse { get; set; }
+        public Nullable<int> QuestionOptionId { get; set; }
+        public int QuestionId { get; set; }
+        public bool IsCorrect { get; set; }
     
-        public virtual Question Question { get; set; }
-        public virtual QuestionOption QuestionOption { get; set; }
         public virtual Student Student { get; set; }
+        public virtual QuestionOption QuestionOption { get; set; }
+        public virtual Question Question { get; set; }
     }
 }

@@ -27,9 +27,9 @@
                     <label for="QuestionType" class="control-label col-md-2">Tipo de pregunta</label>
                     <div class="col-md-10">
                         <select id="evddlQuestionType" name="QuestionType" class="form-control" data_plugin="select2">
-                            <option value="0">-- Seleccionar --</option>
+                            <option value="-1">-- Seleccionar --</option>
                             @{
-            var index = 1;
+            var index = 0;
             foreach (EduClass.Entities.QuestionType item in ((List<EduClass.Entities.QuestionType>)ViewBag.QuestionType))
             {
                                         <option value="@index">@item.ToString()</option>
@@ -110,7 +110,7 @@
             
             var flag = false;
 
-            if ($('#evddlQuestionType option:selected').val() == 0) {
+            if ($('#evddlQuestionType option:selected').val() == -1) {
                 showMessageJS('info,Atención,El campo tipo de pregunta es requerido')
                 return false;
             }
@@ -121,6 +121,14 @@
             }
 
             switch ($('#evddlQuestionType option:selected').text()) {
+                case "TRUEORFALSE":
+
+                    $('input[type="checkbox"]').each(function (index, item) {
+
+                        if ($(item).prop('checked')) { flag = true; }
+                    });
+
+                    break;
                 case "REDACTION":
                     flag = true;
                     break;
@@ -132,8 +140,7 @@
                     });
 
                     break;
-                case "CHECKS",
-                     "TRUEORFALSE":
+                case "CHECKS":
 
                     $('input[type="checkbox"]').each(function (index, item) {
 

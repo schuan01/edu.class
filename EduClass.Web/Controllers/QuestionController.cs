@@ -10,6 +10,7 @@ using EduClass.Web.Infrastructure.ViewModels;
 using EduClass.Entities;
 using System.Text.RegularExpressions;
 using EduClass.Web.Infrastructure.Helpers;
+using log4net;
 
 namespace EduClass.Web.Controllers
 {
@@ -19,14 +20,16 @@ namespace EduClass.Web.Controllers
         private static IQuestionServices _service;
         private static ITestServices _testService;
 		private static IQuestionOptionServices _questionOptionService;
+        private static ILog _log; 
 
-        public QuestionController(IQuestionServices service,  ITestServices testService, IQuestionOptionServices questionOptionService)
+        public QuestionController(IQuestionServices service,  ITestServices testService, IQuestionOptionServices questionOptionService, ILog log)
         {
             _service = service;
             _testService = testService;
 			_questionOptionService = questionOptionService;
+            _log = log;
         }
-        // GET: Question
+        
         public ActionResult Index(int id = 0)
         {
             if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.Unauthorized); }
@@ -56,6 +59,7 @@ namespace EduClass.Web.Controllers
             }
             else
             {
+                _log.Warn("Question - Create -> Not Authorize");
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
         }
@@ -75,12 +79,13 @@ namespace EduClass.Web.Controllers
 
 					//Execute the mapping 
 					var question = AutoMapper.Mapper.Map<QuestionViewModel, Question>(questionVm);
+                    question.QuestionType = (QuestionType)questionVm.QuestionType;
 					question.CreatedAt = DateTime.Now;
 					question.Enabled = true;
 
 					switch (questionVm.QuestionType)
 					{
-						case 1: //True Or False
+						case 0: //True Or False
 
 							var opQuestionToF = new QuestionOption();
 
@@ -109,7 +114,7 @@ namespace EduClass.Web.Controllers
 							question.QuestionOptions.Add(opQuestionToF);
 
 							break;
-						case 2: //Redaction
+						case 1: //Redaction
 
 							var opQuestionR = new QuestionOption();
 
@@ -130,7 +135,7 @@ namespace EduClass.Web.Controllers
 							question.QuestionOptions.Add(opQuestionR);
 
 							break;
-						case 3: //Options
+						case 2: //Options
 
 							//Busco la correcta opción correcta
 							int correctId = 0;
@@ -139,7 +144,7 @@ namespace EduClass.Web.Controllers
 							{
 								if (i.ToString().Contains("chkOp-"))
 								{
-									correctId = Convert.ToInt32(Regex.Replace(i.ToString(), @"\D", String.Empty, RegexOptions.None));
+                                    correctId = StringHelper.ReturnNumbers(i.ToString());
 								}
 							}
 
@@ -154,7 +159,7 @@ namespace EduClass.Web.Controllers
 									var op = new QuestionOption();
 									op.CreatedAt = DateTime.Now;
 
-									opVId = Convert.ToInt32(Regex.Replace(fieldName, @"\D", String.Empty, RegexOptions.None));
+                                    opVId = StringHelper.ReturnNumbers(fieldName);
 
 									if (frm[fieldName] != null)
 									{
@@ -171,7 +176,7 @@ namespace EduClass.Web.Controllers
 
 							}
 							break;
-						case 4: //CHECKS
+						case 3: //CHECKS
 
 							foreach (var item in frm)
 							{
@@ -184,7 +189,7 @@ namespace EduClass.Web.Controllers
 									var op = new QuestionOption();
 									op.CreatedAt = DateTime.Now;
 
-									opVId = Convert.ToInt32(Regex.Replace(fieldName, @"\D", String.Empty, RegexOptions.None));
+                                    opVId = StringHelper.ReturnNumbers(fieldName);
 
 									if (frm[fieldName] != null)
 									{
@@ -194,7 +199,7 @@ namespace EduClass.Web.Controllers
 										{
 											if (i.ToString().Contains("chkOp-"))
 											{
-												if (Convert.ToInt32(Regex.Replace(i.ToString(), @"\D", String.Empty, RegexOptions.None)) == opVId)
+												if (StringHelper.ReturnNumbers(i.ToString()) == opVId)
 												{
 													op.IsCorrect = true;	
 												}
@@ -208,6 +213,7 @@ namespace EduClass.Web.Controllers
 							}
 							break;
 						default:
+                            throw new Exception("No existe");
 							break;
 					}
 
@@ -217,13 +223,14 @@ namespace EduClass.Web.Controllers
 				}
 				else
 				{
+                    _log.Warn("Question - Create -> Not Authorize");
 					return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
 				}
 
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-				
+                _log.Error("Question - Create -> ", ex);
 				throw;
 			}
 
@@ -249,6 +256,7 @@ namespace EduClass.Web.Controllers
             }
             else
             {
+                _log.Warn("Question - Edit -> Not Authorize");
                 return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
         }
@@ -269,9 +277,9 @@ namespace EduClass.Web.Controllers
                     var question = AutoMapper.Mapper.Map<QuestionViewModel, Question>(questionVm, entity);
                     question.UpdatedAt = DateTime.Now;
 
-                    switch (questionVm.QuestionType)
+                    switch (question.QuestionType)
                     {
-                        case 1: //True Or False
+                        case QuestionType.TRUEORFALSE: //True Or False
 
                             var vOptChkId = frm["chkToFId"];
                             int tofId;
@@ -306,7 +314,7 @@ namespace EduClass.Web.Controllers
                             }
 
                             break;
-                        case 2: //Redaction
+                        case QuestionType.REDACTION: //Redaction
 
                             var vOptRedaction = frm["txtRedactionId"];
                             int redactionId;
@@ -332,7 +340,7 @@ namespace EduClass.Web.Controllers
                                 _questionOptionService.Update(opQuestionR);
                             }
                             break;
-                        case 3: //Options
+                        case QuestionType.OPTIONS: //Options
 
                             //Busco la correcta opción correcta
                             int correctId = 0;
@@ -409,7 +417,7 @@ namespace EduClass.Web.Controllers
                             }
 
                             break;
-                        case 4: //CHECKS
+                        case QuestionType.CHECKS: //CHECKS
 
                             foreach (var item in frm)
                             {
@@ -483,17 +491,19 @@ namespace EduClass.Web.Controllers
                 }
                 else
                 {
+                    _log.Warn("Question - Edit(Post) -> Not Authorize");
                     return new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.Warn("Question - Edit(Post) -> ", ex);
 
                 throw;
             }
 
-            return RedirectToAction("Create", new { idTest = questionVm.TestId });
+            return RedirectToAction("Edit", new { idTest = questionVm.TestId });
 
         }
 

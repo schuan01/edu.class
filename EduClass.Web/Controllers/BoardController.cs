@@ -20,9 +20,10 @@ namespace EduClass.Web.Controllers
         private IReplyServices _reply;
         private IFileServices _file;
         private ITestServices _test;
+        private IResponseServices _response;
 		private ILog _log;
 
-        public BoardController(IPersonServices person, IGroupServices group, IPostServices post, IReplyServices reply, IFileServices file, ITestServices test, ILog log)
+        public BoardController(IPersonServices person, IGroupServices group, IPostServices post, IReplyServices reply, IFileServices file, ITestServices test, IResponseServices response, ILog log)
         {
             _person = person;
             _group = group;
@@ -30,7 +31,8 @@ namespace EduClass.Web.Controllers
             _reply = reply;
             _file = file;
             _test = test;
-
+            _response = response;
+             
 			_log = log;
         }
 
@@ -59,8 +61,16 @@ namespace EduClass.Web.Controllers
                 if (UserSession.GetCurrentUser() is Student)
                 {
                     var testList = _test.GetEnabledTestForStudents(UserSession.GetCurrentGroup().Id);
+                    var responseList = _response.GetResponsesByStudent((Student)UserSession.GetCurrentUser());
 
-                    if (testList.Count() > 0) { ViewBag.GetTests = testList; }
+                    var resolved = from t in testList
+                                   join r in responseList on t.Id equals r.Question.TestId into resultTest
+                                   from tr in resultTest.DefaultIfEmpty()
+                                   where tr == null
+                                   select t;
+
+
+                    if (resolved.Count() > 0) { ViewBag.GetTests = resolved; }
                 }
 
                 ViewBag.PostTypeList = Enum.GetValues(new PostType().GetType());

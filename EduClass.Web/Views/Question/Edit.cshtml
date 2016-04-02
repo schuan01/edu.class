@@ -4,10 +4,10 @@
 
     Dictionary<int, string> _dictionaryQuestionType = new Dictionary<int, string>();
 
-    _dictionaryQuestionType.Add(1, "TRUEORFALSE");
-    _dictionaryQuestionType.Add(2, "REDACTION");
-    _dictionaryQuestionType.Add(3, "OPTIONS");
-    _dictionaryQuestionType.Add(4, "CHECKS");
+    _dictionaryQuestionType.Add(0, "TRUEORFALSE");
+    _dictionaryQuestionType.Add(1, "REDACTION");
+    _dictionaryQuestionType.Add(2, "OPTIONS");
+    _dictionaryQuestionType.Add(3, "CHECKS");
 }
 
 @if (Model == null)
@@ -42,7 +42,7 @@
                         <select id="evddlQuestionType" name="QuestionType" class="form-control" data_plugin="select2" disabled>
                             <option value="0">-- Seleccionar --</option>
                             @{
-            var index = 1;
+            var index = 0;
             foreach (EduClass.Entities.QuestionType item in ((List<EduClass.Entities.QuestionType>)ViewBag.QuestionType))
             {
                 if (_dictionaryQuestionType[Convert.ToInt32(Model.QuestionType)].ToString() == item.ToString())
@@ -155,6 +155,9 @@
             }
 
             switch ($('#evddlQuestionType option:selected').text()) {
+                case "REDACTION":
+                    flag = true;
+                    break;
                 case "OPTIONS":
 
                     $('input[type="radio"]').each(function (index, item) {

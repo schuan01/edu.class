@@ -10,154 +10,285 @@ using EduClass.Web.Infrastructure;
 using EduClass.Web.Infrastructure.ViewModels;
 using EduClass.Entities;
 using EduClass.Web.Infrastructure.Mappers;
+using EduClass.Web.Infrastructure.Helpers;
+using System.Collections.Generic;
+using log4net;
 
 namespace EduClass.Web.Controllers
 {
-    [Authorize]
-    public class TestsController : Controller
-    {
-        private static ITestServices _service;
+	[Authorize]
+	public class TestsController : Controller
+	{
+		private static ITestServices _service;
+		private static IResponseServices _response;
+		private static IQuestionServices _question;
+		private static ICollection<string> _questionTypes;
+        private static IPersonServices _person;
+        private static ILog _log;
 
-        public TestsController(ITestServices service)
-        {
-            _service = service;
-        }
+		public TestsController(ITestServices service, IQuestionServices question, IResponseServices response, IPersonServices person, ILog log)
+		{
+			_service = service;
+			_response = response;
+			_question = question;
+            _person = person;
+            _log = log;
 
-        public ActionResult Index()
-        {
-            if (UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+			_questionTypes = new List<string>()
+			{
+				{"tof-"},
+				{"redaction-"},
+				{"op-"},
+				{"chk-"}
+				
+			};
+		}
+
+		public ActionResult Index()
+		{
+			if (UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+			
+			if (UserSession.GetCurrentGroup() == null) { return View(); }
+
+			var list = _service.GetAll(UserSession.GetCurrentGroup().Id).OrderByDescending(a => a.CreatedAt);
+
+			return View(list);
+		}
+
+		// GET: Test
+		[HttpGet]
+		public ActionResult Create()
+		{
+			var test = new TestViewModel();
+			test.GroupId = UserSession.GetCurrentGroup().Id;
+			return View(test);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Create([Bind(Include = "Name, Description, StartDate, EndDate, GroupId")]TestViewModel testVm)
+		{
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					//Execute the mapping 
+					var test = AutoMapper.Mapper.Map<TestViewModel, Test>(testVm);
+
+					test.GroupId = UserSession.GetCurrentGroup().Id;
+					test.CreatedAt = DateTime.Now;
+					test.Enabled = false; //Se pone deshabilitada para que no les aparezcan a los alumnos
+
+					if (UserSession.GetCurrentUser() is Teacher)
+						_service.Create(test);
+					else
+						throw new Exception("El usuario actual no es un Profesor");
+
+					MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Creacion Exitosa", "La prueba se creo correctamente. <br />Haz clic en el icono [ <i class=\"fa fa-question\" style=\"font-size: 25px\"></i> ] para agregar preguntas a la prueba."));
+
+					return RedirectToAction("Index");
+
+				}
+				catch (Exception ex)
+				{
+                    _log.Error("Test - Create(Post) -> ", ex);
+					MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se pudo crear la prueba"));
+				}
+			}
+
+			return View(testVm);
+		}
+
+		[HttpGet]
+		public ActionResult Edit(int id = 0)
+		{
+			if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+			var test = AutoMapper.Mapper.Map<Test, TestViewModel>(_service.GetById(id));
+
+			return View(test);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Edit([Bind(Include = "Id, Name, Description, StartDate, EndDate, GroupId")]TestViewModel testVm)
+		{
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					var entity = _service.GetById(testVm.Id);
+
+					var test = AutoMapper.Mapper.Map<TestViewModel, Test>(testVm, entity);
+					test.UpdatedAt = DateTime.Now;
+
+					_service.Update(test);
+
+					MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Test modificado", string.Format("El test {0} fue modificado con éxito", testVm.Name)));
+
+					return RedirectToAction("Index");
+				}
+				catch (Exception ex)
+				{
+                    _log.Error("Test - Edit(Post) -> ", ex);
+					MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al modificar test"));
+				}
+			}
+
+			return View(testVm);
+		}
+
+		public ActionResult Disable(int id = 0)
+		{
+			if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+
+			var test = _service.GetById(id);
+
+			if (test == null) { return HttpNotFound(); }
+
+			if (test.Enabled)
+			{
+				test.Enabled = false;
+			}
+			else 
+			{ 
+				test.Enabled = true; 
+			}
+
+			test.UpdatedAt = DateTime.Now;
+
+			_service.Update(test);
+
+			MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Test modificado", string.Format("Se ha agregado una alerta a los alumnos para que comienzen el test.", test.Name)));
+
+			return RedirectToAction("Index");
+		}
+
+		[HttpGet]
+		public ActionResult ReadyToTest(int id)
+		{ 
+			if (UserSession.GetCurrentUser() is Teacher) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+
+            var testList = _service.GetEnabledTestForStudents(UserSession.GetCurrentGroup().Id);
+            var responseList = _response.GetResponsesByStudent((Student)UserSession.GetCurrentUser());
+
+            if (testList.Any(b => responseList.Any(c => c.Question.Test.Id == b.Id)))
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.WARNING, "Importante", "Ya has hecho ésta prueba.,"));
+                return RedirectToAction("Index", "Board");
+            }
+
+			return View(_service.GetById(id));
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult ReadyToTest(int id, FormCollection frm)
+		{
+			if (id == null && id == 0 && UserSession.GetCurrentUser() is Teacher) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
             
-            if (UserSession.GetCurrentGroup() == null) { return View(); }
-
-            var list = _service.GetAll(UserSession.GetCurrentGroup().Id).OrderByDescending(a => a.CreatedAt);
-
-            return View(list);
-        }
-
-        // GET: Test
-        [HttpGet]
-        public ActionResult Create()
-        {
-            var test = new TestViewModel();
-            test.GroupId = UserSession.GetCurrentGroup().Id;
-            return View(test);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name, Description, StartDate, EndDate, GroupId")]TestViewModel testVm)
-        {
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    //Execute the mapping 
-                    var test = AutoMapper.Mapper.Map<TestViewModel, Test>(testVm);
+			    var test = _service.GetById(id);
 
-                    test.GroupId = UserSession.GetCurrentGroup().Id;
-                    test.CreatedAt = DateTime.Now;
-                    test.Enabled = false; //Se pone deshabilitada para que no les aparezcan a los alumnos
+			    foreach (var question in test.Questions)
+			    {
+				
+				    foreach (var item in frm)
+				    {
+						
+					    var qType = _questionTypes.FirstOrDefault(a => item.ToString().Contains(a));
 
-                    if (UserSession.GetCurrentUser() is Teacher)
-                        _service.Create(test);
-                    else
-                        throw new Exception("El usuario actual no es un Profesor");
+					    if (qType != null)
+					    {
+						    var questionResponseId = StringHelper.ReturnNumbers(item.ToString());
 
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Creacion Exitosa", "La prueba se creo correctamente. <br />Haz clic en el icono [ <i class=\"fa fa-question\" style=\"font-size: 25px\"></i> ] para agregar preguntas a la prueba."));
+						    if (question.Id == questionResponseId)
+						    {
+							    if (qType.Contains("tof-"))
+							    {
+                                    var response = GetResponse(question);
+                                    response.QuestionOption = question.QuestionOptions.FirstOrDefault();
 
-                    return RedirectToAction("Index");
+								    var vToF = frm[item.ToString()];
 
-                }
-                catch (Exception ex)
-                {
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se pudo crear la prueba"));
-                }
+								    if (vToF.Equals("true")) { response.TrueOrFalse = true; }
+								    else if (vToF.Equals("false")) { response.TrueOrFalse = false; }
+								    else { response.TrueOrFalse = null; }
+
+                                    if (response.QuestionOption.TrueOrFalse == response.TrueOrFalse)
+								    {
+									    response.IsCorrect = true;
+								    }
+
+                                    _response.Create(response);
+								    break;
+							    }
+							    else if (qType.Contains("redaction-"))
+							    {
+                                    var response = GetResponse(question);
+                                    response.QuestionOption = question.QuestionOptions.FirstOrDefault();
+
+                                    if (response.QuestionOption != null)
+								    {
+									    response.Content = frm[item.ToString()];
+
+                                        _response.Create(response);
+
+                                        break;
+								    }
+							    }
+							    else if (qType.Contains("op-") || qType.Contains("chk-"))
+							    {
+
+                                    var opIds = frm[item.ToString()].Split(',');
+
+                                    foreach (var opId in opIds)
+                                    {
+								        var qopResponseId = StringHelper.ReturnNumbers(opId);
+
+								        var qop = question.QuestionOptions.FirstOrDefault(q => q.Id == qopResponseId);
+
+								        if (qop != null)
+								        {
+                                            var response = GetResponse(question);
+									        response.QuestionOption = qop;
+
+									        if (qop.IsCorrect != null && qop.IsCorrect == true) { response.IsCorrect = true; }
+
+                                            _response.Create(response);
+								        }
+                                    }
+								
+                                    break;
+							    }
+						    }
+					    }
+				    }
+			    }
+
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Importante", "Tu prueba fué enviada. Cuando termine el periodo podrás visualizar los resultados."));
+
+                return RedirectToAction("Index", "Board");
             }
-
-            return View(testVm);
-        }
-
-        [HttpGet]
-        public ActionResult Edit(int id = 0)
-        {
-            if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
-            var test = AutoMapper.Mapper.Map<Test, TestViewModel>(_service.GetById(id));
-
-            return View(test);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id, Name, Description, StartDate, EndDate, GroupId")]TestViewModel testVm)
-        {
-            if (ModelState.IsValid)
+            catch (Exception ex)
             {
-                try
-                {
-                    var entity = _service.GetById(testVm.Id);
-
-                    var test = AutoMapper.Mapper.Map<TestViewModel, Test>(testVm, entity);
-                    test.UpdatedAt = DateTime.Now;
-
-                    _service.Update(test);
-
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Test modificado", string.Format("El test {0} fue modificado con éxito", testVm.Name)));
-
-                    return RedirectToAction("Index");
-                }
-                catch (Exception ex)
-                {
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al modificar test"));
-                }
+                _log.Error("Test - ReadyToTest(Post) -> ", ex);
+                throw;
             }
+		}
 
-            return View(testVm);
-        }
-
-        public ActionResult Disable(int id = 0)
+        private Response GetResponse(Question question)
         {
-            if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+            Response response = new Response();
 
-            var test = _service.GetById(id);
+            response.CreatedAt = DateTime.Now;
+            response.Question = question;
+            response.QuestionId = question.Id;
+            response.Student = (Student)_person.GetById(UserSession.GetCurrentUser().Id);
 
-            if (test == null) { return HttpNotFound(); }
-
-            if (test.Enabled)
-            {
-                test.Enabled = false;
-            }
-            else 
-            { 
-                test.Enabled = true; 
-            }
-
-            test.UpdatedAt = DateTime.Now;
-
-            _service.Update(test);
-
-            MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Test modificado", string.Format("Se ha agregado una alerta a los alumnos para que comienzen el test.", test.Name)));
-
-            return RedirectToAction("Index");
+            return response;
         }
-
-        [HttpGet]
-        public ActionResult ReadyToTest(int id)
-        { 
-            if (UserSession.GetCurrentUser() is Teacher) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
-
-            return View(_service.GetById(id));
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ReadyToTest(FormCollection frm)
-        {
-            if (UserSession.GetCurrentUser() is Teacher) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
-
-            return View();
-            /*return View(_service.GetById(id));*/
-        }
-    }
+	}
 }
 
 

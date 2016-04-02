@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ResponseRepository.cs" />
     <Compile Include="AvatarRepository.cs" />
     <Compile Include="Base\BaseRepository.cs" />
     <Compile Include="Base\IBaseRepository.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="IQuestionOptionRepository.cs" />
     <Compile Include="IQuestionRepository.cs" />
     <Compile Include="IReplyRepository.cs" />
+    <Compile Include="IResponseRepository.cs" />
     <Compile Include="ITestRepository.cs" />
     <Compile Include="MailRepository.cs" />
     <Compile Include="PageRepository.cs" />

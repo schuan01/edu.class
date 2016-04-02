@@ -24,6 +24,5 @@ namespace EduClass.Entities
         public Nullable<bool> IsCorrect { get; set; }
     
         public virtual Question Question { get; set; }
-        public virtual Response Response { get; set; }
     }
 }

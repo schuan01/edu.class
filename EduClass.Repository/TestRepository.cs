@@ -22,6 +22,7 @@ namespace EduClass.Repository
         {
             return dbSet.Where(x => x.GroupId == groupId 
                                     && x.Enabled 
+                                    && x.Questions.Count() > 0
                                     && (x.StartDate <= DateTime.Now 
                                     && x.EndDate >= DateTime.Now));
         }

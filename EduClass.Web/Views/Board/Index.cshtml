@@ -30,40 +30,40 @@ else
 {
     if (EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser() is EduClass.Entities.Student && ViewBag.GetTests != null)
     {
-        <div class="col-sm-8 col-md-9 col-lg-10 col-md-offset-1">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Tienes pruebas pendientes</h3>
-                </div>
-                <div class="panel-body">
-                    @foreach (EduClass.Entities.Test item in ViewBag.GetTests)
-                    {
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Nombre prueba</th>
-                                    <th>Comenzó</th>
-                                    <th>Termina</th>
-                                    <th>Profesor</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>@item.Name</td>
-                                    <td>@HelperView.FormatDateTime(item.StartDate)</td>
-                                    <td>@HelperView.FormatDateTime(item.EndDate)</td>
-                                    <td>@item.Group.Teacher.FirstName @item.Group.Teacher.LastName</td>
-                                    <td>
-                                        <a href="@Url.Action("ReadyToTest", "Tests", new { id = item.Id })" class="btn btn-primary btn-xs">Comenzar prueba</a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    }
+            <div class="col-sm-8 col-md-9 col-lg-10 col-md-offset-1">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Tienes pruebas pendientes</h3>
+                    </div>
+                    <div class="panel-body">
+                        @foreach (EduClass.Entities.Test item in ViewBag.GetTests)
+                        {
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre prueba</th>
+                                        <th>Comenzó</th>
+                                        <th>Termina</th>
+                                        <th>Profesor</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>@item.Name</td>
+                                        <td>@HelperView.FormatDateTime(item.StartDate)</td>
+                                        <td>@HelperView.FormatDateTime(item.EndDate)</td>
+                                        <td>@item.Group.Teacher.FirstName @item.Group.Teacher.LastName</td>
+                                        <td>
+                                            <a href="@Url.Action("ReadyToTest", "Tests", new { id = item.Id })" class="btn btn-primary btn-xs">Comenzar prueba</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
     }
 
     <div class="col-sm-8 col-md-9 col-lg-10">
@@ -249,7 +249,11 @@ else
 }
 
 @Scripts.Render("~/bundles/jquery")
-<script>
+@Scripts.Render("~/bundles/jqueryval")
+@{var sessionMessage = EduClass.Web.Infrastructure.Sessions.MessageSession.GetMessage(); }
+
+<script src="~/Scripts/app/helpersSite.js"></script>
+<script type="text/javascript">
     $(document).ready(function () {
 
         var anno1 = new Anno({

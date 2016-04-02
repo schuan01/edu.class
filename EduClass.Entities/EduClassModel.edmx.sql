@@ -2,8 +2,8 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 03/29/2016 12:09:33
--- Generated from EDMX file: C:\Users\jvolpe\Documents\Cosas\edu.class\EduClass.Entities\EduClassModel.edmx
+-- Date Created: 04/01/2016 22:29:04
+-- Generated from EDMX file: D:\code\Edu.Class\EduClass.Entities\EduClassModel.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
@@ -56,9 +56,6 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_QuestionQuestionOption]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[QuestionOptions] DROP CONSTRAINT [FK_QuestionQuestionOption];
 GO
-IF OBJECT_ID(N'[dbo].[FK_QuestionOptionResponse]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Responses] DROP CONSTRAINT [FK_QuestionOptionResponse];
-GO
 IF OBJECT_ID(N'[dbo].[FK_GroupStudent_Group]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[GroupStudent] DROP CONSTRAINT [FK_GroupStudent_Group];
 GO
@@ -94,6 +91,9 @@ IF OBJECT_ID(N'[dbo].[FK_StudentCalification]', 'F') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[FK_GroupCalification]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Califications] DROP CONSTRAINT [FK_GroupCalification];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ResponseQuestionOption]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[QuestionOptions] DROP CONSTRAINT [FK_ResponseQuestionOption];
 GO
 IF OBJECT_ID(N'[dbo].[FK_Teacher_inherits_Person]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Person_Teacher] DROP CONSTRAINT [FK_Teacher_inherits_Person];
@@ -253,21 +253,21 @@ CREATE TABLE [dbo].[QuestionOptions] (
     [TrueOrFalse] bit  NULL,
     [Content] nvarchar(max)  NULL,
     [Text] nvarchar(max)  NULL,
-    [IsCorrect] bit  NULL
+    [IsCorrect] bit  NULL,
+    [ResponseQuestionOption_QuestionOption_Id] int  NULL
 );
 GO
 
 -- Creating table 'Responses'
 CREATE TABLE [dbo].[Responses] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Content] nvarchar(max)  NOT NULL,
+    [Content] nvarchar(max)  NULL,
     [CreatedAt] datetime  NOT NULL,
     [StudentId] int  NOT NULL,
-    [QuestionId] nvarchar(max)  NOT NULL,
-    [TrueOrFalse] nvarchar(max)  NOT NULL,
-    [QuestionOptionId] nvarchar(max)  NOT NULL,
-    [Question_Id] int  NOT NULL,
-    [QuestionOption_Id] int  NOT NULL
+    [TrueOrFalse] bit  NULL,
+    [QuestionOptionId] int  NULL,
+    [QuestionId] int  NOT NULL,
+    [IsCorrect] bit  NOT NULL
 );
 GO
 
@@ -712,21 +712,6 @@ ON [dbo].[Questions]
     ([TestId]);
 GO
 
--- Creating foreign key on [Question_Id] in table 'Responses'
-ALTER TABLE [dbo].[Responses]
-ADD CONSTRAINT [FK_QuestionResponse]
-    FOREIGN KEY ([Question_Id])
-    REFERENCES [dbo].[Questions]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_QuestionResponse'
-CREATE INDEX [IX_FK_QuestionResponse]
-ON [dbo].[Responses]
-    ([Question_Id]);
-GO
-
 -- Creating foreign key on [QuestionId] in table 'QuestionOptions'
 ALTER TABLE [dbo].[QuestionOptions]
 ADD CONSTRAINT [FK_QuestionQuestionOption]
@@ -740,21 +725,6 @@ GO
 CREATE INDEX [IX_FK_QuestionQuestionOption]
 ON [dbo].[QuestionOptions]
     ([QuestionId]);
-GO
-
--- Creating foreign key on [QuestionOption_Id] in table 'Responses'
-ALTER TABLE [dbo].[Responses]
-ADD CONSTRAINT [FK_QuestionOptionResponse]
-    FOREIGN KEY ([QuestionOption_Id])
-    REFERENCES [dbo].[QuestionOptions]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_QuestionOptionResponse'
-CREATE INDEX [IX_FK_QuestionOptionResponse]
-ON [dbo].[Responses]
-    ([QuestionOption_Id]);
 GO
 
 -- Creating foreign key on [Groups_Id] in table 'GroupStudent'
@@ -917,6 +887,36 @@ GO
 CREATE INDEX [IX_FK_GroupCalification]
 ON [dbo].[Califications]
     ([GroupId]);
+GO
+
+-- Creating foreign key on [ResponseQuestionOption_QuestionOption_Id] in table 'QuestionOptions'
+ALTER TABLE [dbo].[QuestionOptions]
+ADD CONSTRAINT [FK_ResponseQuestionOption]
+    FOREIGN KEY ([ResponseQuestionOption_QuestionOption_Id])
+    REFERENCES [dbo].[Responses]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_ResponseQuestionOption'
+CREATE INDEX [IX_FK_ResponseQuestionOption]
+ON [dbo].[QuestionOptions]
+    ([ResponseQuestionOption_QuestionOption_Id]);
+GO
+
+-- Creating foreign key on [QuestionId] in table 'Responses'
+ALTER TABLE [dbo].[Responses]
+ADD CONSTRAINT [FK_QuestionResponse]
+    FOREIGN KEY ([QuestionId])
+    REFERENCES [dbo].[Questions]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_QuestionResponse'
+CREATE INDEX [IX_FK_QuestionResponse]
+ON [dbo].[Responses]
+    ([QuestionId]);
 GO
 
 -- Creating foreign key on [Id] in table 'Person_Teacher'

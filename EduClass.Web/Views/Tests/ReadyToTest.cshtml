@@ -12,27 +12,29 @@
             <div class="panel-heading">
                 <h3 class="panel-title">@Model.Name (Prof: @Model.Group.Teacher.FirstName @Model.Group.Teacher.LastName)</h3>
                 <div class="row">
-                    <button type="button" class="btn btn-success pull-right">Enviar prueba</button> 
+                    <button type="submit" class="btn btn-success pull-right">Enviar prueba</button> 
                 </div>
             </div>
-            <div class="panel-body">
+            <div id="divTest" class="panel-body hidden">
+                <input type="hidden" name="id" value="@Model.Id" /> 
+
                 @foreach (var item in Model.Questions)
                 {
                     if (item.Enabled)
                     {
                     
-                        <h4>@item.Content</h4>
+                        <h4>@item.Content</h4>  
                         if(item.QuestionType == EduClass.Entities.QuestionType.TRUEORFALSE)
                         {                    
-                            <input type="radio" name="@item.Id" value="true"/> 
+                            <input type="radio" name="tof-@item.Id" value="true"/> 
                             <span>Verdadero</span>                    
                             <br />
-                            <input type="radio" name="chkFalse-@item.Id" value="false"/>
+                            <input type="radio" name="tof-@item.Id" value="false" />
                             <span>Falso</span>
                         }
                         else if (item.QuestionType == EduClass.Entities.QuestionType.REDACTION)
                         {
-                            <textarea class="form-control" name="chkRedaction-@item.Id" cols="60"rows="10"></textarea>
+                            <textarea class="form-control" name="redaction-@item.Id" cols="60"rows="10"></textarea>
                         }
                         else if (item.QuestionType == EduClass.Entities.QuestionType.OPTIONS)
                         {
@@ -62,7 +64,64 @@
             </div>
         </div>
     }
+
+
+    <div class="modal bounceIn animated" id="mdConfirmTest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Atención</h4>
+                </div>
+                <div class="modal-body">
+                    ¿Estas seguro de que quieres comenzar la prueba?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="btnMdNo">No</button>
+                    <button type="button" id="btnMdYes" class="btn btn-primary">Si</button>
+                </div>
+            </div><!-- modal-content -->
+        </div><!-- modal-dialog -->
+    </div>
 </div>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+@{var sessionMessage = EduClass.Web.Infrastructure.Sessions.MessageSession.GetMessage(); }
 
+<script src="~/Scripts/app/helpersSite.js"></script>
+<script type="text/javascript">
+    //window.onbeforeunload = confirmExit;
 
+    $(document).ready(function () {
+        var cookie = getCookie('Test-'+@Html.Raw(Model.Id));
+
+        if (cookie != null) {
+            
+            $('#mdConfirmTest').modal('hide');
+            
+            $('#divTest').removeClass('hidden');
+        }else {
+    
+            $('#mdConfirmTest').modal('show');
+
+            $('#btnMdNo').click(function () {
+                window.location = "/Board/Index";
+            });
+
+            $('#btnMdYes').click(function () {
+
+                $('#mdConfirmTest').modal('hide');
+
+                setCookie('Test-' + @Html.Raw(Model.Id), '', 30)
+
+                $('#divTest').removeClass('hidden');
+            });
+        }
+    });
+
+    function confirmExit()
+    {
+        return "Si usted se va de esta página se reiniciaran las respuestas.";
+    }
+</script>
 

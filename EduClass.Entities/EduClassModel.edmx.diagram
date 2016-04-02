@@ -4,10 +4,17 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="d40e4d5d4eff4ec291ef2f22cd6b4075" Name="Diagram1" ZoomLevel="86" >
+      <Diagram DiagramId="d40e4d5d4eff4ec291ef2f22cd6b4075" Name="Diagram1" ZoomLevel="94" >
         <EntityTypeShape EntityType="EduClassModel.Person" Width="1.5" PointX="3.125" PointY="3.75" />
         <EntityTypeShape EntityType="EduClassModel.Teacher" Width="1.5" PointX="5.5" PointY="8.625" />
-        <InheritanceConnector EntityType="EduClassModel.Teacher" />
+        <InheritanceConnector EntityType="EduClassModel.Teacher" ManuallyRouted="true" >
+          <ConnectorPoint PointX="3.875" PointY="8.4225065104166656" />
+          <ConnectorPoint PointX="3.875" PointY="9.1206447862812929" />
+          <ConnectorPoint PointX="4.875" PointY="9.1206447862812929" />
+          <ConnectorPoint PointX="4.875" PointY="8.25" />
+          <ConnectorPoint PointX="6.25" PointY="8.25" />
+          <ConnectorPoint PointX="6.25" PointY="8.625" />
+        </InheritanceConnector>
         <EntityTypeShape EntityType="EduClassModel.Student" Width="1.5" PointX="1.375" PointY="8.625" />
         <InheritanceConnector EntityType="EduClassModel.Student" />
         <EntityTypeShape EntityType="EduClassModel.Post" Width="1.5" PointX="7.875" PointY="0.875" />
@@ -15,7 +22,7 @@
         <EntityTypeShape EntityType="EduClassModel.Group" Width="1.5" PointX="6.375" PointY="11.625" />
         <EntityTypeShape EntityType="EduClassModel.Test" Width="1.5" PointX="8.75" PointY="16.375" />
         <EntityTypeShape EntityType="EduClassModel.Question" Width="1.5" PointX="4.875" PointY="16.75" />
-        <EntityTypeShape EntityType="EduClassModel.QuestionOption" Width="1.5" PointX="1" PointY="18.75" />
+        <EntityTypeShape EntityType="EduClassModel.QuestionOption" Width="1.5" PointX="1" PointY="19" />
         <EntityTypeShape EntityType="EduClassModel.Response" Width="1.5" PointX="0.875" PointY="15.375" />
         <EntityTypeShape EntityType="EduClassModel.Calendar" Width="1.5" PointX="8.75" PointY="9.375" />
         <EntityTypeShape EntityType="EduClassModel.Event" Width="1.5" PointX="10.875" PointY="9.25" />
@@ -34,9 +41,7 @@
         <AssociationConnector Association="EduClassModel.GroupPage" />
         <AssociationConnector Association="EduClassModel.GroupTest" />
         <AssociationConnector Association="EduClassModel.TestQuestion" />
-        <AssociationConnector Association="EduClassModel.QuestionResponse" />
         <AssociationConnector Association="EduClassModel.QuestionQuestionOption" />
-        <AssociationConnector Association="EduClassModel.QuestionOptionResponse" />
         <AssociationConnector Association="EduClassModel.GroupStudent" />
         <AssociationConnector Association="EduClassModel.StudentResponse" />
         <AssociationConnector Association="EduClassModel.PersonMail" />
@@ -49,6 +54,8 @@
         <EntityTypeShape EntityType="EduClassModel.Calification" Width="1.5" PointX="9.875" PointY="3.5" />
         <AssociationConnector Association="EduClassModel.StudentCalification" />
         <AssociationConnector Association="EduClassModel.GroupCalification" />
+        <AssociationConnector Association="EduClassModel.ResponseQuestionOption" />
+        <AssociationConnector Association="EduClassModel.QuestionResponse" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

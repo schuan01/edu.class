@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 
 namespace EduClass.Repository
@@ -36,9 +37,22 @@ namespace EduClass.Repository
                 // Save changes with the default options
                 return _dbContext.SaveChanges();
             }
+            catch (DbUpdateException dbe)
+            {
+                throw dbe;
+            }
             catch (DbEntityValidationException esx)
             {
-                throw;
+                foreach (var item in esx.EntityValidationErrors)
+                {
+
+                    foreach (var i in item.ValidationErrors)
+	                {
+                        System.Diagnostics.Debugger.Log(1,"Test", i.ErrorMessage);
+	                }
+                }
+
+                throw esx;
             }
             catch (Exception ex)
             {

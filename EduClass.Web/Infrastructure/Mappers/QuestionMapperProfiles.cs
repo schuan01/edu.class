@@ -20,6 +20,7 @@ namespace EduClass.Web.Infrastructure.Mappers
 
             Mapper.CreateMap<QuestionViewModel, Question>()
                 .ForMember(u => u.CreatedAt, src => src.Ignore())
+                .ForMember(u => u.QuestionType, src => src.Ignore())
                 .ForMember(u => u.Enabled, src => src.Ignore());
 			Mapper.CreateMap<Question, QuestionViewModel>();
         }
