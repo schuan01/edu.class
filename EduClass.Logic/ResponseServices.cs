@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using EduClass.Entities;
 using EduClass.Repository;
+using System.Linq;
 
 namespace EduClass.Logic
 {
@@ -18,9 +19,14 @@ namespace EduClass.Logic
             _responseRepository = responseRepository;
         }
 
-        public IEnumerable<Response> GetResponsesByStudent(Student student) 
+        public IEnumerable<Response> GetResponsesByStudent(int idStudent) 
         {
-            return _responseRepository.GetResponsesByStudent(student);
+            return _responseRepository.GetResponsesByStudent(idStudent);
+        }
+
+        public IList<Student> GetStudentsTests(int idTest) 
+        {
+            return _responseRepository.GetStudentsTests(idTest);
         }
     }
 }

@@ -90,7 +90,7 @@
 
 <script src="~/Scripts/app/helpersSite.js"></script>
 <script type="text/javascript">
-    //window.onbeforeunload = confirmExit;
+    window.onbeforeunload = confirmExit;
 
     $(document).ready(function () {
         var cookie = getCookie('Test-'+@Html.Raw(Model.Id));

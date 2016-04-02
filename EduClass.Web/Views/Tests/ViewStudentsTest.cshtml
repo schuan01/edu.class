@@ -1,0 +1,46 @@
+﻿@model IList<EduClass.Entities.Student>
+
+@{
+    ViewBag.Title = "Ver test de los estudiantes";
+    var test = (EduClass.Entities.Test)ViewBag.Test;
+}
+
+<div class="panel">
+    <div class="panel-heading">
+        <h4 class="panel-title">Pruebas entregadas. (@test.Name)</h4>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table nomargin">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Id</th>
+                            <th>Nombre</th>
+                            <th>Usuario</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="text-center">@item.Id</td>
+                                    <td>@item.FirstName @item.LastName</td>
+                                    <td>@item.UserName</td>
+                                    <td>
+                                        <a href="@Url.Action("ViewResponsesStudent", new { idTest = test.Id, idStudent = item.Id })" title="" data-placement="top" data-toggle="tooltip" class="tooltips" type="button" data-original-title="Ver lista de preguntas">
+                                            <i class="fa fa-question" style="font-size: 18px"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,82 @@
+﻿@using System.Collections.Generic;
+@using EduClass.Entities;
+
+@{
+    var student = (Student)ViewBag.Student;
+    
+    ViewBag.Title = student.FirstName + " " + student.LastName;
+}
+
+<div class="col-md-10 col-md-offset-1">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">@student.FirstName  @student.LastName</h3>
+        </div>
+        <div id="divTest" class="panel-body">
+
+            @foreach (var item in (List<Question>)ViewBag.TestQuestions)
+            {
+
+                if (item.Enabled)
+                {
+
+                    <h4>@item.Content</h4>
+                    if (item.QuestionType == EduClass.Entities.QuestionType.TRUEORFALSE)
+                    {
+                        <input type="radio" name="tof-@item.Id" value="true" data-id="" />
+                        <span>Verdadero</span>
+                        <br />
+                        <input type="radio" name="tof-@item.Id" value="false" />
+                        <span>Falso</span>
+                    }
+                    else if (item.QuestionType == EduClass.Entities.QuestionType.REDACTION)
+                    {
+                        <textarea class="form-control" name="redaction-@item.Id" cols="60" rows="10"></textarea>
+                    }
+                    else if (item.QuestionType == EduClass.Entities.QuestionType.OPTIONS)
+                    {
+                        foreach (var qop in item.QuestionOptions)
+                        {
+                            <input type="radio" name="op-@item.Id" value="@qop.Id" />
+                            <span>@qop.Content</span><br />
+                        }
+                    }
+                    else if (item.QuestionType == EduClass.Entities.QuestionType.CHECKS)
+                    {
+                        foreach (var qop in item.QuestionOptions)
+                        {
+                            <input type="checkbox" name="chk-@item.Id" value="@qop.Id" />
+                            <span>@qop.Content</span> <br />
+                        }
+                    }
+
+                    <hr />
+                }
+            }
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <button type="submit" class="btn btn-success pull-right">Enviar prueba</button>
+        </div>
+    </div>
+</div>
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+@{var sessionMessage = EduClass.Web.Infrastructure.Sessions.MessageSession.GetMessage(); }
+
+<script src="~/Scripts/app/helpersSite.js"></script>
+<script type="text/javascript">
+    //window.onbeforeunload = confirmExit;
+
+    $(document).ready(function () {
+        UpdateFields()
+    });
+
+    function UpdateFields()
+    {
+
+    }
+</script>
+

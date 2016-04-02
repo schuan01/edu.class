@@ -648,6 +648,8 @@
     <Content Include="Views\Tests\Edit.cshtml" />
     <Content Include="Views\Tests\Index.cshtml" />
     <Content Include="Views\Tests\ReadyToTest.cshtml" />
+    <Content Include="Views\Tests\ViewStudentsTest.cshtml" />
+    <Content Include="Views\Tests\ViewResponsesStudent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

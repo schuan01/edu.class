@@ -40,7 +40,6 @@ namespace EduClass.Web.Controllers
 				{"redaction-"},
 				{"op-"},
 				{"chk-"}
-				
 			};
 		}
 
@@ -168,15 +167,15 @@ namespace EduClass.Web.Controllers
 		{ 
 			if (UserSession.GetCurrentUser() is Teacher) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
-            var testList = _service.GetEnabledTestForStudents(UserSession.GetCurrentGroup().Id);
-            var responseList = _response.GetResponsesByStudent((Student)UserSession.GetCurrentUser());
+            //var testList = _service.GetEnabledTestForStudents(UserSession.GetCurrentGroup().Id);
+            var responseList = _response.GetResponsesByStudent(UserSession.GetCurrentUser().Id);
 
-            if (testList.Any(b => responseList.Any(c => c.Question.Test.Id == b.Id)))
+            if (responseList.Any(x => x.Question.TestId == id))
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.WARNING, "Importante", "Ya has hecho ésta prueba.,"));
                 return RedirectToAction("Index", "Board");
             }
-
+            
 			return View(_service.GetById(id));
 		}
 
@@ -220,7 +219,7 @@ namespace EduClass.Web.Controllers
 									    response.IsCorrect = true;
 								    }
 
-                                    _response.Create(response);
+                                    //_response.Create(response);
 								    break;
 							    }
 							    else if (qType.Contains("redaction-"))
@@ -232,7 +231,7 @@ namespace EduClass.Web.Controllers
 								    {
 									    response.Content = frm[item.ToString()];
 
-                                        _response.Create(response);
+                                        //_response.Create(response);
 
                                         break;
 								    }
@@ -277,6 +276,33 @@ namespace EduClass.Web.Controllers
             }
 		}
 
+        [HttpGet]
+        public ActionResult ViewStudentsTest(int id)
+        {
+            if (UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+
+            ViewBag.Test = _service.GetById(id);
+            var a = _response.GetStudentsTests(id);
+
+            return View(a);
+        }
+
+        [HttpGet]
+        public ActionResult ViewResponsesStudent(int idTest, int idStudent)
+        {
+            if (UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+
+            var a = _response.GetResponsesByStudent(idStudent).ToList();
+
+            ViewBag.StudentResponses = a;
+            ViewBag.TestQuestions = _service.GetById(idTest).Questions.ToList();
+            ViewBag.Student = _person.GetById(idStudent);
+
+            return View();
+        }
+
+
+        /*************** METHODS ***************/
         private Response GetResponse(Question question)
         {
             Response response = new Response();

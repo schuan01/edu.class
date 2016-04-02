@@ -8,6 +8,7 @@ namespace EduClass.Logic
 {
     public interface IResponseServices : IEntityService<Response>
     {
-        IEnumerable<Response> GetResponsesByStudent(Student student);
+        IEnumerable<Response> GetResponsesByStudent(int idStudent);
+        IList<Student> GetStudentsTests(int idTest);
     }
 }

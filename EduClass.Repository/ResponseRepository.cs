@@ -14,9 +14,24 @@ namespace EduClass.Repository
 
         }
 
-        public IEnumerable<Response> GetResponsesByStudent(Student student) 
+        public IEnumerable<Response> GetResponsesByStudent(int idStudent) 
         {
-            return dbSet.Where(s => s.StudentId == student.Id).ToList();
+            return dbSet.Where(s => s.StudentId == idStudent).ToList();
+        }
+
+        public IList<Student> GetStudentsTests(int idTest)
+        {
+            var student = new List<Student>();
+
+            foreach(var item in dbSet.Where(x => x.Question.TestId == idTest))
+            {
+                if (!student.Any(s => s.Id == item.StudentId))
+                {
+                    student.Add(item.Student);
+                }
+            };
+
+            return student;
         }
     }
 }

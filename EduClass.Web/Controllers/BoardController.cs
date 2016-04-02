@@ -61,7 +61,7 @@ namespace EduClass.Web.Controllers
                 if (UserSession.GetCurrentUser() is Student)
                 {
                     var testList = _test.GetEnabledTestForStudents(UserSession.GetCurrentGroup().Id);
-                    var responseList = _response.GetResponsesByStudent((Student)UserSession.GetCurrentUser());
+                    var responseList = _response.GetResponsesByStudent(UserSession.GetCurrentUser().Id);
 
                     var resolved = from t in testList
                                    join r in responseList on t.Id equals r.Question.TestId into resultTest

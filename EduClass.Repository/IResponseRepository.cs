@@ -8,6 +8,7 @@ namespace EduClass.Repository
 {
     public interface IResponseRepository : IBaseRepository<Response>
     {
-        IEnumerable<Response> GetResponsesByStudent(Student student);
+        IEnumerable<Response> GetResponsesByStudent(int idStudent);
+        IList<Student> GetStudentsTests(int idTest);
     }
 }
