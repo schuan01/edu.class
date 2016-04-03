@@ -271,8 +271,6 @@ namespace EduClass.Web.Controllers
                     }
 
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -366,6 +364,7 @@ namespace EduClass.Web.Controllers
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al descargar el archivo."));
                 _log.Error("FilesLibrary - DownloadMoreFiles", ex);
+                
 
             }
 

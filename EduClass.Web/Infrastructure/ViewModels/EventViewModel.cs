@@ -12,15 +12,19 @@ namespace EduClass.Web.Infrastructure.ViewModels
 
         [Required]
         [MaxLength(100)]
+        [Display(Name = "Título")]
         public string Title { get; set; }
 
         [Required]
+        [Display(Name = "Descripción")]
         public string Description { get; set; }
 
         [Required]
+        [Display(Name = "Comienzo")]
         public string Start { get; set; }
 
         [Required]
+        [Display(Name = "Final")]
         public string End { get; set; }
 
         [Required]

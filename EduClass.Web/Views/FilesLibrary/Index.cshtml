@@ -6,6 +6,7 @@
     ViewBag.Title = "Libreria de Archivos";
 }
 
+<h2>Mis Archivos</h2>
 <div class="row">
     <div class="col-sm-8 col-md-9 col-lg-10">
         <div class="well well-asset-options clearfix">
@@ -34,7 +35,7 @@
                     {
                         @Html.AntiForgeryToken()
                         <input id="seleccionadosBorrar" name="seleccionadosBorrar" hidden />
-                        <button id="borrarArchivos" type="submit" class="btn btn-default"><i class="fa fa-trash"></i> Borrar</button>
+                        <button id="borrarArchivos"  onclick="return confirm('Esta accion borrara tambien los Post asociados, esta seguro?');" type="submit" class="btn btn-default"><i class="fa fa-trash"></i> Borrar</button>
 
                     }
                 </div>
@@ -158,21 +159,39 @@
             var checkValues = $('input[name=archivo]:checked').map(function () {
                 return $(this).val();
             }).get();
-            $('#seleccionados').val(checkValues);
+            if (checkValues.length > 0) {
+                $('#seleccionados').val(checkValues);
+            }
+            else {
+                showMessageJS('danger,Atención,No hay archivos seleccionados')
+                return false;
+            }
         });
 
         $('#borrarArchivos').click(function () {
             var checkValues = $('input[name=archivo]:checked').map(function () {
                 return $(this).val();
             }).get();
-            $('#seleccionadosBorrar').val(checkValues);
+            if (checkValues.length > 0) {
+                $('#seleccionadosBorrar').val(checkValues);
+            }
+            else {
+                showMessageJS('danger,Atención,No hay archivos seleccionados')
+                return false;
+            }
         });
 
         $('#descargarArchivos').click(function () {
             var checkValues = $('input[name=archivo]:checked').map(function () {
                 return $(this).val();
             }).get();
-            $('#seleccionadosDescargar').val(checkValues);
+            if (checkValues.length > 0) {
+                $('#seleccionadosDescargar').val(checkValues);
+            }
+            else {
+                showMessageJS('danger,Atención,No hay archivos seleccionados')
+                return false;
+            }
         });
 
         jQuery('.thmb').hover(function () {

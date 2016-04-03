@@ -29,7 +29,7 @@ namespace EduClass.Web.Controllers
         private static IPageServices _servicePage;
         private static ITestServices _serviceTest;
         private ILog _log;
-        private const int defaultPageSize = 10;
+        private const int defaultPageSize = 1;
         
 
 

@@ -12,15 +12,19 @@ namespace EduClass.Web.Infrastructure.ViewModels
 
         [Required]
         [MaxLength(100)]
+        [Display(Name = "Nombre")]
         public string Name { get; set; }
 
         [Required]
+        [Display(Name = "Descripción")]
         public string Description { get; set; }
 
         [Required]
+        [Display(Name = "Fecha Inicio")]
         public string StartDate { get; set; }
 
         [Required]
+        [Display(Name = "Fecha Finalización")]
         public string EndDate { get; set; }
 
         [Required]

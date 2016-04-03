@@ -152,7 +152,7 @@ namespace EduClass.Web.Controllers
 
                         mail.Description = HttpUtility.HtmlEncode(mail.Description);
                         _service.Create(mail);
-                        MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Envio Exitoso", "El Email fue enviado correctamente"));
+                        MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Envio Exitoso", "El Mensaje fue enviado correctamente"));
                         
                     }
                     else
@@ -224,7 +224,7 @@ namespace EduClass.Web.Controllers
                     mailNuevo.PersonsTo.Add(mailAnterior.PersonFrom);//Solo al remitente
 
                     _service.Create(mailNuevo);
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Envio Exitoso", "El Email fue enviado correctamente"));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Envio Exitoso", "El Mensaje fue enviado correctamente"));
                 }
                 else
                 {
@@ -273,12 +273,12 @@ namespace EduClass.Web.Controllers
                         throw new Exception("El mail no pertence a tus Enviados/Recibidos");
                     }
 
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Borrado Exitoso", "El mail fue borrado correctamente"));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Borrado Exitoso", "El Mensaje fue borrado correctamente"));
 
                 }
                 else
                 {
-                    throw new Exception("Error al borrar el mail");
+                    throw new Exception("Error al borrar el mensaje");
                 }
             }
             catch (Exception ex)

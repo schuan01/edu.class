@@ -1,26 +1,30 @@
 ﻿@using EduClass.Web.Infrastructure.Sessions
 @using EduClass.Entities
-
+<style>
+    .ml20 {
+        margin-left:50px ;
+    }
+</style>
 <div class="logopanel">
     <h2><a href="@Url.Action("Index","Board")">Edu.Class</a></h2>
 </div><!-- logopanel -->
 
 <div class="headerbar">
-    <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
+    
+    <a id="menuToggle" class="menutoggle" href="#"><i class="fa fa-bars"></i><span style="font-size: 25px">&nbsp;&nbsp;&nbsp;&nbsp;</span></a>
     <div class="searchpanel">
-
         <div class="input-group">
             @if (UserSession.GetCurrentGroup() != null)
             {
 
-                <button id="botonMenu" type="button" class="btn btn-success dropdown-toggle btn-lg" data-toggle="dropdown" aria-expanded="false">
+                <button id="botonMenu" type="button" class="btn btn-success dropdown-toggle btn-lg ml20" data-toggle="dropdown" aria-expanded="false">
                     @UserSession.GetCurrentGroup().Name <span class="caret"></span>
                 </button>
 
             }
             else
             {
-                <button id="botonMenu" type="button" class="btn btn-success dropdown-toggle btn-lg" data-toggle="dropdown" aria-expanded="false">
+                <button id="botonMenu" type="button" class="btn btn-success dropdown-toggle btn-lg ml20" data-toggle="dropdown" aria-expanded="false">
                     Mis Grupos<span class="caret"></span>
                 </button>
             }
@@ -72,7 +76,7 @@
 
         <ul class="headermenu">
             <li>
-                <div id="noticePanel" class="btn-group">
+                <div id="noticePanel " class="btn-group hidden">
                     <button class="btn btn-notice alert-notice" data-toggle="dropdown">
                         <i class="fa fa-globe"></i>
                     </button>

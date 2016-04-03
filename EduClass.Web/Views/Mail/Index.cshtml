@@ -27,7 +27,7 @@
                 </div>
                 
                     <a href="Index" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="Recargar"><i class="fa fa-refresh"></i></a>
-                    <a href="" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="Mover a la papelera"><i class="fa fa-trash"></i></a>
+                    
                 
 
             </div>
@@ -53,11 +53,11 @@
                             <div class="media-left">
                                 @if (elemento.PersonFrom.Avatar == null || elemento.PersonFrom.Avatar.UrlPhoto == "")
                                 {
-                                    <img class="media-object img-circle" src="img/images_photos_user1.png" alt="">
+                                    <img class="media-object img-circle" id="avatarListaMails"  src="img/images_photos_user1.png" alt="">
                                 }
                                 else
                                 {
-                                    <img class="media-object img-circle" src="@Url.Content(elemento.PersonFrom.Avatar.UrlPhoto)" alt="" />
+                                    <img class="media-object img-circle" id="avatarListaMails" src="@Url.Content(elemento.PersonFrom.Avatar.UrlPhoto)" alt="" />
                                 }
                                 
                             </div>
@@ -83,15 +83,12 @@
                         <div class="email-header">
                             <div class="pull-right">
                                 <div class="btn-group mr5">
-                                    <button class="btn btn-default" type="button"><i class="fa fa-reply"></i></button>
+                                    
                                     <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button" aria-expanded="false">
                                         <span class="caret"></span>
                                         <span class="sr-only">Desplegar Dropdown</span>
                                     </button>
-                                    <ul role="menu" class="dropdown-menu dm-icon pull-right">
-                                        <li><a href="SendEmail"><i class="fa fa-reply-all"></i> Responder a todos</a></li>
-                                        <li><a href="SendEmail"><i class="fa fa-arrow-right"></i> Reenviar</a></li>
-                                        <li><button type="button" class="btn btn-link" onclick="PrintElem('#@elemento.Id')"><i class="fa fa-print"></i> Imprimir</button></li>
+                                    <ul role="menu" class="dropdown-menu dm-icon pull-right"> 
                                         @using (Html.BeginForm("DeleteMail", "Mail", FormMethod.Post, htmlAttributes: new { @Id = "" }))
                                         {
                                             @Html.AntiForgeryToken()
@@ -101,21 +98,18 @@
                                     </ul>
                                 </div>
 
-                                <div class="btn-group">
-                                    <button class="btn btn-default" type="button"><i class="fa fa-angle-left"></i></button>
-                                    <button class="btn btn-default" type="button"><i class="fa fa-angle-right"></i></button>
-                                </div>
+                               
                             </div>
                             <div class="media">
                                 <div class="media-left">
                                     <a href="#">
                                         @if (elemento.PersonFrom.Avatar == null || elemento.PersonFrom.Avatar.UrlPhoto == "")
                                         {
-                                        <img class="media-object img-circle" src="img/images_photos_user1.png" alt="">
+                                        <img class="media-object img-circle" id="avatarMailSeleccionado" src="img/images_photos_user1.png" alt="">
                                         }
                                         else
                                         {
-                                        <img class="media-object img-circle" src="@Url.Content(elemento.PersonFrom.Avatar.UrlPhoto)" alt="" />
+                                        <img class="media-object img-circle"  id="avatarMailSeleccionado" src="@Url.Content(elemento.PersonFrom.Avatar.UrlPhoto)" alt="" />
                                         }
                                         
                                     </a>
@@ -135,7 +129,7 @@
 
                         <hr>
                         
-                        <h3 class="email-subject">@elemento.Subject <span class="markstar"><i class="glyphicon glyphicon-star"></i></span></h3>
+                        <h3 class="email-subject">@elemento.Subject</h3>
                         <div class="email-body">
                             <p>@Html.Raw(elemento.Description)</p>
                         </div>
@@ -294,7 +288,9 @@ $(document).ready(function()
   // HTML5 WYSIWYG Editor
   $('#wysiwyg').wysihtml5({
       toolbar: {
-          fa: true
+          fa: true,
+          "image": false,
+          "link": false
       }
   });
 

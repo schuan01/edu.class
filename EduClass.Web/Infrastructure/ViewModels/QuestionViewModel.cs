@@ -11,7 +11,8 @@ namespace EduClass.Web.Infrastructure.ViewModels
 		public int Id { get; set; }
 
 		[Required]
-		public string Content { get; set; }
+        [Display(Name = "Contenido")]
+        public string Content { get; set; }
 		
 		public System.DateTime CreatedAt { get; set; }
 		

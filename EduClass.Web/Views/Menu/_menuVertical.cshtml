@@ -3,7 +3,7 @@
 <div class="tab-pane active" id="mainmenu">
     <h5 class="sidebar-title">Menú Principal</h5>
     <ul class="nav nav-pills nav-stacked nav-quirk">
-        <li class="active"><a href="@Url.Action("Index", "Board")"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
+        <li><a href="@Url.Action("Index", "Board")"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
         <li><a href="@Url.Action("Index", "Mail")"><i class="fa fa-inbox"></i> <span>Mensajes</span></a></li>
         <li><a href="@Url.Action("Index", "Groups")"><i class="fa fa-users"></i> <span>Grupos</span></a></li>
         @if (UserSession.GetCurrentUser() is Teacher)
@@ -13,7 +13,10 @@
         <li><a href="@Url.Action("GetContacts", "Groups")"><i class="fa fa-book"></i> <span>Contactos</span></a></li>
         <li><a href="@Url.Action("Index", "Events")"><i class="fa fa-calendar"></i> <span>Eventos</span></a></li>
         <li><a href="@Url.Action("Index", "Pages")"><i class="fa fa-weibo"></i> <span>Páginas Públicas</span></a></li>
-        <li><a href="@Url.Action("Index", "Tests")"><i class="fa fa-paperclip"></i> <span>Pruebas Diagnosticas</span></a></li>
+        @if (UserSession.GetCurrentUser() is Teacher)
+        {
+            <li><a href="@Url.Action("Index", "Tests")"><i class="fa fa-paperclip"></i> <span>Pruebas Diagnosticas</span></a></li>
+        }
         @if (UserSession.GetCurrentUser() is Teacher)
         {
             <li><a href="@Url.Action("Index", "Califications")"><i class="fa fa-sort-numeric-asc"></i> <span>Calificaciones</span></a></li>

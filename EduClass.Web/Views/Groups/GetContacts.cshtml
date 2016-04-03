@@ -38,7 +38,7 @@
 
 
                     
-                    <span class="people-count pull-right">Página <strong>@Model.PageNumber</strong> de <strong>@Model.TotalItemCount</strong> Estudiantes</span>
+                    <span class="people-count pull-right"><strong>@Model.PageNumber</strong> de <strong>@Model.PageCount</strong> Páginas</span>
                 </div><!-- people-options -->
 
 
@@ -132,7 +132,7 @@
                                 <div class="media-left">
                                     <a href="#">
                                        
-                                            <img class="media-object img-circle" src="@Url.Content(ViewBag.urlTeacher)" alt="">
+                                            <img class="media-object img-circle" id="avatarTeacherContacts" src="@Url.Content(ViewBag.urlTeacher)" alt="">
                                        
                                     </a>
                                 </div>
