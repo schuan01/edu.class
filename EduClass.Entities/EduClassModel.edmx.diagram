@@ -22,8 +22,8 @@
         <EntityTypeShape EntityType="EduClassModel.Group" Width="1.5" PointX="6.375" PointY="11.625" />
         <EntityTypeShape EntityType="EduClassModel.Test" Width="1.5" PointX="8.75" PointY="16.375" />
         <EntityTypeShape EntityType="EduClassModel.Question" Width="1.5" PointX="4.875" PointY="16.75" />
-        <EntityTypeShape EntityType="EduClassModel.QuestionOption" Width="1.5" PointX="1" PointY="19" />
-        <EntityTypeShape EntityType="EduClassModel.Response" Width="1.5" PointX="0.875" PointY="15.375" />
+        <EntityTypeShape EntityType="EduClassModel.QuestionOption" Width="1.5" PointX="0.875" PointY="19.5" />
+        <EntityTypeShape EntityType="EduClassModel.Response" Width="2" PointX="0.875" PointY="15.375" />
         <EntityTypeShape EntityType="EduClassModel.Calendar" Width="1.5" PointX="8.75" PointY="9.375" />
         <EntityTypeShape EntityType="EduClassModel.Event" Width="1.5" PointX="10.875" PointY="9.25" />
         <EntityTypeShape EntityType="EduClassModel.Page" Width="1.5" PointX="3.625" PointY="11.125" />
@@ -54,8 +54,8 @@
         <EntityTypeShape EntityType="EduClassModel.Calification" Width="1.5" PointX="9.875" PointY="3.5" />
         <AssociationConnector Association="EduClassModel.StudentCalification" />
         <AssociationConnector Association="EduClassModel.GroupCalification" />
-        <AssociationConnector Association="EduClassModel.ResponseQuestionOption" />
         <AssociationConnector Association="EduClassModel.QuestionResponse" />
+        <AssociationConnector Association="EduClassModel.QuestionOptionResponse" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

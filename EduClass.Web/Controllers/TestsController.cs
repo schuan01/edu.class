@@ -219,7 +219,7 @@ namespace EduClass.Web.Controllers
 									    response.IsCorrect = true;
 								    }
 
-                                    //_response.Create(response);
+                                    _response.Create(response);
 								    break;
 							    }
 							    else if (qType.Contains("redaction-"))
@@ -231,7 +231,7 @@ namespace EduClass.Web.Controllers
 								    {
 									    response.Content = frm[item.ToString()];
 
-                                        //_response.Create(response);
+                                        _response.Create(response);
 
                                         break;
 								    }
@@ -292,9 +292,7 @@ namespace EduClass.Web.Controllers
         {
             if (UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
-            var a = _response.GetResponsesByStudent(idStudent).ToList();
-
-            ViewBag.StudentResponses = a;
+            ViewBag.StudentResponses = _response.GetResponsesByStudent(idStudent).ToList();
             ViewBag.TestQuestions = _service.GetById(idTest).Questions.ToList();
             ViewBag.Student = _person.GetById(idStudent);
 
