@@ -2,11 +2,13 @@
 using EduClass.Logic;
 using EduClass.WebApi.Infrastructure.ViewModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
@@ -20,12 +22,13 @@ namespace EduClass.WebApi.Controllers
         private static IGroupServices _service;
         private static IPersonServices _personService;
         private static IPostServices _postService;
-
-        public BoardController(IGroupServices service, IPersonServices personService, IPostServices postService)
+        private static IReplyServices _replyService;
+        public BoardController(IGroupServices service, IPersonServices personService, IPostServices postService, IReplyServices replyService)
         {
             _service = service;
             _personService = personService;
             _postService = postService;
+            _replyService = replyService;
 
 
         }
@@ -134,6 +137,62 @@ namespace EduClass.WebApi.Controllers
             }
 
             return Json(new { error = "Error al crear el Post" });
+        }
+
+        [HttpPost]
+        [Route("Reply")]
+        [AllowAnonymous]
+        public IHttpActionResult Reply([FromBody]JObject parametros)
+        {
+            var usuario = parametros["personId"].ToObject<int>();
+            var idPost = parametros["postId"].ToObject<int>();
+            var contenido = parametros["content"].ToObject<string>();
+            
+
+            if (ModelState.IsValid)
+            {
+                if (idPost == 0 || String.IsNullOrEmpty(contenido))
+                {
+                    return Json(new { error = "Error al crear comentario" });
+                }
+
+                try
+                {
+
+                    Person p = _personService.GetById(usuario);
+                    if (!p.Silenced)
+                    {
+
+                        var reply = new Reply();
+                        reply.Content = HttpUtility.HtmlEncode(contenido);
+                        reply.CreatedAt = DateTime.Now;
+                        reply.PersonId = usuario;
+                        reply.PostId = idPost;
+                        reply.Enabled = true;
+
+                        _replyService.Create(reply);
+
+                        return Json(new { mensaje = "Se creo correcamente el Reply" });
+                    }
+                    else
+                    {
+                        return Json(new { error = "No puedes comentar un Post si estas silenciado" });
+                        //_log.Warn("Board - Reply => No authorize");
+                    }
+                }
+                catch (System.Data.Entity.Infrastructure.DbUpdateException du)
+                {
+                    //_log.Error("Board - Reply -> ", du);
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { error = "Error al crear un Reply" });
+                    //_log.Error("Board - Reply", ex);
+                }
+            }
+
+            return Json(new { error = "Error al crear un Reply" });
         }
     }
 }

@@ -241,7 +241,7 @@ namespace EduClass.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al crear post, por favor contacte con el Administrador."));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error al crear Reply, por favor contacte con el Administrador."));
 					_log.Error("Board - Reply", ex);
                 }
             }
