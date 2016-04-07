@@ -1,0 +1,52 @@
+﻿@model IEnumerable<EduClass.Entities.Test>
+@{
+    ViewBag.Title = "Mis pruebas";
+}
+
+<div class="panel">
+    <div class="panel-heading">
+        <h4 class="panel-title">Mis pruebas</h4>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table nomargin">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Id</th>
+                            <th>Nombre de la prueba</th>
+                            <th>Comenzó</th>
+                            <th>Termina</th>
+                            <th>Estado</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center">@item.Id</td>
+                                <td>@item.Name</td>
+                                <td>@item.StartDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@item.EndDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>
+                                    @if (item.EndDate > DateTime.Now)
+                                    {
+                                        <a href="@Url.Action("ViewResponsesStudent", "Tests", new { idTest = item.Id, idStudent = EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser().Id })" title="" data-placement="top" data-toggle="tooltip" class="tooltips" type="button" data-original-title="Ver prueba">
+                                            <div class="label label-success">Ver prueba</div>    
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <div class="label label-info">En curso</div>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

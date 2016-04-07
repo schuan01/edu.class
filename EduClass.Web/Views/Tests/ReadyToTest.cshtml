@@ -5,7 +5,7 @@
 }
 
 <div class="col-md-10 col-md-offset-1">
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("ReadyToTest", "Tests", FormMethod.Post, new { id = "frmReadyToTest"}))
     {
         @Html.AntiForgeryToken()   
         <div class="panel panel-primary">
@@ -24,7 +24,7 @@
                     {
                     
                         <h4>@item.Content</h4>  
-                        if(item.QuestionType == EduClass.Entities.QuestionType.TRUEORFALSE)
+                        if (item.QuestionType == EduClass.Entities.QuestionType.TRUEORFALSE)
                         {                    
                             <input type="radio" name="tof-@item.Id" value="true"/> 
                             <span>Verdadero</span>                    
@@ -117,6 +117,10 @@
                 $('#divTest').removeClass('hidden');
             });
         }
+
+        $('#frmReadyToTest').on('submit', function(e) { 
+            window.onbeforeunload = null;
+        });
     });
 
     function confirmExit()

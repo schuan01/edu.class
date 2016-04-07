@@ -26,5 +26,10 @@ namespace EduClass.Repository
                                     && (x.StartDate <= DateTime.Now 
                                     && x.EndDate >= DateTime.Now));
         }
+
+        public IEnumerable<Test> GetTestStudents(int idStudent)
+        {
+            return dbSet.Where(x => x.Questions.Any(s => s.Responses.Any(r => r.StudentId == idStudent)));
+        }
     }
 }

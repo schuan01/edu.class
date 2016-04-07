@@ -27,5 +27,10 @@ namespace EduClass.Logic
         {
             return _testRepository.GetEnabledTestForStudents(groupId);
         }
+
+        public IEnumerable<Test> GetTestStudents(int idStudent) 
+        {
+            return _testRepository.GetTestStudents(idStudent);
+        }
     }
 }

@@ -7,5 +7,6 @@ namespace EduClass.Repository
     {
         IEnumerable<Test> GetAll(int id);
         IEnumerable<Test> GetEnabledTestForStudents(int groupId);
+        IEnumerable<Test> GetTestStudents(int idStudent);
     }
 }

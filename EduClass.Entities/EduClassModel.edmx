@@ -233,7 +233,7 @@
     <Property Name="StudentId" Type="int" Nullable="false" />
     <Property Name="TrueOrFalse" Type="bit" Nullable="true" />
     <Property Name="QuestionId" Type="int" Nullable="false" />
-    <Property Name="IsCorrect" Type="bit" Nullable="false" />
+    <Property Name="IsCorrect" Type="bit" Nullable="true" />
     <Property Name="QuestionOptionId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Calendars">
@@ -975,7 +975,7 @@
           <Property Name="TrueOrFalse" Type="Boolean" Nullable="true" />
           <NavigationProperty Name="Question" Relationship="EduClassModel.QuestionResponse" FromRole="Response" ToRole="Question" />
           <Property Name="QuestionId" Type="Int32" Nullable="false" />
-          <Property Name="IsCorrect" Type="Boolean" Nullable="false" />
+          <Property Name="IsCorrect" Type="Boolean" Nullable="true" />
           <NavigationProperty Name="QuestionOption" Relationship="EduClassModel.QuestionOptionResponse" FromRole="Response" ToRole="QuestionOption" />
           <Property Name="QuestionOptionId" Type="Int32" Nullable="false" />
         </EntityType>

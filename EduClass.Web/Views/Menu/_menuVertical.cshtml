@@ -21,6 +21,10 @@
         {
             <li><a href="@Url.Action("Index", "Califications")"><i class="fa fa-sort-numeric-asc"></i> <span>Calificaciones</span></a></li>
         }
+        @if (UserSession.GetCurrentUser() is Student)
+        {
+            <li><a href="@Url.Action("MyTests", "Tests")"><i class="fa fa-paperclip"></i> <span>Mis Pruebas</span></a></li>
+        }
         <li class="nav-parent" >
             <a href=""><i class="fa fa-list-alt"></i> <span>Listado de Grupos</span></a>
             <ul class="children" id="gruposDDLVertical">

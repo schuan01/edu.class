@@ -20,7 +20,7 @@ namespace EduClass.Entities
         public int StudentId { get; set; }
         public Nullable<bool> TrueOrFalse { get; set; }
         public int QuestionId { get; set; }
-        public bool IsCorrect { get; set; }
+        public Nullable<bool> IsCorrect { get; set; }
         public int QuestionOptionId { get; set; }
     
         public virtual Student Student { get; set; }

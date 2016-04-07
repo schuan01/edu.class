@@ -650,6 +650,8 @@
     <Content Include="Views\Tests\ReadyToTest.cshtml" />
     <Content Include="Views\Tests\ViewStudentsTest.cshtml" />
     <Content Include="Views\Tests\ViewResponsesStudent.cshtml" />
+    <Content Include="Views\Tests\ViewResponses.cshtml" />
+    <Content Include="Views\Tests\MyTests.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

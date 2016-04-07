@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 04/04/2016 00:03:06
+-- Date Created: 04/04/2016 23:41:04
 -- Generated from EDMX file: D:\code\Edu.Class\EduClass.Entities\EduClassModel.edmx
 -- --------------------------------------------------
 
@@ -89,11 +89,11 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_GroupCalification]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Califications] DROP CONSTRAINT [FK_GroupCalification];
 GO
-IF OBJECT_ID(N'[dbo].[FK_ResponseQuestionOption]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[QuestionOptions] DROP CONSTRAINT [FK_ResponseQuestionOption];
-GO
 IF OBJECT_ID(N'[dbo].[FK_QuestionResponse]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Responses] DROP CONSTRAINT [FK_QuestionResponse];
+GO
+IF OBJECT_ID(N'[dbo].[FK_QuestionOptionResponse]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Responses] DROP CONSTRAINT [FK_QuestionOptionResponse];
 GO
 IF OBJECT_ID(N'[dbo].[FK_Teacher_inherits_Person]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Person_Teacher] DROP CONSTRAINT [FK_Teacher_inherits_Person];
@@ -265,7 +265,7 @@ CREATE TABLE [dbo].[Responses] (
     [StudentId] int  NOT NULL,
     [TrueOrFalse] bit  NULL,
     [QuestionId] int  NOT NULL,
-    [IsCorrect] bit  NOT NULL,
+    [IsCorrect] bit  NULL,
     [QuestionOptionId] int  NOT NULL
 );
 GO

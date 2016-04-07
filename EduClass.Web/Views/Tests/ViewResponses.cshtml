@@ -3,17 +3,17 @@
 
 @{
     var student = (Student)ViewBag.Student;
-    
+
     ViewBag.Title = student.FirstName + " " + student.LastName;
     var qtyQuestions = ((List<Question>)ViewBag.TestQuestions).Count();
-    
+
 }
 
 <div class="col-md-10 col-md-offset-1">
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">@student.FirstName  @student.LastName <span class="label label-warning pull-right" style="font-size: 14px"><strong>TOTAL: </strong><span id="qtyCorrect"></span>/@qtyQuestions</span></h3>
-            
+
         </div>
         <div id="divTest" class="panel-body">
 
@@ -22,7 +22,7 @@
 
                 if (item.Enabled)
                 {
-                    
+
                     <h4>@item.Content <span id="isCorrectLabel-@item.Id" class="label"></span></h4>
                     <br />
                     if (item.QuestionType == EduClass.Entities.QuestionType.TRUEORFALSE)
@@ -30,25 +30,16 @@
                         <input type="radio" name="tof-true-@item.Id" value="true" data-id="@item.Id" class="QtToF" disabled />
                         <span>Verdadero</span>
                         <br />
-                        <input type="radio" name="tof-false-@item.Id" value="false" data-id="@item.Id" class="QtToF" disabled/>
+                        <input type="radio" name="tof-false-@item.Id" value="false" data-id="@item.Id" class="QtToF" disabled />
                         <span>Falso</span>
                     }
                     else if (item.QuestionType == EduClass.Entities.QuestionType.REDACTION)
                     {
-                        using (Html.BeginForm("MarkRedactionOptionType", "Tests", FormMethod.Post, new { @id = "frmRedaction-" + item.Id }))
-                        {
-                            <textarea class="form-control QtRedaction" name="redaction-@item.Id" data-id="@item.Id" cols="60" rows="10" disabled></textarea>
-                            <input type="hidden" class="idResponse-@item.Id" name="idResponse" />
-                            <input type="hidden"  class="responseT-@item.Id" name="responseT" />
-                            <div id="btnRedaction-@item.Id" class="row mt10 hidden">
-                                <div class="col-md-6">
-                                    <input type="button" class="btn btn-success form-control btnRedaction" data-id="@item.Id" value="Correcta"/>
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="button" class="btn btn-danger form-control btnRedaction" data-id="@item.Id" value="Incorrecta" />
-                                </div>
-                            </div>
-                        }
+                        <textarea class="form-control QtRedaction" name="redaction-@item.Id" data-id="@item.Id" cols="60" rows="10" disabled></textarea>
+                            
+                        <div id="btnRedaction-@item.Id" class="row mt10 hidden">
+                              <div class="col-md-12 text-center text-danger">Esta pregunta no ha sido corregida por el profesor.</div>  
+                        </div>
                     }
                     else if (item.QuestionType == EduClass.Entities.QuestionType.OPTIONS)
                     {
@@ -62,21 +53,21 @@
                     {
                         foreach (var qop in item.QuestionOptions)
                         {
-                            <input type="checkbox" name="chk-@item.Id" value="@qop.Id" data-id="@item.Id" data-iscorrect="@qop.IsCorrect.ToString().ToLower()" class="QtChecks" disabled/>
+                            <input type="checkbox" name="chk-@item.Id" value="@qop.Id" data-id="@item.Id" data-iscorrect="@qop.IsCorrect.ToString().ToLower()" class="QtChecks" disabled />
                             <span>@qop.Content</span> <br />
                         }
                     }
 
-                    <hr />  
+                    <hr />
                 }
             }
-    </div>
-    <div class="panel-footer">
-        <div class="row">
-            <a href="@Url.Action("ViewStudentsTest", new { id = ViewBag.TestId })" class="btn btn-primary pull-right">Volver</a>
+        </div>
+        <div class="panel-footer">
+            <div class="row">
+                <a href="@Url.Action("MyTests")" class="btn btn-primary pull-right">Volver</a>
+            </div>
         </div>
     </div>
-</div>
 </div>
 
 @Scripts.Render("~/bundles/jquery")
@@ -93,20 +84,6 @@
         checkCorrectQuestion();
 
         $('#qtyCorrect').text(qtyCorrect);
-
-        $('.btnRedaction').click(function(){
-
-            var idQuestion = $(this).data('id');
-            var responseT = false;
-
-            if ($(this).val() === 'Correcta') {
-                responseT = true;
-            }
-            
-            $('.responseT-' + idQuestion).val(responseT);
-
-            $('#frmRedaction-' + idQuestion).submit();
-        });
     });
 
     function UpdateFields() {
@@ -118,8 +95,6 @@
 
                     if (item.TrueOrFalse != null)
                     {
-                        //var correct = (item.IsCorrec == null) ? false : item.IsCorrect.Value;
-                        
                         if (item.TrueOrFalse.Value)
                         {
                             <text>
@@ -132,7 +107,7 @@
                                 markQuestions('input[name="tof-false-@item.QuestionId"]')
                             </text>
                         }
-                        
+
                         <text>
                             markCorrectOrIncorrect('#isCorrectLabel-@item.QuestionId', @item.IsCorrect.Value.ToString().ToLower())
                         </text>
@@ -149,12 +124,10 @@
                         {
                             <text>
                                 markCorrectOrIncorrect('#isCorrectLabel-@item.QuestionId', @item.IsCorrect.Value.ToString().ToLower())
-                            </text>        
+                            </text>
                         }
                         
-                    
                         <text>
-                            $('.idResponse-@item.QuestionId').val(@item.Id)
                             $('textarea[name="redaction-@item.QuestionId"]').text('@item.Content');
                         </text>
                     break;
@@ -167,12 +140,12 @@
 
                     break;
                 case QuestionType.CHECKS:
-                
-                    <text>        
+
+                    <text>
                         var chk = searchInListChecks(@item.QuestionId);
                         chk.addOptionCheck(@item.QuestionOptionId)
                         markQuestions('input[name="chk-@item.QuestionId"][value="@item.QuestionOptionId"]')
-                    </text>    
+                    </text>
                     break;
             }
         }
@@ -197,9 +170,9 @@
         }
 
         $(obj).addClass(xClass);
-        $(obj).text(text);        
+        $(obj).text(text);
     }
-   
+
     function checksObj(idQuestion)
     {
         this.idQuestion = idQuestion;
@@ -209,7 +182,7 @@
             var flag = true;
 
             for (var i = 0; i < this.idOption.length; i++) {
-                
+
                 if (this.idOption[i] == id) {
                     flag = false;
                 }
@@ -224,27 +197,27 @@
     function searchInListChecks(id) {
 
         for (var i = 0; i < listChecks.length; i++) {
-            
+
             if (listChecks[i] !== undefined && listChecks[i].idQuestion == id) {
                 return listChecks[i];
-            } 
+            }
         }
         var chk = new checksObj(id);
         listChecks.push(chk)
-        return chk; 
+        return chk;
     }
 
     function checkCorrectQuestion(){
 
 
         for (var i = 0; i < listChecks.length; i++) {
-            
+
             var listCorrects = [];
-    
+
             $('input[type="checkbox"][data-id=' + listChecks[i].idQuestion + ']').each(function(i, item){
-                
+
                 var is = $(item).data('iscorrect');
-                
+
                 if (is) {
                     listCorrects.push($(item).val());
                 }
@@ -253,11 +226,9 @@
             var student = listChecks[i].idOption.join();
             var professor = listCorrects.join();
             var retorno = student == professor;
-            
+
             markCorrectOrIncorrect('#isCorrectLabel-' + listChecks[i].idQuestion, retorno);
         }
-
-        
     }
 
 </script>

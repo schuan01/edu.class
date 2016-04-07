@@ -54,10 +54,21 @@ namespace EduClass.Web.Controllers
 			return View(list);
 		}
 
+        public ActionResult MyTests()
+        {
+            if (UserSession.GetCurrentUser() is Teacher) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+
+            var testList = _service.GetTestStudents(UserSession.GetCurrentUser().Id);
+
+            return View(testList);
+        }
+
 		// GET: Test
 		[HttpGet]
 		public ActionResult Create()
 		{
+            if (UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+
 			var test = new TestViewModel();
 			test.GroupId = UserSession.GetCurrentGroup().Id;
 			return View(test);
@@ -67,6 +78,8 @@ namespace EduClass.Web.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Create([Bind(Include = "Name, Description, StartDate, EndDate, GroupId")]TestViewModel testVm)
 		{
+            if (UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+
 			if (ModelState.IsValid)
 			{
 				try
@@ -101,7 +114,7 @@ namespace EduClass.Web.Controllers
 		[HttpGet]
 		public ActionResult Edit(int id = 0)
 		{
-			if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+            if (id == 0 || UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 			var test = AutoMapper.Mapper.Map<Test, TestViewModel>(_service.GetById(id));
 
 			return View(test);
@@ -111,6 +124,8 @@ namespace EduClass.Web.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Edit([Bind(Include = "Id, Name, Description, StartDate, EndDate, GroupId")]TestViewModel testVm)
 		{
+            if (UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+
 			if (ModelState.IsValid)
 			{
 				try
@@ -138,7 +153,7 @@ namespace EduClass.Web.Controllers
 
 		public ActionResult Disable(int id = 0)
 		{
-			if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+            if (id == 0 || UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
 			var test = _service.GetById(id);
 
@@ -163,9 +178,9 @@ namespace EduClass.Web.Controllers
 		}
 
 		[HttpGet]
-		public ActionResult ReadyToTest(int id)
+		public ActionResult ReadyToTest(int id = 0)
 		{ 
-			if (UserSession.GetCurrentUser() is Teacher) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+			if (UserSession.GetCurrentUser() is Teacher || id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
             //var testList = _service.GetEnabledTestForStudents(UserSession.GetCurrentGroup().Id);
             var responseList = _response.GetResponsesByStudent(UserSession.GetCurrentUser().Id);
@@ -217,7 +232,11 @@ namespace EduClass.Web.Controllers
                                     if (response.QuestionOption.TrueOrFalse == response.TrueOrFalse)
 								    {
 									    response.IsCorrect = true;
-								    }
+                                    }
+                                    else
+                                    {
+                                        response.IsCorrect = false;
+                                    }
 
                                     _response.Create(response);
 								    break;
@@ -277,9 +296,9 @@ namespace EduClass.Web.Controllers
 		}
 
         [HttpGet]
-        public ActionResult ViewStudentsTest(int id)
+        public ActionResult ViewStudentsTest(int id = 0)
         {
-            if (UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+            if (UserSession.GetCurrentUser() is Student || id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
             ViewBag.Test = _service.GetById(id);
             var a = _response.GetStudentsTests(id);
@@ -288,18 +307,37 @@ namespace EduClass.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult ViewResponsesStudent(int idTest, int idStudent)
+        public ActionResult ViewResponsesStudent(int idTest = 0, int idStudent = 0)
         {
-            if (UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
-
+            if (idTest == 0 || idStudent == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
             ViewBag.StudentResponses = _response.GetResponsesByStudent(idStudent).ToList();
             ViewBag.TestQuestions = _service.GetById(idTest).Questions.ToList();
             ViewBag.Student = _person.GetById(idStudent);
+            ViewBag.TestId = idTest;
+
+            if (UserSession.GetCurrentUser() is Student) 
+            {
+                return View("ViewResponses");
+            }
 
             return View();
         }
 
+        [HttpPost]
+        public ActionResult MarkRedactionOptionType(int idResponse, bool responseT) 
+        {
+            if (idResponse == 0 || UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
+            var response = _response.GetById(idResponse);
+
+            response.IsCorrect = responseT;
+
+            _response.Update(response);
+
+            return RedirectToAction("ViewResponsesStudent", new { idTest = response.Question.TestId, idStudent = response.StudentId });
+        }
+        
+        
         /*************** METHODS ***************/
         private Response GetResponse(Question question)
         {
