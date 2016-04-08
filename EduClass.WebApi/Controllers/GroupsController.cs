@@ -113,6 +113,48 @@ namespace EduClass.WebApi.Controllers
             return Json(new { idGrupo = g.Id, nombreGrupo = g.Name});
         }
 
-        
+        [HttpPost]
+        [Route("JoinStudent")]
+        [AllowAnonymous]
+        public IHttpActionResult JoinStudent([FromBody]JObject parametros)
+        {
+
+            try
+            {
+                var usuario = parametros["usuario"].ToObject<int>();
+                var clave = parametros["clave"].ToObject<string>();
+
+                Person student = null;
+                int idStudent = usuario;//Obtengo el usuario Actual
+
+                var group = _service.GetByKey(clave);//Obtengo el Grupo del Id pasado por parametro
+                student = _personService.GetById(idStudent);
+
+                if (group == null || student == null) { throw new Exception("El usuario o el grupo no existe"); }
+
+                if (group.Students.FirstOrDefault(st => st.Id == student.Id) != null)//Si ya existe en la collecion
+                {
+                    throw new Exception("El usuario actual ya existe en el grupo seleccionado");
+                }
+
+                if (student is Student)//Solo aplica si es tipo Student
+                {
+                    group.Students.Add((Student)student);
+                    _service.Update(group);
+
+                    return Json(new { idGrupo = group.Id, nombreGrupo = group.Name, mensaje = "El usuario actual se agrego correctamente", url = "Board.html" });
+                }
+                else
+                    throw new Exception("El usuario actual no es un estudiante");
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+                //_log.Error("Groups - JoinStudent", ex);
+            }
+        }
+
+
     }
 }
