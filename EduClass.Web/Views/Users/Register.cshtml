@@ -98,8 +98,8 @@
                             <input id="email" name="email" type="email" class="form-control required">
                             <label for="password">Contraseña *</label>
                             <input id="password" name="password" type="password" class="form-control required">
-                            <label for="confirm">Confirmación de contraseña *</label>
-                            <input id="confirm" name="ConfirmPassword" type="password" class="form-control required">
+                            <label for="ConfirmPassword">Confirmación de contraseña *</label>
+                            <input id="ConfirmPassword" name="ConfirmPassword" type="password" class="form-control required">
                         </section>
                         <h3>Persona</h3>
                         <section>
@@ -150,6 +150,12 @@
     
     <script src="~/Scripts/app/helpersSite.js"></script>
     <script>
+
+        $.validator.setDefaults({
+            submitHandler: function () {
+                alert("submitted!");
+            }
+        });
         $(document).ready(function () {
             //$("#birthday").mask("99/99/9999");
 
@@ -176,9 +182,15 @@
             form.validate({
                 errorPlacement: function errorPlacement(error, element) { element.before(error); },
                 rules: {
-                    
-                    confirm: {
+               
+                    ConfirmPassword: {
+                        required: true,
+                        minlength: 6,
                         equalTo: "#password"
+                    },
+                    password: {
+                        required: true,
+                        minlength: 6
                     }
                 }
             });

@@ -77,14 +77,14 @@ else
             <div class="panel" style="height:200px">
                 <div class="panel-body">
                     <div class="form-horizontal">
-                        @using (Html.BeginForm("Post", "Board"))
+                        @using (Html.BeginForm("Post", "Board", FormMethod.Post, new { id = "frmPost"}))
                         {
                             @Html.AntiForgeryToken()
                             <div class="row">
                                 <h4>Escribe un post</h4>
                             </div>
                             <div class="row" id="tituloBoard">
-                                <input type="text" name="Title" class="form-control" placeholder="Título" >
+                                <input type="text" name="Title" class="form-control" placeholder="Título">
                             </div>
 
                             <div class="row" style="margin-top: 10px" id="contenidoBoard">
@@ -255,6 +255,22 @@ else
 
 <script src="~/Scripts/app/helpersSite.js"></script>
 <script type="text/javascript">
+
+    jQuery.validator.setDefaults({
+        debug: false,
+        success: "valid"
+    });
+    $("#frmPost").validate({
+        rules: {
+            Title: {
+                required: true
+            },
+            Content: {
+                required: true
+            }
+        }
+    });
+
     $(document).ready(function () {
 
         var anno1 = new Anno({

@@ -15,20 +15,21 @@
 
 <div class="panel">
     <div class="panel-heading">
-        <h4 class="panel-title">Pruebas de Evaluación</h4>
+        <h4 class="panel-title">Lista de preguntas </h4>
     </div>
     <div class="panel-body">
-        <div class="row mb10">
-            <div class="col-md-3 col-md-offset-9 ">
-                
-                <a href="@Url.Action("Create", new { idTest = ViewBag.TestId })" class="btn btn-primary pull-right">Agregar pregunta</a>
-                <a href="@Url.Action("Index", "Tests")" class="btn btn-default-active pull-right mr10">Volver</a>
-
-            </div>
+        <div class="people-list">
+            <div class="people-options clearfix">
+                <div class="btn-group pull-right people-pager">
+                    <a href="@Url.Action("Create", new { idTest = ViewBag.TestId })" class="btn btn-primary pull-right">Agregar pregunta</a>
+                    <a href="@Url.Action("Index", "Tests")" class="btn btn-default-active pull-right mr10">Volver</a>
+                </div>
+            </div><!-- people-options -->
         </div>
+
         <div class="row">
             <div class="table-responsive">
-                <table class="table nomargin">
+                <table class="table table-bordered table-primary nomargin">
                     <thead>
                         <tr>
                             <th class="text-center">Id</th>
@@ -46,12 +47,12 @@
                                 <td>@item.Content</td>
                                 <td>@_dictionaryQuestionType[Convert.ToInt32(item.QuestionType)]</td>
                                 <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
-                                <td>
+                                <td class="text-center">
                                     <a href="@Url.Action("Edit", new { id = item.Id })"><i class="fa fa-edit" style="font-size: 18px"></i></a> |
                                     <a href="@Url.Action("Disable", new { id = item.Id })"><i class="fa fa-trash" style="font-size: 18px"></i></a>
                                 </td>
                             </tr>
-                            
+
                             i++;
                         }
                     </tbody>

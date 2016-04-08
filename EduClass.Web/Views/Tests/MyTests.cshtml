@@ -10,7 +10,7 @@
     <div class="panel-body">
         <div class="row">
             <div class="table-responsive">
-                <table class="table nomargin">
+                <table class="table table-bordered table-primary nomargin">
                     <thead>
                         <tr>
                             <th class="text-center">Id</th>
@@ -33,7 +33,7 @@
                                     @if (item.EndDate > DateTime.Now)
                                     {
                                         <a href="@Url.Action("ViewResponsesStudent", "Tests", new { idTest = item.Id, idStudent = EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser().Id })" title="" data-placement="top" data-toggle="tooltip" class="tooltips" type="button" data-original-title="Ver prueba">
-                                            <div class="label label-success">Ver prueba</div>    
+                                            <div class="label label-success">Ver prueba</div>
                                         </a>
                                     }
                                     else

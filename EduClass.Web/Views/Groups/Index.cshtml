@@ -7,119 +7,113 @@
     ViewBag.Title = "Grupos";
 }
 
+<div class="panel">
+    <div class="panel-heading">
+        <h4 class="panel-title">Grupos</h4>
+    </div>
+    <div class="panel-body">
 
+        <div class="contentpanel">
 
-<h2>Grupos</h2>
-    <div class="contentpanel">
+            @if (UserSession.GetCurrentUser() is Teacher)
+            {
+                <div class="row">
+                    <div class="col-md-12 people-list">
 
-    @if (UserSession.GetCurrentUser() is Teacher)
-    {
-        <div class="row">
-            <div class="col-md-12 people-list">
+                        <div class="people-options clearfix">
+                            <div class="btn-group pull-right people-pager">
+                                <a href="@Url.Action("Create", "Groups")" class="btn btn-primary">
+                                    Crear nuevo Grupo
+                                </a>
+                            </div>
+                        </div><!-- people-options -->
 
-                <div class="people-options clearfix">
-                    <div class="btn-group pull-right people-pager">
-                        <a href="@Url.Action("Index", "Groups")" class="btn btn-default"><i class="fa fa-refresh"></i></a>
-                    </div>
-                    <div class="btn-group pull-left people-pager">
-                        <a href="@Url.Action("Create", "Groups")" class="btn btn-danger">
-                            Crear nuevo Grupo
-                        </a>
-                    </div>
-                </div><!-- people-options -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-primary nomargin">
+                                <thead>
+                                    <tr>
 
-                <div class="table-responsive">
-                    <table class="table table-bordered table-primary nomargin">
-                        <thead>
-                            <tr>
-
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Descripción</th>
-                                <th>Clave</th>
-                                <th>Estado</th>
-                                <th class="text-center">Alumnos</th>
-                                <th>Editar</th>
-                                <th>Deshabilitar/Habilitar</th>
-                                <th>Eliminar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var elemento in Model)
-                            {
-                                <tr>
-
-                                    <td>@elemento.Id</td>
-                                    <td>@elemento.Name</td>
-                                    <td>@elemento.Description</td>
-                                    <td>@elemento.Key</td>
-                                    @if (@elemento.Enabled == true)
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Descripción</th>
+                                        <th>Clave</th>
+                                        <th>Estado</th>
+                                        <th class="text-center">Alumnos</th>
+                                        <th>Editar</th>
+                                        <th>Deshabilitar/Habilitar</th>
+                                        <th>Eliminar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var elemento in Model)
                                     {
-                                        <td>Activo</td>
+                                        <tr>
+
+                                            <td>@elemento.Id</td>
+                                            <td>@elemento.Name</td>
+                                            <td>@elemento.Description</td>
+                                            <td>@elemento.Key</td>
+                                            <td class="text-center">@HelperView.LabelEnableOrDisable(elemento.Enabled)</td>
+                                            <td class="text-center">@elemento.Students.Count</td>
+                                            <td>
+                                                <ul class="table-options">
+                                                    <li><a href="@Url.Action("Edit", "Groups", new { id = elemento.Id })"><i class="fa fa-pencil"></i></a></li>
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <ul class="table-options">
+                                                    @using (Html.BeginForm("Disable", "Groups", FormMethod.Post, htmlAttributes: new { @Id = @elemento.Id }))
+                                                    {
+
+
+                                                        @Html.AntiForgeryToken()
+                                                        <li><input type="hidden" name="groupId" value="@elemento.Id" /></li>
+                                                        <li><button type="submit" class="btn-link"><i class="fa fa-close"></i></button></li>
+                                                    }
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <ul class="table-options">
+
+                                                    @using (Html.BeginForm("DeleteGroup", "Groups", FormMethod.Post, htmlAttributes: new { @Id = @elemento.Id }))
+                                                    {
+
+                                                        @Html.AntiForgeryToken()
+                                                        <li><input type="hidden" name="groupId" value="@elemento.Id" /></li>
+                                                        <li><button type="submit" class="btn-link" onclick="return confirm('Esta accion borrara completamente el Grupo, esta seguro?');"><i class="fa fa-trash"></i></button></li>
+                                                    }
+
+                                                </ul>
+                                            </td>
+
+
+
+                                        </tr>
                                     }
-                                    else
-                                    {
-                                        <td >Inactivo</td>
-                                    }
-                                    <td class="text-center">@elemento.Students.Count</td>   
-                                    <td>
-                                        <ul class="table-options">
-                                            <li><a href="@Url.Action("Edit", "Groups", new { id = elemento.Id })"><i class="fa fa-pencil"></i></a></li>
-                                        </ul>
-                                    </td>
-                                    <td>
-                                        <ul class="table-options">
-                                            @using (Html.BeginForm("Disable", "Groups", FormMethod.Post, htmlAttributes: new { @Id = @elemento.Id }))
-                                            {
+
+                                </tbody>
+                            </table>
+                        </div><!-- table-responsive -->
+
+                    </div><!-- col-sm-8 -->
 
 
-                                                @Html.AntiForgeryToken()
-                                                <li><input type="hidden" name="groupId" value="@elemento.Id" /></li>
-                                                <li><button type="submit" class="btn-link"><i class="fa fa-close"></i></button></li>
-                                            }
-                                        </ul>
-                                    </td>
-                                    <td>
-                                        <ul class="table-options">
-                                    
-                                            @using (Html.BeginForm("DeleteGroup", "Groups", FormMethod.Post, htmlAttributes: new { @Id = @elemento.Id }))
-                                            {
-
-                                                @Html.AntiForgeryToken()
-                                                <li><input type="hidden" name="groupId" value="@elemento.Id" /></li>
-                                                <li><button type="submit" class="btn-link" onclick="return confirm('Esta accion borrara completamente el Grupo, esta seguro?');"><i class="fa fa-trash"></i></button></li>
-                                            }
-                                            
-                                        </ul>
-                                    </td>
-                                   
-
-                                    
-                                </tr>
-                            }
-
-                        </tbody>
-                    </table>
-                </div><!-- table-responsive -->
-
-            </div><!-- col-sm-8 -->
-
-          
-        </div><!-- row -->
-    }
-    else
-    {
-        <div class="col-sm-4 col-md-3 col-lg-2">
-            <div class="panel">
-                <div class="panel-body">
-                    <a href="@Url.Action("JoinStudent","Groups")" class="btn btn-danger btn-quirk btn-block profile-btn-follow">
-                        Unirse a un Grupo
-                    </a>
+                </div><!-- row -->
+            }
+            else
+            {
+                <div class="col-sm-4 col-md-3 col-lg-2">
+                    <div class="panel">
+                        <div class="panel-body">
+                            <a href="@Url.Action("JoinStudent","Groups")" class="btn btn-danger btn-quirk btn-block profile-btn-follow">
+                                Unirse a un Grupo
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-     }
- </div><!-- contentpanel -->
+            }
+        </div><!-- contentpanel -->
 
-
+    </div>
+</div>
 

@@ -17,63 +17,69 @@ else
         <h4 class="panel-title">Pruebas de Evaluación</h4>
     </div>
     <div class="panel-body">
-        <div class="row">
-            <div class="col-md-12">
-                <a href="@Url.Action("Create")" class="btn btn-primary pull-right mb10">Agregar prueba diagnositca</a>
-            </div>
-        </div>    
+
+        <div class="people-list">
+
+            <div class="people-options clearfix">
+
+                <div class="btn-group pull-right people-pager">
+                    <a href="@Url.Action("Create")" class="btn btn-primary pull-right">Agregar prueba diagnositca</a>
+                </div>
+
+            </div><!-- people-options -->
+        </div>
         <div class="row">
             <div class="table-responsive">
-            <table class="table nomargin">
-                <thead>
-                    <tr>
-                        <th class="text-center">Id</th>
-                        <th>Nombre</th>
-                        <th>Inicio</th>
-                        <th>Fin</th>
-                        <th>Fecha de Creación</th>
-                        <th>Cantidad de preguntas</th>
-                        <th>Estado</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {    
+                <table class="table table-bordered table-primary nomargin nomargin">
+                    <thead>
                         <tr>
-                            <td class="text-center">@item.Id</td>
-                            <td>@item.Name</td>
-                            <td>@item.StartDate.ToString("dd/MM/yyyy HH:mm")</td>
-                            <td>@item.EndDate.ToString("dd/MM/yyyy HH:mm")</td>
-                            <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
-                            <td class="text-center">@item.Questions.Count</td>
-                            <td>@HelperView.LabelEnableOrDisable(item.Enabled)</td>
-                            <td>
-                                <a href="@Url.Action("Index", "Question", new { id = item.Id })" title="" data-placement="top" data-toggle="tooltip" class="tooltips" type="button" data-original-title="Ver lista de preguntas">
-                                    <i class="fa fa-question" style="font-size: 18px"></i>
-                                </a> |
-                                <a href="@Url.Action("ViewStudentsTest", new { id = item.Id })" title="" data-placement="top" data-toggle="tooltip" class="tooltips" type="button" data-original-title="Ver alumnos que han hecho la prueba">
-                                    <i class="fa fa-smile-o" style="font-size: 18px"></i>
-                                </a> | 
-                                <a href="@Url.Action("Edit", new { id = item.Id })"><i class="fa fa-edit" style="font-size: 18px"></i></a> |
-                                @if (item.Enabled)
-                                {
-                                    <a href="@Url.Action("Disable", new { id = item.Id })" title="" data-placement="top" data-toggle="tooltip" class="tooltips" type="button" data-original-title="Deshabilitar examen para los alumnos">
-                                        <i class="fa fa-minus-circle" style="font-size: 18px; color: red;"></i>
-                                    </a>  
-                                }
-                                else
-                                {
-                                    <a href="@Url.Action("Disable", new { id = item.Id })" title="" data-placement="top" data-toggle="tooltip" class="tooltips" type="button" data-original-title="Habilitar examen para los alumnos, se les enviará una notificación">
-                                        <i class="fa fa-check-circle" style="font-size: 18px; color: green;"></i>
-                                    </a> 
-                                }
-
-                            </td>
+                            <th class="text-center">Id</th>
+                            <th>Nombre</th>
+                            <th>Inicio</th>
+                            <th>Fin</th>
+                            <th>Fecha de Creación</th>
+                            <th>Cantidad de preguntas</th>
+                            <th>Estado</th>
+                            <th></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center">@item.Id</td>
+                                <td>@item.Name</td>
+                                <td>@item.StartDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@item.EndDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td class="text-center">@item.Questions.Count</td>
+                                <td class="text-center">@HelperView.LabelEnableOrDisable(item.Enabled)</td>
+                                <td class="text-center">
+                                    <a href="@Url.Action("Index", "Question", new { id = item.Id })" title="" data-placement="top" data-toggle="tooltip" class="tooltips" type="button" data-original-title="Ver lista de preguntas">
+                                        <i class="fa fa-question" style="font-size: 18px"></i>
+                                    </a> |
+                                    <a href="@Url.Action("ViewStudentsTest", new { id = item.Id })" title="" data-placement="top" data-toggle="tooltip" class="tooltips" type="button" data-original-title="Ver alumnos que han hecho la prueba">
+                                        <i class="fa fa-smile-o" style="font-size: 18px"></i>
+                                    </a> |
+                                    <a href="@Url.Action("Edit", new { id = item.Id })"><i class="fa fa-edit" style="font-size: 18px"></i></a> |
+                                    @if (item.Enabled)
+                                    {
+                                        <a href="@Url.Action("Disable", new { id = item.Id })" title="" data-placement="top" data-toggle="tooltip" class="tooltips" type="button" data-original-title="Deshabilitar examen para los alumnos">
+                                            <i class="fa fa-minus-circle" style="font-size: 18px; color: red;"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("Disable", new { id = item.Id })" title="" data-placement="top" data-toggle="tooltip" class="tooltips" type="button" data-original-title="Habilitar examen para los alumnos, se les enviará una notificación">
+                                            <i class="fa fa-check-circle" style="font-size: 18px; color: green;"></i>
+                                        </a>
+                                    }
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
         </div>
         </div>    
     </div>

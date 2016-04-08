@@ -10,15 +10,28 @@
         <h4 class="panel-title">Pruebas entregadas. (@test.Name)</h4>
     </div>
     <div class="panel-body">
+
+        <div class="people-list">
+
+            <div class="people-options clearfix">
+
+                <div class="btn-group pull-right people-pager">
+                    <button type="button" id="btnBack" class="btn btn-default-active pull-right">
+                        Volver
+                    </button>
+                </div>
+
+            </div><!-- people-options -->
+        </div>
+
         <div class="row">
             <div class="table-responsive">
-                <table class="table nomargin">
+                <table class="table table-bordered table-primary nomargin">
                     <thead>
                         <tr>
                             <th class="text-center">Id</th>
                             <th>Nombre</th>
                             <th>Usuario</th>
-                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
@@ -30,7 +43,7 @@
                                     <td class="text-center">@item.Id</td>
                                     <td>@item.FirstName @item.LastName</td>
                                     <td>@item.UserName</td>
-                                    <td>
+                                    <td class="text-center">
                                         <a href="@Url.Action("ViewResponsesStudent", new { idTest = test.Id, idStudent = item.Id })" title="" data-placement="top" data-toggle="tooltip" class="tooltips" type="button" data-original-title="Ver lista de preguntas">
                                             <i class="fa fa-question" style="font-size: 18px"></i>
                                         </a>
@@ -44,3 +57,9 @@
         </div>
     </div>
 </div>
+<script>
+    $('#btnBack').click(function () {
+
+        window.history.back();
+    });
+</script>

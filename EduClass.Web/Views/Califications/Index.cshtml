@@ -5,88 +5,94 @@
 @{
     ViewBag.Title = "Calificaciones";
 }
-<h2>Calificaciones del Grupo @UserSession.GetCurrentGroup().Name </h2>
-@using (Html.BeginForm("Save", "Califications", FormMethod.Post, htmlAttributes: new { @Id = "frmCalifications" }))
-{
-    @Html.AntiForgeryToken()
-    <div class="contentpanel">
 
-        @if (UserSession.GetCurrentUser() is Teacher)
+<div class="panel">
+    <div class="panel-heading">
+        <h4 class="panel-title">Calificaciones </h4>
+    </div>
+    <div class="panel-body">
+
+        @using (Html.BeginForm("Save", "Califications", FormMethod.Post, htmlAttributes: new { @Id = "frmCalifications" }))
         {
-            <div class="row">
-                <div class="col-sm-8 col-md-9 col-lg-10 people-list">
+            @Html.AntiForgeryToken()
+            <div class="contentpanel">
 
-                    <div class="people-options clearfix">
-                        <div class="btn-group pull-right people-pager">
-                            <a href="@Url.Action("Index", "Califications")" class="btn btn-default"><i class="fa fa-refresh"></i></a>
-                        </div>
+                @if (UserSession.GetCurrentUser() is Teacher)
+                {
+                    <div class="row">
+                        <div class="col-md-12 people-list">
 
-                        <div class="btn-group pull-left people-pager">
-                            <button type="submit" class="btn btn-success">
-                                Guardar Cambios
-                            </button>
-                        </div>
+                            <div class="people-options clearfix">
 
-                    </div><!-- people-options -->
+                                <div class="btn-group pull-right people-pager">
+                                    <button type="submit" class="btn btn-primary pull-right">
+                                        Guardar Cambios
+                                    </button>
+                                </div>
 
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-primary nomargin">
-                            <thead>
-                                <tr>
+                            </div><!-- people-options -->
 
-                                    <th>ID</th>
-                                    <th>Nombre Completo</th>
-                                    <th>Oral</th>
-                                    <th>Escrito</th>
-                                    <th>Otro</th>
-                                    <th>Promedio</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                @foreach (var elemento in Model)
-                                {
-                                    var idOral = "oral" + elemento.Id;
-                                    var idescrito = "escrito" + elemento.Id;
-                                    var idOtro = "otro" + elemento.Id;
-                                    IEnumerable<Calification> notasAlumno = new List<Calification>();
-                                    notasAlumno = ((Student)elemento).Califications;
-                                    Calification c = notasAlumno.FirstOrDefault(x => x.GroupId == UserSession.GetCurrentGroup().Id);//Deberia ser una unica nota por alumno del grupo
-                                    if (c != null)
-                                    {
-
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-primary nomargin">
+                                    <thead>
                                         <tr>
-                                            <td>@elemento.Id</td>
-                                            <td>@elemento.FirstName @elemento.LastName</td>
-                                            <td><input id="@idOral" name="@idOral" type="number" value="@c.Oral" min="1" max="12" class="form-control" /></td>
-                                            <td><input id="@idescrito" name="@idescrito" type="number" value="@c.Test" min="1" max="12" class="form-control" /></td>
-                                            <td><input id="@idOtro" name="@idOtro" type="number" value="@c.Other" min="1" max="12" class="form-control" /></td>
-                                            <td><input id="promedio" type="number" value="@c.Average" min="1" max="12" readonly class="form-control" /></td>
+
+                                            <th>ID</th>
+                                            <th>Nombre Completo</th>
+                                            <th>Oral</th>
+                                            <th>Escrito</th>
+                                            <th>Otro</th>
+                                            <th>Promedio</th>
+
                                         </tr>
-                                    }
-                                    else
-                                    {
-                                        <tr>
-                                            <td>@elemento.Id</td>
-                                            <td>@elemento.FirstName @elemento.LastName</td>
-                                            <td><input id="@idOral" name="@idOral" type="number" min="1" max="12" class="form-control" /></td>
-                                            <td><input id="@idescrito" name="@idescrito" type="number" min="1" max="12" class="form-control" /></td>
-                                            <td><input id="@idOtro" name="@idOtro" type="number" min="1" max="12" class="form-control" /></td>
-                                            <td><input id="promedio" type="number" min="1" max="12" readonly class="form-control" /></td>
-                                        </tr>
-                                    }
-                                }
+                                    </thead>
+                                    <tbody>
 
-                            </tbody>
-                        </table>
-                    </div><!-- table-responsive -->
+                                        @foreach (var elemento in Model)
+                                        {
+                                            var idOral = "oral" + elemento.Id;
+                                            var idescrito = "escrito" + elemento.Id;
+                                            var idOtro = "otro" + elemento.Id;
+                                            IEnumerable<Calification> notasAlumno = new List<Calification>();
+                                            notasAlumno = ((Student)elemento).Califications;
+                                            Calification c = notasAlumno.FirstOrDefault(x => x.GroupId == UserSession.GetCurrentGroup().Id);//Deberia ser una unica nota por alumno del grupo
+                                            if (c != null)
+                                            {
 
-                </div><!-- col-sm-8 -->
+                                                <tr>
+                                                    <td>@elemento.Id</td>
+                                                    <td>@elemento.FirstName @elemento.LastName</td>
+                                                    <td><input id="@idOral" name="@idOral" type="number" value="@c.Oral" min="1" max="12" class="form-control" /></td>
+                                                    <td><input id="@idescrito" name="@idescrito" type="number" value="@c.Test" min="1" max="12" class="form-control" /></td>
+                                                    <td><input id="@idOtro" name="@idOtro" type="number" value="@c.Other" min="1" max="12" class="form-control" /></td>
+                                                    <td><input id="promedio" type="number" value="@c.Average" min="1" max="12" readonly class="form-control" /></td>
+                                                </tr>
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td>@elemento.Id</td>
+                                                    <td>@elemento.FirstName @elemento.LastName</td>
+                                                    <td><input id="@idOral" name="@idOral" type="number" min="1" max="12" class="form-control" /></td>
+                                                    <td><input id="@idescrito" name="@idescrito" type="number" min="1" max="12" class="form-control" /></td>
+                                                    <td><input id="@idOtro" name="@idOtro" type="number" min="1" max="12" class="form-control" /></td>
+                                                    <td><input id="promedio" type="number" min="1" max="12" readonly class="form-control" /></td>
+                                                </tr>
+                                            }
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div><!-- table-responsive -->
+
+                        </div><!-- col-sm-8 -->
 
 
-            </div><!-- row -->
+                    </div><!-- row -->
+                }
+
+            </div><!-- contentpanel -->
         }
+    </div><!-- table-responsive -->
 
-    </div><!-- contentpanel -->
-}
+</div><!-- col-sm-8 -->

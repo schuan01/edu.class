@@ -10,109 +10,121 @@
     <link href="~/Content/fullcalendar.min.css" rel="stylesheet" />
     <link href="~/Content/fullcalendar.print.css" rel="stylesheet" media='print' />
 }
-@if (UserSession.GetCurrentUser() is Teacher)
-{
-<div class="row">
-    <div class="col-md-1 pull-right">
-        <button type="button" class="btn btn-primary pull-right" style="margin: 5px" data-toggle="modal" data-target="#modalEventView">Agregar evento</button>
+
+<div class="panel">
+    <div class="panel-heading">
+        <h4 class="panel-title">Eventos</h4>
     </div>
-</div>
-}
-<div id='calendar'></div>
+    <div class="panel-body">
 
-<!--MODAL VIEW EVENT-->
-<div class="modal bounceIn animated" id="modalEventView" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            @using (Html.BeginForm("AddOrModifyEvent", "Events"))
-            {
-                @Html.AntiForgeryToken()
-            
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title" id="myModalLabel">Ver evento</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-horizontal">
+        @if (UserSession.GetCurrentUser() is Teacher)
+        {
 
-                        <input type="hidden" class="evId" name="Id" value="0" />
-                        <input type="hidden" id="evCalendarId" name="CalendarId" value="@ViewBag.CalendarId" />
-
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label class="h5 col-md-4">Titulo</label>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control" id="evTitle" name="Title" />
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="h5 col-md-4">Tipo de evento</label>
-                                    <div class="col-md-8">
-                                        <select id="evddlEventType" name="EventType" class="form-control" data_plugin="select2">
-                                            <option value="0">-- Seleccionar --</option>
-                                            @{
-                                                var index = 1;
-                                                foreach (EduClass.Entities.EventType item in ((List<EduClass.Entities.EventType>)ViewBag.EventTypeList))
-                                                {
-                                                                    <option value="@index">@item.ToString()</option>
-                                                    index++;
-                                                }
-                                            }
-                                        </select>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label class="h5 col-md-4">Comienza</label>
-                                    <div class="col-md-8">
-                                        <div class='input-group date evControl'>
-                                            <input type="text" class="form-control" id="evStart" name="Start" />
-                                            <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-calendar"></span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="h5 col-md-4">Finaliza</label>
-                                    <div class="col-md-8">
-                                        <div class='input-group date evControl'>
-                                            <input type="text" class="form-control" id="evEnd" name="End" />
-                                            <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-calendar"></span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    
-                        <div class="form-group">
-                            <label class="h5 col-md-2">Descripción</label>
-                            <div class="col-md-10">
-                                <input type="text" class="form-control" id="evDescription" name="Description" />
-                            </div>
-                        </div>
+            <div class="people-list">
+                <div class="people-options clearfix">
+                    <div class="btn-group pull-right people-pager">
+                        <button type="button" class="btn btn-primary pull-right" style="margin: 5px" data-toggle="modal" data-target="#modalEventView">Agregar evento</button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    @if(EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser() is EduClass.Entities.Teacher)
-                    {
-                        <a href="#" class="btn btn-danger pull-left" id="btnDisable"><i class="fa fa-trash"></i> Borrar</a>
-                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                    }
+                </div><!-- people-options -->
+            </div>
+        }
+        <div id='calendar'></div>
 
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                </div>
-            }
-        </div><!-- modal-content -->
-    </div><!-- modal-dialog -->
+        <!--MODAL VIEW EVENT-->
+        <div class="modal bounceIn animated" id="modalEventView" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    @using (Html.BeginForm("AddOrModifyEvent", "Events"))
+                    {
+                        @Html.AntiForgeryToken()
+            
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title" id="myModalLabel">Ver evento</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-horizontal">
+
+                                <input type="hidden" class="evId" name="Id" value="0" />
+                                <input type="hidden" id="evCalendarId" name="CalendarId" value="@ViewBag.CalendarId" />
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label class="h5 col-md-4">Titulo</label>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" id="evTitle" name="Title" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="h5 col-md-4">Tipo de evento</label>
+                                            <div class="col-md-8">
+                                                <select id="evddlEventType" name="EventType" class="form-control" data_plugin="select2">
+                                                    <option value="0">-- Seleccionar --</option>
+                                                    @{
+                                                        var index = 1;
+                                                        foreach (EduClass.Entities.EventType item in ((List<EduClass.Entities.EventType>)ViewBag.EventTypeList))
+                                                        {
+                                                                            <option value="@index">@item.ToString()</option>
+                                                            index++;
+                                                        }
+                                                    }
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                    
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label class="h5 col-md-4">Comienza</label>
+                                            <div class="col-md-8">
+                                                <div class='input-group date evControl'>
+                                                    <input type="text" class="form-control" id="evStart" name="Start" />
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="h5 col-md-4">Finaliza</label>
+                                            <div class="col-md-8">
+                                                <div class='input-group date evControl'>
+                                                    <input type="text" class="form-control" id="evEnd" name="End" />
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                    
+                                <div class="form-group">
+                                    <label class="h5 col-md-2">Descripción</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" id="evDescription" name="Description" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            @if(EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser() is EduClass.Entities.Teacher)
+                            {
+                                <a href="#" class="btn btn-danger pull-left" id="btnDisable"><i class="fa fa-trash"></i> Borrar</a>
+                                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                            }
+
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    }
+                </div><!-- modal-content -->
+            </div><!-- modal-dialog -->
+        </div>
+    </div>
 </div>
 
 <form action="@Url.Action("Disable", "Events")" method="post" id="formDisable">
