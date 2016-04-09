@@ -19,14 +19,24 @@ namespace EduClass.Logic
             _responseRepository = responseRepository;
         }
 
-        public IEnumerable<Response> GetResponsesByStudent(int idStudent) 
+        public IEnumerable<Response> GetResponsesByStudent(int idStudent)
         {
             return _responseRepository.GetResponsesByStudent(idStudent);
+        }
+
+        public IEnumerable<Response> GetResponsesByStudent(int idStudent, int idTest) 
+        {
+            return _responseRepository.GetResponsesByStudent(idStudent, idTest);
         }
 
         public IList<Student> GetStudentsTests(int idTest) 
         {
             return _responseRepository.GetStudentsTests(idTest);
+        }
+
+        public int GetCorrectResponses(int idStudent, int idTest) 
+        {
+            return _responseRepository.GetCorrectResponses(idStudent, idTest);
         }
     }
 }

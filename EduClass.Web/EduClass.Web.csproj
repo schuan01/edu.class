@@ -215,6 +215,7 @@
     <Compile Include="Infrastructure\ViewModels\QuestionViewModel.cs" />
     <Compile Include="Infrastructure\ViewModels\ReplyViewModel.cs" />
     <Compile Include="Infrastructure\ViewModels\TestViewModel.cs" />
+    <Compile Include="Infrastructure\ViewModels\ViewStudentsTestViewModel.cs" />
     <Compile Include="Mailers\IUserMailer.cs" />
     <Compile Include="Mailers\UserMailer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

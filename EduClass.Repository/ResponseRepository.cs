@@ -14,7 +14,12 @@ namespace EduClass.Repository
 
         }
 
-        public IEnumerable<Response> GetResponsesByStudent(int idStudent) 
+        public IEnumerable<Response> GetResponsesByStudent(int idStudent, int idTest) 
+        {
+            return dbSet.Where(s => s.StudentId == idStudent && s.Question.TestId == idTest).ToList();
+        }
+
+        public IEnumerable<Response> GetResponsesByStudent(int idStudent)
         {
             return dbSet.Where(s => s.StudentId == idStudent).ToList();
         }
@@ -32,6 +37,15 @@ namespace EduClass.Repository
             };
 
             return student;
+        }
+
+        public int GetCorrectResponses(int idStudent, int idTest)
+        {
+            var r = GetResponsesByStudent(idStudent, idTest);
+
+            var a = r.Where(x => x.IsCorrect == true).GroupBy(x => x.QuestionId).Select(g => g.First());
+
+            return a.Count();
         }
     }
 }

@@ -23,16 +23,16 @@ namespace EduClass.Web.Controllers
 		private static IResponseServices _response;
 		private static IQuestionServices _question;
 		private static ICollection<string> _questionTypes;
-        private static IPersonServices _person;
-        private static ILog _log;
+		private static IPersonServices _person;
+		private static ILog _log;
 
 		public TestsController(ITestServices service, IQuestionServices question, IResponseServices response, IPersonServices person, ILog log)
 		{
 			_service = service;
 			_response = response;
 			_question = question;
-            _person = person;
-            _log = log;
+			_person = person;
+			_log = log;
 
 			_questionTypes = new List<string>()
 			{
@@ -54,20 +54,20 @@ namespace EduClass.Web.Controllers
 			return View(list);
 		}
 
-        public ActionResult MyTests()
-        {
-            if (UserSession.GetCurrentUser() is Teacher) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+		public ActionResult MyTests()
+		{
+			if (UserSession.GetCurrentUser() is Teacher) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
-            var testList = _service.GetTestStudents(UserSession.GetCurrentUser().Id);
+			var testList = _service.GetTestStudents(UserSession.GetCurrentUser().Id);
 
-            return View(testList);
-        }
+			return View(testList);
+		}
 
 		// GET: Test
 		[HttpGet]
 		public ActionResult Create()
 		{
-            if (UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+			if (UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
 			var test = new TestViewModel();
 			test.GroupId = UserSession.GetCurrentGroup().Id;
@@ -78,7 +78,7 @@ namespace EduClass.Web.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Create([Bind(Include = "Name, Description, StartDate, EndDate, GroupId")]TestViewModel testVm)
 		{
-            if (UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+			if (UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
 			if (ModelState.IsValid)
 			{
@@ -103,7 +103,7 @@ namespace EduClass.Web.Controllers
 				}
 				catch (Exception ex)
 				{
-                    _log.Error("Test - Create(Post) -> ", ex);
+					_log.Error("Test - Create(Post) -> ", ex);
 					MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "No se pudo crear la prueba"));
 				}
 			}
@@ -114,7 +114,7 @@ namespace EduClass.Web.Controllers
 		[HttpGet]
 		public ActionResult Edit(int id = 0)
 		{
-            if (id == 0 || UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+			if (id == 0 || UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 			var test = AutoMapper.Mapper.Map<Test, TestViewModel>(_service.GetById(id));
 
 			return View(test);
@@ -124,7 +124,7 @@ namespace EduClass.Web.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Edit([Bind(Include = "Id, Name, Description, StartDate, EndDate, GroupId")]TestViewModel testVm)
 		{
-            if (UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+			if (UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
 			if (ModelState.IsValid)
 			{
@@ -143,7 +143,7 @@ namespace EduClass.Web.Controllers
 				}
 				catch (Exception ex)
 				{
-                    _log.Error("Test - Edit(Post) -> ", ex);
+					_log.Error("Test - Edit(Post) -> ", ex);
 					MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "", "Error al modificar test"));
 				}
 			}
@@ -153,7 +153,7 @@ namespace EduClass.Web.Controllers
 
 		public ActionResult Disable(int id = 0)
 		{
-            if (id == 0 || UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+			if (id == 0 || UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
 			var test = _service.GetById(id);
 
@@ -182,15 +182,14 @@ namespace EduClass.Web.Controllers
 		{ 
 			if (UserSession.GetCurrentUser() is Teacher || id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
-            //var testList = _service.GetEnabledTestForStudents(UserSession.GetCurrentGroup().Id);
-            var responseList = _response.GetResponsesByStudent(UserSession.GetCurrentUser().Id);
+			var responseList = _response.GetResponsesByStudent(UserSession.GetCurrentUser().Id, id);
 
-            if (responseList.Any(x => x.Question.TestId == id))
-            {
-                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.WARNING, "Importante", "Ya has hecho ésta prueba.,"));
-                return RedirectToAction("Index", "Board");
-            }
-            
+			if (responseList.Any(x => x.Question.TestId == id))
+			{
+				MessageSession.SetMessage(new MessageHelper(Enum_MessageType.WARNING, "Importante", "Ya has hecho ésta prueba.,"));
+				return RedirectToAction("Index", "Board");
+			}
+			
 			return View(_service.GetById(id));
 		}
 
@@ -199,157 +198,163 @@ namespace EduClass.Web.Controllers
 		public ActionResult ReadyToTest(int id, FormCollection frm)
 		{
 			if (id == null && id == 0 && UserSession.GetCurrentUser() is Teacher) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
-            
-            try
-            {
-			    var test = _service.GetById(id);
+			
+			try
+			{
+				var test = _service.GetById(id);
 
-			    foreach (var question in test.Questions)
-			    {
+				foreach (var question in test.Questions)
+				{
 				
-				    foreach (var item in frm)
-				    {
+					foreach (var item in frm)
+					{
 						
-					    var qType = _questionTypes.FirstOrDefault(a => item.ToString().Contains(a));
+						var qType = _questionTypes.FirstOrDefault(a => item.ToString().Contains(a));
 
-					    if (qType != null)
-					    {
-						    var questionResponseId = StringHelper.ReturnNumbers(item.ToString());
+						if (qType != null)
+						{
+							var questionResponseId = StringHelper.ReturnNumbers(item.ToString());
 
-						    if (question.Id == questionResponseId)
-						    {
-							    if (qType.Contains("tof-"))
-							    {
-                                    var response = GetResponse(question);
-                                    response.QuestionOption = question.QuestionOptions.FirstOrDefault();
+							if (question.Id == questionResponseId)
+							{
+								if (qType.Contains("tof-"))
+								{
+									var response = GetResponse(question);
+									response.QuestionOption = question.QuestionOptions.FirstOrDefault();
 
-								    var vToF = frm[item.ToString()];
+									var vToF = frm[item.ToString()];
 
-								    if (vToF.Equals("true")) { response.TrueOrFalse = true; }
-								    else if (vToF.Equals("false")) { response.TrueOrFalse = false; }
-								    else { response.TrueOrFalse = null; }
+									if (vToF.Equals("true")) { response.TrueOrFalse = true; }
+									else if (vToF.Equals("false")) { response.TrueOrFalse = false; }
+									else { response.TrueOrFalse = null; }
 
-                                    if (response.QuestionOption.TrueOrFalse == response.TrueOrFalse)
-								    {
-									    response.IsCorrect = true;
-                                    }
-                                    else
-                                    {
-                                        response.IsCorrect = false;
-                                    }
+									if (response.QuestionOption.TrueOrFalse == response.TrueOrFalse)
+									{
+										response.IsCorrect = true;
+									}
+									else
+									{
+										response.IsCorrect = false;
+									}
 
-                                    _response.Create(response);
-								    break;
-							    }
-							    else if (qType.Contains("redaction-"))
-							    {
-                                    var response = GetResponse(question);
-                                    response.QuestionOption = question.QuestionOptions.FirstOrDefault();
+									_response.Create(response);
+									break;
+								}
+								else if (qType.Contains("redaction-"))
+								{
+									var response = GetResponse(question);
+									response.QuestionOption = question.QuestionOptions.FirstOrDefault();
 
-                                    if (response.QuestionOption != null)
-								    {
-									    response.Content = frm[item.ToString()];
+									if (response.QuestionOption != null)
+									{
+										response.Content = frm[item.ToString()];
 
-                                        _response.Create(response);
+										_response.Create(response);
 
-                                        break;
-								    }
-							    }
-							    else if (qType.Contains("op-") || qType.Contains("chk-"))
-							    {
+										break;
+									}
+								}
+								else if (qType.Contains("op-") || qType.Contains("chk-"))
+								{
 
-                                    var opIds = frm[item.ToString()].Split(',');
+									var opIds = frm[item.ToString()].Split(',');
 
-                                    foreach (var opId in opIds)
-                                    {
-								        var qopResponseId = StringHelper.ReturnNumbers(opId);
+									foreach (var opId in opIds)
+									{
+										var qopResponseId = StringHelper.ReturnNumbers(opId);
 
-								        var qop = question.QuestionOptions.FirstOrDefault(q => q.Id == qopResponseId);
+										var qop = question.QuestionOptions.FirstOrDefault(q => q.Id == qopResponseId);
 
-								        if (qop != null)
-								        {
-                                            var response = GetResponse(question);
-									        response.QuestionOption = qop;
+										if (qop != null)
+										{
+											var response = GetResponse(question);
+											response.QuestionOption = qop;
 
-									        if (qop.IsCorrect != null && qop.IsCorrect == true) { response.IsCorrect = true; }
+											if (qop.IsCorrect != null && qop.IsCorrect == true) { response.IsCorrect = true; }
 
-                                            _response.Create(response);
-								        }
-                                    }
+											_response.Create(response);
+										}
+									}
 								
-                                    break;
-							    }
-						    }
-					    }
-				    }
-			    }
+									break;
+								}
+							}
+						}
+					}
+				}
 
-                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Importante", "Tu prueba fué enviada. Cuando termine el periodo podrás visualizar los resultados."));
+				MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Importante", "Tu prueba fué enviada. Cuando termine el periodo podrás visualizar los resultados."));
 
-                return RedirectToAction("Index", "Board");
-            }
-            catch (Exception ex)
-            {
-                _log.Error("Test - ReadyToTest(Post) -> ", ex);
-                throw;
-            }
+				return RedirectToAction("Index", "Board");
+			}
+			catch (Exception ex)
+			{
+				_log.Error("Test - ReadyToTest(Post) -> ", ex);
+				throw;
+			}
 		}
 
-        [HttpGet]
-        public ActionResult ViewStudentsTest(int id = 0)
-        {
-            if (UserSession.GetCurrentUser() is Student || id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+		[HttpGet]
+		public ActionResult ViewStudentsTest(int id = 0)
+		{
+			if (UserSession.GetCurrentUser() is Student || id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
-            ViewBag.Test = _service.GetById(id);
-            var a = _response.GetStudentsTests(id);
+            var studentsList = new List<ViewStudentsTestViewModel>();
+			var students = _response.GetStudentsTests(id);
 
-            return View(a);
-        }
-
-        [HttpGet]
-        public ActionResult ViewResponsesStudent(int idTest = 0, int idStudent = 0)
-        {
-            if (idTest == 0 || idStudent == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
-            ViewBag.StudentResponses = _response.GetResponsesByStudent(idStudent).ToList();
-            ViewBag.TestQuestions = _service.GetById(idTest).Questions.ToList();
-            ViewBag.Student = _person.GetById(idStudent);
-            ViewBag.TestId = idTest;
-
-            if (UserSession.GetCurrentUser() is Student) 
+            foreach (var item in students)
             {
-                return View("ViewResponses");
+                studentsList.Add(new ViewStudentsTestViewModel { Student = item, ReponseCorrect = _response.GetCorrectResponses(item.Id, id) });
             }
 
-            return View();
-        }
+			ViewBag.Test = _service.GetById(id);
+			return View(studentsList);
+		}
 
-        [HttpPost]
-        public ActionResult MarkRedactionOptionType(int idResponse, bool responseT) 
-        {
-            if (idResponse == 0 || UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+		[HttpGet]
+		public ActionResult ViewResponsesStudent(int idTest = 0, int idStudent = 0)
+		{
+			if (idTest == 0 || idStudent == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+			ViewBag.StudentResponses = _response.GetResponsesByStudent(idStudent, idTest).ToList();
+			ViewBag.TestQuestions = _service.GetById(idTest).Questions.ToList();
+			ViewBag.Student = _person.GetById(idStudent);
+			ViewBag.TestId = idTest;
 
-            var response = _response.GetById(idResponse);
+			if (UserSession.GetCurrentUser() is Student) 
+			{
+				return View("ViewResponses");
+			}
 
-            response.IsCorrect = responseT;
+			return View();
+		}
 
-            _response.Update(response);
+		[HttpPost]
+		public ActionResult MarkRedactionOptionType(int idResponse, bool responseT) 
+		{
+			if (idResponse == 0 || UserSession.GetCurrentUser() is Student) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
-            return RedirectToAction("ViewResponsesStudent", new { idTest = response.Question.TestId, idStudent = response.StudentId });
-        }
-        
-        
-        /*************** METHODS ***************/
-        private Response GetResponse(Question question)
-        {
-            Response response = new Response();
+			var response = _response.GetById(idResponse);
 
-            response.CreatedAt = DateTime.Now;
-            response.Question = question;
-            response.QuestionId = question.Id;
-            response.Student = (Student)_person.GetById(UserSession.GetCurrentUser().Id);
+			response.IsCorrect = responseT;
 
-            return response;
-        }
+			_response.Update(response);
+
+			return RedirectToAction("ViewResponsesStudent", new { idTest = response.Question.TestId, idStudent = response.StudentId });
+		}
+		
+		
+		/*************** METHODS ***************/
+		private Response GetResponse(Question question)
+		{
+			Response response = new Response();
+
+			response.CreatedAt = DateTime.Now;
+			response.Question = question;
+			response.QuestionId = question.Id;
+			response.Student = (Student)_person.GetById(UserSession.GetCurrentUser().Id);
+
+			return response;
+		}
 	}
 }
 
