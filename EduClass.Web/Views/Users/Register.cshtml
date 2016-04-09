@@ -108,7 +108,24 @@
                             <label for="lastName">Apellido *</label>
                             <input id="lastName" name="lastName" type="text" class="form-control required">
                             <label for="birthday">Fecha de nacimiento *</label>
-                            <input id="birthday" name="birthday" type="date" class="form-control">
+                            <input id="birthday" name="birthday" type="text" class="form-control hidden" required>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <select id="selectDay" class="form-control" required>
+                                        <option>--</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-5" >
+                                    <select id="selectMonth" class="form-control" required>
+                                        <option>--</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select id="selectYear" class="form-control" required>
+                                        <option>----</option>
+                                    </select>
+                                </div>
+                            </div>
                             <label for="identificationCard">Tarjeta de Identificación *</label>
                             <input id="identificationCard" name="identificationCard" type="text" class="form-control required">
                         </section>
@@ -121,7 +138,6 @@
                 <h3 class="signtitle mb20">Información</h3>
                 <p>Edu.Class es una plataforma sencilla y dinámica  para el manejo de una clase y su profesor.</p>
                 <p>Prueba Edu.Class, es gratis!</p>
-
 
                 <br>
 
@@ -145,19 +161,26 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/template")
+    <script src="~/Scripts/app/helpersSite.js"></script>
 
     @{var sessionMessage = EduClass.Web.Infrastructure.Sessions.MessageSession.GetMessage(); }
-    
-    <script src="~/Scripts/app/helpersSite.js"></script>
     <script>
+        var maxYear = 80;
+        var currentMonth = new Date().getMonth() + 1;
+        var currentYear = new Date().getFullYear();
+        var day;
+        var month;
+        var year;
 
         $.validator.setDefaults({
             submitHandler: function () {
                 alert("submitted!");
             }
         });
+
         $(document).ready(function () {
-            //$("#birthday").mask("99/99/9999");
+
+            LoadBirthday();
 
             var form = $("#registerForm");
 
@@ -167,14 +190,26 @@
                 transitionEffect: "slideLeft",
                 autoFocus: true,
                 onStepChanging: function (event, currentIndex, newIndex) {
+
                     form.validate().settings.ignore = ":disabled,:hidden";
                     return form.valid();
                 },
                 onFinishing: function (event, currentIndex) {
+                    
                     form.validate().settings.ignore = ":disabled";
+
+                    birthday = day + '/' + month + '/' + year;
+                    $('#birthday').val(birthday)
+
                     return form.valid();
                 },
                 onFinished: function (event, currentIndex) {
+
+                    if (day > daysInMonth(month, year)) {
+                        $('#birthday').val('');
+                        return form.valid();
+                    }
+
                     this.submit();
                 }
             });
@@ -191,18 +226,66 @@
                     password: {
                         required: true,
                         minlength: 6
+                    },
+                    birthday: {
+                        required: true
                     }
+                }
+            });
+
+            $('#selectDay').change(function () {
+                if ($(this).val() != null) {
+                    day = $(this).val();
+                }
+            });
+
+            $('#selectMonth').change(function () {
+                if ($(this).val() != null) {
+                    month = $(this).val();
+                }
+            });
+
+            $('#selectYear').change(function () {
+                if ($(this).val() != null) {
+                    year = $(this).val();
                 }
             });
 
             var message = "@Html.Raw(sessionMessage.ToString())";
             if (message != "") {
 
-                
-
                 showMessageJS(message);
             }
         });
+
+        function LoadBirthday() {
+            var months = [{ id: "01", name: "Enero" }, { id: "02", name: "Febrero" }, { id: "03", name: "Marzo" }, { id: "04", name: "Abril" }, { id: "05", name: "Mayo" }, { id: "06", name: "Junio" }, { id: "07", name: "Julio" }, { id: "08", name: "Agosto" }, { id: "09", name: "Septiembre" }, { id: "10", name: "Octubre" }, { id: "11", name: "Noviembre" }, { id: "12", name: "Diciembre" }];
+
+            calculateDays();
+
+            for (var i = 0; i < months.length; i++) {
+                $("#selectMonth").append($("<option></option>").val(months[i].id).html(months[i].name));
+            }
+
+            for (var i = (currentYear - 10); i > currentYear - maxYear; i--) {
+                $("#selectYear").append($("<option></option>").val(i).html(i));
+            }
+        }
+
+        function calculateDays() {
+
+            for (var i = 1; i < daysInMonth(currentMonth, currentYear) + 1; i++) {
+
+                var number = i;
+                if (i < 10) { number = "0" + i; }
+
+                $("#selectDay").append($("<option></option>").val(number).html(number));
+            }
+        }
+
+        function daysInMonth(month, year) {
+            return new Date(year, month, 0).getDate();
+        }
     </script>
 </body>
 </html>

@@ -272,7 +272,7 @@ namespace EduClass.Web.Controllers
                     var user =_service.GetById(userVm.Id);
                     user.FirstName = userVm.FirstName;
                     user.LastName = userVm.LastName;
-                    user.Birthday = userVm.Birthday;
+                    user.Birthday = Convert.ToDateTime(userVm.Birthday);
                     user.Email = userVm.Email;
                     user.IdentificationCard = userVm.IdentificationCard;
                     user.UpdatedAt = DateTime.Now;

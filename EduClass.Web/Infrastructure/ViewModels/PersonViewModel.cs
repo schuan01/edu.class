@@ -40,7 +40,7 @@ namespace EduClass.Web.Infrastructure.ViewModels
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Fecha Nacimiento")]
-        public System.DateTime Birthday { get; set; }
+        public string Birthday { get; set; }
 
         [Required]
         [DataType(DataType.EmailAddress)]

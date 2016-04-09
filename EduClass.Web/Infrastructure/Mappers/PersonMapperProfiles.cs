@@ -18,8 +18,11 @@ namespace EduClass.Web.Infrastructure.Mappers
         protected override void Configure()
         {
             /*Persons*/
-            Mapper.CreateMap<PersonViewModel, Person>();
-            Mapper.CreateMap<Person, PersonViewModel>();
+            Mapper.CreateMap<PersonViewModel, Person>()
+                .ForMember(e => e.Birthday, x => x.ResolveUsing<StringToDateTimeResolver>().FromMember(y => y.Birthday + " 00:00"));
+
+            Mapper.CreateMap<Person, PersonViewModel>()
+                .ForMember(e => e.Birthday, src => src.MapFrom(x => x.Birthday.Value.ToString("yyyy-MM-ddTHH:mm:ss")));
 
             /*Teacher*/
             Mapper.CreateMap<PersonViewModel, Teacher>()
@@ -28,7 +31,7 @@ namespace EduClass.Web.Infrastructure.Mappers
                 .ForMember(u => u.LastName, src => src.MapFrom(x => x.LastName))
                 .ForMember(u => u.UserName, src => src.MapFrom(x => x.UserName))
                 .ForMember(u => u.Email, src => src.MapFrom(x => x.Email))
-                .ForMember(u => u.Birthday, src => src.MapFrom(x => x.Birthday))
+                .ForMember(e => e.Birthday, x => x.ResolveUsing<StringToDateTimeResolver>().FromMember(y => y.Birthday))
                 .ForMember(u => u.Password, src => src.MapFrom(x => Security.EncodePassword(x.Password)))
                 .ForMember(u => u.IdentificationCard, src => src.MapFrom(x => x.IdentificationCard));
 
@@ -41,7 +44,7 @@ namespace EduClass.Web.Infrastructure.Mappers
                 .ForMember(u => u.LastName, src => src.MapFrom(x => x.LastName))
                 .ForMember(u => u.UserName, src => src.MapFrom(x => x.UserName))
                 .ForMember(u => u.Email, src => src.MapFrom(x => x.Email))
-                .ForMember(u => u.Birthday, src => src.MapFrom(x => x.Birthday))
+                .ForMember(e => e.Birthday, x => x.ResolveUsing<StringToDateTimeResolver>().FromMember(y => y.Birthday))
                 .ForMember(u => u.Password, src => src.MapFrom(x => Security.EncodePassword(x.Password)))
                 .ForMember(u => u.IdentificationCard, src => src.MapFrom(x => x.IdentificationCard));
 

@@ -22,6 +22,11 @@ namespace EduClass.Web.Infrastructure.Mappers
                     return default(DateTime);
                 }
 
+                if (!source.Contains(':'))
+                {
+                    source += " 00:00";
+                }
+
                 dateTime = DateTime.ParseExact(source, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
 
                 return dateTime;
