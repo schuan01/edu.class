@@ -71,8 +71,6 @@ namespace EduClass.Web.Controllers
                         if (!String.IsNullOrEmpty(returnurl) && Url.IsLocalUrl(returnurl))
                             return Redirect(returnurl);
 
-
-
                         return RedirectToAction("Index", "Board");
                     }
                     else
@@ -391,8 +389,6 @@ namespace EduClass.Web.Controllers
         [AllowAnonymous]
         public ActionResult ResetPasswordEmail()
         {
-            ViewBag.Sended = false;
-
             return View();
         }
 
@@ -401,24 +397,30 @@ namespace EduClass.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ResetPasswordEmail(string email)
         {
+            if (String.IsNullOrEmpty(email))
+            {
+                return View();
+            }
 
-            var uMailer = new UserMailer();
+            var user = _service.GetByEmail(email);
 
-            //var key = Guid.NewGuid().ToString();
-            var urlReset = Url.Action("EmailUrlResetPassword", "Users", new { email = email }, Request.Url.Scheme);
-            uMailer.PasswordReset(email, urlReset).Send();
+            if (user != null)
+            {
+                var uMailer = new UserMailer();
 
-            //_service.SaveKeyResetPassword(email, key);
+                var newPassword = Security.EncodePasswordBase64().Substring(0, 8);
 
-            ViewBag.Sended = true;
-            return View();
-        }
+                _service.ChangePassword(user.Id, Security.EncodePassword(newPassword));
 
-        [HttpGet]
-        [AllowAnonymous]
-        public ActionResult EmailUrlResetPassword(string key)
-        {
-            //TODO: HACER LOS METODOS PARA EMAILURLRESSET
+                uMailer.PasswordReset(email, newPassword).Send();
+
+                ViewBag.Sended = true;
+            }
+            else
+            {
+                ViewBag.Sended = false;
+            }
+            
             return View();
         }
 
@@ -437,7 +439,6 @@ namespace EduClass.Web.Controllers
         {
             return View();
         }
-
 
         [HttpPost]
         public ActionResult ChangeAvatar(int id= 0)

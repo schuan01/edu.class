@@ -16,9 +16,9 @@
             <div class="people-options clearfix">
 
                 <div class="btn-group pull-right people-pager">
-                    <button type="button" id="btnBack" class="btn btn-default-active pull-right">
+                    <a href="@Url.Action("Index")" id="btnBack" class="btn btn-default-active pull-right">
                         Volver
-                    </button>
+                    </a>
                 </div>
 
             </div><!-- people-options -->
@@ -59,9 +59,3 @@
         </div>
     </div>
 </div>
-<script>
-    $('#btnBack').click(function () {
-
-        window.history.back();
-    });
-</script>

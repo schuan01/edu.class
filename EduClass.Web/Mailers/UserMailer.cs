@@ -23,9 +23,9 @@ namespace EduClass.Web.Mailers
 			});
 		}
  
-		public virtual MvcMailMessage PasswordReset(string email, string urlReset)
+		public virtual MvcMailMessage PasswordReset(string email, string newPassword)
 		{
-            ViewBag.UrlReset = urlReset;
+            ViewBag.NewPassword = newPassword;
 
 			return Populate(x =>
 			{

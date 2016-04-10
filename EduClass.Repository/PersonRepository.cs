@@ -30,18 +30,17 @@ namespace EduClass.Repository
 
         public Person GetByUserName(string userName)
         {
-            return dbSet.Where(x => x.UserName == userName)//Si el mail o el ususario coinciden
+            return dbSet.Where(x => x.UserName == userName)//Si el mail
                 .Include(x => x.Avatar)
                 .Include(x => x.Posts)
                 .Include(x => x.Files)
                 .FirstOrDefault();
         }
 
-        public void SaveKeyResetPassword(string email, string key)
+        public Person GetByEmail(string email)
         {
-            throw new NotImplementedException();
-        }
 
-        
+            return dbSet.FirstOrDefault(x => x.Email == email);
+        }
     }
 }

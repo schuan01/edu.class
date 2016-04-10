@@ -29,13 +29,15 @@
     <div class="panel signin">
         <div class="panel-heading">
             <h1>Edu.Class</h1>
-            <h5 class="panel-title">Bienvenido, por favor inicia sesión</h5>
+            <h5 class="panel-title">Reseteo de contraseña</h5>
         </div>
         <div class="panel-body">
             @RenderBody()
         </div>
     </div><!-- panel -->
-
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @RenderSection("scripts", required: false)
 </body>
 </html>
 

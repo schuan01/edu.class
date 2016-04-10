@@ -45,9 +45,9 @@ namespace EduClass.Logic
             _unitOfWork.Commit();
         }
 
-        public void SaveKeyResetPassword(string email, string key)
+        public Person GetByEmail(string email) 
         {
-            _personRepository.SaveKeyResetPassword(email, key);
+            return _personRepository.GetByEmail(email);
         }
     }
 }
