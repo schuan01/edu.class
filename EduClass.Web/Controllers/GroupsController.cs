@@ -213,7 +213,10 @@ namespace EduClass.Web.Controllers
                 var group = _serviceGroup.GetByKey(key);//Obtengo el Grupo del Id pasado por parametro
                 student = _servicePerson.GetById(idStudent);
 
-                if (group == null || student == null) { return HttpNotFound(); }
+                if (group == null || student == null)
+                {
+                    throw new Exception("El grupo o el usuario no existe");
+                }
 
                 if (group.Students.FirstOrDefault(st => st.Id == student.Id) != null)//Si ya existe en la collecion
                 {
@@ -235,6 +238,7 @@ namespace EduClass.Web.Controllers
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
                 _log.Error("Groups - InviteStudentByMail", ex);
+                return RedirectToAction("Index", "Board");
             }
 
             return View();

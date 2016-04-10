@@ -47,24 +47,7 @@
         </div>
 </div>
 
-<!-- Modal -->
-<div class="modal bounceIn animated" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Prueba de Modal</h4>
-      </div>
-      <div class="modal-body">
-        @ViewBag.Key
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary">Guardar Cambios</button>
-      </div>
-    </div><!-- modal-content -->
-  </div><!-- modal-dialog -->
-</div><!-- modal -->
+
 
 @Scripts.Render("~/bundles/jquery")
 @{var sessionMessage = EduClass.Web.Infrastructure.Sessions.MessageSession.GetMessage(); }

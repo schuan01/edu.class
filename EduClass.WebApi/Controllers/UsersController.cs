@@ -98,7 +98,7 @@ namespace EduClass.WebApi.Controllers
                         }
 
                         person.CreatedAt = DateTime.Now;
-                        person.Enabled = true;
+                        person.Enabled = false;//Sea crea siempre inactivo, falta activar por MAIL
                         person.Silenced = false;
 
                         _service.Create(person);
