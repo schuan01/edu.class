@@ -1,6 +1,6 @@
 ﻿@using System.Configuration;
 @{ 
-    var server = ConfigurationManager.AppSettings["UrlServer"]+ "/Groups/InviteStudentByMail?key=";
+    var server = ConfigurationManager.AppSettings["UrlServer"]+ "/Groups/InviteStudentByMail?person=";
 }
 <p>Has sido invitado a un nuevo grupo de Edu.Class</p>
 <p>Puedes unirte desde la APP usando la clave <h2>@ViewBag.UrlGroup</h2></p>

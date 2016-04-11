@@ -1,4 +1,9 @@
+@using System.Configuration;
+@{
+    var server = ConfigurationManager.AppSettings["UrlServer"] + "/Users/EnableByMail?key=";
+}
+
 <p>Su ususario ha sido creado correctamente</p>
 <p>Haga click en el siguiente Link para completar la Activacion.</p>
 
-<a href="@ViewBag.urlPerson">@ViewBag.urlPerson</a>
+<a href="@server@ViewBag.urlPerson">@server@ViewBag.urlPerson</a>

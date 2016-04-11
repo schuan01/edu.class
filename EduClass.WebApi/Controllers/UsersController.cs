@@ -1,5 +1,6 @@
 ﻿using EduClass.Entities;
 using EduClass.Logic;
+using EduClass.Web.Mailers;
 using EduClass.WebApi.Infrastructure;
 using EduClass.WebApi.Infrastructure.Sessions;
 using EduClass.WebApi.Infrastructure.ViewModels;
@@ -106,7 +107,11 @@ namespace EduClass.WebApi.Controllers
                         CreateUserFolder(person);
                         SetDefaultAvatar(person);
 
-                        return Json(new { mensaje = "Se creo correcamente", url="SignIn.html" });
+                        var uMailer = new UserMailer();
+                        var urlPerson = person.Id.ToString();
+                        uMailer.Welcome(person, urlPerson).Send();
+
+                        return Json(new { mensaje = "Se le ha enviado un correo para activar su cuenta", url="SignIn.html" });
                     }
                     else
                     {
@@ -139,6 +144,7 @@ namespace EduClass.WebApi.Controllers
                 Directory.CreateDirectory(originalDirectory);
             }
         }
+
 
         private void SetDefaultAvatar(Person p)
         {
