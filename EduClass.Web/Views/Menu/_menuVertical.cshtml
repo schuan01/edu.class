@@ -4,7 +4,7 @@
     <h5 class="sidebar-title">Menú Principal</h5>
     <ul class="nav nav-pills nav-stacked nav-quirk">
         <li><a href="@Url.Action("Index", "Board")"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
-        <li><a href="@Url.Action("Index", "Mail")"><i class="fa fa-inbox"></i> <span>Mensajes</span></a></li>
+        <li><a href="@Url.Action("Index", "Mail", new { type = "Enviados" })"><i class="fa fa-inbox"></i> <span>Mensajes</span></a></li>
         <li><a href="@Url.Action("Index", "Groups")"><i class="fa fa-users"></i> <span>Grupos</span></a></li>
         @if (UserSession.GetCurrentUser() is Teacher)
         {
@@ -15,7 +15,7 @@
         <li><a href="@Url.Action("Index", "Pages")"><i class="fa fa-weibo"></i> <span>Páginas Públicas</span></a></li>
         @if (UserSession.GetCurrentUser() is Teacher)
         {
-            <li><a href="@Url.Action("Index", "Tests")"><i class="fa fa-paperclip"></i> <span>Pruebas Diagnosticas</span></a></li>
+            <li><a href="@Url.Action("Index", "Tests")"><i class="fa fa-paperclip"></i> <span>Pruebas Diagnósticas</span></a></li>
         }
         @if (UserSession.GetCurrentUser() is Teacher)
         {

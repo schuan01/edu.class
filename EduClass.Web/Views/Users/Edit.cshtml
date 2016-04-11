@@ -7,12 +7,6 @@
 
 <div class="panel panel-site-traffic col-md-8 col-md-offset-2">
     <div class="panel-heading">
-        
-        <ul class="panel-options">
-            <li><a href="@Url.Action("ChangeAvatar", "Users")" class="btn-quirk pull-right">Cambiar Foto</a></li>
-            <li><a href="@Url.Action("ChangePassword", "Users")" class="btn-quirk pull-right">Cambiar Contraseña</a></li>
-
-        </ul>
         <h4 class="panel-title text-success">Editar Usuario</h4>
         
     </div>
@@ -73,24 +67,50 @@
                         @Html.ValidationMessageFor(model => model.IdentificationCard, "", new { @class = "text-danger" })
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-2">
+                            <a href="@Url.Action("ChangeAvatar", "Users")" class="btn btn-quirk"><i class="fa fa-file-image-o fa-2x"></i> Cambiar Foto</a>
+                        </div>
+                        <div class="col-md-4 col-md-offset-2">
+                            <a href="@Url.Action("ChangePassword", "Users")" class="btn-quirk pull-right"><i class="fa fa-key fa-2x"></i> Cambiar Contraseña</a>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Guardar" class="btn btn-success" />
+                        <input type="submit" value="Guardar" class="btn btn-primary pull-right" />
+                        <a href="@Url.Action("Index")" class="btn btn-default-active pull-right mr10">Volver</a>
                     </div>
                 </div>
             </div>
           
         }
-        @using (Html.BeginForm("Disable", "Users", FormMethod.Post, htmlAttributes: new { @Id = Model.Id }))
-        {
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="id" value="@Model.Id" />
-            <button type="submit" class="btn  btn-sm btn-danger"  onclick="return confirm('¿Esta seguro de darse de baja permanentemente?');">Eliminar Usuario</button>
-
-        }
+        
         </div>
     </div>
+<div class="panel panel-default col-md-8 col-md-offset-2">
+    <div class="panel-body">
+        <div class="row">
+            <div class="panel panel-danger-full">
+                <div class="panel-body">
+                    <p>Si eliminas tu usuario se borraran todos los datos, incluyendo (posts, files, grupos, contactos, eventos, páginas públicas, calificaciones).</p>
+                </div>
+            </div> 
+        </div>
+        <div class="row">
+            <div class="col-md-offset-5">
+                @using (Html.BeginForm("Disable", "Users", FormMethod.Post, htmlAttributes: new { @Id = Model.Id }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <button type="submit" class="btn  btn-sm btn-danger" onclick="return confirm('¿Esta seguro de darse de baja permanentemente?');">Eliminar Usuario</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
 
 @Scripts.Render("~/bundles/jquery")
 <script src="~/Scripts/app/helpersSite.js"></script>

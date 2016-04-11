@@ -3,7 +3,7 @@
 @using EduClass.Web.Infrastructure.Sessions
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Emails";
+    ViewBag.Title = "Mensajes";
 }
 
 <div class="mainpanel">
@@ -17,7 +17,7 @@
                 <div class="btn-group mr5">
                     
                     <button type="button" class="btn btn-success dropdown-toggle btn-sm" data-toggle="dropdown" aria-expanded="false">
-                        Recibidos <span class="caret"></span>
+                        @ViewBag.Type <span class="caret"></span>
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <ul role="menu" class="dropdown-menu dm-icon pull-right">

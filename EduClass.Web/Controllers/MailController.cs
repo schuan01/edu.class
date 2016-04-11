@@ -32,11 +32,12 @@ namespace EduClass.Web.Controllers
         {
             
             var list = _service.GetMailsReceived(UserSession.GetCurrentUser()).OrderByDescending(a => a.CreateAt);
+            
+            ViewBag.Type = type;
 
             if (type == "Enviados")
             {
                 list = _service.GetMailsSent(UserSession.GetCurrentUser()).OrderByDescending(a => a.CreateAt);//Obtengo enviados
-                
                     
             }
 
