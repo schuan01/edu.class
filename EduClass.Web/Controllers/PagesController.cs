@@ -147,7 +147,7 @@ namespace EduClass.Web.Controllers
                     //Execute the mapping 
                     var page = _service.GetById(pageVm.Id);
                     page.Name = pageVm.Name;
-                    page.Content = HttpUtility.HtmlEncode(page.Content);
+                    page.Content = HttpUtility.HtmlEncode(pageVm.Content);
 
                     if (page.GroupId != UserSession.GetCurrentGroup().Id)
                     {
