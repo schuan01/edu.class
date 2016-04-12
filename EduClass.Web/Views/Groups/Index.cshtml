@@ -41,7 +41,6 @@
                                         <th class="text-center">Alumnos</th>
                                         <th>Editar</th>
                                         <th>Deshabilitar/Habilitar</th>
-                                        <th>Eliminar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -72,19 +71,7 @@
                                                     }
                                                 </ul>
                                             </td>
-                                            <td>
-                                                <ul class="table-options">
-
-                                                    @using (Html.BeginForm("DeleteGroup", "Groups", FormMethod.Post, htmlAttributes: new { @Id = @elemento.Id }))
-                                                    {
-
-                                                        @Html.AntiForgeryToken()
-                                                        <li><input type="hidden" name="groupId" value="@elemento.Id" /></li>
-                                                        <li><button type="submit" class="btn-link" onclick="return confirm('Esta accion borrara completamente el Grupo, esta seguro?');"><i class="fa fa-trash"></i></button></li>
-                                                    }
-
-                                                </ul>
-                                            </td>
+                                           
 
 
 

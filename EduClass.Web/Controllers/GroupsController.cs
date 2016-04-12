@@ -433,12 +433,16 @@ namespace EduClass.Web.Controllers
 
 
         //ELIMINARA TOTALMENTE EL GRUPO, Y CUALQUIER RELACION CON EL
+        //NO SE IMPLEMENTARA
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteGroup(int groupId = 0)
         {
             try
             {
+                //////////////////////////////////////////////
+                //NO SE IMPLENTARA EN ESTA VERSION
+                /////////////////////////////////////////////
                 if (groupId == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
                 var group = _serviceGroup.GetById(groupId);
@@ -504,7 +508,7 @@ namespace EduClass.Web.Controllers
                         p.Replays.Remove(p.Replays.FirstOrDefault(x => x.Id == a));
                     }
                     group.Posts.Remove(group.Posts.FirstOrDefault(x => x.Id == i));
-                    _servicePost.Delete(_servicePost.GetById(i));
+                    _servicePost.Delete(p);
                 }
 
                 //BORRO LAS CALIFICACIONES
@@ -586,6 +590,10 @@ namespace EduClass.Web.Controllers
                     UserSession.SetCurrentGroup(grupos[0]);//Obtengo el primer grupo que venga y lo coloco en la Session
 
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Grupo", "El grupo fue eliminado correctamente"));
+
+                //////////////////////////////////////////////
+                //NO SE IMPLENTARA EN ESTA VERSION
+                /////////////////////////////////////////////
 
             }
             catch (Exception ex)
