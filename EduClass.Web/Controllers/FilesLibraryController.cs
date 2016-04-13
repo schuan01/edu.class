@@ -116,6 +116,7 @@ namespace EduClass.Web.Controllers
                                 System.IO.Directory.CreateDirectory(pathString);
 
                             string rutaArchActual = "";
+                            
                             foreach (DropNet.Models.MetaData arch in metaData.Contents)
                             {
                                 rutaArchActual = string.Format("{0}\\{1}", pathString, arch.Name);
@@ -149,6 +150,11 @@ namespace EduClass.Web.Controllers
                                 {
                                     _log.Error("FilesLibrary - Index => El byte de archivo " + rutaArchActual + " no existe");
                                 }
+                            }
+
+                            if (metaData.Contents.Count == 0)
+                            {
+                                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Atención", "No hay archivos para importar en Aplicaciones/EduClassFolder"));
                             }
 
                             Session["DropNetUserLogin"] = null;

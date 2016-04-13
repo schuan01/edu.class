@@ -263,15 +263,13 @@ namespace EduClass.Web.Controllers
                         p.MailsRecieved.Remove(p.MailsRecieved.First(x => x.Id == m.Id));
                         _personService.Update(p);
                     }
-                    //NO PODES BORRAR ALGO ENVIADO POR LA RELACION 1 - N.
-                    /*else if (p.MailsSends.Any(x => x.Id == m.Id))
+                    else if (p.MailsSends.Any(x => x.Id == m.Id))
                     {
-                        p.MailsSends.Remove(p.MailsSends.First(x => x.Id == m.Id));
-                        _personService.Update(p);
-                    }*/
+                        throw new Exception("No puedes eliminar un mensaje enviado");
+                    }
                     else
                     {
-                        throw new Exception("El mail no pertence a tus Enviados/Recibidos");
+                        throw new Exception("El mensaje no pertence a tus Enviados/Recibidos");
                     }
 
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Borrado Exitoso", "El Mensaje fue borrado correctamente"));
