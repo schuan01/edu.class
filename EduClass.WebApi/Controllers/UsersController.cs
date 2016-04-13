@@ -131,7 +131,39 @@ namespace EduClass.WebApi.Controllers
             return Json(new { error = "Error al crear el usuario" });
         }
 
-        
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("ResetPasswordEmail")]
+        public IHttpActionResult ResetPasswordEmail(string email)
+        {
+            if (String.IsNullOrEmpty(email))
+            {
+                return Json(new { error = "Ingrese un mail valido" });
+            }
+
+            var user = _service.GetByEmail(email);
+
+            if (user != null)
+            {
+                var uMailer = new UserMailer();
+
+                var newPassword = Security.EncodePasswordBase64().Substring(0, 8);
+
+                _service.ChangePassword(user.Id, Security.EncodePassword(newPassword));
+
+                uMailer.PasswordReset(email, newPassword).Send();
+
+                return Json(new { mensaje = "Se le ha enviado un correo con la contraseña nueva", url = "SignIn.html" });
+            }
+            else
+            {
+                return Json(new { error = "El mail ingresado no existe" });
+            }
+
+            
+        }
+
+
         private void CreateUserFolder(Person person)
         {
             //REDIRECCIONA A LA CARPETA DEL WEB, DONDE ESTARIA TODO

@@ -320,8 +320,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\UserMailer\_Layout.cshtml" />
     <Content Include="Views\UserMailer\InvitedToGroup.cshtml" />
-    <Content Include="Views\UserMailer\PasswordReset.cshtml" />
     <Content Include="Views\UserMailer\Welcome.cshtml" />
+    <Content Include="Views\UserMailer\PasswordReset.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
