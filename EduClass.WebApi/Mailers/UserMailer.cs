@@ -23,17 +23,17 @@ namespace EduClass.Web.Mailers
 			});
 		}
  
-		public virtual MvcMailMessage PasswordReset(string email, string urlReset)
+		public virtual MvcMailMessage PasswordReset(string email, string newPassword)
 		{
-            ViewBag.UrlReset = urlReset;
+            ViewBag.NewPassword = newPassword;
 
-			return Populate(x =>
-			{
-				x.Subject = "Reseteo de contraseña";
-				x.ViewName = "PasswordReset";
-				x.To.Add(email);
-			});
-		}
+            return Populate(x =>
+            {
+                x.Subject = "Reseteo de contraseña";
+                x.ViewName = "PasswordReset";
+                x.To.Add(email);
+            });
+        }
 
         public virtual MvcMailMessage InviteUserToGroup(List<string> mails, Group g, string urlGroup)
         {

@@ -5,6 +5,7 @@ using EduClass.WebApi.Infrastructure;
 using EduClass.WebApi.Infrastructure.Sessions;
 using EduClass.WebApi.Infrastructure.ViewModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Configuration;
 using System.Data.Entity.Validation;
@@ -134,30 +135,38 @@ namespace EduClass.WebApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("ResetPasswordEmail")]
-        public IHttpActionResult ResetPasswordEmail(string email)
+        public IHttpActionResult ResetPasswordEmail([FromBody]JObject parametros)
         {
-            if (String.IsNullOrEmpty(email))
+            var email = parametros["email"].ToObject<string>();
+            try
             {
-                return Json(new { error = "Ingrese un mail valido" });
+                if (String.IsNullOrEmpty(email))
+                {
+                    return Json(new { error = "Ingrese un mail valido" });
+                }
+
+                var user = _service.GetByEmail(email);
+
+                if (user != null)
+                {
+                    var uMailer = new UserMailer();
+
+                    var newPassword = Security.EncodePasswordBase64().Substring(0, 8);
+
+                    _service.ChangePassword(user.Id, Security.EncodePassword(newPassword));
+
+                    uMailer.PasswordReset(email, newPassword).Send();
+
+                    return Json(new { mensaje = "Se le ha enviado un correo con la contraseña nueva", url = "SignIn.html" });
+                }
+                else
+                {
+                    return Json(new { error = "El mail ingresado no existe" });
+                }
             }
-
-            var user = _service.GetByEmail(email);
-
-            if (user != null)
+            catch (Exception ex)
             {
-                var uMailer = new UserMailer();
-
-                var newPassword = Security.EncodePasswordBase64().Substring(0, 8);
-
-                _service.ChangePassword(user.Id, Security.EncodePassword(newPassword));
-
-                uMailer.PasswordReset(email, newPassword).Send();
-
-                return Json(new { mensaje = "Se le ha enviado un correo con la contraseña nueva", url = "SignIn.html" });
-            }
-            else
-            {
-                return Json(new { error = "El mail ingresado no existe" });
+                return Json(new { error = ex.Message });
             }
 
             
