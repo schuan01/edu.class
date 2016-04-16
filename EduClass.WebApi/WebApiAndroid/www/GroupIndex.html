@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Listar Grupos|Edu.Class</title>
+
+    <link rel="shortcut icon" href="Content/images/logo.ico" type="image/x-icon" />
+    <link rel="icon" href="Content/images/logo.ico" type="image/ico" />
+    <link rel="stylesheet" href="css/lib_bootstrap3-wysihtml5-bower_bootstrap3-wysihtml5.css">
+    <link rel="stylesheet" href="css/lib_fontawesome_css_font-awesome.css">
+    <link rel="stylesheet" href="css/lib_Hover_hover.css">
+    <link rel="stylesheet" href="css/lib_ionicons_css_ionicons.css">
+    <link rel="stylesheet" href="css/lib_jquery.gritter_jquery.gritter.css">
+    <link rel="stylesheet" href="css/lib_jquery.steps_jquery.steps.css">
+    <link rel="stylesheet" href="css/lib_jquery-toggles_toggles-full.css">
+    <link rel="stylesheet" href="css/lib_morrisjs_morris.css">
+    <link rel="stylesheet" href="css/lib_select2_select2.css">
+    <link rel="stylesheet" href="css/lib_weather-icons_css_weather-icons.css">
+    <link rel="stylesheet" href="css/css_quirk.css"  >
+    <link rel="stylesheet" href="font/droidserif.css">
+    <link rel="stylesheet" href="font/colorbox.css">
+    <link rel="stylesheet" href="font/bootstrap-responsive.css">
+    <link rel="stylesheet" href="font/animate.delay.css">
+    <link rel="stylesheet" href="font/roboto.css">
+    <link rel="stylesheet" href="font/isotope.css">
+    <link rel="stylesheet" href="css/lib_bootstrapcolorpicker_css_bootstrap-colorpicker.css">
+    <link rel="stylesheet" href="css/lib_datatables-plugins_integration_bootstrap_3_dataTables.bootstrap.css">
+    <link rel="stylesheet" href="css/lib_dropzone_dropzone.css">
+    <link rel="stylesheet" href="css/lib_jquery-ui_jquery-ui.css">
+    <link rel="stylesheet" href="css/lib_timepicker_jquery.timepicker.css">
+    <link rel="stylesheet" href="css/site.css">
+    <link rel="stylesheet" href="css/basic.css">
+
+    <script src="scripts/modernizr-2.8.3.js"></script>
+    <style>
+        #imgGetContacts {
+            width: 200px;
+            height: 200px;
+        }
+
+        #imgAvatarTop {
+            width: 24px;
+            height: 24px;
+        }
+
+        #imgAvatarLeft {
+            width: 48px;
+            height: 48px;
+
+        }
+
+        #imgAvatarMe {
+            width: 128px;
+            height: 128px;
+
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="headerpanel">
+        <!-- ################## MENU TOP ################## -->
+
+<div class="logopanel">
+    <h2><a href="Board.html">Edu.Class</a></h2>
+
+</div><!-- logopanel -->
+
+<div class="headerbar">
+
+    <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
+
+    <div class="searchpanel">
+        <div class="input-group">
+                
+                   
+
+
+        </div><!-- input-group -->
+
+
+    </div>
+    <div class="header-right">
+
+        <ul class="headermenu">
+            <li>
+                <div id="noticePanel " class="btn-group">
+                    <button  id="botonRefresh"class="btn btn-notice">
+                        <i class="fa fa-refresh"></i>
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="btn-group">
+                    <button id="btnNombreCompleto" type="button" class="btn btn-logged" data-toggle="dropdown">
+                
+                    <img id="imgAvatarTop" src="http://localhost:55555/Content/images/default.png" alt="" />
+                        
+                    NombreUsuario
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="#"><i class="glyphicon glyphicon-user"></i> Mi Perfil</a></li>
+                        <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Preferencias de Cuenta</a></li>
+                        <li><a href="#" id="linkSignOut"><i class="glyphicon glyphicon-log-out"></i> Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+
+    </div><!-- header-right -->
+</div><!-- headerbar -->
+
+    <script src="scripts/jquery-2.1.4.js"></script>
+    <script src="scripts/jquery.validate.js"></script>
+    <script src="scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="scripts/jquery.validate-vsdoc.js"></script>
+    <script src="scripts/jquery.validate.min.js"></script>
+    <script src="scripts/js_quirk.js"></script>
+    <script src="scripts/lib_select2_select2.js"></script>
+    <script src="scripts/lib_bootstrap3-wysihtml5-bower_bootstrap3-wysihtml5.all.js"></script>
+    <script src="scripts/lib_jquery-ui_jquery-ui.js"></script>
+    <script src="scripts/lib_jquery-toggles_toggles.js"></script>
+    <script src="scripts/lib_bootstrap_js_bootstrap.js"></script>
+    <script src="scripts/lib_morrisjs_morris.js"></script>
+    <script src="scripts/lib_raphael_raphael.js"></script>
+    <script src="scripts/lib_flot_jquery.flot.js"></script>
+    <script src="scripts/lib_flot_jquery.flot.resize.js"></script>
+    <script src="scripts/lib_jquery.steps_jquery.steps.js"></script>
+    <script src="scripts/lib_flot-spline_jquery.flot.spline.js"></script>
+    <script src="scripts/lib_jquery-knob_jquery.knob.js"></script>
+    <script src="scripts/lib_jquery.gritter_jquery.gritter.js"></script>
+    <script src="scripts/lib_wysihtml5x_wysihtml5x-toolbar.js"></script>
+    <script src="scripts/lib_wysihtml5x_wysihtml5x.js"></script>
+    <script src="scripts/js.cookie.js"></script>
+    <script src="scripts/initEduClass.js"></script>
+    <script src="scripts/helpersSiteAndroid.js"></script>
+    <script src="scripts/js.cookie.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+
+            
+        </div><!-- header-->
+    </header>
+
+    <section>
+
+        <div class="leftpanel">
+            <div class="leftpanelinner">
+
+                <!-- ################## LEFT PANEL PROFILE ################## -->
+
+                <div class="media leftpanel-profile">
+                    <div class="media-left">
+                        <a href="#">
+                       
+                            <img id="imgAvatarLeft" src="" alt="" class="media-object img-circle">
+                       
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading" id="headingNombreCompleto">nombreUsuario<a data-toggle="collapse" data-target="#loguserinfo" class="pull-right"><i class="fa fa-angle-down"></i></a>  </h4>
+                        <span id="spanTipoPerson">tipoPersona</span>
+                        
+
+                    </div>
+                </div><!-- leftpanel-profile -->
+
+                <div class="leftpanel-userinfo collapse" id="loguserinfo">
+                    <h5 class="sidebar-title">Contacto</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <label class="pull-left">Email</label>
+                            <span class="pull-right" id="spanEmail">emailUsuario</span>
+                        </li>
+                        <li class="list-group-item">
+                            <label class="pull-left">Cumpleaños</label>
+                            <span class="pull-right" id="spanCumple">01/01/1990</span>
+                        </li>
+                        <li class="list-group-item">
+                            <label class="pull-left">Cédula</label>
+                            <span class="pull-right" id="spanCi">123456</span>
+                        </li>
+                    </ul>
+                </div><!-- leftpanel-userinfo -->
+
+                <div class="tab-content">
+
+                    <!-- ################# MAIN MENU VERTICAL################### -->
+                    
+                    <div class="tab-pane active" id="mainmenu">
+                        <h5 class="sidebar-title">Menú Principal</h5>
+                        <ul class="nav nav-pills nav-stacked nav-quirk">
+                            <li><a href="Board.html"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
+                            <li><a href="#" id="linkGrupos"><i class="fa fa-users"></i> <span>Grupos</span></a></li>
+                            <li class="nav-parent" >
+                               <a href=""><i class="fa fa-list-alt"></i> <span>Mis Grupos</span></a>
+                                <ul class="children" id="gruposDDLVertical">
+                                         
+                                </ul>
+                            </li>
+                        </ul>
+
+                       
+                        
+                    </div><!-- tab-pane -->
+                </div><!-- tab-content -->
+
+            </div><!-- leftpanelinner -->
+        </div><!-- leftpanel -->
+
+        <div class="mainpanel">
+
+            <div class="contentpanel">
+                <!-- ################# INICIA CUERPO PRINCIPAL ################### -->
+         
+
+
+        <div class="row">
+            <div class="col-md-12 people-list">
+
+                <div class="people-options clearfix">
+                            <div class="btn-group pull-right people-pager">
+                                <a href="GroupCreate.html" class="btn btn-primary">
+                                    Crear nuevo Grupo
+                                </a>
+                            </div>
+                </div><!-- people-options -->
+
+                <div class="table-responsive">
+                    <table id="tablaGrupos" class="table table-bordered table-primary nomargin">
+                        <thead>
+                            <tr>
+
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Clave</th>
+                                <th>Estado</th>
+                                <th class="text-center">Alumnos</th>
+                                <th>Invitar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div><!-- table-responsive -->
+
+            </div><!-- col-sm-8 -->
+
+          
+        </div><!-- row -->
+        <div class="modal bounceIn animated" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">Invitar Alumnos al Grupo</h4>
+                        </div>
+                        <form id="frmModal">
+                        <select id="select6" name="select6" class="form-control" style="width: 100%" data-plugin = "select2" data-placeholder="Ingrese los mails" multiple>
+                        </select>
+                        
+                        <div class="modal-body" id="claveModal">
+                           
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                            
+                                <button id="btnEnviarMail" type="button" class="btn btn-primary">Enviar Mail</button>
+                            
+                        </div>
+                       <form> 
+                    </div><!-- modal-content -->
+                </div><!-- modal-dialog -->
+            </div><!-- modal -->
+
+
+                <!-- ################# FIN CUERPO PRINCIPAL ################### -->
+            </div><!-- contentpanel -->
+        </div><!-- mainpanel -->
+    </section>
+
+   
+
+    <script>
+        $(document).ready(function () {
+            
+            var usuarioLogeado = Cookies.get('EduClassApiCookieUser'); // => 'value'
+            var usu = jQuery.parseJSON(usuarioLogeado);
+            
+            $("#headingNombreCompleto").html(usu.nombre +" "+usu.apellido);
+            $("#spanTipoPerson").html(usu.tipoUsuario);
+            $("#spanEmail").html(usu.email);
+            $("#spanCumple").html(usu.cumplenios);
+            $("#spanCi").html(usu.identificacion);
+            if(usu.tipoUsuario == "Estudiante")
+            {
+                $('#linkGrupos').attr('href', 'JoinGroup.html');
+            }
+
+            var imgUrl = "";
+            if(usu.urlPhoto)
+            {
+                imgUrl = usu.urlPhoto.replace(/[\\]/g,'/');
+            }
+            imgUrl = imgUrl.replace("~","");
+            imgUrl = serverPathWeb() + imgUrl; 
+            $("#imgAvatarLeft").attr("src",imgUrl);
+            $("#btnNombreCompleto").html('<img id="imgAvatarTop" src="'+imgUrl+'" alt="" />' + usu.nombre + '<span class="caret"></span>');
+            var grupoActual = Cookies.get("EduClassApiCookieGroup");
+            //var fileTransfer = new FileTransfer();
+            if(grupoActual)
+            {
+                grupoActual = JSON.parse(grupoActual);
+                $("#botonMenu:first-child").text(grupoActual.nombreGrupo);
+                $("#botonMenu:first-child").val(grupoActual.nombreGrupo);
+            }
+
+            
+
+            var dato = usu.idUsuario;
+            var idGrupo = "";
+            var grupos;
+            var posts; 
+
+             
+
+            $('#linkSignOut').on("click",function(){
+                Cookies.remove('EduClassApiCookieGroup');
+                Cookies.remove('EduClassApiCookieUser');
+                window.location.href = "SignIn.html";
+              
+            });
+
+             $("#select6").select2({
+                tags: true,
+                tokenSeparators: [',', ' ', '\t']
+            });
+
+            $('body').on('click', '#botonRefresh', function (e) {
+                location.reload();
+            }); 
+
+            var botonClickeado = "";
+            var nombreClickeado = "";
+            var idSeleccionado = "";
+            $('body').on('click', 'button', function () {
+
+                botonClickeado = $(this).attr('id');
+                nombreClickeado = $(this).attr('name');
+                if(botonClickeado)
+                {
+                    if(botonClickeado.indexOf("showModal_") > -1)
+                        {
+                             idSeleccionado = botonClickeado.substr(10,1);
+                             $('#claveModal').find('h2').first().remove();
+                             $("#claveModal").append('<h2>CLAVE: '+nombreClickeado+'</h2>');
+                             $("#claveModal").append('<input type="hidden" name="groupId" value="'+idSeleccionado+'" />');
+                             
+                        }
+                }
+            });
+
+            $('body').on('click', '#btnEnviarMail', function (e) {
+
+                    e.preventDefault();
+                    $('#btnEnviarMail').prop("disabled", true);
+                    var form = $("#frmModal").serialize();
+                             $.ajax({
+                                url: serverPath()+"/Groups/InviteStudentByMail/",
+                                type: 'POST',
+                                data: form,
+                                dataType: 'json',
+                                success: function(result) {
+                                    if(result.error)//si esta definido
+                                            $('#btnEnviarMail').prop("disabled", false);
+                                            showMessageJS(result.error);
+                                    
+                                    if(result.mensaje)
+                                        $('#btnEnviarMail').prop("disabled", false);
+                                        showMessageJS(result.mensaje);
+                                       
+                                    $('#btnEnviarMail').prop("disabled", false);
+                                    location.reload();
+                                    
+
+                                    
+                                   
+                                },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    if (XMLHttpRequest.readyState == 4) {
+                        // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+                        showMessageJS(XMLHttpRequest.statusText);
+                    }
+                    else if (XMLHttpRequest.readyState == 0) {
+                        showMessageJS('Error al conectar con el servidor remoto');
+                    }
+                    else {
+                        showMessageJS(errorThrown);
+                    }
+                }
+                   });
+
+            }); 
+
+            
+
+            $('body').on('click', '#gruposDDLVertical li a', function () {
+
+                
+                 idGrupo = $(this).attr('id');
+                 $.ajax({
+                    url: serverPath()+"/Groups/ChangeGroup/",
+                    type: 'POST',
+                    data: {usuario : dato, grupo: idGrupo},
+                    success: function(result) {
+                        if(result.error)//si esta definido
+                                showMessageJS(result.error);
+                        else
+                        {
+                            grupoActual = JSON.stringify({ idGrupo: result.idGrupo, nombreGrupo: result.nombreGrupo,descripcion : result.descripcion, claveGrupo: result.claveGrupo, estado : result.estado }); 
+                            Cookies.set("EduClassApiCookieGroup", grupoActual);
+                            location.reload();//Recarga la pagina entera
+                            //$("#botonMenu:first-child").text(grupoActual.nombreGrupo);
+                            //$("#botonMenu:first-child").val(grupoActual.nombreGrupo);
+                        }
+
+                        
+                       
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    if (XMLHttpRequest.readyState == 4) {
+                        // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+                        showMessageJS(XMLHttpRequest.statusText);
+                    }
+                    else if (XMLHttpRequest.readyState == 0) {
+                        showMessageJS('Error al conectar con el servidor remoto');
+                    }
+                    else {
+                        showMessageJS(errorThrown);
+                    }
+                }
+                });
+            });
+
+            
+            
+            var estadoGrupo = "";
+             $.ajax({
+                    type: 'GET',
+                    url: serverPath()+"/Groups/GetGroups",
+                    data: { 
+                            id: dato
+                          },
+                    success:function(data){
+                        
+                        grupos=JSON.parse(data);
+                        $.each(grupos, function(key, val) {
+
+                        if(!grupoActual)
+                        {
+                            grupoActual = JSON.stringify({ idGrupo: val.idGrupo, nombreGrupo: val.Name,descripcion : val.Description, claveGrupo: val.Key, estado : val.Enabled, Students : val.Students }); 
+                            Cookies.set("EduClassApiCookieGroup", grupoActual);
+                        }
+
+                        if(val.Enabled == true)
+                        {
+                            estadoGrupo = "Activo";
+                        }
+                        else
+                            estadoGrupo = "Desactivado";
+
+                        $("#gruposDDLVertical").append('<li><a href="#" id="'+ val.Id  +'">'+ val.Name +'</a></li>');
+                        $("#tablaGrupos tbody").append('<tr><td>'+val.Id+'</td><td>'+val.Name+'</td><td>'+val.Description+'</td><td>'+val.Key+'</td><td>'+estadoGrupo+'</td><td class="text-center">'+val.Students.length+'</td><td><ul class="table-options"><li><button id="showModal_'+val.Id+'" name="'+val.Key+'" type="text" class="btn-link" data-toggle="modal" data-target="#myModal"><i class="fa fa-arrow-circle-right"></i></button></li></ul></td></tr>');
+
+                        });
+
+
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    if (XMLHttpRequest.readyState == 4) {
+                        // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+                        showMessageJS(XMLHttpRequest.statusText);
+                    }
+                    else if (XMLHttpRequest.readyState == 0) {
+                        showMessageJS('Error al conectar con el servidor remoto');
+                    }
+                    else {
+                        showMessageJS(errorThrown);
+                    }
+                }
+                });
+            
+        });
+</script>
+
+</body>
+</html>

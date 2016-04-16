@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Unirse a un Grupo|Edu.Class</title>
+
+    <link rel="shortcut icon" href="Content/images/logo.ico" type="image/x-icon" />
+    <link rel="icon" href="Content/images/logo.ico" type="image/ico" />
+    <link rel="stylesheet" href="css/lib_bootstrap3-wysihtml5-bower_bootstrap3-wysihtml5.css">
+    <link rel="stylesheet" href="css/lib_fontawesome_css_font-awesome.css">
+    <link rel="stylesheet" href="css/lib_Hover_hover.css">
+    <link rel="stylesheet" href="css/lib_ionicons_css_ionicons.css">
+    <link rel="stylesheet" href="css/lib_jquery.gritter_jquery.gritter.css">
+    <link rel="stylesheet" href="css/lib_jquery.steps_jquery.steps.css">
+    <link rel="stylesheet" href="css/lib_jquery-toggles_toggles-full.css">
+    <link rel="stylesheet" href="css/lib_morrisjs_morris.css">
+    <link rel="stylesheet" href="css/lib_select2_select2.css">
+    <link rel="stylesheet" href="css/lib_weather-icons_css_weather-icons.css">
+    <link rel="stylesheet" href="css/css_quirk.css"  >
+    <link rel="stylesheet" href="font/droidserif.css">
+    <link rel="stylesheet" href="font/colorbox.css">
+    <link rel="stylesheet" href="font/bootstrap-responsive.css">
+    <link rel="stylesheet" href="font/animate.delay.css">
+    <link rel="stylesheet" href="font/roboto.css">
+    <link rel="stylesheet" href="font/isotope.css">
+    <link rel="stylesheet" href="css/lib_bootstrapcolorpicker_css_bootstrap-colorpicker.css">
+    <link rel="stylesheet" href="css/lib_datatables-plugins_integration_bootstrap_3_dataTables.bootstrap.css">
+    <link rel="stylesheet" href="css/lib_dropzone_dropzone.css">
+    <link rel="stylesheet" href="css/lib_jquery-ui_jquery-ui.css">
+    <link rel="stylesheet" href="css/lib_timepicker_jquery.timepicker.css">
+    <link rel="stylesheet" href="css/site.css">
+    <link rel="stylesheet" href="css/basic.css">
+
+    <script src="scripts/modernizr-2.8.3.js"></script>
+    <style>
+        #imgGetContacts {
+            width: 200px;
+            height: 200px;
+        }
+
+        #imgAvatarTop {
+            width: 24px;
+            height: 24px;
+        }
+
+        #imgAvatarLeft {
+            width: 48px;
+            height: 48px;
+
+        }
+
+        #imgAvatarMe {
+            width: 128px;
+            height: 128px;
+
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="headerpanel">
+        <!-- ################## MENU TOP ################## -->
+
+<div class="logopanel">
+    <h2><a href="Board.html">Edu.Class</a></h2>
+
+</div><!-- logopanel -->
+
+<div class="headerbar">
+
+    <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
+
+    <div class="searchpanel">
+        <div class="input-group">
+
+        </div><!-- input-group -->
+
+
+    </div>
+    
+    <div class="header-right">
+
+        <ul class="headermenu">
+            
+            <li>
+                <div class="btn-group">
+                    <button id="btnNombreCompleto" type="button" class="btn btn-logged" data-toggle="dropdown">
+                
+                    <img id="imgAvatarTop" src="http://localhost:55555/Content/images/default.png" alt="" />
+                        
+                    NombreUsuario
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="#"><i class="glyphicon glyphicon-user"></i> Mi Perfil</a></li>
+                        <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Preferencias de Cuenta</a></li>
+                        <li><a href="#" id="linkSignOut"><i class="glyphicon glyphicon-log-out"></i> Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+
+    </div><!-- header-right -->
+</div><!-- headerbar -->
+
+    <script src="scripts/jquery-2.1.4.js"></script>
+    <script src="scripts/jquery.validate.js"></script>
+    <script src="scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="scripts/jquery.validate-vsdoc.js"></script>
+    <script src="scripts/jquery.validate.min.js"></script>
+    <script src="scripts/js_quirk.js"></script>
+    <script src="scripts/lib_select2_select2.js"></script>
+    <script src="scripts/lib_bootstrap3-wysihtml5-bower_bootstrap3-wysihtml5.all.js"></script>
+    <script src="scripts/lib_jquery-ui_jquery-ui.js"></script>
+    <script src="scripts/lib_jquery-toggles_toggles.js"></script>
+    <script src="scripts/lib_bootstrap_js_bootstrap.js"></script>
+    <script src="scripts/lib_morrisjs_morris.js"></script>
+    <script src="scripts/lib_raphael_raphael.js"></script>
+    <script src="scripts/lib_flot_jquery.flot.js"></script>
+    <script src="scripts/lib_flot_jquery.flot.resize.js"></script>
+    <script src="scripts/lib_jquery.steps_jquery.steps.js"></script>
+    <script src="scripts/lib_flot-spline_jquery.flot.spline.js"></script>
+    <script src="scripts/lib_jquery-knob_jquery.knob.js"></script>
+    <script src="scripts/lib_jquery.gritter_jquery.gritter.js"></script>
+    <script src="scripts/lib_wysihtml5x_wysihtml5x-toolbar.js"></script>
+    <script src="scripts/lib_wysihtml5x_wysihtml5x.js"></script>
+    <script src="scripts/js.cookie.js"></script>
+    <script src="scripts/initEduClass.js"></script>
+    <script src="scripts/helpersSiteAndroid.js"></script>
+    <script src="scripts/js.cookie.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+
+            
+        </div><!-- header-->
+    </header>
+
+    <section>
+
+        <div class="leftpanel">
+            <div class="leftpanelinner">
+
+                <!-- ################## LEFT PANEL PROFILE ################## -->
+
+                <div class="media leftpanel-profile">
+                    <div class="media-left">
+                        <a href="#">
+                       
+                            <img id="imgAvatarLeft" src="" alt="" class="media-object img-circle">
+                       
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading" id="headingNombreCompleto">nombreUsuario<a data-toggle="collapse" data-target="#loguserinfo" class="pull-right"><i class="fa fa-angle-down"></i></a>  </h4>
+                        <span id="spanTipoPerson">tipoPersona</span>
+                        
+
+                    </div>
+                </div><!-- leftpanel-profile -->
+
+                <div class="leftpanel-userinfo collapse" id="loguserinfo">
+                    <h5 class="sidebar-title">Contacto</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <label class="pull-left">Email</label>
+                            <span class="pull-right" id="spanEmail">emailUsuario</span>
+                        </li>
+                        <li class="list-group-item">
+                            <label class="pull-left">Cumpleaños</label>
+                            <span class="pull-right" id="spanCumple">01/01/1990</span>
+                        </li>
+                        <li class="list-group-item">
+                            <label class="pull-left">Cédula</label>
+                            <span class="pull-right" id="spanCi">123456</span>
+                        </li>
+                    </ul>
+                </div><!-- leftpanel-userinfo -->
+
+                <div class="tab-content">
+
+                    <!-- ################# MAIN MENU VERTICAL################### -->
+                    
+                    <div class="tab-pane active" id="mainmenu">
+                        <h5 class="sidebar-title">Menú Principal</h5>
+                        <ul class="nav nav-pills nav-stacked nav-quirk">
+                            <li><a href="Board.html"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
+                            <li><a href="#" id="linkGrupos"><i class="fa fa-users"></i> <span>Grupos</span></a></li>
+                            <li class="nav-parent" >
+                               <a href=""><i class="fa fa-list-alt"></i> <span>Mis Grupos</span></a>
+                                <ul class="children" id="gruposDDLVertical">
+                                         
+                                </ul>
+                            </li>
+                        </ul>
+
+                       
+                        
+                    </div><!-- tab-pane -->
+                </div><!-- tab-content -->
+
+            </div><!-- leftpanelinner -->
+        </div><!-- leftpanel -->
+
+        <div class="mainpanel">
+
+            <div class="contentpanel">
+                <!-- ################# INICIA CUERPO PRINCIPAL ################### -->
+
+                
+
+<div class="panel panel-site-traffic col-md-8 col-md-offset-2">
+    <div class="panel-heading">
+        
+        <h4 class="panel-title text-success">Unirse a un grupo mediante una clave</h4>
+    </div>
+    <div class="panel-body">
+
+            <div class="form-horizontal">
+                
+
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="Key">Clave</label>
+                    <div class="col-md-10">
+                    <input id="claveGrupo" style= "font-weight: bold; text-align: center" class="form-control text-box single-line" data-val="true" data-val-maxlength="El campo Clave debe ser un tipo de cadena o matriz con una longitud máxima de '8'." data-val-maxlength-max="8" data-val-required="El campo Clave es obligatorio." id="Key" name="Key" type="text" value="">
+                       <span class="field-validation-valid text-danger" data-valmsg-for="Key" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-6 col-md-10">
+                        <input type="button" id="btnUnirse" value="Unirse" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+        <div>
+            
+        </div>
+
+    </div>
+
+
+                <!-- ################# FIN CUERPO PRINCIPAL ################### -->
+            </div><!-- contentpanel -->
+        </div><!-- mainpanel -->
+    </section>
+
+   
+
+    <script>
+        $(document).ready(function () {
+            
+            var usuarioLogeado = Cookies.get('EduClassApiCookieUser'); // => 'value'
+            var usu = jQuery.parseJSON(usuarioLogeado);
+            
+            $("#headingNombreCompleto").html(usu.nombre +" "+usu.apellido);
+            $("#spanTipoPerson").html(usu.tipoUsuario);
+            $("#spanEmail").html(usu.email);
+            $("#spanCumple").html(usu.cumplenios);
+            $("#spanCi").html(usu.identificacion);
+            if(usu.tipoUsuario == "Estudiante")
+            {
+                $('#linkGrupos').attr('href', 'JoinGroup.html');
+            }
+
+            var imgUrl = "";
+            if(usu.urlPhoto)
+            {
+                imgUrl = usu.urlPhoto.replace(/[\\]/g,'/');
+            }
+            imgUrl = imgUrl.replace("~","");
+            imgUrl = serverPathWeb() + imgUrl; 
+            //$("#imgAvatarTop").attr("src",imgUrl);
+            $("#imgAvatarLeft").attr("src",imgUrl);
+            $("#btnNombreCompleto").html('<img id="imgAvatarTop" src="'+imgUrl+'" alt="" />' + usu.nombre + '<span class="caret"></span>');
+            var grupoActual = Cookies.get("EduClassApiCookieGroup");
+            //var fileTransfer = new FileTransfer();
+            if(grupoActual)
+            {
+                grupoActual = JSON.parse(grupoActual);
+                $("#botonMenu:first-child").text(grupoActual.nombreGrupo);
+                $("#botonMenu:first-child").val(grupoActual.nombreGrupo);
+            }
+
+            
+
+            var dato = usu.idUsuario;
+            var idGrupo = "";
+            var grupos;
+            var posts;
+            var fechaAnterior = new Date();
+            var numberOfDaysToAdd = 1;
+            fechaAnterior.setDate(fechaAnterior.getDate() + numberOfDaysToAdd);
+
+             
+
+            $('#linkSignOut').on("click",function(){
+                Cookies.remove('EduClassApiCookieGroup');
+                Cookies.remove('EduClassApiCookieUser');
+                window.location.href = "SignIn.html";
+              
+            });
+
+            $('body').on('click', '#botonRefresh', function (e) {
+                location.reload();
+            }); 
+
+            $('body').on('click', '#btnUnirse', function () {
+
+                
+                 var clave = $('#claveGrupo').val();
+                 $.ajax({
+                    url: serverPath()+"/Groups/JoinStudent/",
+                    type: 'POST',
+                    data: {usuario : dato, clave: clave},
+                    success: function(result) {
+                        if(result.error)//si esta definido
+                                showMessageJS(result.error);
+                        else
+                        {
+                            grupoActual = JSON.stringify({ idGrupo: result.idGrupo, nombreGrupo: result.nombreGrupo,descripcion : result.descripcion, claveGrupo: result.claveGrupo, estado : result.estado }); 
+                            Cookies.set("EduClassApiCookieGroup", grupoActual);
+                            window.location.href = result.url;
+                            //$("#botonMenu:first-child").text(grupoActual.nombreGrupo);
+                            //$("#botonMenu:first-child").val(grupoActual.nombreGrupo);
+                        }
+
+                        
+                       
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    if (XMLHttpRequest.readyState == 4) {
+                        // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+                        showMessageJS(XMLHttpRequest.statusText);
+                    }
+                    else if (XMLHttpRequest.readyState == 0) {
+                        showMessageJS('Error al conectar con el servidor remoto');
+                    }
+                    else {
+                        showMessageJS(errorThrown);
+                    }
+                }
+                });
+            });
+
+            $('body').on('click', '#gruposDDLVertical li a', function () {
+
+                
+                 idGrupo = $(this).attr('id');
+                 $.ajax({
+                    url: serverPath()+"/Groups/ChangeGroup/",
+                    type: 'POST',
+                    data: {usuario : dato, grupo: idGrupo},
+                    success: function(result) {
+                        if(result.error)//si esta definido
+                                showMessageJS(result.error);
+                        else
+                        {
+                            grupoActual = JSON.stringify({ idGrupo: result.idGrupo, nombreGrupo: result.nombreGrupo,descripcion : result.descripcion, claveGrupo: result.claveGrupo, estado : result.estado }); 
+                            Cookies.set("EduClassApiCookieGroup", grupoActual);
+                            location.reload();//Recarga la pagina entera
+                            //$("#botonMenu:first-child").text(grupoActual.nombreGrupo);
+                            //$("#botonMenu:first-child").val(grupoActual.nombreGrupo);
+                        }
+
+                        
+                       
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    if (XMLHttpRequest.readyState == 4) {
+                        // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+                        showMessageJS(XMLHttpRequest.statusText);
+                    }
+                    else if (XMLHttpRequest.readyState == 0) {
+                        showMessageJS('Error al conectar con el servidor remoto');
+                    }
+                    else {
+                        showMessageJS(errorThrown);
+                    }
+                }
+                });
+            });
+
+            
+            
+             $.ajax({
+                    type: 'GET',
+                    url: serverPath()+"/Groups/GetGroups",
+                    data: { 
+                            id: dato
+                          },
+                    success:function(data){
+                        
+                        grupos=JSON.parse(data);
+                        $.each(grupos, function(key, val) {
+
+                        if(!grupoActual)
+                        {
+                            grupoActual = JSON.stringify({ idGrupo: val.idGrupo, nombreGrupo: val.Name,descripcion : val.Description, claveGrupo: val.Key, estado : val.Enabled }); 
+                            Cookies.set("EduClassApiCookieGroup", grupoActual);
+                        }
+                        $("#gruposDDLVertical").append('<li><a href="#" id="'+ val.Id  +'">'+ val.Name +'</a></li>');
+
+                        });
+
+
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    if (XMLHttpRequest.readyState == 4) {
+                        // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+                        showMessageJS(XMLHttpRequest.statusText);
+                    }
+                    else if (XMLHttpRequest.readyState == 0) {
+                        showMessageJS('Error al conectar con el servidor remoto');
+                    }
+                    else {
+                        showMessageJS(errorThrown);
+                    }
+                }
+                });
+
+             
+              
+
+            
+                
+
+            
+
+            
+        });
+</script>
+
+</body>
+</html>

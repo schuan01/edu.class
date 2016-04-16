@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Board|Edu.Class</title>
+
+    <link rel="shortcut icon" href="Content/images/logo.ico" type="image/x-icon" />
+    <link rel="icon" href="Content/images/logo.ico" type="image/ico" />
+    <link rel="stylesheet" href="css/lib_bootstrap3-wysihtml5-bower_bootstrap3-wysihtml5.css">
+    <link rel="stylesheet" href="css/lib_fontawesome_css_font-awesome.css">
+    <link rel="stylesheet" href="css/lib_Hover_hover.css">
+    <link rel="stylesheet" href="css/lib_ionicons_css_ionicons.css">
+    <link rel="stylesheet" href="css/lib_jquery.gritter_jquery.gritter.css">
+    <link rel="stylesheet" href="css/lib_jquery.steps_jquery.steps.css">
+    <link rel="stylesheet" href="css/lib_jquery-toggles_toggles-full.css">
+    <link rel="stylesheet" href="css/lib_morrisjs_morris.css">
+    <link rel="stylesheet" href="css/lib_select2_select2.css">
+    <link rel="stylesheet" href="css/lib_weather-icons_css_weather-icons.css">
+    <link rel="stylesheet" href="css/css_quirk.css"  >
+    <link rel="stylesheet" href="font/droidserif.css">
+    <link rel="stylesheet" href="font/colorbox.css">
+    <link rel="stylesheet" href="font/bootstrap-responsive.css">
+    <link rel="stylesheet" href="font/animate.delay.css">
+    <link rel="stylesheet" href="font/roboto.css">
+    <link rel="stylesheet" href="font/isotope.css">
+    <link rel="stylesheet" href="css/lib_bootstrapcolorpicker_css_bootstrap-colorpicker.css">
+    <link rel="stylesheet" href="css/lib_datatables-plugins_integration_bootstrap_3_dataTables.bootstrap.css">
+    <link rel="stylesheet" href="css/lib_dropzone_dropzone.css">
+    <link rel="stylesheet" href="css/lib_jquery-ui_jquery-ui.css">
+    <link rel="stylesheet" href="css/lib_timepicker_jquery.timepicker.css">
+    <link rel="stylesheet" href="css/site.css">
+    <link rel="stylesheet" href="css/basic.css">
+
+    <script src="scripts/modernizr-2.8.3.js"></script>
+    <style>
+        #imgGetContacts {
+            width: 200px;
+            height: 200px;
+        }
+
+        #imgAvatarTop {
+            width: 24px;
+            height: 24px;
+        }
+
+        #imgAvatarLeft {
+            width: 48px;
+            height: 48px;
+
+        }
+
+        #imgAvatarMe {
+            width: 128px;
+            height: 128px;
+
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="headerpanel">
+        <!-- ################## MENU TOP ################## -->
+
+<div class="logopanel">
+    <h2><a href="Board.html">Edu.Class</a></h2>
+
+</div><!-- logopanel -->
+
+<div class="headerbar">
+
+    <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
+
+    <div class="searchpanel">
+        <div class="input-group">
+                
+                   
+        </div><!-- input-group -->
+
+
+    </div>
+    
+    <div class="header-right">
+
+        <ul class="headermenu">
+            <li>
+                 <div class="btn-group">
+                    <button   class="btn btn-notice" id="btnTituloGrupo">
+                     
+                    <span></span>
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div id="noticePanel " class="btn-group">
+                    <button  id="botonRefresh"class="btn btn-notice">
+                        <i class="fa fa-refresh"></i>
+                    </button>
+                </div>
+            </li>
+            <li>
+                <div class="btn-group">
+                    <button id="btnNombreCompleto" type="button" class="btn btn-logged" data-toggle="dropdown">
+                
+                    <img id="imgAvatarTop" src="http://localhost:55555/Content/images/default.png" alt="" />
+                        
+                    NombreUsuario
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="#"><i class="glyphicon glyphicon-user"></i> Mi Perfil</a></li>
+                        <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Preferencias de Cuenta</a></li>
+                        <li><a href="#" id="linkSignOut"><i class="glyphicon glyphicon-log-out"></i> Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+
+    </div><!-- header-right -->
+</div><!-- headerbar -->
+
+    <script src="scripts/jquery-2.1.4.js"></script>
+    <script src="scripts/jquery.validate.js"></script>
+    <script src="scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="scripts/jquery.validate-vsdoc.js"></script>
+    <script src="scripts/jquery.validate.min.js"></script>
+    <script src="scripts/js_quirk.js"></script>
+    <script src="scripts/lib_select2_select2.js"></script>
+    <script src="scripts/lib_bootstrap3-wysihtml5-bower_bootstrap3-wysihtml5.all.js"></script>
+    <script src="scripts/lib_jquery-ui_jquery-ui.js"></script>
+    <script src="scripts/lib_jquery-toggles_toggles.js"></script>
+    <script src="scripts/lib_bootstrap_js_bootstrap.js"></script>
+    <script src="scripts/lib_morrisjs_morris.js"></script>
+    <script src="scripts/lib_raphael_raphael.js"></script>
+    <script src="scripts/lib_flot_jquery.flot.js"></script>
+    <script src="scripts/lib_flot_jquery.flot.resize.js"></script>
+    <script src="scripts/lib_jquery.steps_jquery.steps.js"></script>
+    <script src="scripts/lib_flot-spline_jquery.flot.spline.js"></script>
+    <script src="scripts/lib_jquery-knob_jquery.knob.js"></script>
+    <script src="scripts/lib_jquery.gritter_jquery.gritter.js"></script>
+    <script src="scripts/lib_wysihtml5x_wysihtml5x-toolbar.js"></script>
+    <script src="scripts/lib_wysihtml5x_wysihtml5x.js"></script>
+    <script src="scripts/js.cookie.js"></script>
+    <script src="scripts/initEduClass.js"></script>
+    <script src="scripts/helpersSiteAndroid.js"></script>
+    <script src="scripts/js.cookie.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+
+            
+        </div><!-- header-->
+    </header>
+
+    <section>
+
+        <div class="leftpanel">
+            <div class="leftpanelinner">
+
+                <!-- ################## LEFT PANEL PROFILE ################## -->
+
+                <div class="media leftpanel-profile">
+                    <div class="media-left">
+                        <a href="#">
+                       
+                            <img id="imgAvatarLeft" src="" alt="" class="media-object img-circle">
+                       
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading" id="headingNombreCompleto">nombreUsuario<a data-toggle="collapse" data-target="#loguserinfo" class="pull-right"><i class="fa fa-angle-down"></i></a>  </h4>
+                        <span id="spanTipoPerson">tipoPersona</span>
+                        
+
+                    </div>
+                </div><!-- leftpanel-profile -->
+
+                <div class="leftpanel-userinfo collapse" id="loguserinfo">
+                    <h5 class="sidebar-title">Contacto</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <label class="pull-left">Email</label>
+                            <span class="pull-right" id="spanEmail">emailUsuario</span>
+                        </li>
+                        <li class="list-group-item">
+                            <label class="pull-left">Cumpleaños</label>
+                            <span class="pull-right" id="spanCumple">01/01/1990</span>
+                        </li>
+                        <li class="list-group-item">
+                            <label class="pull-left">Cédula</label>
+                            <span class="pull-right" id="spanCi">123456</span>
+                        </li>
+                    </ul>
+                </div><!-- leftpanel-userinfo -->
+
+                <div class="tab-content">
+
+                    <!-- ################# MAIN MENU VERTICAL################### -->
+                    
+                    <div class="tab-pane active" id="mainmenu">
+                        <h5 class="sidebar-title">Menú Principal</h5>
+                        <ul class="nav nav-pills nav-stacked nav-quirk">
+                            <li><a href="Board.html"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
+                            <li><a href="#" id="linkGrupos"><i class="fa fa-users"></i> <span>Grupos</span></a></li>
+                            <li class="nav-parent" >
+                               <a href=""><i class="fa fa-list-alt"></i> <span>Mis Grupos</span></a>
+                                <ul class="children" id="gruposDDLVertical">
+                                         
+                                </ul>
+                            </li>
+                        </ul>
+
+                       
+                        
+                    </div><!-- tab-pane -->
+                </div><!-- tab-content -->
+
+            </div><!-- leftpanelinner -->
+        </div><!-- leftpanel -->
+
+        <div class="mainpanel">
+
+            <div class="contentpanel">
+                <!-- ################# INICIA CUERPO PRINCIPAL ################### -->
+
+                
+ <div class="alert alert-warning" id="sinGrupo">
+ </div>
+
+       
+<div class="col-sm-8 col-md-9 col-lg-10" id="todoBoard">
+    <div class="timeline-wrapper">
+
+        
+
+        <div class="panel" style="height:200px" id="divAnteriorFecha">
+            <div class="panel-body"> 
+                <div class="form-horizontal">
+                    
+                        <div class="row">
+                            <h4>Escribe un post</h4>
+                        </div>
+                        <div class="row">
+                            <input type="text" name="Title" id="tituloPost" class="form-control" placeholder="Título">
+                        </div>
+
+                        <div class="row" style="margin-top: 10px">
+                            <textarea type="text" id="contenidoPost" name="Content" class="form-control" placeholder="Contenido"></textarea>
+                            <select name="PostType" class="hidden">
+                                 <option value="">Tipo</option>
+                                    
+                                
+                            </select>
+                        </div>
+                        
+                        
+
+                        <div class="row" style="margin-top: 10px">
+                            <button id="btnPost"class="btn btn-primary btn-xs pull-right" style="padding-left: 20px; padding-right: 20px">Post</button>
+                        </div>
+
+                    
+
+                </div>
+            </div>
+        </div><!-- panel panel-post -->
+    </div><!-- timeline-wrapper -->
+
+</div>
+
+                <!-- ################# FIN CUERPO PRINCIPAL ################### -->
+            </div><!-- contentpanel -->
+        </div><!-- mainpanel -->
+    </section>
+
+   
+
+    <script>
+
+        $(document).ready(function () {
+            
+            var usuarioLogeado = Cookies.get('EduClassApiCookieUser'); // => 'value'
+            var usu = jQuery.parseJSON(usuarioLogeado);
+            
+            $("#headingNombreCompleto").html(usu.nombre +" "+usu.apellido);
+            $("#spanTipoPerson").html(usu.tipoUsuario);
+            $("#spanEmail").html(usu.email);
+            $("#spanCumple").html(usu.cumplenios);
+            $("#spanCi").html(usu.identificacion);
+            $("#sinGrupo").addClass('hidden');
+
+            if(usu.tipoUsuario == "Estudiante")
+            {
+                $('#linkGrupos').attr('href', 'JoinGroup.html');
+                
+            }
+
+            if(usu.tipoUsuario == "Profesor")
+            {
+                $('#linkGrupos').attr('href', 'GroupIndex.html');
+               
+            }
+            
+
+
+            var imgUrl = "";
+            if(usu.urlPhoto)
+            {
+                imgUrl = usu.urlPhoto.replace(/[\\]/g,'/');
+            }
+            imgUrl = imgUrl.replace("~","");
+            imgUrl = serverPathWeb() + imgUrl; 
+            $("#imgAvatarLeft").attr("src",imgUrl);
+            $("#btnNombreCompleto").html('<img id="imgAvatarTop" src="'+imgUrl+'" alt="" />' + usu.nombre + '<span class="caret"></span>');
+            var grupoActual = Cookies.get("EduClassApiCookieGroup");
+            //var fileTransfer = new FileTransfer();
+            if(grupoActual)
+            {
+                grupoActual = JSON.parse(grupoActual);
+                $("#botonMenu:first-child").text(grupoActual.nombreGrupo);
+                $("#botonMenu:first-child").val(grupoActual.nombreGrupo);
+                 $("#btnTituloGrupo").html("Grupo: "+grupoActual.nombreGrupo);
+                
+            }
+
+            $('#linkSignOut').on("click",function(){
+                Cookies.remove('EduClassApiCookieGroup');
+                Cookies.remove('EduClassApiCookieUser');
+                window.location.href = "SignIn.html";
+              
+            });
+
+            $('body').on('click', '#botonRefresh', function (e) {
+                location.reload();
+            }); 
+
+
+
+            var dato = usu.idUsuario;
+            var idGrupo = "";
+            var grupos;
+            var posts;
+            var fechaAnterior = new Date();
+            var numberOfDaysToAdd = 1;
+            fechaAnterior.setDate(fechaAnterior.getDate() + numberOfDaysToAdd);
+
+             $.ajax({
+                    type: 'GET',
+                    url: serverPath()+"/Groups/GetGroups",
+                    data: { 
+                            id: dato
+                          },
+                    success:function(data){
+                        
+                        grupos=JSON.parse(data);
+                        if(usu.tipoUsuario == "Estudiante" && grupos.length == 0)
+                        {
+                            
+                            $("#sinGrupo").append('<strong>Bienvenido ...</strong> Para poder continuar debes unirte a un grupo. <a href="JoinGroup.html" class="alert-link">Haz clic aquí </a> para unirse a un grupo.');
+                            $("#sinGrupo").removeClass('hidden');
+                            $("#todoBoard").addClass('hidden');
+                        }
+
+                        if(usu.tipoUsuario == "Profesor" && grupos.length == 0)
+                        {
+                            
+                            $("#sinGrupo").append('<strong>Bienvenido ...</strong> Para poder continuar necesitas tener un grupo creado. <a href="GroupCreate.html" class="alert-link">Haz clic aquí </a> para crear un grupo.');
+                            $("#sinGrupo").removeClass('hidden');
+                            $("#todoBoard").addClass('hidden');
+                        }
+                        $.each(grupos, function(key, val) {
+
+                        if(!grupoActual)
+                        {
+                            grupoActual = JSON.stringify({ idGrupo: val.Id, nombreGrupo: val.Name,descripcion : val.Description, claveGrupo: val.Key, estado : val.Enabled}); 
+                            Cookies.set("EduClassApiCookieGroup", grupoActual);
+                        }
+                        $("#gruposDDLVertical").append('<li><a href="#" id="'+ val.Id  +'">'+ val.Name +'</a></li>');
+
+                        });
+
+
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    if (XMLHttpRequest.readyState == 4) {
+                        // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+                        showMessageJS(XMLHttpRequest.statusText);
+                    }
+                    else if (XMLHttpRequest.readyState == 0) {
+                        showMessageJS('Error al conectar con el servidor remoto');
+                    }
+                    else {
+                        showMessageJS(errorThrown);
+                    }
+                }
+                });
+
+            $('body').on('click', '#gruposDDLVertical li a', function () {
+
+                
+                 idGrupo = $(this).attr('id');
+                 $.ajax({
+                    url: serverPath()+"/Groups/ChangeGroup/",
+                    type: 'POST',
+                    data: {usuario : dato, grupo: idGrupo},
+                    success: function(result) {
+                        if(result.error)//si esta definido
+                                showMessageJS(result.error);
+                        else
+                        {
+                            grupoActual = JSON.stringify({ idGrupo: result.idGrupo, nombreGrupo: result.nombreGrupo,descripcion : result.descripcion, claveGrupo: result.claveGrupo, estado : result.estado}); 
+                            Cookies.set("EduClassApiCookieGroup", grupoActual);
+                            location.reload();//Recarga la pagina entera
+                            
+                        }
+
+                        
+                       
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    if (XMLHttpRequest.readyState == 4) {
+                        // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+                        showMessageJS(XMLHttpRequest.statusText);
+                    }
+                    else if (XMLHttpRequest.readyState == 0) {
+                        showMessageJS('Error al conectar con el servidor remoto');
+                    }
+                    else {
+                        showMessageJS(errorThrown);
+                    }
+                }
+                });
+            });
+
+            $('body').on('click', '#btnPost', function () {
+
+                 grupoActual = Cookies.get("EduClassApiCookieGroup");
+                grupoActual = JSON.parse(grupoActual);
+                 var idGrupoActual = grupoActual.idGrupo;
+                 var tituloPost = $("#tituloPost").val();
+                 var contenidoPost = $("#contenidoPost").val();
+
+                 var postNuevo = JSON.stringify({ Title: tituloPost, Content: contenidoPost, GroupId: idGrupoActual, PersonId: dato, PostType : "1" }); 
+                 $.ajax({
+                    url: serverPath()+"/Board/Post/",
+                    type: 'POST',
+                    dataType: "json",
+                    data: postNuevo,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(result) {
+                        if(result.error)//si esta definido
+                                showMessageJS(result.error);
+                        else
+                        {
+                            //showMessageJS(result.mensaje);
+                            $("#tituloPost").val("");
+                            $("#contenidoPost").val("");
+                            location.reload();//Recarga la pagina entera
+                          
+                        }
+
+                        
+                       
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    if (XMLHttpRequest.readyState == 4) {
+                        // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+                        showMessageJS(XMLHttpRequest.statusText);
+                    }
+                    else if (XMLHttpRequest.readyState == 0) {
+                        showMessageJS('Error al conectar con el servidor remoto');
+                    }
+                    else {
+                        showMessageJS(errorThrown);
+                    }
+                }
+                });
+            });
+
+             var botonClickeado = "";
+              $('body').on('click', 'button', function () {
+                    botonClickeado = $(this).attr('id');
+                    if(botonClickeado.indexOf("comentarReply") > -1)
+                    {
+                        var idPost = botonClickeado.substr(14, 1);
+                        var idTexto = "#comentar_" + idPost;
+                        var textoReply = $(idTexto).val();
+                        $.ajax({
+                            url: serverPath()+"/Board/Reply",
+                            type: 'POST',
+                            data: { 
+                                personId: dato, postId:idPost,content:textoReply
+                             },
+                            success: function(result) {
+                                if(result.error)//si esta definido
+                                        showMessageJS(result.error);
+                                else
+                                {
+                                    //showMessageJS(result.mensaje);
+                                    //$("#tituloPost").val("");
+                                    //$("#contenidoPost").val("");
+                                    location.reload();//Recarga la pagina entera
+                                  
+                                }
+
+                                
+                               
+                            },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    if (XMLHttpRequest.readyState == 4) {
+                        // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+                        showMessageJS(XMLHttpRequest.statusText);
+                    }
+                    else if (XMLHttpRequest.readyState == 0) {
+                        showMessageJS('Error al conectar con el servidor remoto');
+                    }
+                    else {
+                        showMessageJS(errorThrown);
+                    }
+                }
+                        });
+                    }
+
+                    
+                });
+
+               var linkClickeado = "";
+               var nombreClickeado = "";
+               $('body').on('click', 'a', function () {
+                    linkClickeado = $(this).attr('id');
+                    
+                    if(linkClickeado.indexOf("link_") > -1)
+                    {
+                        nombreClickeado = $(this).attr('name')
+                        window.open(nombreClickeado, '_system');
+                    }
+                });
+
+
+
+
+              
+
+             if(grupoActual)
+                {
+                    grupoActual = Cookies.get("EduClassApiCookieGroup");
+                    grupoActual = JSON.parse(grupoActual);
+                    idGrupo = grupoActual.idGrupo;
+                }
+             $.ajax({
+                    type: 'GET',
+                    url: serverPath()+"/Board/GetPostsGroup",
+                    data: { 
+                            id: idGrupo
+                          },
+                    success:function(data){
+                        
+                        if(data.error)//si esta definido
+                                showMessageJS(data.error);
+                        
+                            
+
+                        posts=JSON.parse(data);
+                        $.each(posts, function(key, val) {
+
+                        var user = val.Person;
+                        var avatar = user.Avatar;
+                        var avatarUrl = avatar.UrlPhoto;
+                        avatarUrl = avatarUrl.replace(/[\\]/g,'/');
+                        avatarUrl = avatarUrl.replace("~","");
+                        avatarUrl = serverPathWeb() + avatarUrl; 
+                        
+
+                        var fecha = new Date(val.CreatedAt);
+                        var day = fecha.getDate();
+                        var monthIndex = fecha.getMonth() + 1 ;
+                        var year = fecha.getFullYear();
+
+                        
+                        var diaAnterior = fechaAnterior.getDate();
+                        var mesAnterior = fechaAnterior.getMonth() + 1 ;
+                        var anioAnterior = fechaAnterior.getFullYear();
+
+                        var fechaAnteriorFormateada = diaAnterior+"/"+mesAnterior+ "/"+anioAnterior;
+                        var fechaFormateada = day+"/"+monthIndex+ "/"+year;
+
+                        var texto = "";
+
+                        var horaFormateada = "";
+
+                        var archivoNuevo = "";
+                        var respuestaNueva = "";
+                        var textoArchivo = "";  
+
+                        if(fechaAnteriorFormateada != fechaFormateada )
+                        {
+                            texto = '<div class="timeline-date" id="fecha_'+day+monthIndex+year+'">'+fechaFormateada +'</div>';
+                            fechaAnterior = fecha;
+                            horaFormateada = fecha.getHours() + ":" + fecha.getMinutes();
+
+                            $("#divAnteriorFecha").after( texto +'<div class="panel panel-post-item status"><div class="panel-heading"><div class="media"><div class="media-left"><a href="#"><img alt="" src="'+avatarUrl +'" class="media-object img-circle"></a> </div><div class="media-body"><h4 class="media-heading">'+ user.FirstName+" "+user.LastName +'</h4><p class="media-usermeta"><span class="media-time">'+horaFormateada +'</span></p></div></div><!-- media --></div><!-- panel-heading --><div class="panel-body"><strong>'+val.Title+'</strong><p>'+val.Content+'</p><ul id="archivos_'+val.Id+'" class="list-unstyled list-attachments"></ul></div><div class="panel-footer"><ul class="list-inline"><li><a data-target="#comment-'+val.Id+'" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comentarios ('+val.Replays.length+')</a></li></ul></div><div class="collapse" id="comment-'+val.Id+'"><ul id="ulcomment_'+val.Id+'" class="media-list"></ul></div><div class="form-group"><input type="hidden" name="postId" value="'+val.Id+'" /><input type="hidden" name="personId" value="'+dato+'" /><input type="button" id="comentar_'+val.Id+'" name="content" class="form-control btnSubmit" data-Id="'+val.Id+'" placeholder="Escribe algún comentario"><button type="button" class="btn btn-primary btn-xs pull-right" id="comentarReply_'+val.Id+'" >Comentar</button></div></div><!-- panel panel-post -->');
+
+
+                        }
+                        else
+                        {
+                            horaFormateada = fecha.getHours() + ":" + fecha.getMinutes();
+                            var selector = "#fecha_"+diaAnterior+mesAnterior+anioAnterior;
+                            $(selector).after('<div class="panel panel-post-item status"><div class="panel-heading"><div class="media"><div class="media-left"><a href="#"><img alt="" src="'+avatarUrl +'" class="media-object img-circle"></a> </div><div class="media-body"><h4 class="media-heading">'+ user.FirstName+" "+user.LastName +'</h4><p class="media-usermeta"><span class="media-time">'+horaFormateada +'</span></p></div></div><!-- media --></div><!-- panel-heading --><div class="panel-body"><strong>'+val.Title+'</strong><p>'+val.Content+'</p><ul id="archivos_'+val.Id+'" class="list-unstyled list-attachments"></ul></div><div class="panel-footer"><ul class="list-inline"><li><a data-target="#comment-'+val.Id+'" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comentarios ('+val.Replays.length+')</a></li></ul></div><div class="collapse" id="comment-'+val.Id+'"><ul id="ulcomment_'+val.Id+'"class="media-list"></ul></div><div class="form-group"><input type="hidden" name="postId" value="'+val.Id+'" /><input type="hidden" name="personId" value="'+dato+'" /><input type="button"  id="comentar_'+val.Id+'" name="content" class="form-control btnSubmit" data-Id="'+val.Id+'" placeholder="Escribe algún comentario"><button type="button"  class="btn btn-primary btn-xs pull-right" id="comentarReply_'+val.Id+'" >Comentar</button></div></div><!-- panel panel-post -->');
+                        }
+
+                        $.each(val.Files, function(clave, valorArchivo) 
+                        {
+                            archivoNuevo = valorArchivo;
+                            var archivoUrl = valorArchivo.UrlFile.replace(/[\\]/g,'/');
+                            archivoUrl = archivoUrl.replace("~","");
+                            archivoUrl = serverPathWeb() + archivoUrl; 
+                            //textoArchivo = '<form><li><i class="fa fa-file"></i><a id="link_'+valorArchivo.Id+'" target="_blank" href="'+archivoUrl+'">'+archivoNuevo.Name+'</a> </li><form>';
+                            textoArchivo = '<form><li><i class="fa fa-file"></i><a id="link_'+valorArchivo.Id+'" name="'+archivoUrl+'" href="#">'+archivoNuevo.Name+'</a> </li><form>';
+                           
+                            var nombreUl = "#archivos_" + val.Id;
+
+                            
+
+                            $(nombreUl).append(textoArchivo);
+
+                           
+                        
+                        });
+                        $.each(val.Replays, function(clave, valorRespuesta) 
+                        {
+                            respuestaNueva = valorRespuesta;
+                            var fechaComentario = new Date(respuestaNueva.CreatedAt);
+                            var day = fechaComentario.getDate();
+                            var monthIndex = fechaComentario.getMonth() + 1 ;
+                            var year = fechaComentario.getFullYear();
+
+                            var horaFormateadaComentario = fechaComentario.getHours() + ":" + fechaComentario.getMinutes();
+                            var fechaFormateadaComentario = day+"/"+monthIndex+ "/"+year + " " + horaFormateadaComentario;
+
+                            var avatarUrl = respuestaNueva.Person.Avatar.UrlPhoto;
+                            avatarUrl = avatarUrl.replace(/[\\]/g,'/');
+                            avatarUrl = avatarUrl.replace("~","");
+                            avatarUrl = serverPathWeb() + avatarUrl; 
+
+                            var textoReply = '<li class="media"><div class="media-left"><a href="#"><img class="media-object img-circle" src="'+avatarUrl+'" alt=""></a></div><div class="media-body"><h4 class="media-heading">'+ respuestaNueva.Person.FirstName+" "+respuestaNueva.Person.LastName +'<small>'+fechaFormateadaComentario+'</small></h4>'+respuestaNueva.Content+'</div></li>';
+
+                             var nombreUl = "#ulcomment_" + val.Id;
+                            $(nombreUl).append(textoReply);
+                        });
+
+                        });
+
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    if (XMLHttpRequest.readyState == 4) {
+                        // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+                        showMessageJS(XMLHttpRequest.statusText);
+                    }
+                    else if (XMLHttpRequest.readyState == 0) {
+                        showMessageJS('Error al conectar con el servidor remoto');
+                    }
+                    else {
+                        showMessageJS(errorThrown);
+                    }
+                }
+                });
+
+                
+
+            
+
+            
+        });
+</script>
+
+</body>
+</html>

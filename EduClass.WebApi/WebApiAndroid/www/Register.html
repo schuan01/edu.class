@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!--<link rel="shortcut icon" href="../images/favicon.png" type="image/png">-->
+
+    <title>Edu.Class</title>
+    
+    <link rel="stylesheet" href="css/lib_bootstrap3-wysihtml5-bower_bootstrap3-wysihtml5.css">
+    <link rel="stylesheet" href="css/lib_fontawesome_css_font-awesome.css">
+    <link rel="stylesheet" href="css/lib_Hover_hover.css">
+    <link rel="stylesheet" href="css/lib_ionicons_css_ionicons.css">
+    <link rel="stylesheet" href="css/lib_jquery.gritter_jquery.gritter.css">
+    <link rel="stylesheet" href="css/lib_jquery.steps_jquery.steps.css">
+    <link rel="stylesheet" href="css/lib_jquery-toggles_toggles-full.css">
+    <link rel="stylesheet" href="css/lib_morrisjs_morris.css">
+    <link rel="stylesheet" href="css/lib_select2_select2.css">
+    <link rel="stylesheet" href="css/lib_weather-icons_css_weather-icons.css">
+    <link href="css/css_quirk.css" rel="stylesheet" />
+    <link rel="stylesheet" href="font/droidserif.css">
+    <link rel="stylesheet" href="font/colorbox.css">
+    <link rel="stylesheet" href="font/bootstrap-responsive.css">
+    <link rel="stylesheet" href="font/animate.delay.css">
+    <link rel="stylesheet" href="font/colorbox.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="font/animate.min.css">
+    <link rel="stylesheet" href="font/bootstrap.min.css">
+    <link rel="stylesheet" href="font/roboto.css">
+    <link rel="stylesheet" href="font/isotope.css">
+    <link rel="stylesheet" href="font/font-awesome.min.css">
+    <link rel="stylesheet" href="css/lib_animate.css_animate.css">
+    <link rel="stylesheet" href="css/lib_bootstrapcolorpicker_css_bootstrap-colorpicker.css">
+    <link rel="stylesheet" href="css/lib_datatables-plugins_integration_bootstrap_3_dataTables.bootstrap.css">
+    <link rel="stylesheet" href="css/lib_dropzone_dropzone.css">
+    <link rel="stylesheet" href="css/lib_jquery-ui_jquery-ui.css">
+    <link rel="stylesheet" href="css/lib_timepicker_jquery.timepicker.css">
+    <link rel="stylesheet" href="css/site.css">
+    <link rel="stylesheet" href="css/style.blue.css">
+    <link rel="stylesheet" href="css/style.default.css">
+
+    <script src="scripts/modernizr-2.8.3.js"></script>
+    
+    
+    <style>
+        .cc-selector input{
+            margin:0;padding:0;
+            -webkit-appearance:none;
+            -moz-appearance:none;
+            appearance:none;
+        }
+
+        .input_hidden {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .cc-selector input:active +.drinkcard-cc{opacity: .9;}
+        .cc-selector input:checked +.drinkcard-cc{
+                -webkit-filter: none;
+                -moz-filter: none;
+                filter: none;
+        }
+        .drinkcard-cc{
+            cursor:pointer;
+            background-size:contain;
+            background-repeat:no-repeat;
+            display:inline-block;
+            width:322px;height:110px;
+            -webkit-transition: all 100ms ease-in;
+            -moz-transition: all 100ms ease-in;
+            transition: all 100ms ease-in;
+            -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+            -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+            filter: brightness(1.8) grayscale(1) opacity(.7);
+        }
+        .drinkcard-cc:hover{
+                -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+                -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+                filter: brightness(1.2) grayscale(.5) opacity(.9);
+        }
+
+        /* Extras */
+        a:visited{color:#888}
+        a{color:#444;text-decoration:none;}
+        p{margin-bottom:.3em;}
+    </style>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="js/lib_html5shiv_html5shiv.js"></script>
+    <script src="js/lib_respond_respond.src.js"></script>
+    <![endif]-->
+</head>
+
+<body class="signwrapper">
+
+    <div class="sign-overlay"></div>
+    <div class="signpanel"></div>
+
+    <div class="signup">
+        <div class="row">
+        <div class="col-md-6">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h1>Edu.Class</h1>
+                    <h4 class="panel-title">Create una cuenta</h4>
+                </div>
+                <div class="panel-body">
+                <form id="registerForm" action="/Users/Register" method="post" role="application" class="wizard clearfix" novalidate="novalidate">
+                   
+                        <h3>Tipo</h3>
+                        <section>
+                            <h4>Soy* </h4>
+                            <div class="cc-selector">
+                                <input id="teacher" type="radio" name="PersonType" value="teacher" class="input_hidden required" />
+                                <label class="drinkcard-cc btn btn-primary" for="teacher">Profesor</label>
+                                <input id="student" type="radio" name="PersonType" value="student" class="input_hidden required"/>
+                                <label class="drinkcard-cc btn btn-primary" for="student">Estudiante</label>
+                            </div>
+                        </section>
+                        <h3>Usuario</h3>
+                        <section>
+                            <label for="userName">Nombre de usuario *</label>
+                            <input id="userName" name="userName" type="text" class="form-control required">
+                            <label for="email">Correo electrónico *</label>
+                            <input id="email" name="email" type="email" class="form-control required">
+                            <label for="password">Contraseña *</label>
+                            <input id="password" name="password" type="password" class="form-control required">
+                            <label for="confirm">Confirmación de contraseña *</label>
+                            <input id="confirm" name="ConfirmPassword" type="password" class="form-control required">
+                        </section>
+                        <h3>Persona</h3>
+                        <section>
+                            <label for="firstName">Nombre *</label>
+                            <input id="firstName" name="firstName" type="text" class="form-control required">
+                            <label for="lastName">Apellido *</label>
+                            <input id="lastName" name="lastName" type="text" class="form-control required">
+                            <label for="birthday">Fecha de nacimiento *</label>
+                            <input id="birthday" name="birthday" type="date" class="form-control">
+                            <label for="identificationCard">Tarjeta de Identificación *</label>
+                            <input id="identificationCard" name="identificationCard" type="text" class="form-control required">
+                        </section>
+                </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="sign-sidebar">
+                <h3 class="signtitle mb20">Texto de ejemplo</h3>
+                <p>Habla de lo maravilloso que es Educlass</p>
+                <p>It's amazing</p>
+
+                <br>
+
+                <h4 class="reason">1. Profesor</h4>
+                <p>Beneficions para el profesor</p>
+
+                <br>
+
+                <h4 class="reason">2. Estudiante</h4>
+                <p>Beneficios para el estudiante</p>
+
+                <hr class="invisible">
+
+                <div class="form-group">
+                    <a href="SignIn.html" class="btn btn-default btn-quirk btn-stroke btn-stroke-thin btn-block btn-sign">¿Ya tienes una cuenta? Inicia sesión!</a>
+                </div>
+            </div><!-- sign-sidebar -->
+        </div>
+    </div>
+    </div>
+
+    <script src="scripts/jquery-2.1.4.js"></script>
+    <script src="scripts/jquery.validate.js"></script>
+    <script src="scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="scripts/jquery.validate-vsdoc.js"></script>
+    <script src="scripts/jquery.validate.min.js"></script>
+    <script src="scripts/js_quirk.js"></script>
+    <script src="scripts/lib_select2_select2.js"></script>
+    <script src="scripts/lib_bootstrap3-wysihtml5-bower_bootstrap3-wysihtml5.all.js"></script>
+    <script src="scripts/lib_jquery-ui_jquery-ui.js"></script>
+    <script src="scripts/lib_jquery-toggles_toggles.js"></script>
+    <script src="scripts/lib_bootstrap_js_bootstrap.js"></script>
+    <script src="scripts/lib_morrisjs_morris.js"></script>
+    <script src="scripts/lib_raphael_raphael.js"></script>
+    <script src="scripts/lib_flot_jquery.flot.js"></script>
+    <script src="scripts/lib_flot_jquery.flot.resize.js"></script>
+    <script src="scripts/lib_jquery.steps_jquery.steps.js"></script>
+    <script src="scripts/lib_flot-spline_jquery.flot.spline.js"></script>
+    <script src="scripts/lib_jquery-knob_jquery.knob.js"></script>
+    <script src="scripts/lib_jquery.gritter_jquery.gritter.js"></script>
+    <script src="scripts/lib_wysihtml5x_wysihtml5x-toolbar.js"></script>
+    <script src="scripts/lib_wysihtml5x_wysihtml5x.js"></script>
+    <script src="scripts/initEduClass.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    
+
+   
+    
+    <script src="scripts/helpersSiteAndroid.js"></script>
+    <script>
+        $(document).ready(function () {
+            //$("#birthday").mask("99/99/9999");
+
+            var form = $("#registerForm");
+
+            form.steps({
+                headerTag: "h3",
+                bodyTag: "section",
+                transitionEffect: "slideLeft",
+                autoFocus: true,
+                onStepChanging: function (event, currentIndex, newIndex) {
+                    form.validate().settings.ignore = ":disabled,:hidden";
+                    return form.valid();
+                },
+                onFinishing: function (event, currentIndex) {
+                    form.validate().settings.ignore = ":disabled";
+                    return form.valid();
+                },
+                onFinished: function (event, currentIndex) 
+                {
+                    ActivityIndicator.show("Enviando Solicitud...");
+                    var personType = $('input[name=PersonType]:checked').val();
+                    var username = $('#userName').val();
+                    var password = $('#password').val();
+                    var confirmpassword = $('#confirm').val();
+                    var email = $('#email').val();
+                    var firstname = $('#firstName').val();
+                    var lastname = $('#lastName').val();
+                    var birthday = $('#birthday').val();
+                    var identificationCard = $('#identificationCard').val();
+
+                    var person= JSON.stringify({ PersonType: personType, UserName: username, Password: password, ConfirmPassword: confirmpassword,Email:email, FirstName: firstname, LastName: lastname , Birthday: birthday , IdentificationCard: identificationCard });              
+                    $.ajax({                                    
+                        url: serverPath()+"/Users/Register/",
+                        type: "POST",
+                        dataType: "json",
+                        data: person,
+                        success: function (result) {
+
+                            if(result.error)//si esta definido
+                            {
+                                ActivityIndicator.hide();
+                                showMessageJS(result.error);
+                                
+                            }
+                            if(result.url)//si esta definido
+                            {
+                                ActivityIndicator.hide();
+                                showMessageJS(result.mensaje);
+                                window.location.href = result.url;
+                            }
+
+
+                            
+     
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    ActivityIndicator.hide();
+                    if (XMLHttpRequest.readyState == 4) {
+                        // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
+                        showMessageJS(XMLHttpRequest.statusText);
+                    }
+                    else if (XMLHttpRequest.readyState == 0) {
+                        showMessageJS('Error al conectar con el servidor remoto');
+                    }
+                    else {
+                        showMessageJS(errorThrown);
+                    }
+                },
+                    contentType: 'application/json; charset=utf-8'
+                
+    
+                });
+                }
+            });
+
+            form.validate({
+                errorPlacement: function errorPlacement(error, element) { element.before(error); },
+                rules: {
+                    
+                    confirm: {
+                        equalTo: "#password"
+                    }
+                }
+            });
+
+            
+        });
+    </script>
+</body>
+</html>
