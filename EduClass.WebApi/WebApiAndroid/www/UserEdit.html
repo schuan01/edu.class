@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Crear un Grupo|Edu.Class</title>
+    <title>Editar usuario|Edu.Class</title>
 
     <link rel="shortcut icon" href="Content/images/logo.ico" type="image/x-icon" />
     <link rel="icon" href="Content/images/logo.ico" type="image/ico" />
@@ -130,10 +130,10 @@
     <script src="scripts/lib_jquery.gritter_jquery.gritter.js"></script>
     <script src="scripts/lib_wysihtml5x_wysihtml5x-toolbar.js"></script>
     <script src="scripts/lib_wysihtml5x_wysihtml5x.js"></script>
+    <script src="scripts/lib_timepicker_jquery.timepicker.js"></script>
     <script src="scripts/js.cookie.js"></script>
     <script src="scripts/initEduClass.js"></script>
     <script src="scripts/helpersSiteAndroid.js"></script>
-    <script src="scripts/js.cookie.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
 
@@ -212,44 +212,82 @@
             <div class="contentpanel">
                 <!-- ################# INICIA CUERPO PRINCIPAL ################### -->
 
-                <div class="panel panel-site-traffic col-md-8 col-md-offset-2">
-            <div class="panel-heading">
-                <ul class="panel-options">
-                    <li><a><i class="fa fa-refresh"></i></a></li>
-                </ul>
-                <h4 class="panel-title text-success">Crear un nuevo Grupo</h4>
-            </div>
-            <div class="panel-body">
-               
-                    <div class="form-horizontal">
+               <div class="panel panel-site-traffic col-md-8 col-md-offset-2">
+    <div class="panel-heading">
+        <h4 class="panel-title text-success">Editar Usuario</h4>
+        
+    </div>
+    <div class="panel-body">
+          <div class="form-horizontal">
+                
+                <input data-val="true" data-val-number="The field Id must be a number." data-val-required="El campo Id es obligatorio." id="IdPerson" name="IdPerson" type="hidden" value="2">
 
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="UserName">Nombre Usuario</label>
+                    <div class="col-md-10">
+                        <input class="form-control text-box single-line" data-val="true" data-val-maxlength="El campo Nombre Usuario debe ser un tipo de cadena o matriz con una longitud máxima de '75'." data-val-maxlength-max="75" data-val-required="El campo Nombre Usuario es obligatorio." id="UserName" name="UserName" readonly="" type="text" value="">
+                        <span class="field-validation-valid text-danger" data-valmsg-for="UserName" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="FirstName">Nombre</label>
+                    <div class="col-md-10">
+                        <input class="form-control text-box single-line" data-val="true" data-val-maxlength="El campo Nombre debe ser un tipo de cadena o matriz con una longitud máxima de '75'." data-val-maxlength-max="75" data-val-required="El campo Nombre es obligatorio." id="FirstName" name="FirstName" type="text" value="">
+                        <span class="field-validation-valid text-danger" data-valmsg-for="FirstName" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="LastName">Apellido</label>
+                    <div class="col-md-10">
+                        <input class="form-control text-box single-line" data-val="true" data-val-maxlength="El campo Apellido debe ser un tipo de cadena o matriz con una longitud máxima de '75'." data-val-maxlength-max="75" data-val-required="El campo Apellido es obligatorio." id="LastName" name="LastName" type="text" value="">
+                        <span class="field-validation-valid text-danger" data-valmsg-for="LastName" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="Birthday">Fecha Nacimiento</label>
+                   <div class="col-md-10 input-group">
+                        <!--<input class="form-control text-box single-line" id="datepicker" name="Birthday" placeholder="dd/mm/yyyy" type="text"> -->
+                        <input id="datepicker" name="birthday" type="date" class="form-control">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        <span class="field-validation-valid text-danger" data-valmsg-for="Birthday" data-valmsg-replace="true"></span>
                         
-                       <div class="form-group">
-                        <label class="control-label col-md-2" for="Name">Nombre</label>
-                            <div class="col-md-10">
-                                <input class="form-control text-box single-line" data-val="true" data-val-maxlength="El campo Nombre debe ser un tipo de cadena o matriz con una longitud máxima de '75'." data-val-maxlength-max="75" data-val-required="El campo Nombre es obligatorio." id="Name" name="Name" type="text" value="">
-                                <span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true"></span>
-                            </div>
-                       </div>
+                    </div>
+                </div>
 
-                       <div class="form-group">
-                            <label class="control-label col-md-2" for="Description">Descripción</label>
-                            <div class="col-md-10">
-                                <input class="form-control text-box single-line" data-val="true" data-val-required="El campo Descripción es obligatorio." id="Description" name="Description" type="text" value="">
-                                <span class="field-validation-valid text-danger" data-valmsg-for="Description" data-valmsg-replace="true"></span>
-                            </div>
-                        </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="Email">Email</label>
+                    <div class="col-md-10">
+                        <input class="form-control text-box single-line" data-val="true" data-val-required="El campo Email es obligatorio." id="Email" name="Email" type="email" value="">
+                        <span class="field-validation-valid text-danger" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
 
-                        <div class="form-group">
-                            <div class="col-md-offset-2 col-md-10">
-                                <input type="button" value="Crear" id="btnCrearGrupo" class="btn btn-primary pull-right">
-                                <a href="GroupIndex.html" class="btn btn-default-active pull-right mr10">Volver</a>
-                            </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="IdentificationCard">Cédula</label>
+                    <div class="col-md-10">
+                        <input class="form-control text-box single-line" data-val="true" data-val-required="El campo Cédula es obligatorio." id="IdentificationCard" name="IdentificationCard" type="text" value="">
+                        <span class="field-validation-valid text-danger" data-valmsg-for="IdentificationCard" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-2">
+                            <a href="ChangePassword.html" class="btn-quirk pull-right"><i class="fa fa-key fa-2x"></i> Cambiar Contraseña</a>
                         </div>
                     </div>
-                
                 </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="button" id="btnGuardar" value="Guardar" class="btn btn-primary pull-right">
+                        <a href="Board.html" class="btn btn-default-active pull-right mr10">Volver</a>
+                    </div>
+                </div>
+            </div>     
         </div>
+    </div>
 
             <!-- ################# FIN CUERPO PRINCIPAL ################### -->
             </div><!-- contentpanel -->
@@ -314,31 +352,79 @@
             }); 
 
            //################### FIN DE ESTO VA SIEMPRE ########################
+           $('#IdPerson').val(usu.idUsuario);
+           $('#UserName').val(usu.usuario);
+           $('#Email').val(usu.email);
+           $('#FirstName').val(usu.nombre);
+           $('#LastName').val(usu.apellido);
+           $('#IdentificationCard').val(usu.identificacion);
+           $('#datepicker').val(usu.cumpleanios);
 
-            $('body').on('click', '#btnCrearGrupo', function () {
+
+           /*// Date Picker
+            $('#datepicker').datepicker({
+                dateFormat: "dd/mm/yy", changeMonth: true, changeYear: true, yearRange: "-100:+0",
+                monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+                dayNamesMin: ["D", "L", "M", "M", "J", "V", "S"]
+            });
+            var queryDate = $('#datepicker').val(),
+            dateParts = queryDate.match(/(\d+)/g)
+            realDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]); 
+            $("#datepicker").datepicker("setDate", realDate);
+            
+            $('#datepicker-inline').datepicker();
+            $('#datepicker-multiple').datepicker({ numberOfMonths: 2 });*/
+
+
+           
+            $('body').on('click', '#btnGuardar', function () {
     
-                var name = $('#Description').val();
-                var description = $('#Name').val();
-                 $.ajax({
-                    url: serverPath()+"/Groups/Create/",
-                    type: 'POST',
-                    data: {usuario : dato, descripcion: description, nombre: name},
-                    success: function(result) {
-                        if(result.error)//si esta definido
-                                showMessageJS(result.error);
-                        else
-                        {
-                            grupoActual = JSON.stringify({ idGrupo: result.idGrupo, nombreGrupo: result.nombreGrupo,descripcion : result.descripcion, claveGrupo: result.claveGrupo, estado : result.estado }); 
-                            Cookies.set("EduClassApiCookieGroup", grupoActual);
-                            window.location.href = result.url;
-                            //$("#botonMenu:first-child").text(grupoActual.nombreGrupo);
-                            //$("#botonMenu:first-child").val(grupoActual.nombreGrupo);
-                        }
+                ActivityIndicator.show("Guardando...");
+                var Idusu = $('#IdPerson').val();
+                var username = $('#UserName').val();
+                var email = $('#Email').val();
+                var firstname = $('#FirstName').val();
+                var lastname = $('#LastName').val();
+                //var birthday = $('#datepicker').datepicker("getDate");
+                var birthday = $('#datepicker').val();
+                var password = "123456";//PARA QUE NO JODA EL VIEWMODEL
+                var identificationCard = $('#IdentificationCard').val();
 
-                        
-                       
+                var person= JSON.stringify({Id:Idusu,UserName: username, Password :  password, ConfirmPassword : password,Email:email, FirstName: firstname, LastName: lastname , Birthday: birthday , IdentificationCard: identificationCard });
+
+                //var person= JSON.stringify({ PersonType: personType, UserName: username, Password: password, ConfirmPassword: confirmpassword,Email:email, FirstName: firstname, LastName: lastname , Birthday: birthday , IdentificationCard: identificationCard });   
+
+                $.ajax({                                    
+                        url: serverPath()+"/Users/Edit/",
+                        type: "POST",
+                        dataType: "json",
+                        data: person,
+                        success: function (result) {
+
+                            if(result.error)//si esta definido
+                            {
+                                ActivityIndicator.hide();
+                                showMessageJS(result.error);
+                                
+                            }
+                            
+                            if(result.mensaje)
+                            {
+                                ActivityIndicator.hide();
+                                showMessageJS(result.mensaje);
+
+                                var usuariologeado = JSON.stringify({ idUsuario: result.idUsuario, usuario: result.usuario, nombre: result.nombre, apellido: result.apellido, cumpleanios: result.cumpleanios, tipoUsuario: result.tipoUsuario, email: result.email, identificacion: result.identificacion, urlPhoto:result.urlPhoto }); 
+                                Cookies.set("EduClassApiCookieUser", usuariologeado);
+                                
+                                window.location.href = result.url;
+
+                                
+                            }
+
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    ActivityIndicator.hide();
                     if (XMLHttpRequest.readyState == 4) {
                         // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
                         showMessageJS(XMLHttpRequest.statusText);
@@ -349,7 +435,10 @@
                     else {
                         showMessageJS(errorThrown);
                     }
-                }
+                },
+                    contentType: 'application/json; charset=utf-8'
+                
+    
                 });
             });
 

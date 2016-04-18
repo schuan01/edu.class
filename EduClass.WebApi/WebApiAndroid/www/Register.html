@@ -10,6 +10,8 @@
 
     <title>Edu.Class</title>
     
+    <link rel="shortcut icon" href="Content/images/logo.ico" type="image/x-icon" />
+    <link rel="icon" href="Content/images/logo.ico" type="image/ico" />
     <link rel="stylesheet" href="css/lib_bootstrap3-wysihtml5-bower_bootstrap3-wysihtml5.css">
     <link rel="stylesheet" href="css/lib_fontawesome_css_font-awesome.css">
     <link rel="stylesheet" href="css/lib_Hover_hover.css">
@@ -20,27 +22,20 @@
     <link rel="stylesheet" href="css/lib_morrisjs_morris.css">
     <link rel="stylesheet" href="css/lib_select2_select2.css">
     <link rel="stylesheet" href="css/lib_weather-icons_css_weather-icons.css">
-    <link href="css/css_quirk.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/css_quirk.css"  >
     <link rel="stylesheet" href="font/droidserif.css">
     <link rel="stylesheet" href="font/colorbox.css">
     <link rel="stylesheet" href="font/bootstrap-responsive.css">
     <link rel="stylesheet" href="font/animate.delay.css">
-    <link rel="stylesheet" href="font/colorbox.css">
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="font/animate.min.css">
-    <link rel="stylesheet" href="font/bootstrap.min.css">
     <link rel="stylesheet" href="font/roboto.css">
     <link rel="stylesheet" href="font/isotope.css">
-    <link rel="stylesheet" href="font/font-awesome.min.css">
-    <link rel="stylesheet" href="css/lib_animate.css_animate.css">
     <link rel="stylesheet" href="css/lib_bootstrapcolorpicker_css_bootstrap-colorpicker.css">
     <link rel="stylesheet" href="css/lib_datatables-plugins_integration_bootstrap_3_dataTables.bootstrap.css">
     <link rel="stylesheet" href="css/lib_dropzone_dropzone.css">
     <link rel="stylesheet" href="css/lib_jquery-ui_jquery-ui.css">
     <link rel="stylesheet" href="css/lib_timepicker_jquery.timepicker.css">
     <link rel="stylesheet" href="css/site.css">
-    <link rel="stylesheet" href="css/style.blue.css">
-    <link rel="stylesheet" href="css/style.default.css">
+    <link rel="stylesheet" href="css/basic.css">
 
     <script src="scripts/modernizr-2.8.3.js"></script>
     
@@ -149,24 +144,24 @@
         </div>
         <div class="col-sm-6">
             <div class="sign-sidebar">
-                <h3 class="signtitle mb20">Texto de ejemplo</h3>
-                <p>Habla de lo maravilloso que es Educlass</p>
-                <p>It's amazing</p>
+                <h3 class="signtitle mb20">Información</h3>
+                <p>Edu.Class es una plataforma sencilla y dinámica  para el manejo de una clase y su profesor.</p>
+                <p>Prueba Edu.Class, es gratis!</p>
 
                 <br>
 
                 <h4 class="reason">1. Profesor</h4>
-                <p>Beneficions para el profesor</p>
-
+                <p>Podrás crear tus propios grupos y administrarlos. Además de compartir publicaciones con archivos adjuntos entre los alumnos de cualquiera de tus grupos.</p>
+                <p>Edu.Class permite manejo de Eventos creados por el profesor, para planificar una fecha de entrega, un Examen o una notificación que le interese a sus alumnos en un día determinado</p>
                 <br>
 
                 <h4 class="reason">2. Estudiante</h4>
-                <p>Beneficios para el estudiante</p>
+                <p>Cada Alumno podrá enviar mensajes entre profesores y compañeros de clases. Descargar los archivos del profesor y enterarse de todas sus novedades del grupo</p>
 
                 <hr class="invisible">
 
                 <div class="form-group">
-                    <a href="SignIn.html" class="btn btn-default btn-quirk btn-stroke btn-stroke-thin btn-block btn-sign">¿Ya tienes una cuenta? Inicia sesión!</a>
+                    <a href="@Url.Action("SignIn", "Users")" class="btn btn-default btn-quirk btn-stroke btn-stroke-thin btn-block btn-sign">¿Ya tienes una cuenta? Inicia sesión!</a>
                 </div>
             </div><!-- sign-sidebar -->
         </div>

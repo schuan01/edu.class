@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Board|Edu.Class</title>
+    <title>Board |Edu.Class</title>
 
     <link rel="shortcut icon" href="Content/images/logo.ico" type="image/x-icon" />
     <link rel="icon" href="Content/images/logo.ico" type="image/ico" />
@@ -104,14 +104,13 @@
                 <div class="btn-group">
                     <button id="btnNombreCompleto" type="button" class="btn btn-logged" data-toggle="dropdown">
                 
-                    <img id="imgAvatarTop" src="http://localhost:55555/Content/images/default.png" alt="" />
+                    <img id="imgAvatarTop" src="" alt="" />
                         
                     NombreUsuario
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu pull-right">
-                        <li><a href="#"><i class="glyphicon glyphicon-user"></i> Mi Perfil</a></li>
-                        <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Preferencias de Cuenta</a></li>
+                        <li><a href="UserEdit.html"><i class="glyphicon glyphicon-cog"></i> Preferencias de Cuenta</a></li>
                         <li><a href="#" id="linkSignOut"><i class="glyphicon glyphicon-log-out"></i> Cerrar Sesión</a></li>
                     </ul>
                 </div>
@@ -287,7 +286,7 @@
             $("#headingNombreCompleto").html(usu.nombre +" "+usu.apellido);
             $("#spanTipoPerson").html(usu.tipoUsuario);
             $("#spanEmail").html(usu.email);
-            $("#spanCumple").html(usu.cumplenios);
+            $("#spanCumple").html(usu.cumpleanios);
             $("#spanCi").html(usu.identificacion);
             $("#sinGrupo").addClass('hidden');
 
@@ -316,14 +315,7 @@
             $("#btnNombreCompleto").html('<img id="imgAvatarTop" src="'+imgUrl+'" alt="" />' + usu.nombre + '<span class="caret"></span>');
             var grupoActual = Cookies.get("EduClassApiCookieGroup");
             //var fileTransfer = new FileTransfer();
-            if(grupoActual)
-            {
-                grupoActual = JSON.parse(grupoActual);
-                $("#botonMenu:first-child").text(grupoActual.nombreGrupo);
-                $("#botonMenu:first-child").val(grupoActual.nombreGrupo);
-                 $("#btnTituloGrupo").html("Grupo: "+grupoActual.nombreGrupo);
-                
-            }
+            
 
             $('#linkSignOut').on("click",function(){
                 Cookies.remove('EduClassApiCookieGroup');
@@ -335,9 +327,6 @@
             $('body').on('click', '#botonRefresh', function (e) {
                 location.reload();
             }); 
-
-
-
             var dato = usu.idUsuario;
             var idGrupo = "";
             var grupos;
@@ -346,11 +335,13 @@
             var numberOfDaysToAdd = 1;
             fechaAnterior.setDate(fechaAnterior.getDate() + numberOfDaysToAdd);
 
-             $.ajax({
+            function getGroups(param1,callback) 
+            {
+                $.ajax({
                     type: 'GET',
                     url: serverPath()+"/Groups/GetGroups",
                     data: { 
-                            id: dato
+                            id: param1
                           },
                     success:function(data){
                         
@@ -376,10 +367,17 @@
                         {
                             grupoActual = JSON.stringify({ idGrupo: val.Id, nombreGrupo: val.Name,descripcion : val.Description, claveGrupo: val.Key, estado : val.Enabled}); 
                             Cookies.set("EduClassApiCookieGroup", grupoActual);
+                            var grupito = JSON.parse(grupoActual);
+                            $("#btnTituloGrupo").html(grupito.nombreGrupo);
+                            
+                            
+                            
                         }
                         $("#gruposDDLVertical").append('<li><a href="#" id="'+ val.Id  +'">'+ val.Name +'</a></li>');
 
                         });
+
+                        callback(grupoActual);
 
 
                     },
@@ -396,6 +394,16 @@
                     }
                 }
                 });
+            }
+
+			getGroups(dato, function(datos){
+    
+                grupoActual = datos;
+                var grupito = JSON.parse(grupoActual);
+                $("#btnTituloGrupo").html(grupito.nombreGrupo);
+                idGrupo = grupito.idGrupo;
+                getPostsGroup(idGrupo, null);
+            });
 
             $('body').on('click', '#gruposDDLVertical li a', function () {
 
@@ -437,8 +445,8 @@
             $('body').on('click', '#btnPost', function () {
 
                  grupoActual = Cookies.get("EduClassApiCookieGroup");
-                grupoActual = JSON.parse(grupoActual);
-                 var idGrupoActual = grupoActual.idGrupo;
+                 var grupito = JSON.parse(grupoActual);
+                 var idGrupoActual = grupito.idGrupo;
                  var tituloPost = $("#tituloPost").val();
                  var contenidoPost = $("#contenidoPost").val();
 
@@ -484,7 +492,7 @@
                     botonClickeado = $(this).attr('id');
                     if(botonClickeado.indexOf("comentarReply") > -1)
                     {
-                        var idPost = botonClickeado.substr(14, 1);
+                        var idPost = botonClickeado.substr(14);
                         var idTexto = "#comentar_" + idPost;
                         var textoReply = $(idTexto).val();
                         $.ajax({
@@ -538,22 +546,12 @@
                     }
                 });
 
-
-
-
-              
-
-             if(grupoActual)
-                {
-                    grupoActual = Cookies.get("EduClassApiCookieGroup");
-                    grupoActual = JSON.parse(grupoActual);
-                    idGrupo = grupoActual.idGrupo;
-                }
+             function getPostsGroup(param1,callback){
              $.ajax({
                     type: 'GET',
                     url: serverPath()+"/Board/GetPostsGroup",
                     data: { 
-                            id: idGrupo
+                            id: param1
                           },
                     success:function(data){
                         
@@ -600,7 +598,7 @@
                             fechaAnterior = fecha;
                             horaFormateada = fecha.getHours() + ":" + fecha.getMinutes();
 
-                            $("#divAnteriorFecha").after( texto +'<div class="panel panel-post-item status"><div class="panel-heading"><div class="media"><div class="media-left"><a href="#"><img alt="" src="'+avatarUrl +'" class="media-object img-circle"></a> </div><div class="media-body"><h4 class="media-heading">'+ user.FirstName+" "+user.LastName +'</h4><p class="media-usermeta"><span class="media-time">'+horaFormateada +'</span></p></div></div><!-- media --></div><!-- panel-heading --><div class="panel-body"><strong>'+val.Title+'</strong><p>'+val.Content+'</p><ul id="archivos_'+val.Id+'" class="list-unstyled list-attachments"></ul></div><div class="panel-footer"><ul class="list-inline"><li><a data-target="#comment-'+val.Id+'" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comentarios ('+val.Replays.length+')</a></li></ul></div><div class="collapse" id="comment-'+val.Id+'"><ul id="ulcomment_'+val.Id+'" class="media-list"></ul></div><div class="form-group"><input type="hidden" name="postId" value="'+val.Id+'" /><input type="hidden" name="personId" value="'+dato+'" /><input type="button" id="comentar_'+val.Id+'" name="content" class="form-control btnSubmit" data-Id="'+val.Id+'" placeholder="Escribe algún comentario"><button type="button" class="btn btn-primary btn-xs pull-right" id="comentarReply_'+val.Id+'" >Comentar</button></div></div><!-- panel panel-post -->');
+                            $("#divAnteriorFecha").after( texto +'<div class="panel panel-post-item status"><div class="panel-heading"><div class="media"><div class="media-left"><a href="#"><img alt="" src="'+avatarUrl +'" class="media-object img-circle"></a> </div><div class="media-body"><h4 class="media-heading">'+ user.FirstName+" "+user.LastName +'</h4><p class="media-usermeta"><span class="media-time">'+horaFormateada +'</span></p></div></div><!-- media --></div><!-- panel-heading --><div class="panel-body"><strong>'+val.Title+'</strong><p>'+val.Content+'</p><ul id="archivos_'+val.Id+'" class="list-unstyled list-attachments"></ul></div><div class="panel-footer"><ul class="list-inline"><li><a data-target="#comment-'+val.Id+'" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comentarios ('+val.Replays.length+')</a></li></ul></div><div class="collapse" id="comment-'+val.Id+'"><ul id="ulcomment_'+val.Id+'" class="media-list"></ul></div><div class="form-group"><input type="hidden" name="postId" value="'+val.Id+'" /><input type="hidden" name="personId" value="'+dato+'" /><input type="text" id="comentar_'+val.Id+'" name="content" class="form-control btnSubmit" data-Id="'+val.Id+'" placeholder="Escribe algún comentario"><button type="button" class="btn btn-primary btn-xs pull-right" id="comentarReply_'+val.Id+'" >Comentar</button></div></div><!-- panel panel-post -->');
 
 
                         }
@@ -608,7 +606,7 @@
                         {
                             horaFormateada = fecha.getHours() + ":" + fecha.getMinutes();
                             var selector = "#fecha_"+diaAnterior+mesAnterior+anioAnterior;
-                            $(selector).after('<div class="panel panel-post-item status"><div class="panel-heading"><div class="media"><div class="media-left"><a href="#"><img alt="" src="'+avatarUrl +'" class="media-object img-circle"></a> </div><div class="media-body"><h4 class="media-heading">'+ user.FirstName+" "+user.LastName +'</h4><p class="media-usermeta"><span class="media-time">'+horaFormateada +'</span></p></div></div><!-- media --></div><!-- panel-heading --><div class="panel-body"><strong>'+val.Title+'</strong><p>'+val.Content+'</p><ul id="archivos_'+val.Id+'" class="list-unstyled list-attachments"></ul></div><div class="panel-footer"><ul class="list-inline"><li><a data-target="#comment-'+val.Id+'" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comentarios ('+val.Replays.length+')</a></li></ul></div><div class="collapse" id="comment-'+val.Id+'"><ul id="ulcomment_'+val.Id+'"class="media-list"></ul></div><div class="form-group"><input type="hidden" name="postId" value="'+val.Id+'" /><input type="hidden" name="personId" value="'+dato+'" /><input type="button"  id="comentar_'+val.Id+'" name="content" class="form-control btnSubmit" data-Id="'+val.Id+'" placeholder="Escribe algún comentario"><button type="button"  class="btn btn-primary btn-xs pull-right" id="comentarReply_'+val.Id+'" >Comentar</button></div></div><!-- panel panel-post -->');
+                            $(selector).after('<div class="panel panel-post-item status"><div class="panel-heading"><div class="media"><div class="media-left"><a href="#"><img alt="" src="'+avatarUrl +'" class="media-object img-circle"></a> </div><div class="media-body"><h4 class="media-heading">'+ user.FirstName+" "+user.LastName +'</h4><p class="media-usermeta"><span class="media-time">'+horaFormateada +'</span></p></div></div><!-- media --></div><!-- panel-heading --><div class="panel-body"><strong>'+val.Title+'</strong><p>'+val.Content+'</p><ul id="archivos_'+val.Id+'" class="list-unstyled list-attachments"></ul></div><div class="panel-footer"><ul class="list-inline"><li><a data-target="#comment-'+val.Id+'" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comentarios ('+val.Replays.length+')</a></li></ul></div><div class="collapse" id="comment-'+val.Id+'"><ul id="ulcomment_'+val.Id+'"class="media-list"></ul></div><div class="form-group"><input type="hidden" name="postId" value="'+val.Id+'" /><input type="hidden" name="personId" value="'+dato+'" /><input type="text"  id="comentar_'+val.Id+'" name="content" class="form-control btnSubmit" data-Id="'+val.Id+'" placeholder="Escribe algún comentario"><button type="button"  class="btn btn-primary btn-xs pull-right" id="comentarReply_'+val.Id+'" >Comentar</button></div></div><!-- panel panel-post -->');
                         }
 
                         $.each(val.Files, function(clave, valorArchivo) 
@@ -667,13 +665,9 @@
                     }
                 }
                 });
+            }
+    });
 
-                
-
-            
-
-            
-        });
 </script>
 
 </body>

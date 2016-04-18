@@ -89,14 +89,13 @@
                 <div class="btn-group">
                     <button id="btnNombreCompleto" type="button" class="btn btn-logged" data-toggle="dropdown">
                 
-                    <img id="imgAvatarTop" src="http://localhost:55555/Content/images/default.png" alt="" />
+                    <img id="imgAvatarTop" src="" alt="" />
                         
                     NombreUsuario
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu pull-right">
-                        <li><a href="#"><i class="glyphicon glyphicon-user"></i> Mi Perfil</a></li>
-                        <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Preferencias de Cuenta</a></li>
+                        <li><a href="UserEdit.html"><i class="glyphicon glyphicon-cog"></i> Preferencias de Cuenta</a></li>
                         <li><a href="#" id="linkSignOut"><i class="glyphicon glyphicon-log-out"></i> Cerrar Sesión</a></li>
                     </ul>
                 </div>
@@ -261,7 +260,7 @@
             $("#headingNombreCompleto").html(usu.nombre +" "+usu.apellido);
             $("#spanTipoPerson").html(usu.tipoUsuario);
             $("#spanEmail").html(usu.email);
-            $("#spanCumple").html(usu.cumplenios);
+            $("#spanCumple").html(usu.cumpleanios);
             $("#spanCi").html(usu.identificacion);
             if(usu.tipoUsuario == "Estudiante")
             {

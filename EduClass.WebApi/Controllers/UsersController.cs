@@ -172,6 +172,80 @@ namespace EduClass.WebApi.Controllers
             
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("Edit")]
+        public IHttpActionResult Edit(PersonViewModel userVm)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    //Execute the mapping 
+                    var user = _service.GetById(userVm.Id);
+                    user.FirstName = userVm.FirstName;
+                    user.LastName = userVm.LastName;
+                    user.Birthday = Convert.ToDateTime(userVm.Birthday);
+                    user.Email = userVm.Email;
+                    user.IdentificationCard = userVm.IdentificationCard;
+                    user.UpdatedAt = DateTime.Now;
+
+                    _service.Update(user);
+
+                    string tipo = "";
+                    if (user is Teacher)
+                        tipo = "Profesor";
+                    else
+                        tipo = "Estudiante";
+
+                    return Json(new { mensaje = "El usuario ha sido modificado con exito", idUsuario = user.Id, usuario = user.UserName, nombre = user.FirstName, apellido = user.LastName, cumpleanios = user.Birthday, tipoUsuario = tipo, email = user.Email, identificacion = user.IdentificationCard, urlPhoto = user.Avatar.UrlPhoto, url = "Board.html" });
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { error = ex.Message});
+                    //_log.Error("Users - Edit", ex);
+                }
+            }
+
+            return Json(new { error = "Algunos datos no son correctos" });
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("ChangePassword")]
+        public IHttpActionResult ChangePassword(ChangePasswordViewModel value)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var userId = int.Parse(value.PersonId);
+                    var user = _service.GetById(userId);
+
+                    if (user != null && Security.EncodePassword(value.OldPassword).Equals(user.Password))
+                    {
+                        _service.ChangePassword(userId, Security.EncodePassword(value.NewPassword));
+
+                        return Json(new { mensaje = "Su contraseña fue modificada con éxito", url="Board.html" });
+
+                    }
+                    else
+                    {
+                        return Json(new { error = "Contraseña actual no es valida" });
+                        //_log.Error("Users - ChangePassword => La contraseña actual no es valida");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { error = ex.Message });
+                    //_log.Error("Users - ChangePassword", ex);
+
+                    
+                }
+            }
+            return Json(new { error = "Algunos datos no son correctos" });
+        }
 
         private void CreateUserFolder(Person person)
         {
