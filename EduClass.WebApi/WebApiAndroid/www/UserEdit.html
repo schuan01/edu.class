@@ -358,7 +358,15 @@
            $('#FirstName').val(usu.nombre);
            $('#LastName').val(usu.apellido);
            $('#IdentificationCard').val(usu.identificacion);
-           $('#datepicker').val(usu.cumpleanios);
+
+           
+           var fecha = new Date(usu.cumpleanios);
+           var day = fecha.getDate();
+           var monthIndex = fecha.getMonth() + 1 ;
+           var year = fecha.getFullYear();
+           var fechaFormateada = year+"-"+monthIndex+ "-"+day;
+           
+           $('#datepicker').val(fechaFormateada);
 
 
            /*// Date Picker

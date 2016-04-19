@@ -4,12 +4,62 @@
         "uninstalled": []
     },
     "config_munge": {
-        "files": {}
+        "files": {
+            "res/xml/config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"File\"><param name=\"android-package\" value=\"org.apache.cordova.file.FileUtils\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"FileTransfer\"><param name=\"android-package\" value=\"org.apache.cordova.filetransfer.FileTransfer\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"ActivityIndicator\"><param name=\"android-package\" value=\"org.apache.cordova.plugin.ActivityIndicator\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "AndroidManifest.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
+                            "count": 2
+                        }
+                    ]
+                }
+            }
+        }
     },
     "installed_plugins": {
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.educlass.app"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.educlass.app"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.educlass.app"
+        },
+        "org.apache.cordova.plugin.ActivityIndicator": {
+            "PACKAGE_NAME": "com.educlass.app"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.educlass.app"
+        }
+    }
 }
