@@ -91,19 +91,37 @@ namespace EduClass.Web.Controllers
                         {
                             _client.UserLogin = Session["DropNetUserLogin"] as DropNet.Models.UserLogin;
                             var accessToken = _client.GetAccessToken();
-
+                            
                             string carpeta = "/Aplicaciones/EduClassFolder";
-                            var metaData = _client.GetMetaData(carpeta, null, false, false); //Folder
-                            var carpetaRaiz = _client.GetMetaData("/Aplicaciones", null, false, false);
+                            string apli = "/Aplicaciones";
 
-                            if (!(carpetaRaiz.Contents.Any(c => c.Is_Dir && c.Path.Contains("EduClassFolder"))))
+
+                            var carpetaRaiz = _client.GetMetaData("/", null, false, false);
+                            DropNet.Models.MetaData metaData = null;
+                            if (!(carpetaRaiz.Contents.Any(c => c.Is_Dir && c.Path.Contains("Aplicaciones"))))
                             {
                                 //Creamos si no existe
                                 var folder = _client.CreateFolder(carpeta);
-                                metaData = _client.GetMetaData(carpeta, null, false, false); //Folder
+                                //metaData = _client.GetMetaData(carpeta, null, false, false); //Folder
                                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Carpeta Creada", "Se creo la carpeta EduClassFolder en /Aplicaciones, vuelva a importar para obtener todos los archivos."));
                                 return RedirectToAction("Index");
                             }
+                            else
+                            {
+                                metaData = _client.GetMetaData(apli, null, false, false); //Folder
+                                if (!(metaData.Contents.Any(c => c.Is_Dir && c.Path.Contains("EduClassFolder"))))
+                                {
+                                    var folder = _client.CreateFolder(carpeta);
+                                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Carpeta Creada", "Se creo la carpeta EduClassFolder en /Aplicaciones, vuelva a importar para obtener todos los archivos."));
+                                    return RedirectToAction("Index");
+                                }
+                                else
+                                {
+                                    metaData = _client.GetMetaData(carpeta, null, false, false); //Folder
+                                }
+
+                            }
+                            
 
                             //La carpeta es el userName del usuario
                             var originalDirectory = new DirectoryInfo(string.Format("{0}" + carpetaUsuario + "\\", Server.MapPath(@"\")));
