@@ -138,7 +138,7 @@ else
                         </div>
                     </div>
                     <!-- media -->
-                    @if (item.PersonId == EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser().Id)
+                    @if (item.PersonId == EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser().Id || item.Group.Teacher.Id == EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser().Id)
                     {
                         <ul class="panel-options">
                             <li>

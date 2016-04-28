@@ -98,6 +98,21 @@
         }
         else
         {
+            <div class="row">
+                <div class="col-md-12">
+                    @if (UserSession.GetCurrentUser() is Teacher)
+                    {
+                    <div class="well well-asset-options clearfix">
+                        <div class="btn-toolbar btn-toolbar-media-manager pull-right" role="toolbar">
+                            <a class="btn btn-primary btn-quirk btn-block" href="@Url.Action("Create", "Pages")">Crear nueva Página</a>
+                        </div><!-- btn-toolbar -->
+
+
+                    </div>
+                   }
+
+                </div>
+            </div>
             <div class="alert alert-warning">
                 No hay páginas disponibles.
             </div>
