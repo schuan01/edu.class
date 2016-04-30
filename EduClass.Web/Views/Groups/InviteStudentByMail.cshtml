@@ -1,6 +1,15 @@
 ﻿@model EduClass.Web.Infrastructure.ViewModels.MailViewModel
 @{
     ViewBag.Title = "Bienvenido al nuevo Grupo";
+    var group = (EduClass.Entities.Group)ViewBag.Group;
 }
 
-<p>Bienvenido al nuevo grupo</p>
+
+<div class="panel">
+    <div class="panel-body">
+        <div class="alert alert-success">
+            <h1>TE HAS UNIDO AL GRUPO @group.Name</h1>
+            <h4>Aprenderemos mucho juntos.</h4>
+        </div>
+    </div>
+</div>

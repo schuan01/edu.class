@@ -46,7 +46,7 @@
                 <div class="row">
                     @foreach (Student p in Model)
                     {
-                        <div class="col-md-6 col-lg-3">
+                        <div class="col-md-4 col-lg-3">
                             <div class="panel panel-profile grid-view">
                                 <div class="panel-heading">
                                     <div class="text-center">
@@ -111,6 +111,10 @@
                                     <div class="info-group last">
                                         <label>Cédula</label>
                                         @p.IdentificationCard
+                                    </div>
+                                    <div class="info-group last">
+                                        
+                                        <a href="@Url.Action("DetachStudent", "Groups", new { id = UserSession.GetCurrentGroup().Id, studentId = p.Id })" class="btn btn-danger form-control">Expulsar alumno</a>
                                     </div>
                                 </div><!-- panel-body -->
                             </div><!-- panel -->

@@ -9,22 +9,29 @@
 
 <div class="panel">
     <div class="panel-heading">
-        <h4 class="panel-title">Grupos</h4>
+        <h4 class="panel-title">Mis grupos</h4>
     </div>
     <div class="panel-body">
 
         <div class="contentpanel">
-
-            @if (UserSession.GetCurrentUser() is Teacher)
-            {
                 <div class="row">
                     <div class="col-md-12 people-list">
 
                         <div class="people-options clearfix">
                             <div class="btn-group pull-right people-pager">
-                                <a href="@Url.Action("Create", "Groups")" class="btn btn-primary">
-                                    Crear nuevo Grupo
-                                </a>
+                                
+                                @if (UserSession.GetCurrentUser() is Teacher)
+                                {
+                                    <a href="@Url.Action("Create", "Groups")" class="btn btn-primary">
+                                        Crear nuevo Grupo
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("JoinStudent","Groups")" class="btn btn-primary">
+                                        Unirse a un nuevo Grupo
+                                    </a>
+                                }
                             </div>
                         </div><!-- people-options -->
 
@@ -36,11 +43,18 @@
                                         <th>ID</th>
                                         <th>Nombre</th>
                                         <th>Descripción</th>
-                                        <th>Clave</th>
-                                        <th>Estado</th>
-                                        <th class="text-center">Alumnos</th>
-                                        <th>Editar</th>
-                                        <th>Deshabilitar/Habilitar</th>
+                                        @if (UserSession.GetCurrentUser() is Teacher)
+                                        {
+                                            <th>Clave</th>
+                                            <th>Estado</th>
+                                            <th class="text-center">Alumnos</th>
+                                            <th>Editar</th>
+                                            <th>Deshabilitar/Habilitar</th>
+                                        }
+                                        else
+                                        {
+                                            <th></th>
+                                        }
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -48,33 +62,43 @@
                                     {
                                         <tr>
 
-                                            <td>@elemento.Id</td>
-                                            <td>@elemento.Name</td>
-                                            <td>@elemento.Description</td>
-                                            <td>@elemento.Key</td>
-                                            <td class="text-center">@HelperView.LabelEnableOrDisable(elemento.Enabled)</td>
-                                            <td class="text-center">@elemento.Students.Count</td>
-                                            <td>
-                                                <ul class="table-options">
-                                                    <li><a href="@Url.Action("Edit", "Groups", new { id = elemento.Id })"><i class="fa fa-pencil"></i></a></li>
-                                                </ul>
-                                            </td>
-                                            <td>
-                                                <ul class="table-options">
-                                                    @using (Html.BeginForm("Disable", "Groups", FormMethod.Post, htmlAttributes: new { @Id = @elemento.Id }))
-                                                    {
+                                            
+                                            @if (UserSession.GetCurrentUser() is Teacher)
+                                            {
+                                                <td>@elemento.Id</td>
+                                                <td>@elemento.Name</td>
+                                                <td>@elemento.Description</td>
+                                                <td>@elemento.Key</td>
+                                                <td class="text-center">@HelperView.LabelEnableOrDisable(elemento.Enabled)</td>
+                                                <td class="text-center">@elemento.Students.Count</td>
+                                                <td>
+                                                    <ul class="table-options">
+                                                        <li><a href="@Url.Action("Edit", "Groups", new { id = elemento.Id })"><i class="fa fa-pencil"></i></a></li>
+                                                    </ul>
+                                                </td>
+                                                <td>
+                                                    <ul class="table-options">
+                                                        @using (Html.BeginForm("Disable", "Groups", FormMethod.Post, htmlAttributes: new { @Id = @elemento.Id }))
+                                                        {
 
 
-                                                        @Html.AntiForgeryToken()
-                                                        <li><input type="hidden" name="groupId" value="@elemento.Id" /></li>
-                                                        <li><button type="submit" class="btn-link"><i class="fa fa-close"></i></button></li>
-                                                    }
-                                                </ul>
-                                            </td>
+                                                            @Html.AntiForgeryToken()
+                                                            <li><input type="hidden" name="groupId" value="@elemento.Id" /></li>
+                                                            <li><button type="submit" class="btn-link"><i class="fa fa-close"></i></button></li>
+                                                        }
+                                                    </ul>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td style="padding-top: 20px">@elemento.Id</td>
+                                                <td style="padding-top: 20px">@elemento.Name</td>
+                                                <td style="padding-top: 20px">@elemento.Description</td>
+                                                <td>
+                                                    <a href="@Url.Action("DetachStudent", "Groups", new { id = elemento.Id })" class="btn btn-danger pull-right"><i class="fa fa-user-times"></i> Salir del grupo</a>
+                                                </td>
+                                            }
                                            
-
-
-
                                         </tr>
                                     }
 
@@ -86,19 +110,7 @@
 
 
                 </div><!-- row -->
-            }
-            else
-            {
-                <div class="col-sm-4 col-md-3 col-lg-2">
-                    <div class="panel">
-                        <div class="panel-body">
-                            <a href="@Url.Action("JoinStudent","Groups")" class="btn btn-danger btn-quirk btn-block profile-btn-follow">
-                                Unirse a un Grupo
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            }
+
         </div><!-- contentpanel -->
 
     </div>

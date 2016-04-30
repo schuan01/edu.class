@@ -41,5 +41,10 @@ namespace EduClass.Logic
         {
             return _groupRepository.GetGroupByIdWithPosts(id);
         }
+
+        public void DetachStudent(int id, int studentId)
+        {
+            _groupRepository.DetachStudent(id, studentId);
+        }
     }
 }

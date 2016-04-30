@@ -31,5 +31,10 @@ namespace EduClass.Repository
         {
             return dbSet.Include(p => p.Posts).FirstOrDefault(g => g.Id == id);
         }
+
+        public void DetachStudent(int id, int studentId)
+        {
+            context.Database.ExecuteSqlCommand(String.Format("DELETE FROM GroupStudent WHERE Groups_Id = {0} AND Students_Id = {1}", id, studentId));
+        }
     }
 }

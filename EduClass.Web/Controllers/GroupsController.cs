@@ -48,13 +48,17 @@ namespace EduClass.Web.Controllers
 
         public ActionResult Index()
         {
-            
             List<Group> grupos = new List<Group>();
+           
+            var t = _servicePerson.GetById(UserSession.GetCurrentUser().Id);
+
             if (UserSession.GetCurrentUser() is Teacher)//Si el que ingresa es un teacher
             {
-                //Obtengo los grupos en los que esta el Teacher.
-                Teacher t = (Teacher)_servicePerson.GetById(UserSession.GetCurrentUser().Id);
-                grupos = t.Group.ToList();//Todos los grupos
+                grupos = ((Teacher)t).Group.ToList();//Todos los grupos
+            }
+            else
+            {
+                grupos = ((Student)t).Groups.ToList();//Todos los grupos
             }
             
             return View(grupos);
@@ -153,8 +157,6 @@ namespace EduClass.Web.Controllers
             
         }
 
-       
-
         // GET: Group
         [HttpGet]
         public ActionResult JoinStudent()
@@ -228,7 +230,7 @@ namespace EduClass.Web.Controllers
                     group.Students.Add((Student)student);
                     _serviceGroup.Update(group);
 
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Unirse", "El usuario actual se agrego correctamente"));
+                    ViewBag.Group = group;
                 }
                 else
                     throw new Exception("El usuario actual no es un estudiante");
@@ -334,9 +336,7 @@ namespace EduClass.Web.Controllers
 
             return View(groupVm);
         }
-
-
-
+        
         [HttpGet]
         public ActionResult Edit(int id)
         {
@@ -430,7 +430,6 @@ namespace EduClass.Web.Controllers
             }
             return RedirectToAction("Index");
         }
-
 
         //ELIMINARA TOTALMENTE EL GRUPO, Y CUALQUIER RELACION CON EL
         //NO SE IMPLEMENTARA
@@ -601,6 +600,26 @@ namespace EduClass.Web.Controllers
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
                 _log.Error("Groups - DeleteGroup", ex);
             }
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult DetachStudent(int id = 0, int studentId = 0)
+        {
+            if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+
+            if (studentId == 0) { studentId = UserSession.GetCurrentUser().Id; }
+
+            _serviceGroup.DetachStudent(id, studentId);
+
+            if (UserSession.GetCurrentUser() is Teacher)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.INFO, "Se ha expulsado el estudiando con exito", ""));
+
+                return RedirectToAction("GetContacts");
+            }
+            
+            MessageSession.SetMessage(new MessageHelper(Enum_MessageType.INFO, "Ya no perteneses mas al grupo", ""));
+                
             return RedirectToAction("Index");
         }
     }

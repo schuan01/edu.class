@@ -8,5 +8,6 @@ namespace EduClass.Logic
         Group GetByKey(string key);
         IList<Group> GetActiveGroups(Person person);
         Group GetGroupByIdWithPosts(int id);
+        void DetachStudent(int id, int studentId);
     }
 }

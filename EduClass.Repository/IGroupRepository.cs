@@ -9,5 +9,6 @@ namespace EduClass.Repository
         Group GetGroupByIdWithPosts(int id);
         IList<Group> GetActiveGroupsByTeacher(int id);
         IList<Group> GetActiveGroupsByStudent(int id);
+        void DetachStudent(int id, int studentId);
     }
 }
