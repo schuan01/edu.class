@@ -112,10 +112,13 @@
                                         <label>Cédula</label>
                                         @p.IdentificationCard
                                     </div>
-                                    <div class="info-group last">
+                                    @if (UserSession.GetCurrentUser() is Teacher)
+                                    {
+                                        <div class="info-group last">
                                         
-                                        <a href="@Url.Action("DetachStudent", "Groups", new { id = UserSession.GetCurrentGroup().Id, studentId = p.Id })" class="btn btn-danger form-control">Expulsar alumno</a>
-                                    </div>
+                                            <a href="@Url.Action("DetachStudent", "Groups", new { id = UserSession.GetCurrentGroup().Id, studentId = p.Id })" class="btn btn-danger form-control">Expulsar alumno</a>
+                                        </div>
+                                    }
                                 </div><!-- panel-body -->
                             </div><!-- panel -->
                         </div><!-- col-md-6 -->

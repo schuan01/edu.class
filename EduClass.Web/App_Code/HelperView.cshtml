@@ -1,15 +1,20 @@
-﻿
+﻿@using System.Text;
 @helper LimitDescriptionMail(string contenido)
 {
-    var texto = System.Text.RegularExpressions.Regex.Replace(contenido, @"<(.|\n)*?>", string.Empty);
-    
-    if (texto.Length > 100)
-    {
-            <p>@texto.Substring(0, 100)</p>
-    }
-    else
-    {
+var texto = System.Text.RegularExpressions.Regex.Replace(contenido, @"<(.|\n)*?>", string.Empty);
+if (texto.LastIndexOf("Mensaje") > 0)
+{
+    texto = texto.Substring(0, texto.LastIndexOf("Mensaje"));
+}
+if (texto.Length > 100)
+{
 
+            <p>@texto.Substring(0, 100)</p>
+
+}
+else
+{
+           
             <p>@texto</p>
     }
 
@@ -49,6 +54,7 @@
 {
     <span>@value.ToString("dd/MM/yyyy HH:mm")</span>
 }
+
 
 
 

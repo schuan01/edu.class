@@ -220,9 +220,10 @@ else
                                 <div class="media-body">
                                     <h4 class="media-heading">@reply.Person.FirstName @reply.Person.LastName<small>@HelperView.FormatDateTime(reply.CreatedAt)</small></h4>
                                     @reply.Content
+                                    
                                 </div>
                                 <div class="media-right">
-                                    @if (reply.PersonId == EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser().Id)
+                                    @if (reply.PersonId == EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser().Id || reply.Post.Group.Teacher.Id == EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser().Id)
                                     {
                                     
                                         <a class="tooltips" href="@Url.Action("RemoveReply", "Board", new { id = reply.Id })" data-toggle="tooltip" title="" data-original-title="Remove">
@@ -273,22 +274,9 @@ else
 
     $(document).ready(function () {
 
-        var anno1 = new Anno({
-            target: '#tituloBoard',
-            content: 'TEST'
-        });
+        
 
-        var anno2 = new Anno([{
-            target: '#tituloBoard',
-            content: 'TEST1'
-        }, {
-            target: '#contenidoBoard',
-            content: 'TEST2'
-        }]);
-
-        $('#clickAyuda').click(function () {
-            anno2.show();
-        });
+        
 
         var message = "@Html.Raw(sessionMessage.ToString())";
         if (message != "") {

@@ -605,20 +605,32 @@ namespace EduClass.Web.Controllers
 
         public ActionResult DetachStudent(int id = 0, int studentId = 0)
         {
-            if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
-
-            if (studentId == 0) { studentId = UserSession.GetCurrentUser().Id; }
-
-            _serviceGroup.DetachStudent(id, studentId);
-
-            if (UserSession.GetCurrentUser() is Teacher)
+            try
             {
-                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.INFO, "Se ha expulsado el estudiando con exito", ""));
+                if (id == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 
-                return RedirectToAction("GetContacts");
+                if (studentId != 0 && !(UserSession.GetCurrentUser() is Teacher))//Si casualmente un Student quiere sacar a alguien por URL
+                    throw new Exception("Un alumno no puedo realizar esa accion");
+
+               if (studentId == 0) { studentId = UserSession.GetCurrentUser().Id; }
+
+
+
+                _serviceGroup.DetachStudent(id, studentId);
+
+                if (UserSession.GetCurrentUser() is Teacher)
+                {
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.INFO, "Se ha expulsado el estudiante con exito", ""));
+
+                    return RedirectToAction("GetContacts");
+                }
+
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.INFO, "Ya no perteneces mas al grupo", ""));
             }
-            
-            MessageSession.SetMessage(new MessageHelper(Enum_MessageType.INFO, "Ya no perteneses mas al grupo", ""));
+            catch (Exception ex)
+            {
+                MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", ex.Message));
+            }
                 
             return RedirectToAction("Index");
         }

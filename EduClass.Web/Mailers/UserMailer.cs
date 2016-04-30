@@ -17,7 +17,7 @@ namespace EduClass.Web.Mailers
 
             return Populate(x =>
 			{
-				x.Subject = "Bienvenido " + user.FirstName;
+				x.Subject = "Bienvenido/a " + user.FirstName;
 				x.ViewName = "Welcome";
 				x.To.Add(user.Email);
 			});
@@ -41,7 +41,7 @@ namespace EduClass.Web.Mailers
 
             return Populate(x =>
             {
-                x.Subject = "Usted ha sido invitado al grupo " + g.Name;
+                x.Subject = "Usted ha sido invitado/a al grupo " + g.Name;
                 x.ViewName = "InvitedToGroup";
                 foreach (string valor in mails)
                 {

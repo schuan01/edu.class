@@ -82,7 +82,7 @@
                                     </a>
                                 </div>
                                 <h5 class="fm-title"><a href="@Url.Action("ViewPage", "Pages", new { pageId = elemento.Id })">@elemento.Name</a></h5>
-                                <small class="text-muted">Creado: @elemento.CreatedAt</small>
+                                <small class="text-muted">Creado: @elemento.CreatedAt.ToString("dd/MM/yyyy hh:mm")</small>
                             </div><!-- thmb -->
                         </div><!-- col-xs-6 -->
                     }
