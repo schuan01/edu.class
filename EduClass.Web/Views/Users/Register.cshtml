@@ -72,7 +72,7 @@
             <div class="panel">
                 <div class="panel-heading">
                     <h1>Edu.Class</h1>
-                    <h4 class="panel-title">Create una cuenta</h4>
+                    <h4 class="panel-title">Crear una cuenta</h4>
                 </div>
                 <div class="panel-body">
                     @using (Html.BeginForm("Register", "Users", FormMethod.Post, htmlAttributes: new { @Id = "registerForm" }))
@@ -188,6 +188,11 @@
                 headerTag: "h3",
                 bodyTag: "section",
                 transitionEffect: "slideLeft",
+                labels: {
+                    finish: "Finalizar",
+                    next: "Siguiente",
+                    previous: "Atrás"
+                },
                 autoFocus: true,
                 onStepChanging: function (event, currentIndex, newIndex) {
 

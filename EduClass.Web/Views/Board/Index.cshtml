@@ -133,7 +133,6 @@ else
                             <h4 class="media-heading">@item.Person.FirstName @item.Person.LastName</h4>
                             <p class="media-usermeta">
                                 <span class="media-time">@item.CreatedAt.ToString("hh:mm tt")</span>
-                            
                             </p>
                         </div>
                     </div>
@@ -182,8 +181,8 @@ else
                     }
                     else
                     {
-                    <strong>@item.Title</strong>
-                    <p>@item.Content</p>
+                    <strong>@Server.HtmlDecode(item.Title)</strong>
+                    <p>@Server.HtmlDecode(item.Content)</p>
                     <ul class="list-unstyled list-attachments">
                         @foreach (var archivo in item.Files)
                         {
@@ -219,7 +218,7 @@ else
                                 </div>
                                 <div class="media-body">
                                     <h4 class="media-heading">@reply.Person.FirstName @reply.Person.LastName<small>@HelperView.FormatDateTime(reply.CreatedAt)</small></h4>
-                                    @reply.Content
+                                    @Server.HtmlDecode(reply.Content)
                                     
                                 </div>
                                 <div class="media-right">
