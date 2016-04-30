@@ -9,6 +9,7 @@
     var first = true;
     var currentUser = EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser();
     var esImagen = false;
+
 }
 
 @if (Model == null)
@@ -113,6 +114,7 @@ else
         {
             if (!earlierDate.Equals(item.CreatedAt.ToString("dd/MM/yyyy")))
             {
+                System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
                 <div class="timeline-date">@item.CreatedAt.ToLongDateString()</div>
 
                 { earlierDate = item.CreatedAt.ToString("dd/MM/yyyy"); }

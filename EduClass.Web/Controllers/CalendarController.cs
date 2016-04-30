@@ -12,6 +12,7 @@ using EduClass.Entities;
 using EduClass.Web.Infrastructure.Mappers;
 using log4net;
 
+
 namespace EduClass.Web.Controllers
 {
     [Authorize]
@@ -22,6 +23,7 @@ namespace EduClass.Web.Controllers
 
         public CalendarsController(ICalendarServices service, ILog log)
         {
+           
             _service = service;
             _log = log;
         }
