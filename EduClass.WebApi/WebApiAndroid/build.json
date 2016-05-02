@@ -1,0 +1,11 @@
+{
+    "android": {
+        "release": {
+            "keystore": "educlass.keystore",
+            "storePassword": "",
+            "alias": "educlass",
+            "password" : "Password225",
+            "keystoreType": ""
+        }
+    }
+}

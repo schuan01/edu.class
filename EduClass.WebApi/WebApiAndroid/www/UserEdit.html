@@ -364,7 +364,16 @@
            var day = fecha.getDate();
            var monthIndex = fecha.getMonth() + 1 ;
            var year = fecha.getFullYear();
+           if(monthIndex < 10)
+           {
+                monthIndex = "0"+monthIndex;
+           }
+           if(day < 10)
+           {
+                day = "0"+day;
+           }
            var fechaFormateada = year+"-"+monthIndex+ "-"+day;
+           
            
            $('#datepicker').val(fechaFormateada);
 
