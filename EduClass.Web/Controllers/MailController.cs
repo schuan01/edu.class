@@ -31,6 +31,7 @@ namespace EduClass.Web.Controllers
         public ActionResult Index(string type)
         {
             
+
             var list = _service.GetMailsReceived(UserSession.GetCurrentUser()).OrderByDescending(a => a.CreateAt);
             
             ViewBag.Type = type;
@@ -111,7 +112,7 @@ namespace EduClass.Web.Controllers
             {
                 MessageSession.SetMessage(new MessageHelper(Enum_MessageType.DANGER, "Error", "Error abrir nuevo Mensaje."));
                 _log.Error("Mail - SendEmail", ex);
-                return RedirectToAction("Index", "Mail");
+                return RedirectToAction("Index", "Mail", new { type = "Recibidos" });
             }
 
             return View(new MailViewModel());
@@ -171,7 +172,7 @@ namespace EduClass.Web.Controllers
                 }
             }
 
-            return RedirectToAction("Index", "Mail");
+            return RedirectToAction("Index", "Mail", new { type = "Recibidos" });
         }
 
 
@@ -241,7 +242,7 @@ namespace EduClass.Web.Controllers
                 _log.Error("Mail - ReplyEmail", ex);
             }
 
-            return RedirectToAction("Index", "Mail");
+            return RedirectToAction("Index", "Mail", new { type = "Recibidos" });
         }
 
         //BORRA DEFINITIVO RECIBIDOS
@@ -286,7 +287,7 @@ namespace EduClass.Web.Controllers
                 _log.Error("Mail - DeleteMail", ex);
             }
 
-            return RedirectToAction("Index", "Mail");
+            return RedirectToAction("Index", "Mail", new { type = "Recibidos" });
         }
     }
 }

@@ -57,7 +57,7 @@
 
             <h4 class="panel-title">Cumpleaños</h4>
 
-            <p><i class="glyphicon glyphicon-gift mr5"></i>@cumple.ToShortDateString()</p>
+            <p><i class="glyphicon glyphicon-gift mr5"></i>@cumple.ToString("dd/MM/yyyy")</p>
 
             <hr class="fadeout">
 
@@ -90,7 +90,7 @@
                                     <div class="media-body">
                                         <h4 class="media-heading">@post.Person.FirstName @post.Person.LastName</h4>
                                         <p class="media-usermeta">
-                                            <span class="media-time">@post.CreatedAt</span>
+                                            <span class="media-time">@HelperView.FormatDateTime(post.CreatedAt)</span>
                                         </p>
                                     </div>
                                 </div><!-- media -->
