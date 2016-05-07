@@ -139,7 +139,7 @@
     <script src="~/Scripts/lang-all.js"></script>
     <script type="text/javascript">
 
-        var isProfessor = @Html.Raw((EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser() is EduClass.Entities.Teacher).ToString().ToLower());
+        var isProfessor = @Html.Raw((UserSession.GetCurrentUser() is Teacher).ToString().ToLower());
         var calendarId = @Html.Raw(ViewBag.CalendarId);
         
 
@@ -151,7 +151,8 @@
             });
 
             $('.evControl').datetimepicker({
-                locale: 'es'
+                locale: 'es',
+                format: 'DD/MM/YYYY HH:mm'
             });
 
             getEvents(function(data){

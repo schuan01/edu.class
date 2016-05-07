@@ -41,11 +41,29 @@ namespace EduClass.Repository
 
         public int GetCorrectResponses(int idStudent, int idTest)
         {
+            var list = new List<Question>();
+
             var r = GetResponsesByStudent(idStudent, idTest);
+            var correctcheck = 0;
 
-            var a = r.Where(x => x.IsCorrect == true).GroupBy(x => x.QuestionId).Select(g => g.First());
+            foreach (var item in r.Where(x => x.Question.QuestionType == QuestionType.CHECKS).Select(x => new { x.Question }).Distinct())
+            {
+                var questionOptionsList = item.Question.QuestionOptions.Where(x => x.IsCorrect == true).ToList<QuestionOption>();
 
-            return a.Count();
+                var correctIds = string.Join(",", questionOptionsList.Select(x => x.Id).ToArray());
+
+                var sresponses = string.Join(",", r.Where(x => x.QuestionId == item.Question.Id).Select(x => x.QuestionOptionId).ToArray());
+
+                if (correctIds == sresponses)
+                {
+                    correctcheck++;
+                }
+
+            }
+            
+            var a = r.Where(x => x.IsCorrect == true && x.Question.QuestionType != QuestionType.CHECKS).GroupBy(x => x.QuestionId).Select(g => g.First()).Distinct();
+
+            return a.Count() + correctcheck;
         }
     }
 }
