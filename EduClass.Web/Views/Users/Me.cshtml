@@ -32,7 +32,7 @@
             <h2 class="profile-name">@UserSession.GetCurrentUser().FirstName @UserSession.GetCurrentUser().LastName</h2>
             @if (@UserSession.GetCurrentUser() is Student)
             {
-                <h4 class="profile-designation">Estudiante</h4>
+                <h4 class="profile-designation">Alumno</h4>
             }
             else if (@UserSession.GetCurrentUser() is Teacher)
             {

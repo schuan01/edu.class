@@ -191,7 +191,7 @@ namespace EduClass.Web.Controllers
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Unirse", "El usuario actual se agrego correctamente"));
                 }
                 else
-                    throw new Exception("El usuario actual no es un estudiante");
+                    throw new Exception("El usuario actual no es un alumno");
 
             }
             catch (Exception ex)
@@ -233,7 +233,7 @@ namespace EduClass.Web.Controllers
                     ViewBag.Group = group;
                 }
                 else
-                    throw new Exception("El usuario actual no es un estudiante");
+                    throw new Exception("El usuario actual no es un alumno");
 
             }
             catch (Exception ex)
@@ -620,7 +620,7 @@ namespace EduClass.Web.Controllers
 
                 if (UserSession.GetCurrentUser() is Teacher)
                 {
-                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.INFO, "Se ha expulsado el estudiante con exito", ""));
+                    MessageSession.SetMessage(new MessageHelper(Enum_MessageType.INFO, "Se ha expulsado el alumno con exito", ""));
 
                     return RedirectToAction("GetContacts");
                 }

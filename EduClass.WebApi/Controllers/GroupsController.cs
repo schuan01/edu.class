@@ -160,7 +160,7 @@ namespace EduClass.WebApi.Controllers
                     return Json(new { idGrupo = group.Id, nombreGrupo = group.Name, descripcion = group.Description, claveGrupo = group.Key, estado = group.Enabled, mensaje = "El usuario actual se agrego correctamente", url = "Board.html" });
                 }
                 else
-                    throw new Exception("El usuario actual no es un estudiante");
+                    throw new Exception("El usuario actual no es un alumno");
 
             }
             catch (Exception ex)
