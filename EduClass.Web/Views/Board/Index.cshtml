@@ -143,7 +143,7 @@ else
                     {
                         <ul class="panel-options">
                             <li>
-                                <a class="tooltips" href="@Url.Action("RemovePost", "Board", new { Id = item.Id })" data-toggle="tooltip" title="" data-original-title="Borrar">
+                                <a class="tooltips" onclick="return confirm('Esta seguro de borrar el post?');"  href="@Url.Action("RemovePost", "Board", new { Id = item.Id })" data-toggle="tooltip" title="" data-original-title="Borrar">
                                     <i class="glyphicon glyphicon-remove"></i>
                                 </a>
                             </li>

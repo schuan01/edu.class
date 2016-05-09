@@ -96,7 +96,8 @@
                                 </div><!-- media -->
                             </div><!-- panel-heading -->
                             <div class="panel-body">
-                                <p>@post.Content</p>
+                                <strong>@Server.HtmlDecode(post.Title)</strong>
+                                <p>@Server.HtmlDecode(post.Content)</p>
                                 <ul class="list-unstyled list-attachments">
                                     @foreach (var archivo in post.Files)
                                     {
