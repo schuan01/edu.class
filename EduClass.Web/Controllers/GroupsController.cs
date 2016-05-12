@@ -380,7 +380,8 @@ namespace EduClass.Web.Controllers
                     }
 
                     _serviceGroup.Update(group);
-
+                    if (UserSession.GetCurrentGroup().Id == group.Id)
+                        UserSession.SetCurrentGroup(group);//para q actualice el lista y las cosas del lado del usuario
                     MessageSession.SetMessage(new MessageHelper(Enum_MessageType.SUCCESS, "Grupo", "El grupo fue editado correctamente"));
                     return RedirectToAction("Index", "Groups");
                 }
