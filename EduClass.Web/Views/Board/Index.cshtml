@@ -75,9 +75,12 @@ else
             
             @{meAvatar = currentUser.Avatar.UrlPhoto;}
 
-            <div class="panel" style="height:200px">
+            <div class="panel" style="height:250px">
                 <div class="panel-body">
                     <div class="form-horizontal">
+                        <div class="row">
+                            <button type="button" class="btn btn-default pull-right" onclick="location.reload();"><i class="fa fa-refresh"></i> Actualizar dashboard</button>
+                        </div>
                         @using (Html.BeginForm("Post", "Board", FormMethod.Post, new { id = "frmPost"}))
                         {
                             @Html.AntiForgeryToken()

@@ -183,7 +183,7 @@
                             $('#evDescription').attr('disabled','disabled');
                             $('#evStart').attr('disabled','disabled');
                             $('#evEnd').attr('disabled','disabled');
-                            $('#evddlEventType').attr('disabled','disabled');
+                            $('#evddlEventType option').filter(function () { return $(this).html() == calEvent.eventType; }).attr('selected','selected');
                         }
                     
                         $('#modalEventView').modal('show');
