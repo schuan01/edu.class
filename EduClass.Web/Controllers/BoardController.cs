@@ -160,14 +160,39 @@ namespace EduClass.Web.Controllers
                         nuevoPost.Enabled = true;
                         nuevoPost.PersonId = post.PersonId;//El id es el mismo porq solo la misma persona puede hacer Repost
                         nuevoPost.GroupId = post.GroupId;
+                        
+                        foreach (Reply r in post.Replays)
+                        {
+                            if (r != null)
+                            {
+                                Entities.Reply viejoReply = _reply.GetById(r.Id);
+                                Entities.Reply nuevoReply = new Entities.Reply();
+                                nuevoReply.Content = viejoReply.Content;
+                                nuevoReply.CreatedAt = viejoReply.CreatedAt;
+                                nuevoReply.Enabled = viejoReply.Enabled;
+                                nuevoReply.PersonId = viejoReply.PersonId;
+                                nuevoReply.PostId = viejoReply.PostId;
+                                nuevoReply.UpdatedAt = viejoReply.UpdatedAt;
+                                if (nuevoReply != null)
+                                {
+                                    nuevoPost.Replays.Add(nuevoReply);
+                                }
+                            }
+                        }
+
                         foreach (File f in post.Files)
                         {
                             if (f != null)
                             {
-                                Entities.File nuevoFile = _file.GetById(f.Id);
+                                Entities.File fileViejo = _file.GetById(f.Id);
+                                Entities.File nuevoFile = new Entities.File();
+                                nuevoFile.Name = fileViejo.Name;
+                                nuevoFile.PersonId = fileViejo.PersonId;
+                                nuevoFile.CreatedAt = fileViejo.CreatedAt;
+                                nuevoFile.UrlFile = fileViejo.UrlFile;
                                 if (nuevoFile != null && nuevoFile.PersonId == nuevoPost.PersonId)//Solo puedo compartir archivos mios
                                 {
-                                    nuevoPost.Files.Add(f);
+                                    nuevoPost.Files.Add(nuevoFile);
                                 }
                             }
                         }

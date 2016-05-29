@@ -288,11 +288,13 @@
     <Content Include="Content\images\default.png" />
     <Content Include="Content\images\images_doc.png" />
     <Content Include="Content\images\images_docx.png" />
+    <Content Include="Content\images\images_file.png" />
     <Content Include="Content\images\images_image.png" />
     <Content Include="Content\images\images_logo-big.png" />
     <Content Include="Content\images\images_logo.png" />
     <Content Include="Content\images\images_mp3.png" />
     <Content Include="Content\images\images_mp4.png" />
+    <Content Include="Content\images\images_pdf.png" />
     <Content Include="Content\images\images_photos_loggeduser.png" />
     <Content Include="Content\images\images_photos_photo1.jpg" />
     <Content Include="Content\images\images_photos_photo2.jpg" />
@@ -576,6 +578,7 @@
     <Content Include="Content\bootstrap\alerts.less" />
     <Content Include="Content\bootstrap-datetimepicker-build.less" />
     <Content Include="Content\_bootstrap-datetimepicker.less" />
+    <None Include="Properties\PublishProfiles\zip.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
