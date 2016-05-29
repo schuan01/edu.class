@@ -39,26 +39,26 @@
                 <div class="form-group">
                     <label for="QuestionType" class="control-label col-md-2">Tipo de pregunta</label>
                     <div class="col-md-10">
-                        <select id="evddlQuestionType" name="QuestionType" class="form-control" data_plugin="select2" disabled>
+                        <select id="evddlQuestionType" class="form-control" data_plugin="select2" disabled>
                             <option value="0">-- Seleccionar --</option>
                             @{
-            var index = 0;
-            foreach (EduClass.Entities.QuestionType item in ((List<EduClass.Entities.QuestionType>)ViewBag.QuestionType))
-            {
-                if (_dictionaryQuestionType[Convert.ToInt32(Model.QuestionType)].ToString() == item.ToString())
-                {
-                    <option value="@index" selected>@item.ToString()</option>
-                }
-                else
-                {
-                    <option value="@index">@item.ToString()</option>
-                }
-                index++;
-            }
+                                var index = 0;
+                                foreach (EduClass.Entities.QuestionType item in ((List<EduClass.Entities.QuestionType>)ViewBag.QuestionType))
+                                {
+                                    if (_dictionaryQuestionType[Convert.ToInt32(Model.QuestionType)].ToString() == item.ToString())
+                                    {
+                                        <option value="@index" selected>@item.ToString()</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@index">@item.ToString()</option>
+                                    }
+                                    index++;
+                                }
                             }
                         </select>
 
-
+                        
 
                     </div>
                 </div>
@@ -143,11 +143,6 @@
         $('#btnSubmit').click(function () {
             
             var flag = false;
-
-            if ($('#evddlQuestionType option:selected').val() == 0) {
-                showMessageJS('info,Atención,El campo tipo de pregunta es requerido')
-                return false;
-            }
 
             if ($('#Content').val() == '') {
                 showMessageJS('info,Atención,El campo pregunta es requerido')
