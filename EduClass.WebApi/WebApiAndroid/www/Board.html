@@ -87,7 +87,7 @@
         <ul class="headermenu">
             <li>
                  <div class="btn-group">
-                    <button   class="btn btn-notice" id="btnTituloGrupo">
+                    <button   class="btn btn-notice popovers" data-placement="bottom" data-toggle="popover" data-container="body" type="button" data-original-title="" title="" id="btnTituloGrupo">
                      
                     <span></span>
                     </button>
@@ -368,7 +368,18 @@
                             grupoActual = JSON.stringify({ idGrupo: val.Id, nombreGrupo: val.Name,descripcion : val.Description, claveGrupo: val.Key, estado : val.Enabled}); 
                             Cookies.set("EduClassApiCookieGroup", grupoActual);
                             var grupito = JSON.parse(grupoActual);
-                            $("#btnTituloGrupo").html(grupito.nombreGrupo);
+                            var textoCorto = "";
+                            if(window.innerHeight > window.innerWidth){
+                                textoCorto = jQuery.trim(grupito.nombreGrupo).substring(0, 6).split(" ").slice(0, -1).join(" ") + "...";
+                            }
+                            else
+                            {
+                                textoCorto = jQuery.trim(grupito.nombreGrupo).substring(0, 20).split(" ").slice(0, -1).join(" ") + "...";
+                            }
+                            
+                            //$("#btnTituloGrupo").html(grupito.nombreGrupo);
+                            $("#btnTituloGrupo").html(textoCorto);
+                            $('#btnTituloGrupo').attr("data-original-title", grupito.nombreGrupo);
                             
                             
                             
@@ -400,7 +411,19 @@
     
                 grupoActual = datos;
                 var grupito = JSON.parse(grupoActual);
-                $("#btnTituloGrupo").html(grupito.nombreGrupo);
+                var textoCorto = "";
+                if(window.innerHeight > window.innerWidth){
+                    textoCorto = jQuery.trim(grupito.nombreGrupo).substring(0, 6).split(" ").slice(0, -1).join(" ") + "...";
+                }
+                else
+                {
+                    textoCorto = jQuery.trim(grupito.nombreGrupo).substring(0, 20).split(" ").slice(0, -1).join(" ") + "...";
+                }
+                            
+                //$("#btnTituloGrupo").html(grupito.nombreGrupo);
+                $("#btnTituloGrupo").html(textoCorto);
+                $('#btnTituloGrupo').attr("data-original-title", grupito.nombreGrupo);
+                
                 idGrupo = grupito.idGrupo;
                 getPostsGroup(idGrupo, null);
             });
