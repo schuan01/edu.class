@@ -1,6 +1,10 @@
-﻿@model IEnumerable<EduClass.Entities.Test>
+﻿@using System.Linq;
+@model IEnumerable<EduClass.Entities.Test>
 @{
     ViewBag.Title = "Lista";
+    
+    var questions = 0;
+    
 }
 
 @if (Model == null)
@@ -52,7 +56,8 @@ else
                                 <td>@item.StartDate.ToString("dd/MM/yyyy HH:mm")</td>
                                 <td>@item.EndDate.ToString("dd/MM/yyyy HH:mm")</td>
                                 <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
-                                <td class="text-center">@item.Questions.Count</td>
+                                
+                                <td class="text-center">@HelperView.PrintQtyQuestions(item)</td>
                                 <td class="text-center">@HelperView.LabelEnableOrDisable(item.Enabled)</td>
                                 <td class="text-center">
                                     <a href="@Url.Action("Index", "Question", new { id = item.Id })" title="" data-placement="top" data-toggle="tooltip" class="tooltips" type="button" data-original-title="Ver lista de preguntas">

@@ -32,13 +32,13 @@
                                 <td>
                                     @if (item.EndDate > DateTime.Now)
                                     {
-                                        <a href="@Url.Action("ViewResponsesStudent", "Tests", new { idTest = item.Id, idStudent = EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser().Id })" title="" data-placement="top" data-toggle="tooltip" class="tooltips" type="button" data-original-title="Ver prueba">
-                                            <div class="label label-success">Ver prueba</div>
-                                        </a>
+                                        <div class="label label-warning">En curso</div>
                                     }
                                     else
                                     {
-                                        <div class="label label-info">En curso</div>
+                                        <a href="@Url.Action("ViewResponsesStudent", "Tests", new { idTest = item.Id, idStudent = EduClass.Web.Infrastructure.Sessions.UserSession.GetCurrentUser().Id })" title="" data-placement="top" data-toggle="tooltip" class="tooltips" type="button" data-original-title="Ver prueba">
+                                            <div class="label label-success">Ver prueba</div>
+                                        </a>
                                     }
                                 </td>
                             </tr>
