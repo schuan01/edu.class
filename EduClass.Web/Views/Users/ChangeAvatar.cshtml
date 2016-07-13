@@ -1,8 +1,8 @@
 ﻿
 @{
-    ViewBag.Title = "Cambiar Foto Perfil";
+    ViewBag.Title = "Cambiar Foto de Perfil";
 }
-
+<h2>Cambiar Foto de Perfil</h2>
 <div class="jumbotron">
     <form action="~/Users/ChangeAvatar" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
         <div class="fallback">
@@ -50,6 +50,9 @@
                     // Add the button to the file preview element.
                     file.previewElement.appendChild(removeButton);
                 });
+            },
+            success: function () {
+                window.location = '@Html.Raw(Url.Action("Me","Users"))';
             }
         };
 
