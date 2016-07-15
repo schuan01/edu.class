@@ -44,7 +44,7 @@
                                     <td class="text-center">@item.Student.Id</td>
                                     <td>@item.Student.FirstName @item.Student.LastName</td>
                                     <td>@item.Student.UserName</td>
-                                    <td>@item.ReponseCorrect / @test.Questions.Count</td>
+                                    <td>@item.ReponseCorrect / @HelperView.PrintQtyQuestions(test)</td>
                                     <td class="text-center">
                                         <a href="@Url.Action("ViewResponsesStudent", new { idTest = test.Id, idStudent = item.Student.Id })" title="" data-placement="top" data-toggle="tooltip" class="tooltips" type="button" data-original-title="Ver lista de preguntas">
                                             <i class="fa fa-question" style="font-size: 18px"></i>

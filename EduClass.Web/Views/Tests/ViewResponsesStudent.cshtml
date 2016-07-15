@@ -5,7 +5,7 @@
     var student = (Student)ViewBag.Student;
     
     ViewBag.Title = student.FirstName + " " + student.LastName;
-    var qtyQuestions = ((List<Question>)ViewBag.TestQuestions).Count();
+    var qtyQuestions = ((List<Question>)ViewBag.TestQuestions).FindAll(x => x.Enabled).Count();
     
 }
 

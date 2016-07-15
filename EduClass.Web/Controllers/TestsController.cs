@@ -308,6 +308,7 @@ namespace EduClass.Web.Controllers
             }
 
 			ViewBag.Test = _service.GetById(id);
+            
 			return View(studentsList);
 		}
 
@@ -316,7 +317,7 @@ namespace EduClass.Web.Controllers
 		{
 			if (idTest == 0 || idStudent == 0) { return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
 			ViewBag.StudentResponses = _response.GetResponsesByStudent(idStudent, idTest).ToList();
-			ViewBag.TestQuestions = _service.GetById(idTest).Questions.ToList();
+			ViewBag.TestQuestions = _service.GetById(idTest).Questions.Where(x => x.Enabled).ToList();
 			ViewBag.Student = _person.GetById(idStudent);
 			ViewBag.TestId = idTest;
 
