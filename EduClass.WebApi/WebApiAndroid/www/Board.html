@@ -280,6 +280,7 @@
 
         $(document).ready(function () {
             
+
             var usuarioLogeado = Cookies.get('EduClassApiCookieUser'); // => 'value'
             var usu = jQuery.parseJSON(usuarioLogeado);
             
@@ -593,8 +594,13 @@
                         avatarUrl = avatarUrl.replace("~","");
                         avatarUrl = serverPathWeb() + avatarUrl; 
                         
-
-                        var fecha = new Date(val.CreatedAt);
+                        Date.prototype.addHours= function(h){
+                            this.setHours(this.getHours()+h);
+                            return this;
+                        }
+                        var fecha = new Date(val.CreatedAt).addHours(3);
+                        
+                        
                         var day = fecha.getDate();
                         var monthIndex = fecha.getMonth() + 1 ;
                         var year = fecha.getFullYear();
@@ -619,6 +625,7 @@
                         {
                             texto = '<div class="timeline-date" id="fecha_'+day+monthIndex+year+'">'+fechaFormateada +'</div>';
                             fechaAnterior = fecha;
+                            
                             horaFormateada = fecha.getHours() + ":" + fecha.getMinutes();
 
                             $("#divAnteriorFecha").after( texto +'<div class="panel panel-post-item status"><div class="panel-heading"><div class="media"><div class="media-left"><a href="#"><img alt="" src="'+avatarUrl +'" class="media-object img-circle"></a> </div><div class="media-body"><h4 class="media-heading">'+ user.FirstName+" "+user.LastName +'</h4><p class="media-usermeta"><span class="media-time">'+horaFormateada +'</span></p></div></div><!-- media --></div><!-- panel-heading --><div class="panel-body"><strong>'+val.Title+'</strong><p>'+val.Content+'</p><ul id="archivos_'+val.Id+'" class="list-unstyled list-attachments"></ul></div><div class="panel-footer"><ul class="list-inline"><li><a data-target="#comment-'+val.Id+'" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comentarios ('+val.Replays.length+')</a></li></ul></div><div class="collapse" id="comment-'+val.Id+'"><ul id="ulcomment_'+val.Id+'" class="media-list"></ul></div><div class="form-group"><input type="hidden" name="postId" value="'+val.Id+'" /><input type="hidden" name="personId" value="'+dato+'" /><input type="text" id="comentar_'+val.Id+'" name="content" class="form-control btnSubmit" data-Id="'+val.Id+'" placeholder="Escribe algún comentario"><button type="button" class="btn btn-primary btn-xs pull-right" id="comentarReply_'+val.Id+'" >Comentar</button></div></div><!-- panel panel-post -->');
@@ -627,6 +634,7 @@
                         }
                         else
                         {
+                            
                             horaFormateada = fecha.getHours() + ":" + fecha.getMinutes();
                             var selector = "#fecha_"+diaAnterior+mesAnterior+anioAnterior;
                             $(selector).after('<div class="panel panel-post-item status"><div class="panel-heading"><div class="media"><div class="media-left"><a href="#"><img alt="" src="'+avatarUrl +'" class="media-object img-circle"></a> </div><div class="media-body"><h4 class="media-heading">'+ user.FirstName+" "+user.LastName +'</h4><p class="media-usermeta"><span class="media-time">'+horaFormateada +'</span></p></div></div><!-- media --></div><!-- panel-heading --><div class="panel-body"><strong>'+val.Title+'</strong><p>'+val.Content+'</p><ul id="archivos_'+val.Id+'" class="list-unstyled list-attachments"></ul></div><div class="panel-footer"><ul class="list-inline"><li><a data-target="#comment-'+val.Id+'" data-toggle="collapse"><i class="glyphicon glyphicon-comment"></i> Comentarios ('+val.Replays.length+')</a></li></ul></div><div class="collapse" id="comment-'+val.Id+'"><ul id="ulcomment_'+val.Id+'"class="media-list"></ul></div><div class="form-group"><input type="hidden" name="postId" value="'+val.Id+'" /><input type="hidden" name="personId" value="'+dato+'" /><input type="text"  id="comentar_'+val.Id+'" name="content" class="form-control btnSubmit" data-Id="'+val.Id+'" placeholder="Escribe algún comentario"><button type="button"  class="btn btn-primary btn-xs pull-right" id="comentarReply_'+val.Id+'" >Comentar</button></div></div><!-- panel panel-post -->');
